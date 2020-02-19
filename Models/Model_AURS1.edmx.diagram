@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="858040c852fe42089c4de916a1ff0ab6" Name="Diagram1">
+        <EntityTypeShape EntityType="aurs1Model.AspNetRoles" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="aurs1Model.AspNetUserRoles" Width="1.5" PointX="7.5" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="aurs1Model.AspNetUsers" Width="1.5" PointX="9.875" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="aurs1Model.Module" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="aurs1Model.SousModule" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="aurs1Model.Statuts" Width="1.5" PointX="4" PointY="5.125" IsExpanded="true" />
+        <AssociationConnector Association="aurs1Model.FK_AspNetRoles_SousModule" ManuallyRouted="false" />
+        <AssociationConnector Association="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" ManuallyRouted="false" />
+        <AssociationConnector Association="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="aurs1Model.FK_AspNetUsers_Statuts" ManuallyRouted="false" />
+        <AssociationConnector Association="aurs1Model.FK_SousModule_Module" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
