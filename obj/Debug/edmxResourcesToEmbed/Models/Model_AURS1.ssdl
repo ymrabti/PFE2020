@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="aurs1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AspNetRoles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+    <Property Name="SouModuleId" Type="int" />
+    <Property Name="RoleDescription" Type="text" />
+  </EntityType>
+  <EntityType Name="AspNetUserRoles">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Read" Type="bit" />
+    <Property Name="Create" Type="bit" />
+    <Property Name="Update" Type="bit" />
+    <Property Name="Delete" Type="bit" />
+  </EntityType>
+  <EntityType Name="AspNetUsers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="UserNameAr" Type="nvarchar(max)" />
+    <Property Name="Nom" Type="nvarchar(max)" />
+    <Property Name="Prenom" Type="nvarchar(max)" />
+    <Property Name="Ville" Type="nvarchar(max)" />
+    <Property Name="CIN" Type="nvarchar(max)" />
+    <Property Name="Sexe" Type="nvarchar(max)" />
+    <Property Name="NomAr" Type="nvarchar(max)" />
+    <Property Name="PrenomAr" Type="nvarchar(max)" />
+    <Property Name="Intiulé" Type="nvarchar(max)" />
+    <Property Name="Adresse" Type="nvarchar(max)" />
+    <Property Name="demandeur" Type="nvarchar(max)" />
+    <Property Name="Email" Type="nvarchar" MaxLength="256" />
+    <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+    <Property Name="PasswordHash" Type="nvarchar(max)" />
+    <Property Name="SecurityStamp" Type="nvarchar(max)" />
+    <Property Name="PhoneNumber" Type="nvarchar(max)" />
+    <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="datetime" />
+    <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+    <Property Name="StatutId" Type="int" />
+    <Property Name="typeUtilisateur" Type="varchar" MaxLength="50" />
+    <Property Name="Organisme" Type="int" />
+  </EntityType>
+  <EntityType Name="Module">
+    <Key>
+      <PropertyRef Name="ModuleId" />
+    </Key>
+    <Property Name="ModuleId" Type="int" Nullable="false" />
+    <Property Name="ModuleName" Type="text" Nullable="false" />
+    <Property Name="ModuleDescription" Type="text" />
+  </EntityType>
+  <EntityType Name="SousModule">
+    <Key>
+      <PropertyRef Name="SousModuleId" />
+    </Key>
+    <Property Name="SousModuleId" Type="int" Nullable="false" />
+    <Property Name="SousModuleName" Type="text" Nullable="false" />
+    <Property Name="ModuleId" Type="int" Nullable="false" />
+    <Property Name="SousModuleDescription" Type="text" />
+  </EntityType>
+  <EntityType Name="Statuts">
+    <Key>
+      <PropertyRef Name="StatutId" />
+    </Key>
+    <Property Name="StatutId" Type="int" Nullable="false" />
+    <Property Name="StatutName" Type="text" Nullable="false" />
+    <Property Name="StatutDescription" Type="text" />
+  </EntityType>
+  <Association Name="FK_AspNetRoles_SousModule">
+    <End Role="SousModule" Type="Self.SousModule" Multiplicity="0..1" />
+    <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SousModule">
+        <PropertyRef Name="SousModuleId" />
+      </Principal>
+      <Dependent Role="AspNetRoles">
+        <PropertyRef Name="SouModuleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AspNetUsers_Statuts">
+    <End Role="Statuts" Type="Self.Statuts" Multiplicity="0..1" />
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Statuts">
+        <PropertyRef Name="StatutId" />
+      </Principal>
+      <Dependent Role="AspNetUsers">
+        <PropertyRef Name="StatutId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+    <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetRoles">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserRoles">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserRoles">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SousModule_Module">
+    <End Role="Module" Type="Self.Module" Multiplicity="1" />
+    <End Role="SousModule" Type="Self.SousModule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Module">
+        <PropertyRef Name="ModuleId" />
+      </Principal>
+      <Dependent Role="SousModule">
+        <PropertyRef Name="ModuleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="aurs1ModelStoreContainer">
+    <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Module" EntityType="Self.Module" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SousModule" EntityType="Self.SousModule" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Statuts" EntityType="Self.Statuts" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_AspNetRoles_SousModule" Association="Self.FK_AspNetRoles_SousModule">
+      <End Role="SousModule" EntitySet="SousModule" />
+      <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AspNetUsers_Statuts" Association="Self.FK_AspNetUsers_Statuts">
+      <End Role="Statuts" EntitySet="Statuts" />
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+      <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+      <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SousModule_Module" Association="Self.FK_SousModule_Module">
+      <End Role="Module" EntitySet="Module" />
+      <End Role="SousModule" EntitySet="SousModule" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

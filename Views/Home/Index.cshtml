@@ -1,31 +1,137 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model IEnumerable<GestionnaireUtilisateurs.Models.AspNetUsers>
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<link rel="stylesheet" href="~/assets/vendor/fonts/circular-std/style.css" >
+<link rel="stylesheet" href="~/assets/vendor/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="~/assets/libs/css/style.css">
+<link rel="stylesheet" href="~/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+<link rel="stylesheet" href="~/assets/vendor/charts/chartist-bundle/chartist.css">
+<link rel="stylesheet" href="~/assets/vendor/charts/morris-bundle/morris.css">
+<link rel="stylesheet" href="~/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css">
+<link rel="stylesheet" href="~/assets/vendor/charts/c3charts/c3.css">
+<link rel="stylesheet" href="~/assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Catamaran&display=swap">
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<p>
+    @Html.ActionLink("UsersManager", "Index", "UsersManager")
+</p>
+
+
+<div class="dashboard-main-wrapper">
+
+    <!--==============================================================
+    navbar
+    ==============================================================-->
+    <!--==============================================================
+    end navbar
+    ==============================================================
+    ==============================================================
+    left sidebar
+    ==============================================================-->
+    <div class="nav-left-sidebar sidebar-dark">
+        <div class="menu-list">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="d-xl-none d-lg-none" href="#">Dashboard</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav flex-column">
+                        <li class="nav-divider">
+                            Menu
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link" href="index.html" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-users"></i>Gestion des utilisateurs<span class="badge badge-success">6</span></a>
+                        </li>
+
+                        <li class="nav-item ">
+                            <a class="nav-link" href="module.html" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fas fa-clone"></i>Gestion des modules<span class="badge badge-success"></span></a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" href="sousmodule.html" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class=" fas fa-folder-open"></i>Gestion des sous modules<span class="badge badge-success"></span></a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link" href="taches.html" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fas fa-qrcode"></i>Gestion des Tâches<span class="badge badge-success"></span></a>
+                        </li>
+                    </ul>
+                </div>
+
+                Menu
+            </nav>
+        </div>
+    </div>
+
+
+    <!--==============================================================
+        ==============================================================
+        end left sidebar
+        ==============================================================-->
+    <div class="dashboard-wrapper">
+        <div class="dashboard-finance">
+            <div class="container-fluid dashboard-content">
+
+                <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+                    <div class="card-body">
+                        <div class="card-body border-top">
+                            <a href="add.html" class="btn btn" style="background-color:#09aacc ; color:white;">
+                                <i class="fa fa-plus"> Ajouter  </i>
+                            </a>
+                            <button type="button" class="btn btn" style="background-color:#09aacc ; color:white;">
+                                <i class="fa fa-edit"> Modifier  </i>
+                            </button>
+                            <button type="button" class="btn btn" style="background-color:#09aacc ; color:white;">
+                                <i class="fa fa-trash"> Supprimer  </i>
+                            </button>
+                            <a href="role.html" class="btn btn" style="background-color:#09aacc ; color:white; margin-left: 63%;">
+                                <i class="fa fa-sliders-h"> Gestion des roles  </i>
+                            </a>
+                        </div>
+                        <table class="table">
+                            <thead>
+                                <tr>
+
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Nom)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Prenom)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Email)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Ville)
+                                    </th>
+                                    <th></th>
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                            </tbody>
+
+
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+
+
+
+
+
