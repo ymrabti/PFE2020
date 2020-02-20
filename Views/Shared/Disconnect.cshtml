@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNet.Identity
+
+<ul class="navbar-nav ml-auto navbar-right-top">
+    <li class="nav-item dropdown nav-user nav navbar-nav navbar-right">
+        <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img src="~/assets/images/avatar-1.jpg" alt="" class="user-avatar-md rounded-circle">
+        </a>
+
+        <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
+
+            @if (Request.IsAuthenticated)
+            {
+                using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="nav-user-info">
+                        <h5 class="mb-0 text-white nav-user-name">@User.Identity.GetUserName() </h5>
+                        <span class="status"></span><span class="ml-2">Connecté</span>
+                    </div>
+                    <a href="javascript:document.getElementById('logoutForm').submit()" class="dropdown-item">
+                        <i class="fas fa-power-off mr-2"></i> Se déconnecter
+                    </a>
+                }
+
+            }
+            else
+            {
+                <ul class="nav navbar-nav navbar-right">
+                    <li>@Html.ActionLink("S'inscrire", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+                    <li>@Html.ActionLink("Se connecter", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                </ul>
+            }
+        </div>
+
+    <li>
+</ul>
+
+

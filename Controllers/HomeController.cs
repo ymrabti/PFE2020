@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GestionnaireUtilisateurs.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,9 +9,10 @@ namespace GestionnaireUtilisateurs.Controllers
 {
     public class HomeController : Controller
     {
+        aurs1Entities database = new aurs1Entities();
         public ActionResult Index()
         {
-            return View();
+            return View(database.AspNetUsers.ToList());
         }
 
         public ActionResult About()
