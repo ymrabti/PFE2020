@@ -28,5 +28,14 @@ namespace GestionnaireUtilisateurs.Controllers
 
             return View();
         }
+
+        public ActionResult AddUser() {
+            return View();
+        }
+
+
+        public ActionResult UserTache() {
+            return View();
+        }
     }
 }
