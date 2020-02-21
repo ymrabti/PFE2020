@@ -68,6 +68,18 @@ namespace GestionnaireUtilisateurs.Models
         [EmailAddress]
         [Display(Name = "Courrier électronique")]
         public string Email { get; set; }
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Nom d'utilisateur")]
+        public string UserName { get; set; }
+        [Required]
+        [EmailAddress]
+        [Display(Name = "CIN")]
+        public string CIN { get; set; }
+        [Required]
+        [EmailAddress]
+        [Display(Name = "CIN")]
+        public string Sexe { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
