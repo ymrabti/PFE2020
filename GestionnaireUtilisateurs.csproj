@@ -736,6 +736,9 @@
     <Content Include="Views\Shared\Disconnect.cshtml" />
     <Content Include="Views\Home\AddUser.cshtml" />
     <Content Include="Views\Home\UserTache.cshtml" />
+    <Content Include="Views\Home\module.cshtml" />
+    <Content Include="Views\Home\sousmodule.cshtml" />
+    <Content Include="Views\Home\taches.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

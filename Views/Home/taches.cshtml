@@ -1,0 +1,73 @@
+﻿@model IEnumerable<GestionnaireUtilisateurs.Models.AspNetRoles>
+@{
+    ViewBag.Title = "Gestionnaire des taches";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="dashboard-main-wrapper">
+    <div class="dashboard-wrapper">
+        <div class="dashboard-finance">
+            <div class="container-fluid dashboard-content">
+
+                <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+                    <div class="card-body">
+                        <h4> <span class="badge-dot badge-info"></span>   Gestion des sous modules</h4>
+                        <div class="card-body border-top">
+                            <button type="button" class="btn btn" style="background-color:#09aacc ; color:white;">
+                                <i class="fa fa-plus"> Ajouter  </i>
+                            </button>
+                            <button type="button" class="btn btn" style="background-color:#09aacc ; color:white;">
+                                <i class="fa fa-edit"> Modifier  </i>
+                            </button>
+                            <button type="button" class="btn btn" style="background-color:#09aacc ; color:white;">
+                                <i class="fa fa-trash"> Supprimer  </i>
+                            </button>
+
+                        </div>
+
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Name)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Name)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Name)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.RoleDescription)
+                                    </th>
+                                    <th></th>
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.RoleDescription)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
