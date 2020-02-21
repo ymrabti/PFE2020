@@ -1,4 +1,4 @@
-﻿
+﻿@model GestionnaireUtilisateurs.Models.MultiModeles
 
 @{
     ViewBag.Title = "Taches des Utilisateurs";
@@ -38,6 +38,10 @@
                                                 <label for="name">Utilisateur</label>
                                                 <select class="form-control form-control-sm" id="">
                                                     <option value="">--- Sélectionner un Utilisateur ---</option>
+                                                    @foreach (var item in Model.aspNetUsers)
+                                                    {
+                                                        <option value="@item.Id">@item.NomAr</option>
+                                                    }
                                                 </select>
                                             </div>
                                         </div>
@@ -55,11 +59,10 @@
                                                 <label for="name">Module</label>
                                                 <select class="form-control form-control-sm" id="">
                                                     <option value="">--- Sélectionner un module ---</option>
-                                                    <option value="">Gestion urbaine</option>
-                                                    <option value="">Planification urbaine</option>
-                                                    <option value="">Affaires juridiques et topographiques</option>
-                                                    <option value="">Operations foncieres et de l'amenagement urbain</option>
-                                                    <option value="">Operations transverses</option>
+                                                    @foreach (var item in Model.modules)
+                                                    {
+                                                        <option value="@item.ModuleId">@item.ModuleName</option>
+                                                    }
                                                 </select>
                                             </div>
                                         </div>
@@ -76,6 +79,10 @@
                                                 <label for="name">Sous module</label>
                                                 <select class="form-control form-control-sm" id="">
                                                     <option value="">--- Sélectionner un Sous module ---</option>
+                                                    @foreach (var item in Model.sousModules)
+                                                    {
+                                                        <option value="@item.SousModuleId">@item.SousModuleName</option>
+                                                    }
                                                 </select>
                                             </div>
                                         </div>

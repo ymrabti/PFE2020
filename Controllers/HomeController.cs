@@ -14,7 +14,7 @@ namespace GestionnaireUtilisateurs.Controllers
         public ActionResult Index()
         {
             var user = database.AspNetUsers.ToList();
-            return View();
+            return View(user);
         }
 
 
@@ -24,9 +24,16 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
         [Authorize]
-
         public ActionResult UserTache() {
-            return View();
+            var model = new MultiModeles
+            {
+                aspNetUsers = database.AspNetUsers.Where(p => p.NomAr != null).ToList(),
+                aspNetRoles = database.AspNetRoles.ToList(),
+                aspNetUserRoles = database.AspNetUserRoles.ToList(),
+                modules = database.Module.ToList(),
+                sousModules = database.SousModule.ToList()
+            };
+            return View(model);
         }
         [Authorize]
         public ActionResult module() {
