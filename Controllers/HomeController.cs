@@ -13,7 +13,8 @@ namespace GestionnaireUtilisateurs.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            return View(database.AspNetUsers.ToList());
+            var user = database.AspNetUsers.ToList();
+            return View();
         }
 
 
