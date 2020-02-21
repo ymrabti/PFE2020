@@ -180,6 +180,9 @@
     <Compile Include="Models\Application.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ApplicationModule.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AspNetRoles.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
@@ -209,6 +212,7 @@
     <Compile Include="Models\Module.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\MultiModeles.cs" />
     <Compile Include="Models\SousModule.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>

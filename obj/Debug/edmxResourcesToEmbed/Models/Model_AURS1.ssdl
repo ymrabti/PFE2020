@@ -16,6 +16,7 @@
     </Key>
     <Property Name="ApplicationId" Type="int" Nullable="false" />
     <Property Name="ModuleId" Type="int" Nullable="false" />
+    <Property Name="description" Type="nchar" MaxLength="10" />
   </EntityType>
   <EntityType Name="AspNetRoles">
     <Key>

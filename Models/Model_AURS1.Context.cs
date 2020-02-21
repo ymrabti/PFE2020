@@ -26,6 +26,7 @@ namespace GestionnaireUtilisateurs.Models
         }
     
         public virtual DbSet<Application> Application { get; set; }
+        public virtual DbSet<ApplicationModule> ApplicationModule { get; set; }
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }

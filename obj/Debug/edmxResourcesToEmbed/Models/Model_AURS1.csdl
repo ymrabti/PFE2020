@@ -2,6 +2,7 @@
 <Schema Namespace="aurs1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
   <EntityContainer Name="aurs1Entities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Application" EntityType="aurs1Model.Application" />
+    <EntitySet Name="ApplicationModule" EntityType="aurs1Model.ApplicationModule" />
     <EntitySet Name="AspNetRoles" EntityType="aurs1Model.AspNetRoles" />
     <EntitySet Name="AspNetUserRoles" EntityType="aurs1Model.AspNetUserRoles" />
     <EntitySet Name="AspNetUsers" EntityType="aurs1Model.AspNetUsers" />
@@ -9,6 +10,14 @@
     <EntitySet Name="SousModule" EntityType="aurs1Model.SousModule" />
     <EntitySet Name="Statuts" EntityType="aurs1Model.Statuts" />
     <EntitySet Name="StatutRole" EntityType="aurs1Model.StatutRole" />
+    <AssociationSet Name="FK_ApplicationModule_Application" Association="aurs1Model.FK_ApplicationModule_Application">
+      <End Role="Application" EntitySet="Application" />
+      <End Role="ApplicationModule" EntitySet="ApplicationModule" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ApplicationModule_Module" Association="aurs1Model.FK_ApplicationModule_Module">
+      <End Role="Module" EntitySet="Module" />
+      <End Role="ApplicationModule" EntitySet="ApplicationModule" />
+    </AssociationSet>
     <AssociationSet Name="FK_AspNetRoles_SousModule" Association="aurs1Model.FK_AspNetRoles_SousModule">
       <End Role="SousModule" EntitySet="SousModule" />
       <End Role="AspNetRoles" EntitySet="AspNetRoles" />
@@ -37,10 +46,6 @@
       <End Role="Statuts" EntitySet="Statuts" />
       <End Role="StatutRole" EntitySet="StatutRole" />
     </AssociationSet>
-    <AssociationSet Name="ApplicationModule" Association="aurs1Model.ApplicationModule">
-      <End Role="Application" EntitySet="Application" />
-      <End Role="Module" EntitySet="Module" />
-    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Application">
     <Key>
@@ -50,7 +55,18 @@
     <Property Name="ApplicationName" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
     <Property Name="ApplicationDescription" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
     <Property Name="type" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-    <NavigationProperty Name="Module" Relationship="aurs1Model.ApplicationModule" FromRole="Application" ToRole="Module" />
+    <NavigationProperty Name="ApplicationModule" Relationship="aurs1Model.FK_ApplicationModule_Application" FromRole="Application" ToRole="ApplicationModule" />
+  </EntityType>
+  <EntityType Name="ApplicationModule">
+    <Key>
+      <PropertyRef Name="ApplicationId" />
+      <PropertyRef Name="ModuleId" />
+    </Key>
+    <Property Name="ApplicationId" Type="Int32" Nullable="false" />
+    <Property Name="ModuleId" Type="Int32" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="Application" Relationship="aurs1Model.FK_ApplicationModule_Application" FromRole="ApplicationModule" ToRole="Application" />
+    <NavigationProperty Name="Module" Relationship="aurs1Model.FK_ApplicationModule_Module" FromRole="ApplicationModule" ToRole="Module" />
   </EntityType>
   <EntityType Name="AspNetRoles">
     <Key>
@@ -118,8 +134,8 @@
     <Property Name="ModuleId" Type="Int32" Nullable="false" />
     <Property Name="ModuleName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="ModuleDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ApplicationModule" Relationship="aurs1Model.FK_ApplicationModule_Module" FromRole="Module" ToRole="ApplicationModule" />
     <NavigationProperty Name="SousModule" Relationship="aurs1Model.FK_SousModule_Module" FromRole="Module" ToRole="SousModule" />
-    <NavigationProperty Name="Application" Relationship="aurs1Model.ApplicationModule" FromRole="Module" ToRole="Application" />
   </EntityType>
   <EntityType Name="SousModule">
     <Key>
@@ -160,6 +176,30 @@
     <NavigationProperty Name="AspNetRoles" Relationship="aurs1Model.FK_StatutRole_AspNetRoles" FromRole="StatutRole" ToRole="AspNetRoles" />
     <NavigationProperty Name="Statuts" Relationship="aurs1Model.FK_StatutRole_Statuts" FromRole="StatutRole" ToRole="Statuts" />
   </EntityType>
+  <Association Name="FK_ApplicationModule_Application">
+    <End Type="aurs1Model.Application" Role="Application" Multiplicity="1" />
+    <End Type="aurs1Model.ApplicationModule" Role="ApplicationModule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Application">
+        <PropertyRef Name="ApplicationId" />
+      </Principal>
+      <Dependent Role="ApplicationModule">
+        <PropertyRef Name="ApplicationId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ApplicationModule_Module">
+    <End Type="aurs1Model.Module" Role="Module" Multiplicity="1" />
+    <End Type="aurs1Model.ApplicationModule" Role="ApplicationModule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Module">
+        <PropertyRef Name="ModuleId" />
+      </Principal>
+      <Dependent Role="ApplicationModule">
+        <PropertyRef Name="ModuleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_AspNetRoles_SousModule">
     <End Type="aurs1Model.SousModule" Role="SousModule" Multiplicity="0..1" />
     <End Type="aurs1Model.AspNetRoles" Role="AspNetRoles" Multiplicity="*" />
@@ -247,9 +287,5 @@
         <PropertyRef Name="StatutId" />
       </Dependent>
     </ReferentialConstraint>
-  </Association>
-  <Association Name="ApplicationModule">
-    <End Type="aurs1Model.Application" Role="Application" Multiplicity="*" />
-    <End Type="aurs1Model.Module" Role="Module" Multiplicity="*" />
   </Association>
 </Schema>

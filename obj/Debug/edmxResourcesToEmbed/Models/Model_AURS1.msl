@@ -11,6 +11,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="ApplicationModule">
+      <EntityTypeMapping TypeName="aurs1Model.ApplicationModule">
+        <MappingFragment StoreEntitySet="ApplicationModule">
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="ModuleId" ColumnName="ModuleId" />
+          <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="AspNetRoles">
       <EntityTypeMapping TypeName="aurs1Model.AspNetRoles">
         <MappingFragment StoreEntitySet="AspNetRoles">
@@ -105,13 +114,5 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="ApplicationModule" TypeName="aurs1Model.ApplicationModule" StoreEntitySet="ApplicationModule">
-      <EndProperty Name="Module">
-        <ScalarProperty Name="ModuleId" ColumnName="ModuleId" />
-      </EndProperty>
-      <EndProperty Name="Application">
-        <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
-      </EndProperty>
-    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping>
