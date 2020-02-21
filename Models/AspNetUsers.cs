@@ -43,7 +43,7 @@ namespace GestionnaireUtilisateurs.Models
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
         public string UserName { get; set; }
-        public Nullable<int> StatutId { get; set; }
+        public string StatutId { get; set; }
         public string typeUtilisateur { get; set; }
         public Nullable<int> Organisme { get; set; }
     

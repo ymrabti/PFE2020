@@ -12,22 +12,20 @@ namespace GestionnaireUtilisateurs.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Module
+    public partial class Application
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Module()
+        public Application()
         {
-            this.SousModule = new HashSet<SousModule>();
-            this.Application = new HashSet<Application>();
+            this.Module = new HashSet<Module>();
         }
     
-        public int ModuleId { get; set; }
-        public string ModuleName { get; set; }
-        public string ModuleDescription { get; set; }
+        public int ApplicationId { get; set; }
+        public string ApplicationName { get; set; }
+        public string ApplicationDescription { get; set; }
+        public string type { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<SousModule> SousModule { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Application> Application { get; set; }
+        public virtual ICollection<Module> Module { get; set; }
     }
 }

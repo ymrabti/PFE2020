@@ -1,5 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="aurs1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Application">
+    <Key>
+      <PropertyRef Name="ApplicationId" />
+    </Key>
+    <Property Name="ApplicationId" Type="int" Nullable="false" />
+    <Property Name="ApplicationName" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="ApplicationDescription" Type="nchar" MaxLength="10" />
+    <Property Name="type" Type="nchar" MaxLength="10" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ApplicationModule">
+    <Key>
+      <PropertyRef Name="ApplicationId" />
+      <PropertyRef Name="ModuleId" />
+    </Key>
+    <Property Name="ApplicationId" Type="int" Nullable="false" />
+    <Property Name="ModuleId" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="AspNetRoles">
     <Key>
       <PropertyRef Name="Id" />
@@ -48,7 +65,7 @@
     <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
     <Property Name="AccessFailedCount" Type="int" Nullable="false" />
     <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
-    <Property Name="StatutId" Type="int" />
+    <Property Name="StatutId" Type="nvarchar" MaxLength="128" />
     <Property Name="typeUtilisateur" Type="varchar" MaxLength="50" />
     <Property Name="Organisme" Type="int" />
   </EntityType>
@@ -69,14 +86,56 @@
     <Property Name="ModuleId" Type="int" Nullable="false" />
     <Property Name="SousModuleDescription" Type="text" />
   </EntityType>
+  <!--Erreurs détectées durant la génération :
+avertissement 6002: La table/vue 'aurs1.dbo.StatutRole' n'a pas de clé primaire définie. La clé a été déduite et la définition a été créée en tant que table/vue en lecture seule.-->
+  <EntityType Name="StatutRole">
+    <Key>
+      <PropertyRef Name="StatutId" />
+      <PropertyRef Name="RoleId" />
+      <PropertyRef Name="Read" />
+      <PropertyRef Name="Create" />
+      <PropertyRef Name="Updade" />
+      <PropertyRef Name="Delete" />
+    </Key>
+    <Property Name="StatutId" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Read" Type="bit" Nullable="false" />
+    <Property Name="Create" Type="bit" Nullable="false" />
+    <Property Name="Updade" Type="bit" Nullable="false" />
+    <Property Name="Delete" Type="bit" Nullable="false" />
+  </EntityType>
   <EntityType Name="Statuts">
     <Key>
       <PropertyRef Name="StatutId" />
     </Key>
-    <Property Name="StatutId" Type="int" Nullable="false" />
+    <Property Name="StatutId" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="StatutName" Type="text" Nullable="false" />
     <Property Name="StatutDescription" Type="text" />
   </EntityType>
+  <Association Name="FK_ApplicationModule_Application">
+    <End Role="Application" Type="Self.Application" Multiplicity="1" />
+    <End Role="ApplicationModule" Type="Self.ApplicationModule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Application">
+        <PropertyRef Name="ApplicationId" />
+      </Principal>
+      <Dependent Role="ApplicationModule">
+        <PropertyRef Name="ApplicationId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ApplicationModule_Module">
+    <End Role="Module" Type="Self.Module" Multiplicity="1" />
+    <End Role="ApplicationModule" Type="Self.ApplicationModule" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Module">
+        <PropertyRef Name="ModuleId" />
+      </Principal>
+      <Dependent Role="ApplicationModule">
+        <PropertyRef Name="ModuleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_AspNetRoles_SousModule">
     <End Role="SousModule" Type="Self.SousModule" Multiplicity="0..1" />
     <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="*" />
@@ -141,13 +200,57 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_StatutRole_AspNetRoles">
+    <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1" />
+    <End Role="StatutRole" Type="Self.StatutRole" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetRoles">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="StatutRole">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_StatutRole_Statuts">
+    <End Role="Statuts" Type="Self.Statuts" Multiplicity="1" />
+    <End Role="StatutRole" Type="Self.StatutRole" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Statuts">
+        <PropertyRef Name="StatutId" />
+      </Principal>
+      <Dependent Role="StatutRole">
+        <PropertyRef Name="StatutId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="aurs1ModelStoreContainer">
+    <EntitySet Name="Application" EntityType="Self.Application" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ApplicationModule" EntityType="Self.ApplicationModule" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Module" EntityType="Self.Module" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SousModule" EntityType="Self.SousModule" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Statuts" EntityType="Self.Statuts" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="StatutRole" EntityType="Self.StatutRole" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [StatutRole].[StatutId] AS [StatutId], 
+    [StatutRole].[RoleId] AS [RoleId], 
+    [StatutRole].[Read] AS [Read], 
+    [StatutRole].[Create] AS [Create], 
+    [StatutRole].[Updade] AS [Updade], 
+    [StatutRole].[Delete] AS [Delete]
+    FROM [dbo].[StatutRole] AS [StatutRole]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_ApplicationModule_Application" Association="Self.FK_ApplicationModule_Application">
+      <End Role="Application" EntitySet="Application" />
+      <End Role="ApplicationModule" EntitySet="ApplicationModule" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ApplicationModule_Module" Association="Self.FK_ApplicationModule_Module">
+      <End Role="Module" EntitySet="Module" />
+      <End Role="ApplicationModule" EntitySet="ApplicationModule" />
+    </AssociationSet>
     <AssociationSet Name="FK_AspNetRoles_SousModule" Association="Self.FK_AspNetRoles_SousModule">
       <End Role="SousModule" EntitySet="SousModule" />
       <End Role="AspNetRoles" EntitySet="AspNetRoles" />
@@ -167,6 +270,14 @@
     <AssociationSet Name="FK_SousModule_Module" Association="Self.FK_SousModule_Module">
       <End Role="Module" EntitySet="Module" />
       <End Role="SousModule" EntitySet="SousModule" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StatutRole_AspNetRoles" Association="Self.FK_StatutRole_AspNetRoles">
+      <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+      <End Role="StatutRole" EntitySet="StatutRole" />
+    </AssociationSet>
+    <AssociationSet Name="FK_StatutRole_Statuts" Association="Self.FK_StatutRole_Statuts">
+      <End Role="Statuts" EntitySet="Statuts" />
+      <End Role="StatutRole" EntitySet="StatutRole" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

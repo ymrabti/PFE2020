@@ -18,13 +18,16 @@ namespace GestionnaireUtilisateurs.Models
         public Statuts()
         {
             this.AspNetUsers = new HashSet<AspNetUsers>();
+            this.StatutRole = new HashSet<StatutRole>();
         }
     
-        public int StatutId { get; set; }
+        public string StatutId { get; set; }
         public string StatutName { get; set; }
         public string StatutDescription { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetUsers> AspNetUsers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StatutRole> StatutRole { get; set; }
     }
 }

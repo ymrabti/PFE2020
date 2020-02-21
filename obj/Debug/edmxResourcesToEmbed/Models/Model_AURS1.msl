@@ -1,87 +1,117 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="aurs1ModelStoreContainer" CdmEntityContainer="aurs1Entities">
+    <EntitySetMapping Name="Application">
+      <EntityTypeMapping TypeName="aurs1Model.Application">
+        <MappingFragment StoreEntitySet="Application">
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="ApplicationDescription" ColumnName="ApplicationDescription" />
+          <ScalarProperty Name="ApplicationName" ColumnName="ApplicationName" />
+          <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="AspNetRoles">
       <EntityTypeMapping TypeName="aurs1Model.AspNetRoles">
         <MappingFragment StoreEntitySet="AspNetRoles">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="SouModuleId" ColumnName="SouModuleId" />
           <ScalarProperty Name="RoleDescription" ColumnName="RoleDescription" />
+          <ScalarProperty Name="SouModuleId" ColumnName="SouModuleId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="AspNetUserRoles">
       <EntityTypeMapping TypeName="aurs1Model.AspNetUserRoles">
         <MappingFragment StoreEntitySet="AspNetUserRoles">
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
-          <ScalarProperty Name="Read" ColumnName="Read" />
-          <ScalarProperty Name="Create" ColumnName="Create" />
-          <ScalarProperty Name="Update" ColumnName="Update" />
           <ScalarProperty Name="Delete" ColumnName="Delete" />
+          <ScalarProperty Name="Update" ColumnName="Update" />
+          <ScalarProperty Name="Create" ColumnName="Create" />
+          <ScalarProperty Name="Read" ColumnName="Read" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="AspNetUsers">
       <EntityTypeMapping TypeName="aurs1Model.AspNetUsers">
         <MappingFragment StoreEntitySet="AspNetUsers">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="UserNameAr" ColumnName="UserNameAr" />
-          <ScalarProperty Name="Nom" ColumnName="Nom" />
-          <ScalarProperty Name="Prenom" ColumnName="Prenom" />
-          <ScalarProperty Name="Ville" ColumnName="Ville" />
-          <ScalarProperty Name="CIN" ColumnName="CIN" />
-          <ScalarProperty Name="Sexe" ColumnName="Sexe" />
-          <ScalarProperty Name="NomAr" ColumnName="NomAr" />
-          <ScalarProperty Name="PrenomAr" ColumnName="PrenomAr" />
-          <ScalarProperty Name="Intiulé" ColumnName="Intiulé" />
-          <ScalarProperty Name="Adresse" ColumnName="Adresse" />
-          <ScalarProperty Name="demandeur" ColumnName="demandeur" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
-          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
-          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
-          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-          <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
-          <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
-          <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
-          <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
-          <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
-          <ScalarProperty Name="UserName" ColumnName="UserName" />
-          <ScalarProperty Name="StatutId" ColumnName="StatutId" />
-          <ScalarProperty Name="typeUtilisateur" ColumnName="typeUtilisateur" />
           <ScalarProperty Name="Organisme" ColumnName="Organisme" />
+          <ScalarProperty Name="typeUtilisateur" ColumnName="typeUtilisateur" />
+          <ScalarProperty Name="StatutId" ColumnName="StatutId" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+          <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+          <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+          <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+          <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="demandeur" ColumnName="demandeur" />
+          <ScalarProperty Name="Adresse" ColumnName="Adresse" />
+          <ScalarProperty Name="Intiulé" ColumnName="Intiulé" />
+          <ScalarProperty Name="PrenomAr" ColumnName="PrenomAr" />
+          <ScalarProperty Name="NomAr" ColumnName="NomAr" />
+          <ScalarProperty Name="Sexe" ColumnName="Sexe" />
+          <ScalarProperty Name="CIN" ColumnName="CIN" />
+          <ScalarProperty Name="Ville" ColumnName="Ville" />
+          <ScalarProperty Name="Prenom" ColumnName="Prenom" />
+          <ScalarProperty Name="Nom" ColumnName="Nom" />
+          <ScalarProperty Name="UserNameAr" ColumnName="UserNameAr" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Module">
       <EntityTypeMapping TypeName="aurs1Model.Module">
         <MappingFragment StoreEntitySet="Module">
-          <ScalarProperty Name="ModuleId" ColumnName="ModuleId" />
-          <ScalarProperty Name="ModuleName" ColumnName="ModuleName" />
           <ScalarProperty Name="ModuleDescription" ColumnName="ModuleDescription" />
+          <ScalarProperty Name="ModuleName" ColumnName="ModuleName" />
+          <ScalarProperty Name="ModuleId" ColumnName="ModuleId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="SousModule">
       <EntityTypeMapping TypeName="aurs1Model.SousModule">
         <MappingFragment StoreEntitySet="SousModule">
-          <ScalarProperty Name="SousModuleId" ColumnName="SousModuleId" />
-          <ScalarProperty Name="SousModuleName" ColumnName="SousModuleName" />
-          <ScalarProperty Name="ModuleId" ColumnName="ModuleId" />
           <ScalarProperty Name="SousModuleDescription" ColumnName="SousModuleDescription" />
+          <ScalarProperty Name="ModuleId" ColumnName="ModuleId" />
+          <ScalarProperty Name="SousModuleName" ColumnName="SousModuleName" />
+          <ScalarProperty Name="SousModuleId" ColumnName="SousModuleId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Statuts">
       <EntityTypeMapping TypeName="aurs1Model.Statuts">
         <MappingFragment StoreEntitySet="Statuts">
-          <ScalarProperty Name="StatutId" ColumnName="StatutId" />
-          <ScalarProperty Name="StatutName" ColumnName="StatutName" />
           <ScalarProperty Name="StatutDescription" ColumnName="StatutDescription" />
+          <ScalarProperty Name="StatutName" ColumnName="StatutName" />
+          <ScalarProperty Name="StatutId" ColumnName="StatutId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="StatutRole">
+      <EntityTypeMapping TypeName="aurs1Model.StatutRole">
+        <MappingFragment StoreEntitySet="StatutRole">
+          <ScalarProperty Name="Delete" ColumnName="Delete" />
+          <ScalarProperty Name="Updade" ColumnName="Updade" />
+          <ScalarProperty Name="Create" ColumnName="Create" />
+          <ScalarProperty Name="Read" ColumnName="Read" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="StatutId" ColumnName="StatutId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="ApplicationModule" TypeName="aurs1Model.ApplicationModule" StoreEntitySet="ApplicationModule">
+      <EndProperty Name="Module">
+        <ScalarProperty Name="ModuleId" ColumnName="ModuleId" />
+      </EndProperty>
+      <EndProperty Name="Application">
+        <ScalarProperty Name="ApplicationId" ColumnName="ApplicationId" />
+      </EndProperty>
+    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping>

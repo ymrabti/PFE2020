@@ -177,6 +177,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Application.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\AspNetRoles.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
@@ -207,6 +210,9 @@
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SousModule.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\StatutRole.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Statuts.cs">
