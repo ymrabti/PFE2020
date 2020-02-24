@@ -1,4 +1,5 @@
-﻿@model GestionnaireUtilisateurs.Models.MultiModeles
+﻿
+@model GestionnaireUtilisateurs.Models.MultiModeles
 
 @{
     var module_selected = "";
@@ -37,9 +38,9 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label for="name">Utilisateur</label>
-                                                @Html.DropDownListFor(model => model.aspNetUsers, ViewBag.Users as SelectList
-                                               , "--- Sélectionner un Utilisateur ---", new { @class = "form-control form-control-sm" }
+                                                <label for="name">Statut</label>
+                                                @Html.DropDownListFor(model => model.statuts, ViewBag.Statut as SelectList
+                                               , "--- Sélectionner une Statut ---", new { @class = "form-control form-control-sm" }
                                                )
                                                 @*<select class="form-control form-control-sm" id="">
                                                         <option value="">--- Sélectionner un Utilisateur ---</option>
@@ -142,7 +143,7 @@
                                                         <tr>
 
                                                             <th>
-                                                                @Html.DisplayNameFor(model => Model.aspNetUsers)
+                                                                @Html.DisplayNameFor(model => Model.statuts)
                                                             </th>
                                                             <th>
                                                                 @Html.DisplayNameFor(model => Model.modules)
@@ -160,11 +161,11 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach (var item in Model.aspNetUserRoles)
+                                                        @foreach (var item in Model.statutRoles)
                                                         {
                                                             <tr>
                                                                 <td>
-                                                                    @Html.DisplayFor(modelItem => item.AspNetUsers.UserName)
+                                                                    @Html.DisplayFor(modelItem => item.Statuts.StatutName)
                                                                 </td>
                                                                 <td>
                                                                     @Html.DisplayFor(modelItem => item.AspNetRoles.SousModule.Module.ModuleName)
@@ -177,25 +178,25 @@
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(modelitem => item.Read.Value, new { @class = "custom-control-input" })
+                                                                        @Html.CheckBoxFor(modelitem => item.Read, new { @class = "custom-control-input" })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(modelitem => item.Create.Value, new { @class = "custom-control-input" })
+                                                                        @Html.CheckBoxFor(modelitem => item.Create, new { @class = "custom-control-input" })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(modelitem => item.Update.Value, new { @class = "custom-control-input" })
+                                                                        @Html.CheckBoxFor(modelitem => item.Modifier, new { @class = "custom-control-input" })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(modelitem => item.Delete.Value, new { @class = "custom-control-input" })
+                                                                        @Html.CheckBoxFor(modelitem => item.Delete, new { @class = "custom-control-input" })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
@@ -488,38 +489,31 @@
         </div>
     </div>
 </div>
-<script>
-    var sous_modules = [];
 
-</script>
-@foreach (var item in Model.sousModules.Where(element => element.ModuleId.ToString() == module_selected))
-{
-    <script>
-    sous_modules.push([@item.SousModuleId,@item.SousModuleName]);
-    </script>
-}
 @section Scripts{
     <script type="text/javascript">
         $(document).ready(function () {
             $("#moduleSelected").change(function (evt) {
                 $("#SelectedCompany").val($("#moduleSelected option:selected").val().trim());
+                $("#submoduleSelected").empty()
+                $.each(data, function () {
+                    $("#myDropDownLisTId").append($("<option />").val(this.id).text(this.Text));
+                });
                 @module_selected = $("#moduleSelected option:selected").val().trim();
-                @*$("#submoduleSelected").empty()
-                $.each(sous_modules, function () {
-                    $("#submoduleSelected").append($("<option />").val(this.id).text(this.Text));
-                });}*@
-                var op = document.getElementById("submoduleSelected").getElementsByTagName("option");
-
-                for (var i = 0; i < op.length; i++) {
-                    for (var j = 0; j < sous_modules.length; j++) {
-                        if (op[i].value != sous_modules[j][0] /*&& op[i].value != "2" || op[i].value.toLowerCase() == "3"*/) {
-                            op[i].hidden = true;
-                        }
-                    }
+                @foreach (var item in Model.sousModules.Where(element=>element.ModuleId.ToString()==module_selected))
+                {
 
                 }
-            }
-            );
+                @*var op = document.getElementById("submoduleSelected").getElementsByTagName("option");
+
+                for (var i = 0; i < op.length; i++) {
+
+                    if (op[i].value != "1" && op[i].value != "2" /*|| op[i].value.toLowerCase() == "3"*/) {
+                        op[i].hidden = true;
+                    }
+                }*@
+            });
         });
     </script>
 }
+

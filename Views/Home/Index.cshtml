@@ -28,14 +28,13 @@
                             <button type="button" class="btn btn" style="background-color:#09aacc ; color:white;">
                                 <i class="fa fa-trash"> Supprimer  </i>
                             </button>
-                            <a href="@Url.Action("UserTache", "Home")" class="btn btn" style="background-color:#09aacc ; color:white; margin-left: 63%;">
+                            <a href="@Url.Action("StatutTache", "Home")" class="btn btn" style="background-color:#09aacc ; color:white; margin-left: 63%;">
                                 <i class="fa fa-sliders-h"> Gestion des roles  </i>
                             </a>
                         </div>
-                        <table class="table">
+                        <table  data-tablesaw-mode="columntoggle" class="table table-bordered first" id="tableFilter">
                             <thead>
                                 <tr>
-
                                     <th>
                                         @Html.DisplayNameFor(model => model.Nom)
                                     </th>
@@ -48,24 +47,24 @@
                                     <th>
                                         @Html.DisplayNameFor(model => model.Ville)
                                     </th>
-                                    <th></th>
                                 </tr>
 
                             </thead>
                             <tbody>
-                                @foreach (var item in Model) {
+                                @foreach (var item in Model)
+                                {
                                     <tr>
                                         <td>
-                                            @Html.DisplayFor(modelItem=> item.Nom)
+                                            @Html.DisplayFor(modelItem => item.Nom)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem=> item.Prenom)
+                                            @Html.DisplayFor(modelItem => item.Prenom)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem=> item.Email)
+                                            @Html.DisplayFor(modelItem => item.Email)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem=> item.Ville)
+                                            @Html.DisplayFor(modelItem => item.Ville)
                                         </td>
                                     </tr>
                                 }
@@ -83,6 +82,23 @@
 </div>
 
 
+<script data-config="">
+        var filtersConfig = {
+            base_path: 'tablefilter/',
+            auto_filter: {
+                delay: 120 //milliseconds
+            },
+            filters_row_index: 1,
+            state: true,
+            alternate_rows: true,
+            rows_counter: false,
+            btn_reset: false,
+            status_bar: false,
+            msg_filter: 'Filtering...'
+        };
+        var tf = new TableFilter('tableFilter', filtersConfig);
+        tf.init();
+</script>
 
 
 

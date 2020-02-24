@@ -33,8 +33,31 @@ namespace GestionnaireUtilisateurs.Controllers
                 modules = database.Module.ToList(),
                 sousModules = database.SousModule.ToList()
             };
+            ViewBag.Users = new SelectList(database.AspNetUsers, "Id", "UserName");
+            ViewBag.modules = new SelectList(database.Module, "ModuleId", "ModuleName");
+            ViewBag.sousmodules = new SelectList(database.SousModule, "SousModuleId", "SousModuleName");
+            ViewBag.taches = new SelectList(database.AspNetRoles, "Id", "Name");
             return View(model);
         }
+        
+        [Authorize]
+        public ActionResult StatutTache() {
+            var model = new MultiModeles
+            {
+                statuts = database.Statuts.ToList(),
+                aspNetRoles = database.AspNetRoles.ToList(),
+                statutRoles = database.StatutRole.ToList(),
+                modules = database.Module.ToList(),
+                sousModules = database.SousModule.ToList()
+            };
+            ViewBag.Statut = new SelectList(database.Statuts, "StatutId", "StatutName");
+            ViewBag.modules = new SelectList(database.Module, "ModuleId", "ModuleName");
+            ViewBag.sousmodules = new SelectList(database.SousModule, "SousModuleId", "SousModuleName");
+            ViewBag.taches = new SelectList(database.AspNetRoles, "Id", "Name");
+            return View(model);
+        }
+
+
         [Authorize]
         public ActionResult module() {
             return View(database.Module.ToList());

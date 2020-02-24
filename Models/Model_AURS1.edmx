@@ -100,14 +100,14 @@ avertissement 6002: La table/vue 'aurs1.dbo.StatutRole' n'a pas de clé primaire
             <PropertyRef Name="RoleId" />
             <PropertyRef Name="Read" />
             <PropertyRef Name="Create" />
-            <PropertyRef Name="Updade" />
+            <PropertyRef Name="Modifier" />
             <PropertyRef Name="Delete" />
           </Key>
           <Property Name="StatutId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Read" Type="bit" Nullable="false" />
           <Property Name="Create" Type="bit" Nullable="false" />
-          <Property Name="Updade" Type="bit" Nullable="false" />
+          <Property Name="Modifier" Type="bit" Nullable="false" />
           <Property Name="Delete" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Statuts">
@@ -245,7 +245,7 @@ avertissement 6002: La table/vue 'aurs1.dbo.StatutRole' n'a pas de clé primaire
     [StatutRole].[RoleId] AS [RoleId], 
     [StatutRole].[Read] AS [Read], 
     [StatutRole].[Create] AS [Create], 
-    [StatutRole].[Updade] AS [Updade], 
+    [StatutRole].[Modifier] AS [Modifier], 
     [StatutRole].[Delete] AS [Delete]
     FROM [dbo].[StatutRole] AS [StatutRole]</DefiningQuery>
           </EntitySet>
@@ -454,14 +454,14 @@ avertissement 6002: La table/vue 'aurs1.dbo.StatutRole' n'a pas de clé primaire
             <PropertyRef Name="RoleId" />
             <PropertyRef Name="Read" />
             <PropertyRef Name="Create" />
-            <PropertyRef Name="Updade" />
+            <PropertyRef Name="Modifier" />
             <PropertyRef Name="Delete" />
           </Key>
           <Property Name="StatutId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="RoleId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="Read" Type="Boolean" Nullable="false" />
           <Property Name="Create" Type="Boolean" Nullable="false" />
-          <Property Name="Updade" Type="Boolean" Nullable="false" />
+          <Property Name="Modifier" Type="Boolean" Nullable="false" />
           <Property Name="Delete" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetRoles" Relationship="aurs1Model.FK_StatutRole_AspNetRoles" FromRole="StatutRole" ToRole="AspNetRoles" />
           <NavigationProperty Name="Statuts" Relationship="aurs1Model.FK_StatutRole_Statuts" FromRole="StatutRole" ToRole="Statuts" />
@@ -578,7 +578,7 @@ avertissement 6002: La table/vue 'aurs1.dbo.StatutRole' n'a pas de clé primaire
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -689,7 +689,7 @@ avertissement 6002: La table/vue 'aurs1.dbo.StatutRole' n'a pas de clé primaire
             <EntityTypeMapping TypeName="aurs1Model.StatutRole">
               <MappingFragment StoreEntitySet="StatutRole">
                 <ScalarProperty Name="Delete" ColumnName="Delete" />
-                <ScalarProperty Name="Updade" ColumnName="Updade" />
+                <ScalarProperty Name="Modifier" ColumnName="Modifier" />
                 <ScalarProperty Name="Create" ColumnName="Create" />
                 <ScalarProperty Name="Read" ColumnName="Read" />
                 <ScalarProperty Name="RoleId" ColumnName="RoleId" />

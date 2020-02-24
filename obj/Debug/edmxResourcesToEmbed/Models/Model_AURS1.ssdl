@@ -95,14 +95,14 @@ avertissement 6002: La table/vue 'aurs1.dbo.StatutRole' n'a pas de clé primaire
       <PropertyRef Name="RoleId" />
       <PropertyRef Name="Read" />
       <PropertyRef Name="Create" />
-      <PropertyRef Name="Updade" />
+      <PropertyRef Name="Modifier" />
       <PropertyRef Name="Delete" />
     </Key>
     <Property Name="StatutId" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="Read" Type="bit" Nullable="false" />
     <Property Name="Create" Type="bit" Nullable="false" />
-    <Property Name="Updade" Type="bit" Nullable="false" />
+    <Property Name="Modifier" Type="bit" Nullable="false" />
     <Property Name="Delete" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Statuts">
@@ -240,7 +240,7 @@ avertissement 6002: La table/vue 'aurs1.dbo.StatutRole' n'a pas de clé primaire
     [StatutRole].[RoleId] AS [RoleId], 
     [StatutRole].[Read] AS [Read], 
     [StatutRole].[Create] AS [Create], 
-    [StatutRole].[Updade] AS [Updade], 
+    [StatutRole].[Modifier] AS [Modifier], 
     [StatutRole].[Delete] AS [Delete]
     FROM [dbo].[StatutRole] AS [StatutRole]</DefiningQuery>
     </EntitySet>

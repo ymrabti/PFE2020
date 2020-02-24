@@ -106,7 +106,7 @@
       <EntityTypeMapping TypeName="aurs1Model.StatutRole">
         <MappingFragment StoreEntitySet="StatutRole">
           <ScalarProperty Name="Delete" ColumnName="Delete" />
-          <ScalarProperty Name="Updade" ColumnName="Updade" />
+          <ScalarProperty Name="Modifier" ColumnName="Modifier" />
           <ScalarProperty Name="Create" ColumnName="Create" />
           <ScalarProperty Name="Read" ColumnName="Read" />
           <ScalarProperty Name="RoleId" ColumnName="RoleId" />

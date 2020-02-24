@@ -18,7 +18,7 @@ namespace GestionnaireUtilisateurs.Models
         public string RoleId { get; set; }
         public bool Read { get; set; }
         public bool Create { get; set; }
-        public bool Updade { get; set; }
+        public bool Modifier { get; set; }
         public bool Delete { get; set; }
     
         public virtual AspNetRoles AspNetRoles { get; set; }

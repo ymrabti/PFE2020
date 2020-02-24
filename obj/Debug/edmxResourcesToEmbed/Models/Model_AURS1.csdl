@@ -164,14 +164,14 @@
       <PropertyRef Name="RoleId" />
       <PropertyRef Name="Read" />
       <PropertyRef Name="Create" />
-      <PropertyRef Name="Updade" />
+      <PropertyRef Name="Modifier" />
       <PropertyRef Name="Delete" />
     </Key>
     <Property Name="StatutId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
     <Property Name="RoleId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
     <Property Name="Read" Type="Boolean" Nullable="false" />
     <Property Name="Create" Type="Boolean" Nullable="false" />
-    <Property Name="Updade" Type="Boolean" Nullable="false" />
+    <Property Name="Modifier" Type="Boolean" Nullable="false" />
     <Property Name="Delete" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="AspNetRoles" Relationship="aurs1Model.FK_StatutRole_AspNetRoles" FromRole="StatutRole" ToRole="AspNetRoles" />
     <NavigationProperty Name="Statuts" Relationship="aurs1Model.FK_StatutRole_Statuts" FromRole="StatutRole" ToRole="Statuts" />
