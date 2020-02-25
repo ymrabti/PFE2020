@@ -23,8 +23,17 @@ namespace GestionnaireUtilisateurs.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult SubmitModule(FormCollection formcollection)
+        {
+            TempData["Message"] = "Fruit Name: " + formcollection["UserName"];
+            TempData["Message"] += "\\nFruit Id: " + formcollection["Id"]; ;
+            return RedirectToAction("UserTache");
+        }
+
         [Authorize]
         public ActionResult UserTache() {
+            String module_selected = Request.Form["moduleSelected"];
             var model = new MultiModeles
             {
                 aspNetUsers = database.AspNetUsers.Where(p => p.NomAr != null).ToList(),
@@ -33,15 +42,19 @@ namespace GestionnaireUtilisateurs.Controllers
                 modules = database.Module.ToList(),
                 sousModules = database.SousModule.ToList()
             };
-            ViewBag.Users = new SelectList(database.AspNetUsers, "Id", "UserName");
+            ViewBag.Users = new SelectList(database.AspNetUsers.Where(p => p.NomAr != null), "Id", "NomAr");
             ViewBag.modules = new SelectList(database.Module, "ModuleId", "ModuleName");
+            ViewBag.ModuleSelected = 2;
+
+
+
             ViewBag.sousmodules = new SelectList(database.SousModule, "SousModuleId", "SousModuleName");
             ViewBag.taches = new SelectList(database.AspNetRoles, "Id", "Name");
             return View(model);
         }
         
         [Authorize]
-        public ActionResult StatutTache() {
+        public ViewResult StatutTache() {
             var model = new MultiModeles
             {
                 statuts = database.Statuts.ToList(),
@@ -50,10 +63,12 @@ namespace GestionnaireUtilisateurs.Controllers
                 modules = database.Module.ToList(),
                 sousModules = database.SousModule.ToList()
             };
-            ViewBag.Statut = new SelectList(database.Statuts, "StatutId", "StatutName");
+           
             ViewBag.modules = new SelectList(database.Module, "ModuleId", "ModuleName");
             ViewBag.sousmodules = new SelectList(database.SousModule, "SousModuleId", "SousModuleName");
             ViewBag.taches = new SelectList(database.AspNetRoles, "Id", "Name");
+
+            ViewBag.Statut = new SelectList(database.Statuts, "StatutId", "StatutName");
             return View(model);
         }
 

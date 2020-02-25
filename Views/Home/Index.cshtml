@@ -32,26 +32,18 @@
                                 <i class="fa fa-sliders-h"> Gestion des roles  </i>
                             </a>
                         </div>
-                        <table  data-tablesaw-mode="columntoggle" class="table table-bordered first" id="tableFilter">
+                        <table data-tablesaw-mode="columntoggle" class="table table-bordered first" id="tableFilter">
                             <thead>
                                 <tr>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Nom)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Prenom)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Email)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.Ville)
-                                    </th>
+                                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">@Html.DisplayNameFor(model => model.Nom)</th>
+                                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">@Html.DisplayNameFor(model => model.Prenom)</th>
+                                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">@Html.DisplayNameFor(model => model.Email)</th>
+                                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">@Html.DisplayNameFor(model => model.Ville)</th>
                                 </tr>
 
                             </thead>
-                            <tbody>
-                                @foreach (var item in Model)
+                            <tbody id="tableDemandePayee">
+                                @foreach (var item in Model.Where(po=>po.NomAr!=null))
                                 {
                                     <tr>
                                         <td>

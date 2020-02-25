@@ -1,7 +1,6 @@
 ﻿@model GestionnaireUtilisateurs.Models.MultiModeles
 
 @{
-    var module_selected = "";
     ViewBag.Title = "Taches des Utilisateurs";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -27,7 +26,7 @@
                     <div class="col-lg-12" style=" margin-left: auto; margin-right: auto;">
                         <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
                             <div class="card-body">
-                                @using (Html.BeginForm(null, null, FormMethod.Post))
+                                @using (Html.BeginForm())
                                 {
                                     <div class="card-body">
 
@@ -38,16 +37,20 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="name">Utilisateur</label>
+                                                @*@Html.DropDownList("FruitId", ViewBag.Users as SelectList
+        , "--- Sélectionner un Utilisateur ---", new { @id = "ddlFruits" }
+        )
+         @Html.Hidden("FruitName", null, new { @id = "hfFruitName" })*@
                                                 @Html.DropDownListFor(model => model.aspNetUsers, ViewBag.Users as SelectList
-                                               , "--- Sélectionner un Utilisateur ---", new { @class = "form-control form-control-sm" }
-                                               )
+                                                    , "--- Sélectionner un Utilisateur ---", new {@id = "UserSelected", @class = "form-control form-control-sm" }
+                                                    )
                                                 @*<select class="form-control form-control-sm" id="">
-                                                        <option value="">--- Sélectionner un Utilisateur ---</option>
-                                                        @foreach (var item in Model.aspNetUsers)
-                                                        {
-                                                            <option value="@item.Id">@item.NomAr</option>
-                                                        }
-                                                    </select>*@
+            <option value="">--- Sélectionner un Utilisateur ---</option>
+            @foreach (var item in Model.aspNetUsers)
+            {
+                <option value="@item.Id">@item.NomAr</option>
+            }
+        </select>*@
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
@@ -62,16 +65,16 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="name">Module</label>
-                                                @Html.DropDownListFor(model => model.modules, ViewBag.modules as SelectList
-                                               , "--- Sélectionner un module ---", new { @id = "moduleSelected", @class = "form-control form-control-sm" }
-                                               )
-                                                @*<select class="form-control form-control-sm" id="">
-                                                        <option value="">--- Sélectionner un module ---</option>
-                                                        @foreach (var item in Model.modules)
-                                                        {
-                                                            <option value="@item.ModuleId">@item.ModuleName</option>
-                                                        }
-                                                    </select>*@
+                                                @*@Html.DropDownListFor(model => model.modules, ViewBag.modules as SelectList
+        , "--- Sélectionner un module ---", new { @id = "moduleSelected", @class = "form-control form-control-sm" }
+        )*@
+                                                <select class="form-control form-control-sm" name="ListOfModules" id="ListOfModulesId">
+                                                    <option value=-1>--- Sélectionner un module ---</option>
+                                                    @foreach (var item in Model.modules)
+                                                    {
+                                                        <option value="@item.ModuleId">@item.ModuleName</option>
+                                                    }
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
@@ -85,16 +88,16 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label for="name">Sous module</label>
-                                                @Html.DropDownListFor(model => model.sousModules, ViewBag.sousmodules as SelectList
-                                               , "--- Sélectionner un sous module ---", new { @id = "submoduleSelected", @class = "form-control form-control-sm" }
-                                               )
-                                                @*<select class="form-control form-control-sm" id="">
-                                                        <option value="">--- Sélectionner un Sous module ---</option>
-                                                        @foreach (var item in Model.sousModules)
-                                                        {
-                                                            <option value="@item.SousModuleId">@item.SousModuleName</option>
-                                                        }
-                                                    </select>*@
+                                                @*@Html.DropDownListFor(model => model.sousModules, ViewBag.sousmodules as SelectList
+        , "--- Sélectionner un sous module ---", new { @id = "submoduleSelected", @class = "form-control form-control-sm" }
+        )*@
+                                                <select class="form-control form-control-sm" name="submoduleSelected" id="submoduleSelectedId">
+                                                    <option value=-11>--- Sélectionner un Sous module ---</option>
+                                                    @foreach (var item in Model.sousModules)
+                                                    {
+                                                    <option value="@item.SousModuleId" id="@item.ModuleId" style="display:none">@item.SousModuleName</option>
+                                                    }
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
@@ -129,7 +132,7 @@
                                     <div class="col-lg-12" style="text-align: right;">
                                         <div class="form-group">
 
-                                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i>&nbsp;&nbsp;&nbsp;     Ajouter au tableau </button>
+                                            <button id="btnAdd" type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i>&nbsp;&nbsp;&nbsp;     Ajouter au tableau </button>
 
                                         </div>
                                     </div>
@@ -137,7 +140,7 @@
                                         <div class="card">
                                             <h5 class="card-header">Liste des Tâches</h5>
                                             <div class="card-body">
-                                                <table class="table table-hover">
+                                                <table class="table table-hover" id="table_roleUsers">
                                                     <thead>
                                                         <tr>
 
@@ -211,7 +214,6 @@
                                     <div class="row">
 
                                         <div class="col-lg-6">
-                                            <input type="text" id="SelectedCompany" />
                                             <div class="form-group">
                                                 @Html.ActionLink("Retour a la liste", "Index", "Home")
                                             </div>
@@ -488,38 +490,114 @@
         </div>
     </div>
 </div>
-<script>
-    var sous_modules = [];
 
-</script>
-@foreach (var item in Model.sousModules.Where(element => element.ModuleId.ToString() == module_selected))
-{
-    <script>
-    sous_modules.push([@item.SousModuleId,@item.SousModuleName]);
-    </script>
-}
 @section Scripts{
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#moduleSelected").change(function (evt) {
-                $("#SelectedCompany").val($("#moduleSelected option:selected").val().trim());
-                @module_selected = $("#moduleSelected option:selected").val().trim();
-                @*$("#submoduleSelected").empty()
-                $.each(sous_modules, function () {
-                    $("#submoduleSelected").append($("<option />").val(this.id).text(this.Text));
-                });}*@
-                var op = document.getElementById("submoduleSelected").getElementsByTagName("option");
 
-                for (var i = 0; i < op.length; i++) {
-                    for (var j = 0; j < sous_modules.length; j++) {
-                        if (op[i].value != sous_modules[j][0] /*&& op[i].value != "2" || op[i].value.toLowerCase() == "3"*/) {
-                            op[i].hidden = true;
-                        }
-                    }
+    <script type="text/javascript">
+        function returnLab() {
+            var labe = document.createElement("LABEL");
+            labe.className = "be-checkbox custom-control custom-checkbox";
+
+            var spanne = document.createElement("SPAN");
+            spanne.className = "custom-control-label";
+
+            var chkbx = document.createElement("INPUT");
+            chkbx.setAttribute("type", "checkbox");
+            chkbx.className = "custom-control-input";
+
+            labe.appendChild(chkbx); labe.appendChild(spanne);
+            return labe;
+        }
+
+        $(document).ready(function () {
+
+
+            $("body").on("click", "#btnAdd", function () {
+
+                //Get the reference of the Table's TBODY element.
+                var tBody = $("#table_roleUsers > TBODY")[0];
+
+                if ($("#UserSelected option:selected").text().includes("--- Sélectionner") == true
+                    || $("#tache_selected option:selected").text().includes("--- Sélectionner") == true) {
+                    alert("toutes les champs obligatoires !");
+                }
+                else {
+                    //Add Row.
+                    var row = tBody.insertRow(-1);
+                    var cell = $(row.insertCell(-1));
+                    cell.html($("#UserSelected option:selected").text().trim());
+                    cell = $(row.insertCell(-1));
+                    cell.html($("#moduleSelected option:selected").text().trim());
+                    cell = $(row.insertCell(-1));
+                    cell.html($("#submoduleSelected option:selected").text().trim());
+                    cell = $(row.insertCell(-1));
+                    cell.html($("#tache_selected option:selected").text().trim());
+
+
+
+                    cell = $(row.insertCell(-1)); cell.append(returnLab());
+                    cell = $(row.insertCell(-1)); cell.append(returnLab());
+                    cell = $(row.insertCell(-1)); cell.append(returnLab());
+                    cell = $(row.insertCell(-1)); cell.append(returnLab());
+
 
                 }
-            }
-            );
+
+            });
+
+            $('#ListOfModulesId').change(function () {
+
+                var e = document.getElementById("ListOfModulesId");
+                var choix = e.options[e.selectedIndex].value;
+                var Modulee = $(this).val();
+                var com = $("#submoduleSelectedId > option");
+                $("#submoduleSelectedId")[0].selectedIndex = 0; 
+                var a = com[0].getAttribute("id");
+                for (var i = 0; i < com.length; i++) {
+                    if (com[i].getAttribute("id") == Modulee || a == choix || a == -1) {
+                        com[i].style.display = "block";
+                    }
+                    else {
+                        com[i].style.display = "none";
+                    }
+                }
+                $('#submoduleSelectedId').trigger("liszt:updated");
+
+            });
+            @*var sousModulesdmdls = [];
+
+                @foreach (var d in Model.sousModules)
+                {
+                    @:sousModulesdmdls.push("@d");
+                }*@
+            //$("#moduleSelected").change(function (evt) {
+            //    ViewBag.ModuleSelected = $("#moduleSelected option:selected").val().trim();
+            //    $("#submoduleSelected").empty()
+            //    for (var i = 0; i < sousModulesdmdls.length; i++) {
+            //        creates option tag
+            //        jQuery('<option/>', {
+            //            value: sousModulesdmdls[i],
+            //            html: sousModulesdmdls[i]
+            //        }).appendTo('#submoduleSelected select'); //appends to select if parent div has id dropdown
+            //    }
+            //    $.each(sousModulesdmdls, function () {
+            //        $("#submoduleSelected").append($("<option />").val(this.id).text(this.Text));
+            //    });
+            //    var op = document.getElementById("submoduleSelected").getElementsByTagName("option");
+
+            //    for (var i = 0; i < op.length; i++) {
+            //        for (var j = 0; j < sous_modules.length; j++) {
+            //            if (op[i].value != sous_modules[j][0] /*&& op[i].value != "2" || op[i].value.toLowerCase() == "3"*/) {
+            //                op[i].hidden = true;
+            //            }
+            //        }
+            //        if (op[i].value != 1 && op[i].value != "2" /*|| op[i].value.toLowerCase() == "3"*/) {
+            //                op[i].hidden = true;
+            //            }
+
+            //    }
+            //}
+            //);
         });
     </script>
 }
