@@ -1,4 +1,5 @@
 ﻿using GestionnaireUtilisateurs.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,14 +87,33 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(database.AspNetRoles.ToList());
         }
 
+        public JsonResult SaveData(string getepassdata)
+        {
+            //try
+            //{
+            //    var serializeData = JsonConvert.DeserializeObject<List<AspNetUserRoles>>(getepassdata);
 
+            //    foreach (var data in serializeData)
+            //    {
+            //        database.AspNetUserRoles.Add(data);
+            //    }
+
+            //    database.SaveChanges();
+            //}
+            //catch (Exception)
+            //{
+            //    return Json("fail");
+            //}
+
+            return Json(getepassdata);
+        }
 
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+            ViewBag.RoleId = new SelectList(database.AspNetRoles, "Id", "Name");
+            ViewBag.UserId = new SelectList(database.AspNetUsers, "Id", "UserNameAr");
+            return View(new AspNetUserRoles { });
         }
 
         public ActionResult Contact()

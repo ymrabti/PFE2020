@@ -1,5 +1,4 @@
 ﻿@model GestionnaireUtilisateurs.Models.MultiModeles
-
 @{
     ViewBag.Title = "Taches des Utilisateurs";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -38,19 +37,19 @@
                                             <div class="form-group">
                                                 <label for="name">Utilisateur</label>
                                                 @*@Html.DropDownList("FruitId", ViewBag.Users as SelectList
-        , "--- Sélectionner un Utilisateur ---", new { @id = "ddlFruits" }
-        )
-         @Html.Hidden("FruitName", null, new { @id = "hfFruitName" })*@
+                                                    , "--- Sélectionner un Utilisateur ---", new { @id = "ddlFruits" }
+                                                    )
+                                                     @Html.Hidden("FruitName", null, new { @id = "hfFruitName" })*@
                                                 @Html.DropDownListFor(model => model.aspNetUsers, ViewBag.Users as SelectList
-                                                    , "--- Sélectionner un Utilisateur ---", new {@id = "UserSelected", @class = "form-control form-control-sm" }
+                                                    , "--- Sélectionner un Utilisateur ---", new { @id = "UserSelected", @class = "form-control form-control-sm" }
                                                     )
                                                 @*<select class="form-control form-control-sm" id="">
-            <option value="">--- Sélectionner un Utilisateur ---</option>
-            @foreach (var item in Model.aspNetUsers)
-            {
-                <option value="@item.Id">@item.NomAr</option>
-            }
-        </select>*@
+                                                        <option value="">--- Sélectionner un Utilisateur ---</option>
+                                                        @foreach (var item in Model.aspNetUsers)
+                                                        {
+                                                            <option value="@item.Id">@item.NomAr</option>
+                                                        }
+                                                    </select>*@
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
@@ -66,8 +65,8 @@
                                             <div class="form-group">
                                                 <label for="name">Module</label>
                                                 @*@Html.DropDownListFor(model => model.modules, ViewBag.modules as SelectList
-        , "--- Sélectionner un module ---", new { @id = "moduleSelected", @class = "form-control form-control-sm" }
-        )*@
+                                                    , "--- Sélectionner un module ---", new { @id = "moduleSelected", @class = "form-control form-control-sm" }
+                                                    )*@
                                                 <select class="form-control form-control-sm" name="ListOfModules" id="ListOfModulesId">
                                                     <option value=-1>--- Sélectionner un module ---</option>
                                                     @foreach (var item in Model.modules)
@@ -89,13 +88,13 @@
                                             <div class="form-group">
                                                 <label for="name">Sous module</label>
                                                 @*@Html.DropDownListFor(model => model.sousModules, ViewBag.sousmodules as SelectList
-        , "--- Sélectionner un sous module ---", new { @id = "submoduleSelected", @class = "form-control form-control-sm" }
-        )*@
+                                                    , "--- Sélectionner un sous module ---", new { @id = "submoduleSelected", @class = "form-control form-control-sm" }
+                                                    )*@
                                                 <select class="form-control form-control-sm" name="submoduleSelected" id="submoduleSelectedId">
                                                     <option value=-11>--- Sélectionner un Sous module ---</option>
                                                     @foreach (var item in Model.sousModules)
                                                     {
-                                                    <option value="@item.SousModuleId" id="@item.ModuleId" style="display:none">@item.SousModuleName</option>
+                                                        <option value="@item.SousModuleId" id="@item.ModuleId" style="display:none">@item.SousModuleName</option>
                                                     }
                                                 </select>
                                             </div>
@@ -112,9 +111,16 @@
                                             <div class="form-group">
 
                                                 <label for="name">tâche</label>
-                                                @Html.DropDownListFor(model => model.aspNetRoles, ViewBag.taches as SelectList
-                                               , "--- Sélectionner une tâche ---", new { @id = "tache_selected", @class = "form-control form-control-sm" }
-                                               )
+                                                @*@Html.DropDownListFor(model => model.aspNetRoles, ViewBag.taches as SelectList
+                                                    , "--- Sélectionner une tâche ---", new { @id = "tache_selected", @class = "form-control form-control-sm" }
+                                                    )*@
+                                                <select class="form-control form-control-sm" name="tacheSelected" id="tacheSelectedId">
+                                                    <option value=-11>--- Sélectionner une tâche ---</option>
+                                                    @foreach (var item in Model.aspNetRoles)
+                                                    {
+                                                        <option value="@item.Id" id="@item.SouModuleId" style="display:none">@item.Name</option>
+                                                    }
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
@@ -163,7 +169,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach (var item in Model.aspNetUserRoles)
+                                                        @*@foreach (var item in Model.aspNetUserRoles)
                                                         {
                                                             <tr>
                                                                 <td>
@@ -203,7 +209,7 @@
                                                                     </label>
                                                                 </td>
                                                             </tr>
-                                                        }
+                                                        }*@
 
                                                     </tbody>
                                                 </table>
@@ -220,7 +226,7 @@
                                         </div>
                                         <div class="col-lg-6" style="text-align: right;">
                                             <div class="form-group">
-
+                                                <button id="btnSubmit">Submit</button>
                                                 <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i>&nbsp;&nbsp;&nbsp;     Enregistrer </button>
 
                                             </div>
@@ -279,7 +285,7 @@
                     <div class="form-group">
                         <label for="name">Nom du sous module</label>
 
-                        <input id="name" type="text" name="name" class="form-control">
+                        <input id="name1" type="text" name="name" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="name">Description du sous module</label>
@@ -308,7 +314,7 @@
                     <div class="form-group">
                         <label for="name">Nom du tâche</label>
 
-                        <input id="name" type="text" name="name" class="form-control">
+                        <input id="name2" type="text" name="name" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="name">Description du tâche</label>
@@ -324,193 +330,80 @@
         </div>
     </div>
 
-    <div class="modal fade" id="staticBackdrop3" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Ajouter un utilisateur</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12" style=" margin-left: auto; margin-right: auto;">
-                        <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
-                            <div class="card-body">
-                                <form action="@Url.Action("Index", "Home")" method="post">
-                                    <div class="form-group">
-                                        <label for="inputText12">Type d'utilisateur :</label>
-                                        <br>
-                                        <label class="custom-control custom-radio custom-control-inline">
-                                            <input disabled="" type="radio" name="prop1" class="custom-control-input" id="11"><span class="custom-control-label">Morale</span>
-                                        </label>
-                                        <label class="custom-control custom-radio custom-control-inline">
-                                            <input disabled="" type="radio" name="prop1" checked="" class="custom-control-input" id="22"><span class="custom-control-label">Physique</span>
-                                        </label>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">Nom</label>
-                                                <input id="name" type="text" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">Prenom</label>
-                                                <input id="name" type="text" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name" style="  margin-left: 89%">الاسم الشخصي</label>
-                                                <input id="name" type="text" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name" style="  margin-left: 91%">الاسم العائلي</label>
-                                                <input id="name" type="text" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">CIN</label>
-                                                <input id="name" type="text" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">Ville</label>
-                                                <input id="name" type="text" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="inputText12">Sexe:</label>
-                                                <br>
-                                                <label class="custom-control custom-radio custom-control-inline">
-                                                    <input type="radio" name="prop" class="custom-control-input" id="1"><span class="custom-control-label">Homme</span>
-                                                </label>
-                                                <label class="custom-control custom-radio custom-control-inline">
-                                                    <input type="radio" name="prop" class="custom-control-input" id="2"><span class="custom-control-label">Femme</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">Email</label>
-                                                <input id="name" type="email" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">N°Telephone</label>
-                                                <input id="name" type="number" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">Mot de passe</label>
-                                                <input id="name" type="password" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">Confirmer mot de passe</label>
-                                                <input id="name" type="password" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">Statut</label>
-                                                <select class="form-control form-control-sm">
-                                                    <option value="">Statut</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <br />
-
-                                                <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop"><i class=" fas fa-plus">  </i>    </button>
-
-
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-
-                                        <div class="col-lg-6" style="text-align: right;">
-                                            <div class="form-group">
-
-                                                <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-user-plus">  </i>&nbsp;&nbsp;&nbsp;     Créer un compte</button>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </form>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 @section Scripts{
 
     <script type="text/javascript">
-        function returnLab() {
+        function returnLab(checkboxid,Name) {
             var labe = document.createElement("LABEL");
             labe.className = "be-checkbox custom-control custom-checkbox";
 
             var spanne = document.createElement("SPAN");
             spanne.className = "custom-control-label";
 
-            var chkbx = document.createElement("INPUT");
-            chkbx.setAttribute("type", "checkbox");
-            chkbx.className = "custom-control-input";
 
-            labe.appendChild(chkbx); labe.appendChild(spanne);
+            var chkbx = document.createElement("INPUT");
+            chkbx.setAttribute("checked","checked");
+            chkbx.className = "custom-control-input";
+            chkbx.id = checkboxid;
+            chkbx.setAttribute("name", Name);
+            chkbx.setAttribute("type", "checkbox");
+            chkbx.value = true;
+
+            var inputhidden = document.createElement("INPUT");
+            inputhidden.setAttribute("name", Name);
+            inputhidden.setAttribute("type", "hidden");
+            inputhidden.value = false;
+
+            labe.appendChild(chkbx);
+            labe.appendChild(inputhidden);
+            labe.appendChild(spanne);
+
             return labe;
         }
 
-        $(document).ready(function () {
+        
+    function getAllData() {
+        var data = [];
+        $('tbody tr').each(function () {
+            var User = $(this).find('#UserTached').val();
+            var Tache = $(this).find('#TacheUserAttached').val();
+            var lire = $(this).find('#item_Read_Value').val();
+            var ecrire = $(this).find('#item_Create_Value').val();
+            var modifier = $(this).find('#item_Update_Value').val();
+            var supprimer = $(this).find('#item_Delete_Value').val();
+            var alldata = {
+                'UserId': User,
+                'RoleId': Tache,
+                'Read': lire,
+                'Create': ecrire,
+                'Update': modifier,
+                'Delete': supprimer
+            }
+            data.push(alldata);
+        });
+        console.log(data);
+        return data;
+    }
 
+        $(document).ready(function () {
+            $('#btnSubmit').click(function () {
+                var data = JSON.stringify(getAllData());
+                $.ajax({
+                    url: '/Home/SaveData',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({ 'getepassdata': data }),
+                    success: function () {
+                        alert("Data Added Successfully"+success);
+                    },
+                    error: function () {
+                        alert("Error while inserting data");
+                    }
+                });
+            });
 
             $("body").on("click", "#btnAdd", function () {
 
@@ -522,24 +415,39 @@
                     alert("toutes les champs obligatoires !");
                 }
                 else {
-                    //Add Row.
-                    var row = tBody.insertRow(-1);
-                    var cell = $(row.insertCell(-1));
-                    cell.html($("#UserSelected option:selected").text().trim());
-                    cell = $(row.insertCell(-1));
-                    cell.html($("#moduleSelected option:selected").text().trim());
-                    cell = $(row.insertCell(-1));
-                    cell.html($("#submoduleSelected option:selected").text().trim());
-                    cell = $(row.insertCell(-1));
-                    cell.html($("#tache_selected option:selected").text().trim());
+                    var userrid = $("#UserSelected option:selected").val().trim();
+                    var teccherid = $("#tacheSelectedId option:selected").val().trim();
+                    var rowidnew = userrid + "," + teccherid;
+                    rowidnew = rowidnew.replace("-", "");
+                    if ($("#"+rowidnew).length) {
+                        alert("deja exists sur le tableau");
+                    } else {
+
+                        var row = tBody.insertRow(-1);
+                        row.setAttribute("id", userrid + "," + teccherid);
+
+                        var cell = $(row.insertCell(-1));
+                        cell.html($("#UserSelected option:selected").text().trim());
+                        cell.attr("name", "UserTached");
+
+                        cell = $(row.insertCell(-1));
+                        cell.html($("#ListOfModulesId option:selected").text().trim());
+
+                        cell = $(row.insertCell(-1));
+                        cell.html($("#submoduleSelectedId option:selected").text().trim());
+
+                        cell = $(row.insertCell(-1));
+                        cell.html($("#tacheSelectedId option:selected").text().trim());
+                        cell.attr("name", "TacheUserAttached");
 
 
+                        cell = $(row.insertCell(-1)); cell.append(returnLab("item_Read_Value,"+rowidnew, "item.Read.Value"));
+                        cell = $(row.insertCell(-1)); cell.append(returnLab("item_Create_Value,"+rowidnew, "item.Create.Value"));
+                        cell = $(row.insertCell(-1)); cell.append(returnLab("item_Update_Value,"+rowidnew, "item.Update.Value"));
+                        cell = $(row.insertCell(-1)); cell.append(returnLab("item_Delete_Value,"+rowidnew, "item.Delete.Value"));
 
-                    cell = $(row.insertCell(-1)); cell.append(returnLab());
-                    cell = $(row.insertCell(-1)); cell.append(returnLab());
-                    cell = $(row.insertCell(-1)); cell.append(returnLab());
-                    cell = $(row.insertCell(-1)); cell.append(returnLab());
 
+                    }
 
                 }
 
@@ -551,7 +459,8 @@
                 var choix = e.options[e.selectedIndex].value;
                 var Modulee = $(this).val();
                 var com = $("#submoduleSelectedId > option");
-                $("#submoduleSelectedId")[0].selectedIndex = 0; 
+                $("#submoduleSelectedId")[0].selectedIndex = 0;
+                $("#tacheSelectedId")[0].selectedIndex = 0;
                 var a = com[0].getAttribute("id");
                 for (var i = 0; i < com.length; i++) {
                     if (com[i].getAttribute("id") == Modulee || a == choix || a == -1) {
@@ -564,40 +473,26 @@
                 $('#submoduleSelectedId').trigger("liszt:updated");
 
             });
-            @*var sousModulesdmdls = [];
+            $('#submoduleSelectedId').change(function () {
 
-                @foreach (var d in Model.sousModules)
-                {
-                    @:sousModulesdmdls.push("@d");
-                }*@
-            //$("#moduleSelected").change(function (evt) {
-            //    ViewBag.ModuleSelected = $("#moduleSelected option:selected").val().trim();
-            //    $("#submoduleSelected").empty()
-            //    for (var i = 0; i < sousModulesdmdls.length; i++) {
-            //        creates option tag
-            //        jQuery('<option/>', {
-            //            value: sousModulesdmdls[i],
-            //            html: sousModulesdmdls[i]
-            //        }).appendTo('#submoduleSelected select'); //appends to select if parent div has id dropdown
-            //    }
-            //    $.each(sousModulesdmdls, function () {
-            //        $("#submoduleSelected").append($("<option />").val(this.id).text(this.Text));
-            //    });
-            //    var op = document.getElementById("submoduleSelected").getElementsByTagName("option");
+                var e = document.getElementById("submoduleSelectedId");
+                var choix = e.options[e.selectedIndex].value;
+                var SubModulee = $(this).val();
+                var com = $("#tacheSelectedId > option");
+                $("#tacheSelectedId")[0].selectedIndex = 0;
+                var a = com[0].getAttribute("id");
+                for (var i = 0; i < com.length; i++) {
+                    if (com[i].getAttribute("id") == SubModulee || a == choix || a == -1) {
+                        com[i].style.display = "block";
+                    }
+                    else {
+                        com[i].style.display = "none";
+                    }
+                }
+                $('#tacheSelectedId').trigger("liszt:updated");
 
-            //    for (var i = 0; i < op.length; i++) {
-            //        for (var j = 0; j < sous_modules.length; j++) {
-            //            if (op[i].value != sous_modules[j][0] /*&& op[i].value != "2" || op[i].value.toLowerCase() == "3"*/) {
-            //                op[i].hidden = true;
-            //            }
-            //        }
-            //        if (op[i].value != 1 && op[i].value != "2" /*|| op[i].value.toLowerCase() == "3"*/) {
-            //                op[i].hidden = true;
-            //            }
+            });
 
-            //    }
-            //}
-            //);
         });
     </script>
 }
