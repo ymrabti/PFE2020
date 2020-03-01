@@ -763,6 +763,8 @@
     <Content Include="Views\ANR\Edit.cshtml" />
     <Content Include="Views\ANR\Index.cshtml" />
     <Content Include="Views\Home\SaveData.cshtml" />
+    <Content Include="Views\Home\TableResult.cshtml" />
+    <Content Include="Views\Home\Contacter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

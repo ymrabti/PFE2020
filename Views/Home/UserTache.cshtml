@@ -13,10 +13,10 @@
                 <div class="tab-content" style="text-align:center; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
                     <div class="card-body">
 
-                        <span class="mr-2"> <span class="badge-dot badge-info"></span>Nom : Utilisateur  1 &nbsp;&nbsp;</span>
-                        <span class="mr-2"> <span class="badge-dot badge-info"></span>Prenom : Utilisateur  1 &nbsp;&nbsp;</span>
-                        <span class="mr-2"> <span class="badge-dot badge-info"></span>Email : Utilisateur1@Email.com &nbsp;&nbsp;</span>
-                        <span class="mr-2"> <span class="badge-dot badge-info"></span>Statut :Statut</span>
+                        <span class="mr-2"> <span class="badge-dot badge-info"></span>Nom : @ViewBag.Nom &nbsp;&nbsp;</span>
+                        <span class="mr-2"> <span class="badge-dot badge-info"></span>Prenom : @ViewBag.Prenom &nbsp;&nbsp;</span>
+                        <span class="mr-2"> <span class="badge-dot badge-info"></span>Email : @ViewBag.Email &nbsp;&nbsp;</span>
+                        <span class="mr-2"> <span class="badge-dot badge-info"></span>Statut : @ViewBag.StatusName</span>
 
                     </div>
                 </div>
@@ -25,123 +25,98 @@
                     <div class="col-lg-12" style=" margin-left: auto; margin-right: auto;">
                         <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
                             <div class="card-body">
-                                @using (Html.BeginForm())
-                                {
-                                    <div class="card-body">
+                                <div class="card-body">
 
-                                        <h4> <span class="badge-dot badge-info"></span>  Gestion des roles</h4>
-                                        <hr />
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="name">Utilisateur</label>
-                                                @*@Html.DropDownList("FruitId", ViewBag.Users as SelectList
-                                                    , "--- Sélectionner un Utilisateur ---", new { @id = "ddlFruits" }
-                                                    )
-                                                     @Html.Hidden("FruitName", null, new { @id = "hfFruitName" })*@
-                                                @Html.DropDownListFor(model => model.aspNetUsers, ViewBag.Users as SelectList
-                                                    , "--- Sélectionner un Utilisateur ---", new { @id = "UserSelected", @class = "form-control form-control-sm" }
-                                                    )
-                                                @*<select class="form-control form-control-sm" id="">
-                                                        <option value="">--- Sélectionner un Utilisateur ---</option>
-                                                        @foreach (var item in Model.aspNetUsers)
-                                                        {
-                                                            <option value="@item.Id">@item.NomAr</option>
-                                                        }
-                                                    </select>*@
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <br />
-                                                <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop3"><i class=" fas fa-plus"></i></button>
-                                            </div>
+                                    <h4> <span class="badge-dot badge-info"></span>  Gestion des roles</h4>
+                                    <hr />
+                                </div>
+                               
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="name">Module</label>
+                                            @*@Html.DropDownListFor(model => model.modules, ViewBag.modules as SelectList
+                                                , "--- Sélectionner un module ---", new { @id = "moduleSelected", @class = "form-control form-control-sm" }
+                                                )*@
+                                            <select class="form-control form-control-sm" name="ListOfModules" id="ListOfModulesId">
+                                                <option value=-1>--- Sélectionner un module ---</option>
+                                                @foreach (var item in Model.modules)
+                                                {
+                                                    <option value="@item.ModuleId">@item.ModuleName</option>
+                                                }
+                                            </select>
                                         </div>
                                     </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="name">Module</label>
-                                                @*@Html.DropDownListFor(model => model.modules, ViewBag.modules as SelectList
-                                                    , "--- Sélectionner un module ---", new { @id = "moduleSelected", @class = "form-control form-control-sm" }
-                                                    )*@
-                                                <select class="form-control form-control-sm" name="ListOfModules" id="ListOfModulesId">
-                                                    <option value=-1>--- Sélectionner un module ---</option>
-                                                    @foreach (var item in Model.modules)
-                                                    {
-                                                        <option value="@item.ModuleId">@item.ModuleName</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <br />
-                                                <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop"><i class=" fas fa-plus"></i></button>
-                                            </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <br />
+                                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop"><i class=" fas fa-plus"></i></button>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="name">Sous module</label>
-                                                @*@Html.DropDownListFor(model => model.sousModules, ViewBag.sousmodules as SelectList
-                                                    , "--- Sélectionner un sous module ---", new { @id = "submoduleSelected", @class = "form-control form-control-sm" }
-                                                    )*@
-                                                <select class="form-control form-control-sm" name="submoduleSelected" id="submoduleSelectedId">
-                                                    <option value=-11>--- Sélectionner un Sous module ---</option>
-                                                    @foreach (var item in Model.sousModules)
-                                                    {
-                                                        <option value="@item.SousModuleId" id="@item.ModuleId" style="display:none">@item.SousModuleName</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <br />
-                                                <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop1"><i class=" fas fa-plus"></i></button>
-                                            </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="name">Sous module</label>
+                                            @*@Html.DropDownListFor(model => model.sousModules, ViewBag.sousmodules as SelectList
+                                                , "--- Sélectionner un sous module ---", new { @id = "submoduleSelected", @class = "form-control form-control-sm" }
+                                                )*@
+                                            <select class="form-control form-control-sm" name="submoduleSelected" id="submoduleSelectedId">
+                                                <option value=-11>--- Sélectionner un Sous module ---</option>
+                                                @foreach (var item in Model.sousModules)
+                                                {
+                                                    <option value="@item.SousModuleId" name="@item.ModuleId" style="display:none">@item.SousModuleName</option>
+                                                }
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">tâche</label>
-                                                @*@Html.DropDownListFor(model => model.aspNetRoles, ViewBag.taches as SelectList
-                                                    , "--- Sélectionner une tâche ---", new { @id = "tache_selected", @class = "form-control form-control-sm" }
-                                                    )*@
-                                                <select class="form-control form-control-sm" name="tacheSelected" id="tacheSelectedId">
-                                                    <option value=-11>--- Sélectionner une tâche ---</option>
-                                                    @foreach (var item in Model.aspNetRoles)
-                                                    {
-                                                        <option value="@item.Id" id="@item.SouModuleId" style="display:none">@item.Name</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <br />
-
-                                                <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop2"><i class=" fas fa-plus">  </i>    </button>
-
-
-
-
-                                            </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <br />
+                                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop1"><i class=" fas fa-plus"></i></button>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12" style="text-align: right;">
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
                                         <div class="form-group">
 
-                                            <button id="btnAdd" type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i>&nbsp;&nbsp;&nbsp;     Ajouter au tableau </button>
+                                            <label for="name">tâche</label>
+                                            @*@Html.DropDownListFor(model => model.aspNetRoles, ViewBag.taches as SelectList
+                                                , "--- Sélectionner une tâche ---", new { @id = "tacheSelectedId", @class = "form-control form-control-sm" ,@style="display:none"}
+                                                )*@
+                                            <select class="form-control form-control-sm" name="tacheSelected" id="tacheSelectedId">
+                                                <option value=-111>--- Sélectionner une tâche ---</option>
+                                                @foreach (var item in Model.aspNetRoles)
+                                                {
+                                                    <option value="@item.Id" name="@item.SouModuleId" style="display:none">@item.Name</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <br />
+
+                                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop2"><i class=" fas fa-plus">  </i>    </button>
+
+
+
 
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-lg-12" style="text-align: right;">
+                                    <div class="form-group">
+
+                                        <button id="btnAdd" type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i>&nbsp;&nbsp;&nbsp;     Ajouter au tableau </button>
+
+                                    </div>
+                                </div>
+
+                                @using (Html.BeginForm("Contacter", "Home", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
                                     <div class="col-xl-12 col-lg-9 col-md-12 col-sm-12 col-12" style="margin-left: -1%;">
                                         <div class="card">
                                             <h5 class="card-header">Liste des Tâches</h5>
@@ -150,9 +125,6 @@
                                                     <thead>
                                                         <tr>
 
-                                                            <th>
-                                                                @Html.DisplayNameFor(model => Model.aspNetUsers)
-                                                            </th>
                                                             <th>
                                                                 @Html.DisplayNameFor(model => Model.modules)
                                                             </th>
@@ -168,13 +140,11 @@
                                                             <th scope="col">Supprimer</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
-                                                        @*@foreach (var item in Model.aspNetUserRoles)
+                                                    <tbody name="tableRoles">
+
+                                                        @foreach (var item in Model.aspNetUserRoles)
                                                         {
                                                             <tr>
-                                                                <td>
-                                                                    @Html.DisplayFor(modelItem => item.AspNetUsers.UserName)
-                                                                </td>
                                                                 <td>
                                                                     @Html.DisplayFor(modelItem => item.AspNetRoles.SousModule.Module.ModuleName)
                                                                 </td>
@@ -182,41 +152,78 @@
                                                                     @Html.DisplayFor(modelItem => item.AspNetRoles.SousModule.SousModuleName)
                                                                 </td>
                                                                 <td>
-                                                                    @Html.DisplayFor(modelItem => item.AspNetRoles.Name)
+                                                                    @Html.Hidden("RoleId", item.RoleId, new { @id = item.RoleId })
+                                                                    @Html.Hidden("UserId", item.UserId, new { @id = "UserId_" + item.RoleId })
+                                                                    @Html.DisplayFor(m => item.AspNetRoles.Name, item.RoleId)
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(modelitem => item.Read.Value, new { @class = "custom-control-input" })
+                                                                        @Html.CheckBoxFor(m => item.Read.Value
+                                                                   , new
+                                                                        {
+                                                                            @class = "custom-control-input",
+                                                                            Name = "Read"
+                                                                   ,
+                                                                            @id = "Read_" + item.RoleId,
+                                                                            @onclick = "ReadCheckBox(this,\"" + item.RoleId + "\")"
+                                                                        })
+                                                                        @Html.Hidden("Lire", item.Read, new { @id = "Lire_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(modelitem => item.Create.Value, new { @class = "custom-control-input" })
+                                                                        @Html.CheckBoxFor(m => item.Create.Value
+                                                                   , new
+                                                                        {
+                                                                            @class = "custom-control-input",
+                                                                            Name = "Create"
+                                                                   ,
+                                                                            @id = "Create_" + item.RoleId,
+                                                                            @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Cree_\")"
+                                                                        })
+                                                                        @Html.Hidden("Cree", item.Create, new { @id = "Cree_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(modelitem => item.Update.Value, new { @class = "custom-control-input" })
+                                                                        @Html.CheckBoxFor(m => item.Update.Value
+                                                                   , new
+                                                                        {
+                                                                            @class = "custom-control-input",
+                                                                            Name = "Update"
+                                                                   ,
+                                                                            @id = "Update_" + item.RoleId,
+                                                                            @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Modifier_\")"
+                                                                        })
+                                                                        @Html.Hidden("Modifier", item.Update, new { @id = "Modifier_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(modelitem => item.Delete.Value, new { @class = "custom-control-input" })
+                                                                        @Html.CheckBoxFor(m => item.Delete.Value
+                                                                   , new
+                                                                        {
+                                                                            @class = "custom-control-input",
+                                                                            Name = "Delete"
+                                                                   ,
+                                                                            @id = "Delete_" + item.RoleId,
+                                                                            @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Supprimer_\")"
+                                                                        })
+                                                                        @Html.Hidden("Supprimer", item.Delete, new { @id = "Supprimer_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                             </tr>
-                                                        }*@
+                                                        }
 
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="row">
 
                                         <div class="col-lg-6">
@@ -226,7 +233,6 @@
                                         </div>
                                         <div class="col-lg-6" style="text-align: right;">
                                             <div class="form-group">
-                                                <button id="btnSubmit">Submit</button>
                                                 <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i>&nbsp;&nbsp;&nbsp;     Enregistrer </button>
 
                                             </div>
@@ -335,100 +341,98 @@
 @section Scripts{
 
     <script type="text/javascript">
-        function returnLab(checkboxid,Name) {
-            var labe = document.createElement("LABEL");
-            labe.className = "be-checkbox custom-control custom-checkbox";
 
-            var spanne = document.createElement("SPAN");
-            spanne.className = "custom-control-label";
+        function ReadCheckBox(checkbox, iden) {
+            if (checkbox.checked == false) {
+                document.getElementById("Create_"  + iden).checked = false;
+                document.getElementById("Update_"  + iden).checked = false;
+                document.getElementById("Delete_"  + iden).checked = false;
 
+                document.getElementById("Lire_"      + iden).value = false;
+                document.getElementById("Cree_"      + iden).value = false;
+                document.getElementById("Modifier_"  + iden).value = false;
+                document.getElementById("Supprimer_" + iden).value = false;
+            }
+            else {document.getElementById("Lire_" + iden).value = true;
 
-            var chkbx = document.createElement("INPUT");
-            chkbx.setAttribute("checked","checked");
-            chkbx.className = "custom-control-input";
-            chkbx.id = checkboxid;
-            chkbx.setAttribute("name", Name);
-            chkbx.setAttribute("type", "checkbox");
-            chkbx.value = true;
+            }
 
-            var inputhidden = document.createElement("INPUT");
-            inputhidden.setAttribute("name", Name);
-            inputhidden.setAttribute("type", "hidden");
-            inputhidden.value = false;
-
-            labe.appendChild(chkbx);
-            labe.appendChild(inputhidden);
-            labe.appendChild(spanne);
-
-            return labe;
         }
 
-        
-    function getAllData() {
-        var data = [];
-        $('tbody tr').each(function () {
-            var User = $(this).find('#UserTached').val();
-            var Tache = $(this).find('#TacheUserAttached').val();
-            var lire = $(this).find('#item_Read_Value').val();
-            var ecrire = $(this).find('#item_Create_Value').val();
-            var modifier = $(this).find('#item_Update_Value').val();
-            var supprimer = $(this).find('#item_Delete_Value').val();
-            var alldata = {
-                'UserId': User,
-                'RoleId': Tache,
-                'Read': lire,
-                'Create': ecrire,
-                'Update': modifier,
-                'Delete': supprimer
+        function cudCheckBox(checkbox, iden, action) {
+            if (checkbox.checked == true) {
+
+                var checkread = document.getElementById("Read_" + iden);
+                checkread.checked = true;
+                document.getElementById("Lire_" + iden).value = true;
+
+                document.getElementById(action + iden).value = true;
+
             }
-            data.push(alldata);
-        });
-        console.log(data);
-        return data;
-    }
+            else {document.getElementById(action + iden).value = false;
+            }
+        }
+
+        function deleteRow(id) {
+            if (confirm("Volez vous vraiment revoquer le role!")) {
+                var element = document.getElementById("row" + id);
+                element.parentNode.removeChild(element);
+            }
+            return true;
+        }
+
+        function returnLab() {
+            var labe = document.createElement("LABEL");
+            labe.className = "be-checkbox custom-control custom-checkbox";
+            return labe;
+        }
+        
+        function returnSPAN() {
+            var spanne = document.createElement("SPAN");
+            spanne.className = "custom-control-label";
+            return spanne;
+        }
+
+        function explodeString(chaine, sep) {
+            var newStr = chaine.split(sep);
+            var stinng = "";
+            for (i = 0; i < newStr.length; i++) {
+                stinng += newStr[i];
+            }
+            return stinng;
+
+        }
+
+        function returnHidden(id,name,value) {
+            
+            var elmnt = document.createElement("INPUT");
+            elmnt.setAttribute("id", id);
+            elmnt.setAttribute("name", name);
+            elmnt.setAttribute("value", value);
+            elmnt.setAttribute("type", "hidden");
+            return elmnt;
+        }
 
         $(document).ready(function () {
-            $('#btnSubmit').click(function () {
-                var data = JSON.stringify(getAllData());
-                $.ajax({
-                    url: '/Home/SaveData',
-                    type: 'POST',
-                    dataType: 'json',
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify({ 'getepassdata': data }),
-                    success: function () {
-                        alert("Data Added Successfully"+success);
-                    },
-                    error: function () {
-                        alert("Error while inserting data");
-                    }
-                });
-            });
 
             $("body").on("click", "#btnAdd", function () {
 
                 //Get the reference of the Table's TBODY element.
                 var tBody = $("#table_roleUsers > TBODY")[0];
 
-                if ($("#UserSelected option:selected").text().includes("--- Sélectionner") == true
-                    || $("#tache_selected option:selected").text().includes("--- Sélectionner") == true) {
+                if ($("#tacheSelectedId option:selected").text().includes("--- Sélectionner") == true) {
                     alert("toutes les champs obligatoires !");
                 }
                 else {
-                    var userrid = $("#UserSelected option:selected").val().trim();
-                    var teccherid = $("#tacheSelectedId option:selected").val().trim();
-                    var rowidnew = userrid + "," + teccherid;
-                    rowidnew = rowidnew.replace("-", "");
-                    if ($("#"+rowidnew).length) {
+                    var rowidnewcc =  $("#tacheSelectedId option:selected").val().trim();
+
+
+                    if ($("#" + rowidnewcc).length) {
                         alert("deja exists sur le tableau");
                     } else {
 
                         var row = tBody.insertRow(-1);
-                        row.setAttribute("id", userrid + "," + teccherid);
 
-                        var cell = $(row.insertCell(-1));
-                        cell.html($("#UserSelected option:selected").text().trim());
-                        cell.attr("name", "UserTached");
 
                         cell = $(row.insertCell(-1));
                         cell.html($("#ListOfModulesId option:selected").text().trim());
@@ -438,13 +442,114 @@
 
                         cell = $(row.insertCell(-1));
                         cell.html($("#tacheSelectedId option:selected").text().trim());
-                        cell.attr("name", "TacheUserAttached");
+                        cell.append(returnHidden(rowidnewcc,"RoleId",rowidnewcc));
+                        cell.append(returnHidden("UserId_"+rowidnewcc,"UserId","@ViewBag.UserId"));
+
+                        /***************************** Read *************************************/
+                        cell = $(row.insertCell(-1));
+
+                        var labr = returnLab(); var spanne = returnSPAN();
+                        var hiddn = returnHidden("Lire" + "_" + rowidnewcc, "Lire", false);
+
+                        var chkbxr = document.createElement("INPUT");
+                        chkbxr.className = "custom-control-input";
+                        chkbxr.setAttribute("type", "checkbox");
+                        chkbxr.setAttribute("name", "Read");
+                        chkbxr.id = "Read_" + rowidnewcc;
+                        chkbxr.onclick = function () {
+                            if (this.checked == false) {
+                                document.getElementById("Create_" + rowidnewcc).checked = false;
+                                document.getElementById("Update_" + rowidnewcc).checked = false;
+                                document.getElementById("Delete_" + rowidnewcc).checked = false;
+
+                                document.getElementById("Lire_" + rowidnewcc).value = false;
+                                document.getElementById("Cree_" + rowidnewcc).value = false;
+                                document.getElementById("Modifier_" + rowidnewcc).value = false;
+                                document.getElementById("Supprimer_" + rowidnewcc).value = false;
+                            }
+                            else {
+                                //alert("Lire_" + rowidnewcc);
+                                document.getElementById("Lire_" + rowidnewcc).value = true;
+
+                            }
+                        };
 
 
-                        cell = $(row.insertCell(-1)); cell.append(returnLab("item_Read_Value,"+rowidnew, "item.Read.Value"));
-                        cell = $(row.insertCell(-1)); cell.append(returnLab("item_Create_Value,"+rowidnew, "item.Create.Value"));
-                        cell = $(row.insertCell(-1)); cell.append(returnLab("item_Update_Value,"+rowidnew, "item.Update.Value"));
-                        cell = $(row.insertCell(-1)); cell.append(returnLab("item_Delete_Value,"+rowidnew, "item.Delete.Value"));
+                        labr.appendChild(hiddn);
+                        labr.appendChild(chkbxr);
+                        labr.appendChild(spanne);
+                        cell.append(labr);
+
+
+                        
+                        /***************************** Create *************************************/
+
+                        cell = $(row.insertCell(-1));
+                        
+                        var labr = returnLab(); var spanne = returnSPAN();
+                        var hiddn = returnHidden("Cree" + "_" + rowidnewcc, "Cree", false);
+
+                        var chkbxr = document.createElement("INPUT");
+                        chkbxr.className = "custom-control-input";
+                        chkbxr.setAttribute("type", "checkbox");
+                        chkbxr.setAttribute("name", "Create");
+                        chkbxr.id = "Create_" + rowidnewcc;
+                        chkbxr.onclick = function () {
+                            if (this.checked) { alert("check"); }
+                            else { alert("uncheck"); }
+                        };
+
+
+                        labr.appendChild(hiddn);
+                        labr.appendChild(chkbxr);
+                        labr.appendChild(spanne);
+                        cell.append(labr);
+
+                        
+                        /***************************** Update *************************************/
+                        cell = $(row.insertCell(-1));
+                        
+                        var labr = returnLab(); var spanne = returnSPAN();
+                        var hiddn = returnHidden("Modifier" + "_" + rowidnewcc, "Modifier", false);
+
+                        var chkbxr = document.createElement("INPUT");
+                        chkbxr.className = "custom-control-input";
+                        chkbxr.setAttribute("type", "checkbox");
+                        chkbxr.setAttribute("name", "Update");
+                        chkbxr.id = "Update_" + rowidnewcc;
+                        chkbxr.onclick = function () {
+                            if (this.checked) { alert("check"); }
+                            else { alert("uncheck"); }
+                        };
+
+
+                        labr.appendChild(hiddn);
+                        labr.appendChild(chkbxr);
+                        labr.appendChild(spanne);
+                        cell.append(labr);
+
+                        
+                        /***************************** Delete *************************************/
+                        cell = $(row.insertCell(-1));
+                        
+                        var labr = returnLab(); var spanne = returnSPAN();
+                        var hiddn = returnHidden("Supprimer" + "_" + rowidnewcc, "Supprimer", false);
+
+                        var chkbxr = document.createElement("INPUT");
+                        chkbxr.className = "custom-control-input";
+                        chkbxr.setAttribute("type", "checkbox");
+                        chkbxr.setAttribute("name", "Delete");
+                        chkbxr.id = "Delete_" + rowidnewcc;
+                        chkbxr.onclick = function () {
+                            if (this.checked) { alert("check"); }
+                            else { alert("uncheck"); }
+                        };
+
+
+                        labr.appendChild(hiddn);
+                        labr.appendChild(chkbxr);
+                        labr.appendChild(spanne);
+                        cell.append(labr);
 
 
                     }
@@ -461,9 +566,9 @@
                 var com = $("#submoduleSelectedId > option");
                 $("#submoduleSelectedId")[0].selectedIndex = 0;
                 $("#tacheSelectedId")[0].selectedIndex = 0;
-                var a = com[0].getAttribute("id");
+                var a = com[0].getAttribute("name");
                 for (var i = 0; i < com.length; i++) {
-                    if (com[i].getAttribute("id") == Modulee || a == choix || a == -1) {
+                    if (com[i].getAttribute("name") == Modulee || a == choix || a == -11) {
                         com[i].style.display = "block";
                     }
                     else {
@@ -480,9 +585,9 @@
                 var SubModulee = $(this).val();
                 var com = $("#tacheSelectedId > option");
                 $("#tacheSelectedId")[0].selectedIndex = 0;
-                var a = com[0].getAttribute("id");
+                var a = com[0].getAttribute("name");
                 for (var i = 0; i < com.length; i++) {
-                    if (com[i].getAttribute("id") == SubModulee || a == choix || a == -1) {
+                    if (com[i].getAttribute("name") == SubModulee || a == choix || a == -111) {
                         com[i].style.display = "block";
                     }
                     else {
@@ -494,5 +599,23 @@
             });
 
         });
+        
+        //$('body').on("click", "#getdata", function () {
+        //    var data = JSON.stringify(getAllData());
+        //    $.ajax({
+        //        url: '/Home/SaveData',
+        //        type: 'POST',
+        //        dataType: 'json',
+        //        contentType: 'application/json; charset=utf-8',
+        //        data: JSON.stringify({ 'getepassdata': data }),
+        //        success: function () {
+        //            alert("Data Added Successfully"+success);
+        //        },
+        //        error: function () {
+        //            alert("Error while inserting data");
+        //        }
+        //    });
+        //});
+
     </script>
 }
