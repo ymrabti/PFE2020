@@ -19,20 +19,10 @@ namespace GestionnaireUtilisateurs.Controllers
             var user = database.AspNetUsers.ToList();
             return View(user);
         }
-
-
         [Authorize]
         public ActionResult AddUser()
         {
             return View();
-        }
-
-        [HttpPost]
-        public ActionResult SubmitModule(FormCollection formcollection)
-        {
-            TempData["Message"] = "Fruit Name: " + formcollection["UserName"];
-            TempData["Message"] += "\\nFruit Id: " + formcollection["Id"]; ;
-            return RedirectToAction("UserTache");
         }
 
         [Authorize]
@@ -92,22 +82,34 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
         [Authorize]
-        public ViewResult StatutTache()
+        public ActionResult IndexStatut()
         {
+            var statuts = database.Statuts.ToList();
+            return View(statuts);
+        }
+
+        [Authorize]
+        public ActionResult StatutTache(string statutId)
+        {
+            if (statutId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Statuts statuts = database.Statuts.Find(statutId);
+            if (statuts == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Nom = statuts.StatutName;
+
             var model = new MultiModeles
             {
-                statuts = database.Statuts.ToList(),
-                aspNetRoles = database.AspNetRoles.ToList(),
-                statutRoles = database.StatutRole.ToList(),
-                modules = database.Module.ToList(),
-                sousModules = database.SousModule.ToList()
+                statutRoles = database.StatutRole.Where(user => user.StatutId == statutId).ToList()
             };
 
             ViewBag.modules = new SelectList(database.Module, "ModuleId", "ModuleName");
             ViewBag.sousmodules = new SelectList(database.SousModule, "SousModuleId", "SousModuleName");
             ViewBag.taches = new SelectList(database.AspNetRoles, "Id", "Name");
-
-            ViewBag.Statut = new SelectList(database.Statuts, "StatutId", "StatutName");
             return View(model);
         }
 
@@ -126,42 +128,6 @@ namespace GestionnaireUtilisateurs.Controllers
         public ActionResult taches()
         {
             return View(database.AspNetRoles.ToList());
-        }
-
-        public JsonResult SaveData(string getepassdata)
-        {
-            //try
-            //{
-            //    var serializeData = JsonConvert.DeserializeObject<List<AspNetUserRoles>>(getepassdata);
-
-            //    foreach (var data in serializeData)
-            //    {
-            //        database.AspNetUserRoles.Add(data);
-            //    }
-
-            //    database.SaveChanges();
-            //}
-            //catch (Exception)
-            //{
-            //    return Json("fail");
-            //}
-
-            return Json(getepassdata);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult TableResult([Bind(Include = "Id,Name,SouModuleId,RoleDescription")] AspNetUserRoles aspNetRoles)
-        {
-            if (!ModelState.IsValid)
-            {
-                ViewBag.tab = "modele non valide";
-            }
-            else
-            {
-                ViewBag.tab = aspNetRoles.ToString();
-            }
-
-            return View();
         }
 
 

@@ -1,0 +1,101 @@
+﻿@model IEnumerable<GestionnaireUtilisateurs.Models.Statuts>
+
+
+@{
+    ViewBag.Title = "Liste des status";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<div class="dashboard-main-wrapper" style="font-family: 'Catamaran', sans-serif; font-size:15px;background-color:#e9e9e9">
+
+    <div class="dashboard-wrapper">
+        <div class="dashboard-finance">
+            <div class="container-fluid dashboard-content">
+
+                <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+                    <div class="card-body">
+                        <div class="card-body border-top">
+
+                            <a href="@Url.Action("AddUser", "Home")" class="btn btn" style="background-color:#09aacc ; color:white;">
+                                <i class="fa fa-plus"> Ajouter  </i>
+                            </a>
+                            <button type="button" class="btn btn" style="background-color:#09aacc ; color:white;">
+                                <i class="fa fa-edit"> Modifier  </i>
+                            </button>
+                            <button type="button" class="btn btn" style="background-color:#09aacc ; color:white;">
+                                <i class="fa fa-trash"> Supprimer  </i>
+                            </button>
+                            <a href="@Url.Action("StatutTache", "Home")" class="btn btn" style="background-color:#09aacc ; color:white; margin-left: 63%;">
+                                <i class="fa fa-sliders-h"> Gestion des roles  </i>
+                            </a>
+                        </div>
+                        <table data-tablesaw-mode="columntoggle" class="table table-bordered first" id="tableFilter">
+                            <thead>
+                                <tr>
+                                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">@Html.DisplayNameFor(model => model.StatutName)</th>
+                                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">@Html.DisplayNameFor(model => model.StatutDescription)</th>
+                                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">@Html.DisplayNameFor(model => model.StatutRole)</th>
+                                    <th></th>
+                                </tr>
+
+                            </thead>
+                            <tbody id="tableDemandePayee">
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StatutName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StatutDescription)
+                                        </td>
+                                        <td>
+                                            <ul>
+                                                @foreach (var it in item.StatutRole) {
+                                                    <li>@it.AspNetRoles.Name</li>
+                                                }
+                                            </ul>
+                                        </td>
+                                        <td>
+                                            @Html.ActionLink("privilèges", "StatutTache", new { id = item.StatutId })
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+
+                        </table>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script data-config="">
+    var filtersConfig = {
+        base_path: 'tablefilter/',
+        auto_filter: {
+            delay: 120 //milliseconds
+        },
+        filters_row_index: 1,
+        state: true,
+        alternate_rows: true,
+        rows_counter: false,
+        btn_reset: false,
+        status_bar: false,
+        msg_filter: 'Filtering...'
+    };
+    var tf = new TableFilter('tableFilter', filtersConfig);
+    tf.init();
+</script>
+
+
+
+

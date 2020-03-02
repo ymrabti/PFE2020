@@ -765,6 +765,7 @@
     <Content Include="Views\Home\SaveData.cshtml" />
     <Content Include="Views\Home\TableResult.cshtml" />
     <Content Include="Views\Home\Contacter.cshtml" />
+    <Content Include="Views\Home\IndexStatut.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
