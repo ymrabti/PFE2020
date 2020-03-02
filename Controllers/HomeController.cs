@@ -158,19 +158,18 @@ namespace GestionnaireUtilisateurs.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Contacter([Bind(Include = "UserID,Username")] AspNetUserRoles user
-            , string answer, string[] Read,
-             string[] Create,
-             string[] Update,
-             string[] Delete, string[] UserId, string[] RoleId, string[] Lire)
+            , string answer, 
+             string[] Cree,
+             string[] Modifier,
+             string[] Supprimer, string[] UserId, string[] RoleId, string[] Lire)
         {
             ViewBag.User = "" + UserId.Length + " ::: ";
             ViewBag.Tache = "" + RoleId.Length + " ::: ";
-            ViewBag.Create = "" + Create.Length + " ::: ";
-            ViewBag.Read = "" + Read.Length + " ::: ";
-            ViewBag.Update = "" + Read.Length + " ::: ";
-            ViewBag.Delete = "" + Read.Length + " ::: ";
+            ViewBag.Cree = "" + Cree.Length + " ::: ";
             ViewBag.Lire = "" + Lire.Length + " ::: ";
-            if (ModelState.IsValid && Read.Length != 0)
+            ViewBag.Modifier = "" + Modifier.Length + " ::: ";
+            ViewBag.Supprimer = "" + Supprimer.Length + " ::: ";
+            if (ModelState.IsValid && Lire.Length != 0)
             {
                 foreach (string element in UserId)
                 {
@@ -180,25 +179,21 @@ namespace GestionnaireUtilisateurs.Controllers
                 {
                     ViewBag.Tache += element + " ***** ";
                 }
-                foreach (string element in Create)
+                foreach (string element in Cree)
                 {
-                    ViewBag.Create += element + " ***** ";
-                }
-                foreach (string element in Read)
-                {
-                    ViewBag.Read += element + " ***** ";
-                }
-                foreach (string element in Update)
-                {
-                    ViewBag.Update += element + " ***** ";
-                }
-                foreach (string element in Delete)
-                {
-                    ViewBag.Delete += element + " ***** ";
+                    ViewBag.Cree += element + " ***** ";
                 }
                 foreach (string element in Lire)
                 {
                     ViewBag.Lire += element + " ***** ";
+                }
+                foreach (string element in Modifier)
+                {
+                    ViewBag.Modifier += element + " ***** ";
+                }
+                foreach (string element in Supprimer)
+                {
+                    ViewBag.Supprimer += element + " ***** ";
                 }
             }
             return View();

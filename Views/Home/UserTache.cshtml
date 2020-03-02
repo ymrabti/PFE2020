@@ -30,7 +30,7 @@
                                     <h4> <span class="badge-dot badge-info"></span>  Gestion des roles</h4>
                                     <hr />
                                 </div>
-                               
+
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
@@ -162,12 +162,12 @@
                                                                    , new
                                                                         {
                                                                             @class = "custom-control-input",
-                                                                            Name = "Read"
+                                                                            Name = "Lire"
                                                                    ,
-                                                                            @id = "Read_" + item.RoleId,
-                                                                            @onclick = "ReadCheckBox(this,\"" + item.RoleId + "\")"
+                                                                            @id = "Lire_" + item.RoleId,
+                                                                            @onclick = "LireCheckBox(this,\"" + item.RoleId + "\")"
                                                                         })
-                                                                        @Html.Hidden("Lire", item.Read, new { @id = "Lire_" + item.RoleId })
+                                                                        @Html.Hidden("Read", item.Read, new { @id = "Read_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
@@ -177,12 +177,12 @@
                                                                    , new
                                                                         {
                                                                             @class = "custom-control-input",
-                                                                            Name = "Create"
+                                                                            Name = "Cree"
                                                                    ,
-                                                                            @id = "Create_" + item.RoleId,
-                                                                            @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Cree_\")"
+                                                                            @id = "Cree_" + item.RoleId,
+                                                                            @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Create_\")"
                                                                         })
-                                                                        @Html.Hidden("Cree", item.Create, new { @id = "Cree_" + item.RoleId })
+                                                                        @Html.Hidden("Create", item.Create, new { @id = "Create_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
@@ -192,12 +192,12 @@
                                                                    , new
                                                                         {
                                                                             @class = "custom-control-input",
-                                                                            Name = "Update"
+                                                                            Name = "Modifier"
                                                                    ,
-                                                                            @id = "Update_" + item.RoleId,
-                                                                            @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Modifier_\")"
+                                                                            @id = "Modifier_" + item.RoleId,
+                                                                            @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Update_\")"
                                                                         })
-                                                                        @Html.Hidden("Modifier", item.Update, new { @id = "Modifier_" + item.RoleId })
+                                                                        @Html.Hidden("Update", item.Update, new { @id = "Update_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
@@ -207,12 +207,12 @@
                                                                    , new
                                                                         {
                                                                             @class = "custom-control-input",
-                                                                            Name = "Delete"
+                                                                            Name = "Supprimer"
                                                                    ,
-                                                                            @id = "Delete_" + item.RoleId,
-                                                                            @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Supprimer_\")"
+                                                                            @id = "Supprimer_" + item.RoleId,
+                                                                            @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Delete_\")"
                                                                         })
-                                                                        @Html.Hidden("Supprimer", item.Delete, new { @id = "Supprimer_" + item.RoleId })
+                                                                        @Html.Hidden("Delete", item.Delete, new { @id = "Delete_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
@@ -342,18 +342,18 @@
 
     <script type="text/javascript">
 
-        function ReadCheckBox(checkbox, iden) {
+        function LireCheckBox(checkbox, iden) {
             if (checkbox.checked == false) {
-                document.getElementById("Create_"  + iden).checked = false;
-                document.getElementById("Update_"  + iden).checked = false;
-                document.getElementById("Delete_"  + iden).checked = false;
+                document.getElementById("Cree_"  + iden).checked = false;
+                document.getElementById("Modifier_"  + iden).checked = false;
+                document.getElementById("Supprimer_"  + iden).checked = false;
 
-                document.getElementById("Lire_"      + iden).value = false;
-                document.getElementById("Cree_"      + iden).value = false;
-                document.getElementById("Modifier_"  + iden).value = false;
-                document.getElementById("Supprimer_" + iden).value = false;
+                document.getElementById("Read_"      + iden).value = false;
+                document.getElementById("Create_"      + iden).value = false;
+                document.getElementById("Update_"  + iden).value = false;
+                document.getElementById("Delete_" + iden).value = false;
             }
-            else {document.getElementById("Lire_" + iden).value = true;
+            else {document.getElementById("Read_" + iden).value = true;
 
             }
 
@@ -362,9 +362,9 @@
         function cudCheckBox(checkbox, iden, action) {
             if (checkbox.checked == true) {
 
-                var checkread = document.getElementById("Read_" + iden);
+                var checkread = document.getElementById("Lire_" + iden);
                 checkread.checked = true;
-                document.getElementById("Lire_" + iden).value = true;
+                document.getElementById("Read_" + iden).value = true;
 
                 document.getElementById(action + iden).value = true;
 
@@ -386,7 +386,7 @@
             labe.className = "be-checkbox custom-control custom-checkbox";
             return labe;
         }
-        
+
         function returnSPAN() {
             var spanne = document.createElement("SPAN");
             spanne.className = "custom-control-label";
@@ -404,7 +404,7 @@
         }
 
         function returnHidden(id,name,value) {
-            
+
             var elmnt = document.createElement("INPUT");
             elmnt.setAttribute("id", id);
             elmnt.setAttribute("name", name);
@@ -445,31 +445,31 @@
                         cell.append(returnHidden(rowidnewcc,"RoleId",rowidnewcc));
                         cell.append(returnHidden("UserId_"+rowidnewcc,"UserId","@ViewBag.UserId"));
 
-                        /***************************** Read *************************************/
+                        /***************************** Lire *************************************/
                         cell = $(row.insertCell(-1));
 
                         var labr = returnLab(); var spanne = returnSPAN();
-                        var hiddn = returnHidden("Lire" + "_" + rowidnewcc, "Lire", false);
+                        var hiddn = returnHidden("Read" + "_" + rowidnewcc, "Read", false);
 
                         var chkbxr = document.createElement("INPUT");
                         chkbxr.className = "custom-control-input";
                         chkbxr.setAttribute("type", "checkbox");
-                        chkbxr.setAttribute("name", "Read");
-                        chkbxr.id = "Read_" + rowidnewcc;
+                        chkbxr.setAttribute("name", "Lire");
+                        chkbxr.id = "Lire_" + rowidnewcc;
                         chkbxr.onclick = function () {
                             if (this.checked == false) {
-                                document.getElementById("Create_" + rowidnewcc).checked = false;
-                                document.getElementById("Update_" + rowidnewcc).checked = false;
-                                document.getElementById("Delete_" + rowidnewcc).checked = false;
+                                document.getElementById("Cree_" + rowidnewcc).checked = false;
+                                document.getElementById("Modifier_" + rowidnewcc).checked = false;
+                                document.getElementById("Supprimer_" + rowidnewcc).checked = false;
 
-                                document.getElementById("Lire_" + rowidnewcc).value = false;
-                                document.getElementById("Cree_" + rowidnewcc).value = false;
-                                document.getElementById("Modifier_" + rowidnewcc).value = false;
-                                document.getElementById("Supprimer_" + rowidnewcc).value = false;
+                                document.getElementById("Read_" + rowidnewcc).value = false;
+                                document.getElementById("Create_" + rowidnewcc).value = false;
+                                document.getElementById("Update_" + rowidnewcc).value = false;
+                                document.getElementById("Delete_" + rowidnewcc).value = false;
                             }
                             else {
-                                //alert("Lire_" + rowidnewcc);
-                                document.getElementById("Lire_" + rowidnewcc).value = true;
+                                //alert("Read_" + rowidnewcc);
+                                document.getElementById("Read_" + rowidnewcc).value = true;
 
                             }
                         };
@@ -481,22 +481,32 @@
                         cell.append(labr);
 
 
-                        
-                        /***************************** Create *************************************/
+
+                        /***************************** Cree *************************************/
 
                         cell = $(row.insertCell(-1));
-                        
+
                         var labr = returnLab(); var spanne = returnSPAN();
-                        var hiddn = returnHidden("Cree" + "_" + rowidnewcc, "Cree", false);
+                        var hiddn = returnHidden("Create" + "_" + rowidnewcc, "Create", false);
 
                         var chkbxr = document.createElement("INPUT");
                         chkbxr.className = "custom-control-input";
                         chkbxr.setAttribute("type", "checkbox");
-                        chkbxr.setAttribute("name", "Create");
-                        chkbxr.id = "Create_" + rowidnewcc;
+                        chkbxr.setAttribute("name", "Cree");
+                        chkbxr.id = "Cree_" + rowidnewcc;
                         chkbxr.onclick = function () {
-                            if (this.checked) { alert("check"); }
-                            else { alert("uncheck"); }
+                            if (this.checked == true) {
+
+                                var checkread = document.getElementById("Lire_" + rowidnewcc);
+                                checkread.checked = true;
+                                document.getElementById("Read_" + rowidnewcc).value = true;
+
+                                document.getElementById("Create_" + rowidnewcc).value = true;
+
+                            }
+                            else {
+                                document.getElementById("Create_" + rowidnewcc).value = false;
+                            }
                         };
 
 
@@ -505,21 +515,31 @@
                         labr.appendChild(spanne);
                         cell.append(labr);
 
-                        
-                        /***************************** Update *************************************/
+
+                        /***************************** Modifier *************************************/
                         cell = $(row.insertCell(-1));
-                        
+
                         var labr = returnLab(); var spanne = returnSPAN();
-                        var hiddn = returnHidden("Modifier" + "_" + rowidnewcc, "Modifier", false);
+                        var hiddn = returnHidden("Update" + "_" + rowidnewcc, "Update", false);
 
                         var chkbxr = document.createElement("INPUT");
                         chkbxr.className = "custom-control-input";
                         chkbxr.setAttribute("type", "checkbox");
-                        chkbxr.setAttribute("name", "Update");
-                        chkbxr.id = "Update_" + rowidnewcc;
+                        chkbxr.setAttribute("name", "Modifier");
+                        chkbxr.id = "Modifier_" + rowidnewcc;
                         chkbxr.onclick = function () {
-                            if (this.checked) { alert("check"); }
-                            else { alert("uncheck"); }
+                            if (this.checked == true) {
+
+                                var checkread = document.getElementById("Lire_" + rowidnewcc);
+                                checkread.checked = true;
+                                document.getElementById("Read_" + rowidnewcc).value = true;
+
+                                document.getElementById("Update_" + rowidnewcc).value = true;
+
+                            }
+                            else {
+                                document.getElementById("Update_" + rowidnewcc).value = false;
+                            }
                         };
 
 
@@ -528,21 +548,31 @@
                         labr.appendChild(spanne);
                         cell.append(labr);
 
-                        
-                        /***************************** Delete *************************************/
+
+                        /***************************** Supprimer *************************************/
                         cell = $(row.insertCell(-1));
-                        
+
                         var labr = returnLab(); var spanne = returnSPAN();
-                        var hiddn = returnHidden("Supprimer" + "_" + rowidnewcc, "Supprimer", false);
+                        var hiddn = returnHidden("Delete" + "_" + rowidnewcc, "Delete", false);
 
                         var chkbxr = document.createElement("INPUT");
                         chkbxr.className = "custom-control-input";
                         chkbxr.setAttribute("type", "checkbox");
-                        chkbxr.setAttribute("name", "Delete");
-                        chkbxr.id = "Delete_" + rowidnewcc;
+                        chkbxr.setAttribute("name", "Supprimer");
+                        chkbxr.id = "Supprimer_" + rowidnewcc;
                         chkbxr.onclick = function () {
-                            if (this.checked) { alert("check"); }
-                            else { alert("uncheck"); }
+                            if (this.checked == true) {
+
+                                var checkread = document.getElementById("Lire_" + rowidnewcc);
+                                checkread.checked = true;
+                                document.getElementById("Read_" + rowidnewcc).value = true;
+
+                                document.getElementById("Delete_" + rowidnewcc).value = true;
+
+                            }
+                            else {
+                                document.getElementById("Delete_" + rowidnewcc).value = false;
+                            }
                         };
 
 
@@ -599,7 +629,7 @@
             });
 
         });
-        
+
         //$('body').on("click", "#getdata", function () {
         //    var data = JSON.stringify(getAllData());
         //    $.ajax({
