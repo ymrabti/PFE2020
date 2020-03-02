@@ -44,10 +44,16 @@ namespace GestionnaireUtilisateurs.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name,SouModuleId,RoleDescription")] AspNetRoles aspNetRoles)
+        public async Task<ActionResult> Create(//[Bind(Include = "Id,Name,SouModuleId,RoleDescription")] AspNetRoles aspNetRoles,
+            string Id, string Name, int SouModuleId, string RoleDescription)
         {
+                AspNetRoles aspNetRoles = new AspNetRoles();
             if (ModelState.IsValid)
             {
+                aspNetRoles.Id = Id;
+                aspNetRoles.Name = Name;
+                aspNetRoles.SouModuleId = SouModuleId;
+                aspNetRoles.RoleDescription = RoleDescription;
                 db.AspNetRoles.Add(aspNetRoles);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");

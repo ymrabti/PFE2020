@@ -1,4 +1,4 @@
-﻿@model GestionnaireUtilisateurs.Models.AspNetUserRoles
+﻿@model IEnumerable<GestionnaireUtilisateurs.Models.AspNetUserRoles>
 
 @{
     ViewBag.Title = "Details";
@@ -11,54 +11,62 @@
     <h4>AspNetUserRoles</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Read)
-        </dt>
+        @foreach (var item in Model)
+        {
+            <dt>
+                @Html.DisplayNameFor(model => model.Read)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Read)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Create)
-        </dt>
+            <dd>
+                @Html.EditorFor(model => item.Read)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Create)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Update)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Create)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Update)
-        </dd>
+            <dd>
+                @Html.EditorFor(model => item.Create)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Delete)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Delete)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Update)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AspNetRoles.Name)
-        </dt>
+            <dd>
+                @Html.EditorFor(model => item.Update)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.AspNetRoles.Name)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AspNetUsers.UserNameAr)
-        </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Delete)
+            </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.AspNetUsers.UserNameAr)
-        </dd>
+            <dd>
+                @Html.EditorFor(model => item.Delete)
+            </dd>
 
+
+            <dt>
+                @Html.DisplayNameFor(model => model.AspNetRoles.Name)
+            </dt>
+
+            <dd>
+                @Html.EditorFor(model => item.AspNetRoles.Name)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.AspNetUsers.UserName)
+            </dt>
+
+            <dd>
+                @Html.EditorFor(model => item.AspNetUsers.UserName)
+            </dd>
+        }
     </dl>
 </div>
 <p>

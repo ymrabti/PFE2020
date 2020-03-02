@@ -66,6 +66,30 @@ namespace GestionnaireUtilisateurs.Controllers
             ViewBag.taches = new SelectList(database.AspNetRoles, "Id", "Name");
             return View(model);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UserTache( string[] Create, string[] Read, string[] Update, string[] Delete
+            , string[] UserId, string[] RoleId)
+        {
+            if (ModelState.IsValid && Read.Length != 0)
+            {
+                var currentUser = UserId[0];
+                var aspNetUserRoles = database.AspNetUserRoles.Where(iden => iden.UserId == currentUser);
+                database.AspNetUserRoles.RemoveRange(aspNetUserRoles);
+                for (int i=0;i<Read.Length;i++) {
+                    AspNetUserRoles NewRoleOfUser = new AspNetUserRoles();
+                    NewRoleOfUser.UserId = UserId[0];
+                    NewRoleOfUser.RoleId = RoleId[i];
+                    NewRoleOfUser.Read = Read[i].ToUpper().Equals("TRUE");
+                    NewRoleOfUser.Create = Create[i].ToUpper().Equals("TRUE");
+                    NewRoleOfUser.Update = Update[i].ToUpper().Equals("TRUE");
+                    NewRoleOfUser.Delete = Delete[i].ToUpper().Equals("TRUE");
+                    database.AspNetUserRoles.Add(NewRoleOfUser);
+                }
+                database.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
 
         [Authorize]
         public ViewResult StatutTache()
@@ -153,49 +177,6 @@ namespace GestionnaireUtilisateurs.Controllers
         {
             ViewBag.Message = "Your contact page.";
 
-            return View();
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Contacter([Bind(Include = "UserID,Username")] AspNetUserRoles user
-            , string answer, 
-             string[] Cree,
-             string[] Modifier,
-             string[] Supprimer, string[] UserId, string[] RoleId, string[] Lire)
-        {
-            ViewBag.User = "" + UserId.Length + " ::: ";
-            ViewBag.Tache = "" + RoleId.Length + " ::: ";
-            ViewBag.Cree = "" + Cree.Length + " ::: ";
-            ViewBag.Lire = "" + Lire.Length + " ::: ";
-            ViewBag.Modifier = "" + Modifier.Length + " ::: ";
-            ViewBag.Supprimer = "" + Supprimer.Length + " ::: ";
-            if (ModelState.IsValid && Lire.Length != 0)
-            {
-                foreach (string element in UserId)
-                {
-                    ViewBag.User += element + " ***** ";
-                }
-                foreach (string element in RoleId)
-                {
-                    ViewBag.Tache += element + " ***** ";
-                }
-                foreach (string element in Cree)
-                {
-                    ViewBag.Cree += element + " ***** ";
-                }
-                foreach (string element in Lire)
-                {
-                    ViewBag.Lire += element + " ***** ";
-                }
-                foreach (string element in Modifier)
-                {
-                    ViewBag.Modifier += element + " ***** ";
-                }
-                foreach (string element in Supprimer)
-                {
-                    ViewBag.Supprimer += element + " ***** ";
-                }
-            }
             return View();
         }
     }

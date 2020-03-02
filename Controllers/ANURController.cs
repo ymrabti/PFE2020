@@ -28,7 +28,7 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AspNetUserRoles aspNetUserRoles = db.AspNetUserRoles.Find(id);
+            var aspNetUserRoles = db.AspNetUserRoles.Where(rid=>rid.RoleId==id).ToList();
             if (aspNetUserRoles == null)
             {
                 return HttpNotFound();
@@ -44,9 +44,6 @@ namespace GestionnaireUtilisateurs.Controllers
             return View();
         }
 
-        // POST: ANUR/Create
-        // Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
-        // plus de détails, voir  https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "UserId,RoleId,Read,Create,Update,Delete")] AspNetUserRoles aspNetUserRoles)
@@ -80,9 +77,6 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(aspNetUserRoles);
         }
 
-        // POST: ANUR/Edit/5
-        // Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
-        // plus de détails, voir  https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "UserId,RoleId,Read,Create,Update,Delete")] AspNetUserRoles aspNetUserRoles)
@@ -105,7 +99,7 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AspNetUserRoles aspNetUserRoles = db.AspNetUserRoles.Find(id);
+            var aspNetUserRoles = db.AspNetUserRoles.Where(iden=>iden.RoleId==id);
             if (aspNetUserRoles == null)
             {
                 return HttpNotFound();
@@ -118,8 +112,9 @@ namespace GestionnaireUtilisateurs.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
-            AspNetUserRoles aspNetUserRoles = db.AspNetUserRoles.Find(id);
-            db.AspNetUserRoles.Remove(aspNetUserRoles);
+            var aspNetUserRoles = db.AspNetUserRoles.Where(iden => iden.RoleId == id);
+            foreach (var userrole in aspNetUserRoles) { 
+            db.AspNetUserRoles.Remove(userrole);}
             db.SaveChanges();
             return RedirectToAction("Index");
         }

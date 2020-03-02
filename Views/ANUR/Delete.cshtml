@@ -1,4 +1,4 @@
-﻿@model GestionnaireUtilisateurs.Models.AspNetUserRoles
+﻿@model IEnumerable<GestionnaireUtilisateurs.Models.AspNetUserRoles> 
 
 @{
     ViewBag.Title = "Delete";
@@ -11,58 +11,63 @@
 <div>
     <h4>AspNetUserRoles</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Read)
-        </dt>
+    @foreach (var element in Model)
+    {
 
-        <dd>
-            @Html.DisplayFor(model => model.Read)
-        </dd>
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Read)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Create)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => element.Read)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Create)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Create)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Update)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => element.Create)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Update)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Update)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Delete)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => element.Update)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Delete)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Delete)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AspNetRoles.Name)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => element.Delete)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.AspNetRoles.Name)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.AspNetRoles.Name)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AspNetUsers.UserNameAr)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => element.AspNetRoles.Name)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.AspNetUsers.UserNameAr)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.AspNetUsers.UserNameAr)
+            </dt>
 
-    </dl>
+            <dd>
+                @Html.DisplayFor(model => element.AspNetUsers.UserNameAr)
+            </dd>
 
-    @using (Html.BeginForm()) {
+        </dl>
+
+    }
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
