@@ -4,7 +4,7 @@
     <Key>
       <PropertyRef Name="ApplicationId" />
     </Key>
-    <Property Name="ApplicationId" Type="int" Nullable="false" />
+    <Property Name="ApplicationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ApplicationName" Type="nchar" MaxLength="10" Nullable="false" />
     <Property Name="ApplicationDescription" Type="nchar" MaxLength="10" />
     <Property Name="type" Type="nchar" MaxLength="10" Nullable="false" />
@@ -74,7 +74,7 @@
     <Key>
       <PropertyRef Name="ModuleId" />
     </Key>
-    <Property Name="ModuleId" Type="int" Nullable="false" />
+    <Property Name="ModuleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ModuleName" Type="text" Nullable="false" />
     <Property Name="ModuleDescription" Type="text" />
   </EntityType>
@@ -82,10 +82,10 @@
     <Key>
       <PropertyRef Name="SousModuleId" />
     </Key>
-    <Property Name="SousModuleId" Type="int" Nullable="false" />
+    <Property Name="SousModuleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="SousModuleName" Type="text" Nullable="false" />
-    <Property Name="ModuleId" Type="int" Nullable="false" />
     <Property Name="SousModuleDescription" Type="text" />
+    <Property Name="ModuleId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="StatutRole">
     <Key>

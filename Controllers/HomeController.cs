@@ -1,11 +1,8 @@
 ﻿using GestionnaireUtilisateurs.Models;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace GestionnaireUtilisateurs.Controllers
@@ -44,6 +41,7 @@ namespace GestionnaireUtilisateurs.Controllers
             ViewBag.Prenom = aspNetUser.Prenom;
             ViewBag.Email = aspNetUser.Email;
             ViewBag.StatusName = aspNetUser.Statuts.StatutName;
+            ViewBag.Modules = new SelectList(database.Module);
 
             var model = new MultiModeles
             {
@@ -77,19 +75,6 @@ namespace GestionnaireUtilisateurs.Controllers
                 database.SaveChanges();
             }
             return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult UserTacheAddModule([Bind(Include = "ModuleName,ModuleDescription")] Module module) {
-
-            if (ModelState.IsValid)
-            {
-                database.Module.Add(module);
-                database.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
         /// ///////////////////////              STATUT TACHE                    //////////////////////
@@ -163,16 +148,72 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(database.Module.ToList());
         }
         [Authorize]
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UserTacheAddModule([Bind(Include = "ModuleName,ModuleDescription")] Module module)
+        {
+
+            if (ModelState.IsValid)
+            {
+                database.Module.Add(module);
+                database.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        }
+
+        /// ///////////////////////             SUB MODULE                    //////////////////////
+        /// ///////////////////////             SUB MODULE                    //////////////////////
+        /// ///////////////////////             SUB MODULE                    //////////////////////
+
         public ActionResult sousmodule()
         {
             return View(database.SousModule.ToList());
         }
         [Authorize]
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UserTacheAddSousModule([Bind(Include = "SousModuleName,SousModuleDescription,ModuleId")] SousModule sousModule)
+        {
+
+            if (ModelState.IsValid)
+            {
+                database.SousModule.Add(sousModule);
+                database.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        }
+
+        /// ///////////////////////             TACHES                    //////////////////////
+        /// ///////////////////////             TACHES                    //////////////////////
+        /// ///////////////////////             TACHES                    //////////////////////
+
         public ActionResult taches()
         {
             return View(database.AspNetRoles.ToList());
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UserTacheAddTache([Bind(Include = "Name,SousModuleId,RoleDescription")] AspNetRoles Tache)
+        {
 
+            if (ModelState.IsValid)
+            {
+                database.AspNetRoles.Add(Tache);
+                database.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        }
+
+
+        /// ///////////////////////             AUTRES                    //////////////////////
+        /// ///////////////////////             AUTRES                    //////////////////////
+        /// ///////////////////////             AUTRES                    //////////////////////
 
         public ActionResult About()
         {
@@ -186,6 +227,30 @@ namespace GestionnaireUtilisateurs.Controllers
         {
             ViewBag.Message = "Your contact page.";
 
+            return View();
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Test([Bind(Include = "Name,SousModuleId,RoleDescription")] AspNetRoles sousModules
+            ,int SousModuleId)
+        {
+            ViewBag.Test = "";
+            if (sousModules==null)
+            {
+                ViewBag.Test += "NULL";
+            }
+            else
+            {
+                var tache = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext())) ;
+                var tachee = tache.Create(new IdentityRole());
+                sousModules.SouModuleId = SousModuleId;
+                //database.AspNetRoles.Add(sousModules);database.SaveChanges();
+                ViewBag.Test += sousModules.Name + " * " + sousModules.RoleDescription + " * " + sousModules.SouModuleId;
+            }
+            
             return View();
         }
     }

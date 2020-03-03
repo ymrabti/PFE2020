@@ -9,7 +9,7 @@
           <Key>
             <PropertyRef Name="ApplicationId" />
           </Key>
-          <Property Name="ApplicationId" Type="int" Nullable="false" />
+          <Property Name="ApplicationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ApplicationName" Type="nchar" MaxLength="10" Nullable="false" />
           <Property Name="ApplicationDescription" Type="nchar" MaxLength="10" />
           <Property Name="type" Type="nchar" MaxLength="10" Nullable="false" />
@@ -79,7 +79,7 @@
           <Key>
             <PropertyRef Name="ModuleId" />
           </Key>
-          <Property Name="ModuleId" Type="int" Nullable="false" />
+          <Property Name="ModuleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ModuleName" Type="text" Nullable="false" />
           <Property Name="ModuleDescription" Type="text" />
         </EntityType>
@@ -87,10 +87,10 @@
           <Key>
             <PropertyRef Name="SousModuleId" />
           </Key>
-          <Property Name="SousModuleId" Type="int" Nullable="false" />
+          <Property Name="SousModuleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SousModuleName" Type="text" Nullable="false" />
-          <Property Name="ModuleId" Type="int" Nullable="false" />
           <Property Name="SousModuleDescription" Type="text" />
+          <Property Name="ModuleId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="StatutRole">
           <Key>
@@ -326,7 +326,7 @@
           <Key>
             <PropertyRef Name="ApplicationId" />
           </Key>
-          <Property Name="ApplicationId" Type="Int32" Nullable="false" />
+          <Property Name="ApplicationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ApplicationName" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="ApplicationDescription" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="type" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
@@ -406,7 +406,7 @@
           <Key>
             <PropertyRef Name="ModuleId" />
           </Key>
-          <Property Name="ModuleId" Type="Int32" Nullable="false" />
+          <Property Name="ModuleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ModuleName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="ModuleDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ApplicationModule" Relationship="aurs1Model.FK_ApplicationModule_Module" FromRole="Module" ToRole="ApplicationModule" />
@@ -416,10 +416,10 @@
           <Key>
             <PropertyRef Name="SousModuleId" />
           </Key>
-          <Property Name="SousModuleId" Type="Int32" Nullable="false" />
+          <Property Name="SousModuleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SousModuleName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="ModuleId" Type="Int32" Nullable="false" />
           <Property Name="SousModuleDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ModuleId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="AspNetRoles" Relationship="aurs1Model.FK_AspNetRoles_SousModule" FromRole="SousModule" ToRole="AspNetRoles" />
           <NavigationProperty Name="Module" Relationship="aurs1Model.FK_SousModule_Module" FromRole="SousModule" ToRole="Module" />
         </EntityType>
@@ -650,8 +650,8 @@
           <EntitySetMapping Name="SousModule">
             <EntityTypeMapping TypeName="aurs1Model.SousModule">
               <MappingFragment StoreEntitySet="SousModule">
-                <ScalarProperty Name="SousModuleDescription" ColumnName="SousModuleDescription" />
                 <ScalarProperty Name="ModuleId" ColumnName="ModuleId" />
+                <ScalarProperty Name="SousModuleDescription" ColumnName="SousModuleDescription" />
                 <ScalarProperty Name="SousModuleName" ColumnName="SousModuleName" />
                 <ScalarProperty Name="SousModuleId" ColumnName="SousModuleId" />
               </MappingFragment>

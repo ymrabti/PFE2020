@@ -86,8 +86,8 @@
     <EntitySetMapping Name="SousModule">
       <EntityTypeMapping TypeName="aurs1Model.SousModule">
         <MappingFragment StoreEntitySet="SousModule">
-          <ScalarProperty Name="SousModuleDescription" ColumnName="SousModuleDescription" />
           <ScalarProperty Name="ModuleId" ColumnName="ModuleId" />
+          <ScalarProperty Name="SousModuleDescription" ColumnName="SousModuleDescription" />
           <ScalarProperty Name="SousModuleName" ColumnName="SousModuleName" />
           <ScalarProperty Name="SousModuleId" ColumnName="SousModuleId" />
         </MappingFragment>

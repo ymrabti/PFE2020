@@ -22,8 +22,8 @@ namespace GestionnaireUtilisateurs.Models
     
         public int SousModuleId { get; set; }
         public string SousModuleName { get; set; }
-        public int ModuleId { get; set; }
         public string SousModuleDescription { get; set; }
+        public int ModuleId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetRoles> AspNetRoles { get; set; }

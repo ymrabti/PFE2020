@@ -51,7 +51,7 @@
     <Key>
       <PropertyRef Name="ApplicationId" />
     </Key>
-    <Property Name="ApplicationId" Type="Int32" Nullable="false" />
+    <Property Name="ApplicationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="ApplicationName" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
     <Property Name="ApplicationDescription" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
     <Property Name="type" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
@@ -131,7 +131,7 @@
     <Key>
       <PropertyRef Name="ModuleId" />
     </Key>
-    <Property Name="ModuleId" Type="Int32" Nullable="false" />
+    <Property Name="ModuleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="ModuleName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="ModuleDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="ApplicationModule" Relationship="aurs1Model.FK_ApplicationModule_Module" FromRole="Module" ToRole="ApplicationModule" />
@@ -141,10 +141,10 @@
     <Key>
       <PropertyRef Name="SousModuleId" />
     </Key>
-    <Property Name="SousModuleId" Type="Int32" Nullable="false" />
+    <Property Name="SousModuleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="SousModuleName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="ModuleId" Type="Int32" Nullable="false" />
     <Property Name="SousModuleDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="ModuleId" Type="Int32" Nullable="false" />
     <NavigationProperty Name="AspNetRoles" Relationship="aurs1Model.FK_AspNetRoles_SousModule" FromRole="SousModule" ToRole="AspNetRoles" />
     <NavigationProperty Name="Module" Relationship="aurs1Model.FK_SousModule_Module" FromRole="SousModule" ToRole="Module" />
   </EntityType>
