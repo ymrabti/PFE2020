@@ -24,7 +24,9 @@ namespace GestionnaireUtilisateurs.Controllers
         {
             return View();
         }
-
+        /// ///////////////////////              USER TACHE                    //////////////////////
+        /// ///////////////////////              USER TACHE                    //////////////////////
+        /// ///////////////////////              USER TACHE                    //////////////////////
         [Authorize]
         public ActionResult UserTache(string id)
         {
@@ -77,6 +79,22 @@ namespace GestionnaireUtilisateurs.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UserTacheAddModule([Bind(Include = "ModuleName,ModuleDescription")] Module module) {
+
+            if (ModelState.IsValid)
+            {
+                database.Module.Add(module);
+                database.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        }
+
+        /// ///////////////////////              STATUT TACHE                    //////////////////////
+        /// ///////////////////////              STATUT TACHE                    //////////////////////
+        /// ///////////////////////              STATUT TACHE                    //////////////////////
         [Authorize]
         public ActionResult IndexStatut()
         {
@@ -97,6 +115,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 return HttpNotFound();
             }
             ViewBag.Nom = statuts.StatutName;
+            ViewBag.StatutId = statuts.StatutId;
 
             var model = new MultiModeles
             {
@@ -108,7 +127,35 @@ namespace GestionnaireUtilisateurs.Controllers
 
             return View(model);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult StatutTache(string[] Create, string[] Read, string[] Update, string[] Delete
+            , string[] StatutId, string[] RoleId)
+        {
+            if (ModelState.IsValid && Read.Length != 0)
+            {
+                var currentStatut = StatutId[0];
+                var statutRole = database.StatutRole.Where(iden => iden.StatutId == currentStatut);
+                database.StatutRole.RemoveRange(statutRole);
+                for (int i = 0; i < Read.Length; i++)
+                {
+                    StatutRole NewRoleOfStatut = new StatutRole();
+                    NewRoleOfStatut.StatutId = StatutId[0];
+                    NewRoleOfStatut.RoleId = RoleId[i];
+                    NewRoleOfStatut.Lire = Read[i].ToUpper().Equals("TRUE");
+                    NewRoleOfStatut.Cree = Create[i].ToUpper().Equals("TRUE");
+                    NewRoleOfStatut.Modifier = Update[i].ToUpper().Equals("TRUE");
+                    NewRoleOfStatut.Supprimer = Delete[i].ToUpper().Equals("TRUE");
+                    database.StatutRole.Add(NewRoleOfStatut);
+                }
+                database.SaveChanges();
+            }
+            return RedirectToAction("IndexStatut");
+        }
 
+        /// ///////////////////////              MODULE                    //////////////////////
+        /// ///////////////////////              MODULE                    //////////////////////
+        /// ///////////////////////              MODULE                    //////////////////////
 
         [Authorize]
         public ActionResult module()

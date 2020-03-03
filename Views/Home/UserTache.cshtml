@@ -208,6 +208,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -218,20 +219,24 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="name">Nom du module</label>
+                    @using (Html.BeginForm("UserTacheAddModule","Home",FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label for="name">Nom du module</label>
 
-                        <input id="name" type="text" name="name" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="name">Description du module</label>
+                            <input type="text" name="ModuleName" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Description du module</label>
 
-                        <textarea class="form-control"></textarea>
-                    </div>
-                    <div class="modal-footer">
+                            <textarea name="ModuleDescription" class="form-control"></textarea>
+                        </div>
+                        <div class="modal-footer">
 
-                        <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
-                    </div>
+                            <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

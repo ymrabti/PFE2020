@@ -102,12 +102,12 @@
 
                                 @using (Html.BeginForm())
                                 {
-
+                                    @Html.AntiForgeryToken()
                                     <div class="col-xl-12 col-lg-9 col-md-12 col-sm-12 col-12" style="margin-left: -1%;">
                                         <div class="card">
                                             <h5 class="card-header">Liste des Tâches</h5>
                                             <div class="card-body">
-                                                <table class="table table-hover" id="table_roleStatus">
+                                                <table data-tablesaw-mode="columntoggle" class="table table-bordered first" id="table_roleStatus">
                                                     <thead>
                                                         <tr>
                                                             <th>
@@ -396,7 +396,7 @@
                         cell = $(row.insertCell(-1));
                         cell.html($("#tacheSelectedId option:selected").text().trim());
                         cell.append(returnHidden(rowidnewcc,"RoleId",rowidnewcc));
-                        cell.append(returnHidden("UserId_"+rowidnewcc,"UserId","@ViewBag.UserId"));
+                        cell.append(returnHidden("StatutId_"+rowidnewcc,"StatutId","@ViewBag.StatutId"));
 
                         /***************************** Lire *************************************/
                         cell = $(row.insertCell(-1));
