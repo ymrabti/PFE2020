@@ -2,8 +2,7 @@
 @model GestionnaireUtilisateurs.Models.MultiModeles
 
 @{
-    var module_selected = "";
-    ViewBag.Title = "Taches des Utilisateurs";
+    ViewBag.Title = "Taches des Statuts";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -16,10 +15,7 @@
                 <div class="tab-content" style="text-align:center; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
                     <div class="card-body">
 
-                        <span class="mr-2"> <span class="badge-dot badge-info"></span>Nom : Utilisateur  1 &nbsp;&nbsp;</span>
-                        <span class="mr-2"> <span class="badge-dot badge-info"></span>Prenom : Utilisateur  1 &nbsp;&nbsp;</span>
-                        <span class="mr-2"> <span class="badge-dot badge-info"></span>Email : Utilisateur1@Email.com &nbsp;&nbsp;</span>
-                        <span class="mr-2"> <span class="badge-dot badge-info"></span>Statut :Statut</span>
+                        <span class="mr-2"> <span class="badge-dot badge-info"></span>Statut : @ViewBag.Nom</span>
 
                     </div>
                 </div>
@@ -28,123 +24,92 @@
                     <div class="col-lg-12" style=" margin-left: auto; margin-right: auto;">
                         <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
                             <div class="card-body">
-                                @using (Html.BeginForm(null, null, FormMethod.Post))
-                                {
-                                    <div class="card-body">
+                                <div class="card-body">
 
-                                        <h4> <span class="badge-dot badge-info"></span>  Gestion des roles</h4>
-                                        <hr />
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="name">Statut</label>
-                                                @Html.DropDownListFor(model => model.statuts, ViewBag.Statut as SelectList
-                                               , "--- Sélectionner une Statut ---", new { @class = "form-control form-control-sm" }
-                                               )
-                                                @*<select class="form-control form-control-sm" id="">
-                                                        <option value="">--- Sélectionner un Utilisateur ---</option>
-                                                        @foreach (var item in Model.aspNetUsers)
-                                                        {
-                                                            <option value="@item.Id">@item.NomAr</option>
-                                                        }
-                                                    </select>*@
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <br />
-                                                <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop3"><i class=" fas fa-plus"></i></button>
-                                            </div>
+                                    <h4> <span class="badge-dot badge-info"></span>  Gestion des roles</h4>
+                                    <hr />
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="name">Module</label>
+                                            <select class="form-control form-control-sm" id="">
+                                                    <option value="">--- Sélectionner un module ---</option>
+                                                    @foreach (var item in Model.modules)
+                                                    {
+                                                        <option value="@item.ModuleId">@item.ModuleName</option>
+                                                    }
+                                                </select>
                                         </div>
                                     </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="name">Module</label>
-                                                @Html.DropDownListFor(model => model.modules, ViewBag.modules as SelectList
-                                               , "--- Sélectionner un module ---", new { @id = "moduleSelected", @class = "form-control form-control-sm" }
-                                               )
-                                                @*<select class="form-control form-control-sm" id="">
-                                                        <option value="">--- Sélectionner un module ---</option>
-                                                        @foreach (var item in Model.modules)
-                                                        {
-                                                            <option value="@item.ModuleId">@item.ModuleName</option>
-                                                        }
-                                                    </select>*@
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <br />
-                                                <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop"><i class=" fas fa-plus"></i></button>
-                                            </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <br />
+                                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop"><i class=" fas fa-plus"></i></button>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="name">Sous module</label>
-                                                @Html.DropDownListFor(model => model.sousModules, ViewBag.sousmodules as SelectList
-                                               , "--- Sélectionner un sous module ---", new { @id = "submoduleSelected", @class = "form-control form-control-sm" }
-                                               )
-                                                @*<select class="form-control form-control-sm" id="">
-                                                        <option value="">--- Sélectionner un Sous module ---</option>
-                                                        @foreach (var item in Model.sousModules)
-                                                        {
-                                                            <option value="@item.SousModuleId">@item.SousModuleName</option>
-                                                        }
-                                                    </select>*@
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <br />
-                                                <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop1"><i class=" fas fa-plus"></i></button>
-                                            </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="name">Sous module</label>
+                                            <select class="form-control form-control-sm" id="">
+                                                    <option value="">--- Sélectionner un Sous module ---</option>
+                                                    @foreach (var item in Model.sousModules)
+                                                    {
+                                                        <option value="@item.SousModuleId" name="@item.ModuleId" style="display:none">@item.SousModuleName</option>
+                                                    }
+                                                </select>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">tâche</label>
-                                                @Html.DropDownListFor(model => model.aspNetRoles, ViewBag.taches as SelectList
-                                               , "--- Sélectionner une tâche ---", new { @id = "tache_selected", @class = "form-control form-control-sm" }
-                                               )
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <br />
-
-                                                <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop2"><i class=" fas fa-plus">  </i>    </button>
-
-
-
-
-                                            </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <br />
+                                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop1"><i class=" fas fa-plus"></i></button>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12" style="text-align: right;">
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
                                         <div class="form-group">
 
-                                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i>&nbsp;&nbsp;&nbsp;     Ajouter au tableau </button>
+                                            <label for="name">tâche</label>
+                                            <select class="form-control form-control-sm" name="tacheSelected" id="tacheSelectedId">
+                                                <option value=-111>--- Sélectionner une tâche ---</option>
+                                                @foreach (var item in Model.aspNetRoles)
+                                                {
+                                                    <option value="@item.Id" name="@item.SouModuleId" style="display:none">@item.Name</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <br />
+
+                                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop2"><i class=" fas fa-plus">  </i>    </button>
 
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-lg-12" style="text-align: right;">
+                                    <div class="form-group">
+
+                                        <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i>&nbsp;&nbsp;&nbsp;     Ajouter au tableau </button>
+
+                                    </div>
+                                </div>
+
+                                @using (Html.BeginForm())
+                                {
+
                                     <div class="col-xl-12 col-lg-9 col-md-12 col-sm-12 col-12" style="margin-left: -1%;">
                                         <div class="card">
                                             <h5 class="card-header">Liste des Tâches</h5>
                                             <div class="card-body">
-                                                <table class="table table-hover">
+                                                <table class="table table-hover" id="table_roleStatus">
                                                     <thead>
                                                         <tr>
-
-                                                            <th>
-                                                                @Html.DisplayNameFor(model => Model.statuts)
-                                                            </th>
                                                             <th>
                                                                 @Html.DisplayNameFor(model => Model.modules)
                                                             </th>
@@ -165,44 +130,46 @@
                                                         {
                                                             <tr>
                                                                 <td>
-                                                                    @Html.DisplayFor(modelItem => item.Statuts.StatutName)
-                                                                </td>
-                                                                <td>
                                                                     @Html.DisplayFor(modelItem => item.AspNetRoles.SousModule.Module.ModuleName)
                                                                 </td>
                                                                 <td>
                                                                     @Html.DisplayFor(modelItem => item.AspNetRoles.SousModule.SousModuleName)
                                                                 </td>
                                                                 <td>
+                                                                    @Html.Hidden("RoleId", item.RoleId, new { @id = item.RoleId })
+                                                                    @Html.Hidden("StatutId", item.StatutId, new { @id = "StatutId_" + item.RoleId })
                                                                     @Html.DisplayFor(modelItem => item.AspNetRoles.Name)
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(modelitem => item.Read, new { @class = "custom-control-input" })
+                                                                        @Html.CheckBoxFor(m => item.Read, new { @class = "custom-control-input", Name = "Lire", @id = "Lire_" + item.RoleId, @onclick = "LireCheckBox(this,\"" + item.RoleId + "\")" })
+                                                                        @Html.Hidden("Read", item.Read, new { @id = "Read_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(modelitem => item.Create, new { @class = "custom-control-input" })
+                                                                        @Html.CheckBoxFor(m => item.Create, new { @class = "custom-control-input", Name = "Cree", @id = "Cree_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Create_\")" })
+                                                                        @Html.Hidden("Create", item.Create, new { @id = "Create_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(modelitem => item.Modifier, new { @class = "custom-control-input" })
+                                                                        @Html.CheckBoxFor(m => item.Modifier, new { @class = "custom-control-input", Name = "Modifier", @id = "Modifier_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Update_\")" })
+                                                                        @Html.Hidden("Update", item.Modifier, new { @id = "Update_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(modelitem => item.Delete, new { @class = "custom-control-input" })
+                                                                        @Html.CheckBoxFor(m => item.Delete, new { @class = "custom-control-input", Name = "Supprimer", @id = "Supprimer_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Delete_\")" })
+                                                                        @Html.Hidden("Delete", item.Delete, new { @id = "Delete_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                             </tr>
                                                         }
-
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -214,7 +181,7 @@
                                         <div class="col-lg-6">
                                             <input type="text" id="SelectedCompany" />
                                             <div class="form-group">
-                                                @Html.ActionLink("Retour a la liste", "Index", "Home")
+                                                @Html.ActionLink("Retour a la liste", "IndexStatut", "Home")
                                             </div>
                                         </div>
                                         <div class="col-lg-6" style="text-align: right;">
@@ -491,29 +458,313 @@
 </div>
 
 @section Scripts{
+
     <script type="text/javascript">
+
+        function LireCheckBox(checkbox, iden) {
+            if (checkbox.checked == false) {
+                document.getElementById("Cree_"  + iden).checked = false;
+                document.getElementById("Modifier_"  + iden).checked = false;
+                document.getElementById("Supprimer_"  + iden).checked = false;
+
+                document.getElementById("Read_"      + iden).value = false;
+                document.getElementById("Create_"      + iden).value = false;
+                document.getElementById("Update_"  + iden).value = false;
+                document.getElementById("Delete_" + iden).value = false;
+            }
+            else {document.getElementById("Read_" + iden).value = true;
+
+            }
+
+        }
+
+        function cudCheckBox(checkbox, iden, action) {
+            if (checkbox.checked == true) {
+
+                var checkread = document.getElementById("Lire_" + iden);
+                checkread.checked = true;
+                document.getElementById("Read_" + iden).value = true;
+
+                document.getElementById(action + iden).value = true;
+
+            }
+            else {document.getElementById(action + iden).value = false;
+            }
+        }
+
+        function deleteRow(id) {
+            if (confirm("Volez vous vraiment revoquer le role!")) {
+                var element = document.getElementById("row" + id);
+                element.parentNode.removeChild(element);
+            }
+            return true;
+        }
+
+        function returnLab() {
+            var labe = document.createElement("LABEL");
+            labe.className = "be-checkbox custom-control custom-checkbox";
+            return labe;
+        }
+
+        function returnSPAN() {
+            var spanne = document.createElement("SPAN");
+            spanne.className = "custom-control-label";
+            return spanne;
+        }
+
+        function explodeString(chaine, sep) {
+            var newStr = chaine.split(sep);
+            var stinng = "";
+            for (i = 0; i < newStr.length; i++) {
+                stinng += newStr[i];
+            }
+            return stinng;
+
+        }
+
+        function returnHidden(id,name,value) {
+
+            var elmnt = document.createElement("INPUT");
+            elmnt.setAttribute("id", id);
+            elmnt.setAttribute("name", name);
+            elmnt.setAttribute("value", value);
+            elmnt.setAttribute("type", "hidden");
+            return elmnt;
+        }
+
         $(document).ready(function () {
-            $("#moduleSelected").change(function (evt) {
-                $("#SelectedCompany").val($("#moduleSelected option:selected").val().trim());
-                $("#submoduleSelected").empty()
-                $.each(data, function () {
-                    $("#myDropDownLisTId").append($("<option />").val(this.id).text(this.Text));
-                });
-                @module_selected = $("#moduleSelected option:selected").val().trim();
-                @foreach (var item in Model.sousModules.Where(element=>element.ModuleId.ToString()==module_selected))
-                {
+
+            $("body").on("click", "#btnAdd", function () {
+
+                //Get the reference of the Table's TBODY element.
+                var tBody = $("#table_roleStatus > TBODY")[0];
+
+                if ($("#tacheSelectedId option:selected").text().includes("--- Sélectionner") == true) {
+                    alert("toutes les champs obligatoires !");
+                }
+                else {
+                    var rowidnewcc =  $("#tacheSelectedId option:selected").val().trim();
+
+
+                    if ($("#" + rowidnewcc).length) {
+                        alert("deja exists sur le tableau");
+                    } else {
+
+                        var row = tBody.insertRow(-1);
+
+
+                        cell = $(row.insertCell(-1));
+                        cell.html($("#ListOfModulesId option:selected").text().trim());
+
+                        cell = $(row.insertCell(-1));
+                        cell.html($("#submoduleSelectedId option:selected").text().trim());
+
+                        cell = $(row.insertCell(-1));
+                        cell.html($("#tacheSelectedId option:selected").text().trim());
+                        cell.append(returnHidden(rowidnewcc,"RoleId",rowidnewcc));
+                        cell.append(returnHidden("UserId_"+rowidnewcc,"UserId","@ViewBag.UserId"));
+
+                        /***************************** Lire *************************************/
+                        cell = $(row.insertCell(-1));
+
+                        var labr = returnLab(); var spanne = returnSPAN();
+                        var hiddn = returnHidden("Read" + "_" + rowidnewcc, "Read", false);
+
+                        var chkbxr = document.createElement("INPUT");
+                        chkbxr.className = "custom-control-input";
+                        chkbxr.setAttribute("type", "checkbox");
+                        chkbxr.setAttribute("name", "Lire");
+                        chkbxr.id = "Lire_" + rowidnewcc;
+                        chkbxr.onclick = function () {
+                            if (this.checked == false) {
+                                document.getElementById("Cree_" + rowidnewcc).checked = false;
+                                document.getElementById("Modifier_" + rowidnewcc).checked = false;
+                                document.getElementById("Supprimer_" + rowidnewcc).checked = false;
+
+                                document.getElementById("Read_" + rowidnewcc).value = false;
+                                document.getElementById("Create_" + rowidnewcc).value = false;
+                                document.getElementById("Update_" + rowidnewcc).value = false;
+                                document.getElementById("Delete_" + rowidnewcc).value = false;
+                            }
+                            else {
+                                //alert("Read_" + rowidnewcc);
+                                document.getElementById("Read_" + rowidnewcc).value = true;
+
+                            }
+                        };
+
+
+                        labr.appendChild(hiddn);
+                        labr.appendChild(chkbxr);
+                        labr.appendChild(spanne);
+                        cell.append(labr);
+
+
+
+                        /***************************** Cree *************************************/
+
+                        cell = $(row.insertCell(-1));
+
+                        var labr = returnLab(); var spanne = returnSPAN();
+                        var hiddn = returnHidden("Create" + "_" + rowidnewcc, "Create", false);
+
+                        var chkbxr = document.createElement("INPUT");
+                        chkbxr.className = "custom-control-input";
+                        chkbxr.setAttribute("type", "checkbox");
+                        chkbxr.setAttribute("name", "Cree");
+                        chkbxr.id = "Cree_" + rowidnewcc;
+                        chkbxr.onclick = function () {
+                            if (this.checked == true) {
+
+                                var checkread = document.getElementById("Lire_" + rowidnewcc);
+                                checkread.checked = true;
+                                document.getElementById("Read_" + rowidnewcc).value = true;
+
+                                document.getElementById("Create_" + rowidnewcc).value = true;
+
+                            }
+                            else {
+                                document.getElementById("Create_" + rowidnewcc).value = false;
+                            }
+                        };
+
+
+                        labr.appendChild(hiddn);
+                        labr.appendChild(chkbxr);
+                        labr.appendChild(spanne);
+                        cell.append(labr);
+
+
+                        /***************************** Modifier *************************************/
+                        cell = $(row.insertCell(-1));
+
+                        var labr = returnLab(); var spanne = returnSPAN();
+                        var hiddn = returnHidden("Update" + "_" + rowidnewcc, "Update", false);
+
+                        var chkbxr = document.createElement("INPUT");
+                        chkbxr.className = "custom-control-input";
+                        chkbxr.setAttribute("type", "checkbox");
+                        chkbxr.setAttribute("name", "Modifier");
+                        chkbxr.id = "Modifier_" + rowidnewcc;
+                        chkbxr.onclick = function () {
+                            if (this.checked == true) {
+
+                                var checkread = document.getElementById("Lire_" + rowidnewcc);
+                                checkread.checked = true;
+                                document.getElementById("Read_" + rowidnewcc).value = true;
+
+                                document.getElementById("Update_" + rowidnewcc).value = true;
+
+                            }
+                            else {
+                                document.getElementById("Update_" + rowidnewcc).value = false;
+                            }
+                        };
+
+
+                        labr.appendChild(hiddn);
+                        labr.appendChild(chkbxr);
+                        labr.appendChild(spanne);
+                        cell.append(labr);
+
+
+                        /***************************** Supprimer *************************************/
+                        cell = $(row.insertCell(-1));
+
+                        var labr = returnLab(); var spanne = returnSPAN();
+                        var hiddn = returnHidden("Delete" + "_" + rowidnewcc, "Delete", false);
+
+                        var chkbxr = document.createElement("INPUT");
+                        chkbxr.className = "custom-control-input";
+                        chkbxr.setAttribute("type", "checkbox");
+                        chkbxr.setAttribute("name", "Supprimer");
+                        chkbxr.id = "Supprimer_" + rowidnewcc;
+                        chkbxr.onclick = function () {
+                            if (this.checked == true) {
+
+                                var checkread = document.getElementById("Lire_" + rowidnewcc);
+                                checkread.checked = true;
+                                document.getElementById("Read_" + rowidnewcc).value = true;
+
+                                document.getElementById("Delete_" + rowidnewcc).value = true;
+
+                            }
+                            else {
+                                document.getElementById("Delete_" + rowidnewcc).value = false;
+                            }
+                        };
+
+
+                        labr.appendChild(hiddn);
+                        labr.appendChild(chkbxr);
+                        labr.appendChild(spanne);
+                        cell.append(labr);
+
+
+                    }
 
                 }
-                @*var op = document.getElementById("submoduleSelected").getElementsByTagName("option");
 
-                for (var i = 0; i < op.length; i++) {
-
-                    if (op[i].value != "1" && op[i].value != "2" /*|| op[i].value.toLowerCase() == "3"*/) {
-                        op[i].hidden = true;
-                    }
-                }*@
             });
+
+            $('#ListOfModulesId').change(function () {
+
+                var e = document.getElementById("ListOfModulesId");
+                var choix = e.options[e.selectedIndex].value;
+                var Modulee = $(this).val();
+                var com = $("#submoduleSelectedId > option");
+                $("#submoduleSelectedId")[0].selectedIndex = 0;
+                $("#tacheSelectedId")[0].selectedIndex = 0;
+                var a = com[0].getAttribute("name");
+                for (var i = 0; i < com.length; i++) {
+                    if (com[i].getAttribute("name") == Modulee || a == choix || a == -11) {
+                        com[i].style.display = "block";
+                    }
+                    else {
+                        com[i].style.display = "none";
+                    }
+                }
+                $('#submoduleSelectedId').trigger("liszt:updated");
+
+            });
+            $('#submoduleSelectedId').change(function () {
+
+                var e = document.getElementById("submoduleSelectedId");
+                var choix = e.options[e.selectedIndex].value;
+                var SubModulee = $(this).val();
+                var com = $("#tacheSelectedId > option");
+                $("#tacheSelectedId")[0].selectedIndex = 0;
+                var a = com[0].getAttribute("name");
+                for (var i = 0; i < com.length; i++) {
+                    if (com[i].getAttribute("name") == SubModulee || a == choix || a == -111) {
+                        com[i].style.display = "block";
+                    }
+                    else {
+                        com[i].style.display = "none";
+                    }
+                }
+                $('#tacheSelectedId').trigger("liszt:updated");
+
+            });
+
         });
+
+        //$('body').on("click", "#getdata", function () {
+        //    var data = JSON.stringify(getAllData());
+        //    $.ajax({
+        //        url: '/Home/SaveData',
+        //        type: 'POST',
+        //        dataType: 'json',
+        //        contentType: 'application/json; charset=utf-8',
+        //        data: JSON.stringify({ 'getepassdata': data }),
+        //        success: function () {
+        //            alert("Data Added Successfully"+success);
+        //        },
+        //        error: function () {
+        //            alert("Error while inserting data");
+        //        }
+        //    });
+        //});
+
     </script>
 }
-

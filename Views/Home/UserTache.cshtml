@@ -35,9 +35,6 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label for="name">Module</label>
-                                            @*@Html.DropDownListFor(model => model.modules, ViewBag.modules as SelectList
-                                                , "--- Sélectionner un module ---", new { @id = "moduleSelected", @class = "form-control form-control-sm" }
-                                                )*@
                                             <select class="form-control form-control-sm" name="ListOfModules" id="ListOfModulesId">
                                                 <option value=-1>--- Sélectionner un module ---</option>
                                                 @foreach (var item in Model.modules)
@@ -58,9 +55,6 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label for="name">Sous module</label>
-                                            @*@Html.DropDownListFor(model => model.sousModules, ViewBag.sousmodules as SelectList
-                                                , "--- Sélectionner un sous module ---", new { @id = "submoduleSelected", @class = "form-control form-control-sm" }
-                                                )*@
                                             <select class="form-control form-control-sm" name="submoduleSelected" id="submoduleSelectedId">
                                                 <option value=-11>--- Sélectionner un Sous module ---</option>
                                                 @foreach (var item in Model.sousModules)
@@ -82,9 +76,6 @@
                                         <div class="form-group">
 
                                             <label for="name">tâche</label>
-                                            @*@Html.DropDownListFor(model => model.aspNetRoles, ViewBag.taches as SelectList
-                                                , "--- Sélectionner une tâche ---", new { @id = "tacheSelectedId", @class = "form-control form-control-sm" ,@style="display:none"}
-                                                )*@
                                             <select class="form-control form-control-sm" name="tacheSelected" id="tacheSelectedId">
                                                 <option value=-111>--- Sélectionner une tâche ---</option>
                                                 @foreach (var item in Model.aspNetRoles)
@@ -158,60 +149,28 @@
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(m => item.Read.Value
-                                                                   , new
-                                                                        {
-                                                                            @class = "custom-control-input",
-                                                                            Name = "Lire"
-                                                                   ,
-                                                                            @id = "Lire_" + item.RoleId,
-                                                                            @onclick = "LireCheckBox(this,\"" + item.RoleId + "\")"
-                                                                        })
+                                                                        @Html.CheckBoxFor(m => item.Read.Value , new {  @class = "custom-control-input",  Name = "Lire" , @id = "Lire_" + item.RoleId,  @onclick = "LireCheckBox(this,\"" + item.RoleId + "\")" })
                                                                         @Html.Hidden("Read", item.Read, new { @id = "Read_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(m => item.Create.Value
-                                                                   , new
-                                                                        {
-                                                                            @class = "custom-control-input",
-                                                                            Name = "Cree"
-                                                                   ,
-                                                                            @id = "Cree_" + item.RoleId,
-                                                                            @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Create_\")"
-                                                                        })
+                                                                        @Html.CheckBoxFor(m => item.Create.Value , new { @class = "custom-control-input",  Name = "Cree" ,  @id = "Cree_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Create_\")" })
                                                                         @Html.Hidden("Create", item.Create, new { @id = "Create_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(m => item.Update.Value
-                                                                   , new
-                                                                        {
-                                                                            @class = "custom-control-input",
-                                                                            Name = "Modifier"
-                                                                   ,
-                                                                            @id = "Modifier_" + item.RoleId,
-                                                                            @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Update_\")"
-                                                                        })
+                                                                        @Html.CheckBoxFor(m => item.Update.Value , new { @class = "custom-control-input", Name = "Modifier" , @id = "Modifier_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Update_\")" })
                                                                         @Html.Hidden("Update", item.Update, new { @id = "Update_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(m => item.Delete.Value
-                                                                   , new
-                                                                        {
-                                                                            @class = "custom-control-input",
-                                                                            Name = "Supprimer"
-                                                                   ,
-                                                                            @id = "Supprimer_" + item.RoleId,
-                                                                            @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Delete_\")"
-                                                                        })
+                                                                        @Html.CheckBoxFor(m => item.Delete.Value , new { @class = "custom-control-input", Name = "Supprimer" , @id = "Supprimer_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Delete_\")" })
                                                                         @Html.Hidden("Delete", item.Delete, new { @id = "Delete_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
