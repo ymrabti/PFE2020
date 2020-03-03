@@ -87,23 +87,17 @@
     <Property Name="ModuleId" Type="int" Nullable="false" />
     <Property Name="SousModuleDescription" Type="text" />
   </EntityType>
-  <!--Erreurs détectées durant la génération :
-avertissement 6002: La table/vue 'aurs1.dbo.StatutRole' n'a pas de clé primaire définie. La clé a été déduite et la définition a été créée en tant que table/vue en lecture seule.-->
   <EntityType Name="StatutRole">
     <Key>
       <PropertyRef Name="StatutId" />
       <PropertyRef Name="RoleId" />
-      <PropertyRef Name="Read" />
-      <PropertyRef Name="Create" />
-      <PropertyRef Name="Modifier" />
-      <PropertyRef Name="Delete" />
     </Key>
     <Property Name="StatutId" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
-    <Property Name="Read" Type="bit" Nullable="false" />
-    <Property Name="Create" Type="bit" Nullable="false" />
+    <Property Name="Lire" Type="bit" Nullable="false" />
+    <Property Name="Cree" Type="bit" Nullable="false" />
     <Property Name="Modifier" Type="bit" Nullable="false" />
-    <Property Name="Delete" Type="bit" Nullable="false" />
+    <Property Name="Supprimer" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Statuts">
     <Key>
@@ -233,17 +227,8 @@ avertissement 6002: La table/vue 'aurs1.dbo.StatutRole' n'a pas de clé primaire
     <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Module" EntityType="Self.Module" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SousModule" EntityType="Self.SousModule" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="StatutRole" EntityType="Self.StatutRole" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Statuts" EntityType="Self.Statuts" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="StatutRole" EntityType="Self.StatutRole" store:Type="Tables" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [StatutRole].[StatutId] AS [StatutId], 
-    [StatutRole].[RoleId] AS [RoleId], 
-    [StatutRole].[Read] AS [Read], 
-    [StatutRole].[Create] AS [Create], 
-    [StatutRole].[Modifier] AS [Modifier], 
-    [StatutRole].[Delete] AS [Delete]
-    FROM [dbo].[StatutRole] AS [StatutRole]</DefiningQuery>
-    </EntitySet>
     <AssociationSet Name="FK_ApplicationModule_Application" Association="Self.FK_ApplicationModule_Application">
       <End Role="Application" EntitySet="Application" />
       <End Role="ApplicationModule" EntitySet="ApplicationModule" />

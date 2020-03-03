@@ -8,8 +8,8 @@
     <EntitySet Name="AspNetUsers" EntityType="aurs1Model.AspNetUsers" />
     <EntitySet Name="Module" EntityType="aurs1Model.Module" />
     <EntitySet Name="SousModule" EntityType="aurs1Model.SousModule" />
-    <EntitySet Name="Statuts" EntityType="aurs1Model.Statuts" />
     <EntitySet Name="StatutRole" EntityType="aurs1Model.StatutRole" />
+    <EntitySet Name="Statuts" EntityType="aurs1Model.Statuts" />
     <AssociationSet Name="FK_ApplicationModule_Application" Association="aurs1Model.FK_ApplicationModule_Application">
       <End Role="Application" EntitySet="Application" />
       <End Role="ApplicationModule" EntitySet="ApplicationModule" />
@@ -148,6 +148,20 @@
     <NavigationProperty Name="AspNetRoles" Relationship="aurs1Model.FK_AspNetRoles_SousModule" FromRole="SousModule" ToRole="AspNetRoles" />
     <NavigationProperty Name="Module" Relationship="aurs1Model.FK_SousModule_Module" FromRole="SousModule" ToRole="Module" />
   </EntityType>
+  <EntityType Name="StatutRole">
+    <Key>
+      <PropertyRef Name="StatutId" />
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="StatutId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="RoleId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Lire" Type="Boolean" Nullable="false" />
+    <Property Name="Cree" Type="Boolean" Nullable="false" />
+    <Property Name="Modifier" Type="Boolean" Nullable="false" />
+    <Property Name="Supprimer" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="AspNetRoles" Relationship="aurs1Model.FK_StatutRole_AspNetRoles" FromRole="StatutRole" ToRole="AspNetRoles" />
+    <NavigationProperty Name="Statuts" Relationship="aurs1Model.FK_StatutRole_Statuts" FromRole="StatutRole" ToRole="Statuts" />
+  </EntityType>
   <EntityType Name="Statuts">
     <Key>
       <PropertyRef Name="StatutId" />
@@ -157,24 +171,6 @@
     <Property Name="StatutDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="AspNetUsers" Relationship="aurs1Model.FK_AspNetUsers_Statuts" FromRole="Statuts" ToRole="AspNetUsers" />
     <NavigationProperty Name="StatutRole" Relationship="aurs1Model.FK_StatutRole_Statuts" FromRole="Statuts" ToRole="StatutRole" />
-  </EntityType>
-  <EntityType Name="StatutRole">
-    <Key>
-      <PropertyRef Name="StatutId" />
-      <PropertyRef Name="RoleId" />
-      <PropertyRef Name="Read" />
-      <PropertyRef Name="Create" />
-      <PropertyRef Name="Modifier" />
-      <PropertyRef Name="Delete" />
-    </Key>
-    <Property Name="StatutId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="RoleId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="Read" Type="Boolean" Nullable="false" />
-    <Property Name="Create" Type="Boolean" Nullable="false" />
-    <Property Name="Modifier" Type="Boolean" Nullable="false" />
-    <Property Name="Delete" Type="Boolean" Nullable="false" />
-    <NavigationProperty Name="AspNetRoles" Relationship="aurs1Model.FK_StatutRole_AspNetRoles" FromRole="StatutRole" ToRole="AspNetRoles" />
-    <NavigationProperty Name="Statuts" Relationship="aurs1Model.FK_StatutRole_Statuts" FromRole="StatutRole" ToRole="Statuts" />
   </EntityType>
   <Association Name="FK_ApplicationModule_Application">
     <End Type="aurs1Model.Application" Role="Application" Multiplicity="1" />

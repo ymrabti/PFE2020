@@ -33,13 +33,13 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label for="name">Module</label>
-                                            <select class="form-control form-control-sm" id="">
-                                                    <option value="">--- Sélectionner un module ---</option>
-                                                    @foreach (var item in Model.modules)
-                                                    {
-                                                        <option value="@item.ModuleId">@item.ModuleName</option>
-                                                    }
-                                                </select>
+                                            <select class="form-control form-control-sm" name="ListOfModules" id="ListOfModulesId">
+                                                <option value="">--- Sélectionner un module ---</option>
+                                                @foreach (var item in Model.modules)
+                                                {
+                                                    <option value="@item.ModuleId">@item.ModuleName</option>
+                                                }
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -53,13 +53,13 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label for="name">Sous module</label>
-                                            <select class="form-control form-control-sm" id="">
-                                                    <option value="">--- Sélectionner un Sous module ---</option>
-                                                    @foreach (var item in Model.sousModules)
-                                                    {
-                                                        <option value="@item.SousModuleId" name="@item.ModuleId" style="display:none">@item.SousModuleName</option>
-                                                    }
-                                                </select>
+                                            <select class="form-control form-control-sm" name="submoduleSelected" id="submoduleSelectedId">
+                                                <option value="">--- Sélectionner un Sous module ---</option>
+                                                @foreach (var item in Model.sousModules)
+                                                {
+                                                    <option value="@item.SousModuleId" name="@item.ModuleId" style="display:none">@item.SousModuleName</option>
+                                                }
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -95,7 +95,7 @@
                                 <div class="col-lg-12" style="text-align: right;">
                                     <div class="form-group">
 
-                                        <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i>&nbsp;&nbsp;&nbsp;     Ajouter au tableau </button>
+                                        <button id="btnAdd" type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i>&nbsp;&nbsp;&nbsp;     Ajouter au tableau </button>
 
                                     </div>
                                 </div>
@@ -142,15 +142,15 @@
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(m => item.Read, new { @class = "custom-control-input", Name = "Lire", @id = "Lire_" + item.RoleId, @onclick = "LireCheckBox(this,\"" + item.RoleId + "\")" })
-                                                                        @Html.Hidden("Read", item.Read, new { @id = "Read_" + item.RoleId })
+                                                                        @Html.CheckBoxFor(m => item.Lire, new { @class = "custom-control-input", Name = "Lire", @id = "Lire_" + item.RoleId, @onclick = "LireCheckBox(this,\"" + item.RoleId + "\")" })
+                                                                        @Html.Hidden("Read", item.Lire, new { @id = "Read_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(m => item.Create, new { @class = "custom-control-input", Name = "Cree", @id = "Cree_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Create_\")" })
-                                                                        @Html.Hidden("Create", item.Create, new { @id = "Create_" + item.RoleId })
+                                                                        @Html.CheckBoxFor(m => item.Cree, new { @class = "custom-control-input", Name = "Cree", @id = "Cree_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Create_\")" })
+                                                                        @Html.Hidden("Create", item.Cree, new { @id = "Create_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
@@ -163,8 +163,8 @@
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(m => item.Delete, new { @class = "custom-control-input", Name = "Supprimer", @id = "Supprimer_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Delete_\")" })
-                                                                        @Html.Hidden("Delete", item.Delete, new { @id = "Delete_" + item.RoleId })
+                                                                        @Html.CheckBoxFor(m => item.Supprimer, new { @class = "custom-control-input", Name = "Supprimer", @id = "Supprimer_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Delete_\")" })
+                                                                        @Html.Hidden("Delete", item.Supprimer, new { @id = "Delete_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
@@ -179,7 +179,6 @@
                                     <div class="row">
 
                                         <div class="col-lg-6">
-                                            <input type="text" id="SelectedCompany" />
                                             <div class="form-group">
                                                 @Html.ActionLink("Retour a la liste", "IndexStatut", "Home")
                                             </div>
@@ -216,7 +215,7 @@
                     <div class="form-group">
                         <label for="name">Nom du module</label>
 
-                        <input id="name" type="text" name="name" class="form-control">
+                        <input type="text" name="name" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="name">Description du module</label>
@@ -245,7 +244,7 @@
                     <div class="form-group">
                         <label for="name">Nom du sous module</label>
 
-                        <input id="name" type="text" name="name" class="form-control">
+                        <input type="text" name="name" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="name">Description du sous module</label>
@@ -274,7 +273,7 @@
                     <div class="form-group">
                         <label for="name">Nom du tâche</label>
 
-                        <input id="name" type="text" name="name" class="form-control">
+                        <input type="text" name="name" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="name">Description du tâche</label>
@@ -290,171 +289,6 @@
         </div>
     </div>
 
-    <div class="modal fade" id="staticBackdrop3" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Ajouter un utilisateur</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12" style=" margin-left: auto; margin-right: auto;">
-                        <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
-                            <div class="card-body">
-                                <form action="@Url.Action("Index", "Home")" method="post">
-                                    <div class="form-group">
-                                        <label for="inputText12">Type d'utilisateur :</label>
-                                        <br>
-                                        <label class="custom-control custom-radio custom-control-inline">
-                                            <input disabled="" type="radio" name="prop1" class="custom-control-input" id="11"><span class="custom-control-label">Morale</span>
-                                        </label>
-                                        <label class="custom-control custom-radio custom-control-inline">
-                                            <input disabled="" type="radio" name="prop1" checked="" class="custom-control-input" id="22"><span class="custom-control-label">Physique</span>
-                                        </label>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">Nom</label>
-                                                <input id="name" type="text" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">Prenom</label>
-                                                <input id="name" type="text" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name" style="  margin-left: 89%">الاسم الشخصي</label>
-                                                <input id="name" type="text" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name" style="  margin-left: 91%">الاسم العائلي</label>
-                                                <input id="name" type="text" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">CIN</label>
-                                                <input id="name" type="text" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">Ville</label>
-                                                <input id="name" type="text" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label for="inputText12">Sexe:</label>
-                                                <br>
-                                                <label class="custom-control custom-radio custom-control-inline">
-                                                    <input type="radio" name="prop" class="custom-control-input" id="1"><span class="custom-control-label">Homme</span>
-                                                </label>
-                                                <label class="custom-control custom-radio custom-control-inline">
-                                                    <input type="radio" name="prop" class="custom-control-input" id="2"><span class="custom-control-label">Femme</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">Email</label>
-                                                <input id="name" type="email" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">N°Telephone</label>
-                                                <input id="name" type="number" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">Mot de passe</label>
-                                                <input id="name" type="password" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">Confirmer mot de passe</label>
-                                                <input id="name" type="password" name="name" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-
-                                                <label for="name">Statut</label>
-                                                <select class="form-control form-control-sm">
-                                                    <option value="">Statut</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <br />
-
-                                                <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop"><i class=" fas fa-plus">  </i>    </button>
-
-
-
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-
-                                        <div class="col-lg-6" style="text-align: right;">
-                                            <div class="form-group">
-
-                                                <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-user-plus">  </i>&nbsp;&nbsp;&nbsp;     Créer un compte</button>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </form>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 @section Scripts{

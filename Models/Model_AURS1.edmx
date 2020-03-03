@@ -92,23 +92,17 @@
           <Property Name="ModuleId" Type="int" Nullable="false" />
           <Property Name="SousModuleDescription" Type="text" />
         </EntityType>
-        <!--Erreurs détectées durant la génération :
-avertissement 6002: La table/vue 'aurs1.dbo.StatutRole' n'a pas de clé primaire définie. La clé a été déduite et la définition a été créée en tant que table/vue en lecture seule.-->
         <EntityType Name="StatutRole">
           <Key>
             <PropertyRef Name="StatutId" />
             <PropertyRef Name="RoleId" />
-            <PropertyRef Name="Read" />
-            <PropertyRef Name="Create" />
-            <PropertyRef Name="Modifier" />
-            <PropertyRef Name="Delete" />
           </Key>
           <Property Name="StatutId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="Read" Type="bit" Nullable="false" />
-          <Property Name="Create" Type="bit" Nullable="false" />
+          <Property Name="Lire" Type="bit" Nullable="false" />
+          <Property Name="Cree" Type="bit" Nullable="false" />
           <Property Name="Modifier" Type="bit" Nullable="false" />
-          <Property Name="Delete" Type="bit" Nullable="false" />
+          <Property Name="Supprimer" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Statuts">
           <Key>
@@ -238,17 +232,8 @@ avertissement 6002: La table/vue 'aurs1.dbo.StatutRole' n'a pas de clé primaire
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Module" EntityType="Self.Module" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SousModule" EntityType="Self.SousModule" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StatutRole" EntityType="Self.StatutRole" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Statuts" EntityType="Self.Statuts" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="StatutRole" EntityType="Self.StatutRole" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [StatutRole].[StatutId] AS [StatutId], 
-    [StatutRole].[RoleId] AS [RoleId], 
-    [StatutRole].[Read] AS [Read], 
-    [StatutRole].[Create] AS [Create], 
-    [StatutRole].[Modifier] AS [Modifier], 
-    [StatutRole].[Delete] AS [Delete]
-    FROM [dbo].[StatutRole] AS [StatutRole]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_ApplicationModule_Application" Association="Self.FK_ApplicationModule_Application">
             <End Role="Application" EntitySet="Application" />
             <End Role="ApplicationModule" EntitySet="ApplicationModule" />
@@ -298,8 +283,8 @@ avertissement 6002: La table/vue 'aurs1.dbo.StatutRole' n'a pas de clé primaire
           <EntitySet Name="AspNetUsers" EntityType="aurs1Model.AspNetUsers" />
           <EntitySet Name="Module" EntityType="aurs1Model.Module" />
           <EntitySet Name="SousModule" EntityType="aurs1Model.SousModule" />
-          <EntitySet Name="Statuts" EntityType="aurs1Model.Statuts" />
           <EntitySet Name="StatutRole" EntityType="aurs1Model.StatutRole" />
+          <EntitySet Name="Statuts" EntityType="aurs1Model.Statuts" />
           <AssociationSet Name="FK_ApplicationModule_Application" Association="aurs1Model.FK_ApplicationModule_Application">
             <End Role="Application" EntitySet="Application" />
             <End Role="ApplicationModule" EntitySet="ApplicationModule" />
@@ -438,6 +423,20 @@ avertissement 6002: La table/vue 'aurs1.dbo.StatutRole' n'a pas de clé primaire
           <NavigationProperty Name="AspNetRoles" Relationship="aurs1Model.FK_AspNetRoles_SousModule" FromRole="SousModule" ToRole="AspNetRoles" />
           <NavigationProperty Name="Module" Relationship="aurs1Model.FK_SousModule_Module" FromRole="SousModule" ToRole="Module" />
         </EntityType>
+        <EntityType Name="StatutRole">
+          <Key>
+            <PropertyRef Name="StatutId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="StatutId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="RoleId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Lire" Type="Boolean" Nullable="false" />
+          <Property Name="Cree" Type="Boolean" Nullable="false" />
+          <Property Name="Modifier" Type="Boolean" Nullable="false" />
+          <Property Name="Supprimer" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AspNetRoles" Relationship="aurs1Model.FK_StatutRole_AspNetRoles" FromRole="StatutRole" ToRole="AspNetRoles" />
+          <NavigationProperty Name="Statuts" Relationship="aurs1Model.FK_StatutRole_Statuts" FromRole="StatutRole" ToRole="Statuts" />
+        </EntityType>
         <EntityType Name="Statuts">
           <Key>
             <PropertyRef Name="StatutId" />
@@ -447,24 +446,6 @@ avertissement 6002: La table/vue 'aurs1.dbo.StatutRole' n'a pas de clé primaire
           <Property Name="StatutDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="AspNetUsers" Relationship="aurs1Model.FK_AspNetUsers_Statuts" FromRole="Statuts" ToRole="AspNetUsers" />
           <NavigationProperty Name="StatutRole" Relationship="aurs1Model.FK_StatutRole_Statuts" FromRole="Statuts" ToRole="StatutRole" />
-        </EntityType>
-        <EntityType Name="StatutRole">
-          <Key>
-            <PropertyRef Name="StatutId" />
-            <PropertyRef Name="RoleId" />
-            <PropertyRef Name="Read" />
-            <PropertyRef Name="Create" />
-            <PropertyRef Name="Modifier" />
-            <PropertyRef Name="Delete" />
-          </Key>
-          <Property Name="StatutId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="RoleId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="Read" Type="Boolean" Nullable="false" />
-          <Property Name="Create" Type="Boolean" Nullable="false" />
-          <Property Name="Modifier" Type="Boolean" Nullable="false" />
-          <Property Name="Delete" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="AspNetRoles" Relationship="aurs1Model.FK_StatutRole_AspNetRoles" FromRole="StatutRole" ToRole="AspNetRoles" />
-          <NavigationProperty Name="Statuts" Relationship="aurs1Model.FK_StatutRole_Statuts" FromRole="StatutRole" ToRole="Statuts" />
         </EntityType>
         <Association Name="FK_ApplicationModule_Application">
           <End Type="aurs1Model.Application" Role="Application" Multiplicity="1" />
@@ -676,23 +657,23 @@ avertissement 6002: La table/vue 'aurs1.dbo.StatutRole' n'a pas de clé primaire
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="StatutRole">
+            <EntityTypeMapping TypeName="aurs1Model.StatutRole">
+              <MappingFragment StoreEntitySet="StatutRole">
+                <ScalarProperty Name="Supprimer" ColumnName="Supprimer" />
+                <ScalarProperty Name="Modifier" ColumnName="Modifier" />
+                <ScalarProperty Name="Cree" ColumnName="Cree" />
+                <ScalarProperty Name="Lire" ColumnName="Lire" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="StatutId" ColumnName="StatutId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Statuts">
             <EntityTypeMapping TypeName="aurs1Model.Statuts">
               <MappingFragment StoreEntitySet="Statuts">
                 <ScalarProperty Name="StatutDescription" ColumnName="StatutDescription" />
                 <ScalarProperty Name="StatutName" ColumnName="StatutName" />
-                <ScalarProperty Name="StatutId" ColumnName="StatutId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="StatutRole">
-            <EntityTypeMapping TypeName="aurs1Model.StatutRole">
-              <MappingFragment StoreEntitySet="StatutRole">
-                <ScalarProperty Name="Delete" ColumnName="Delete" />
-                <ScalarProperty Name="Modifier" ColumnName="Modifier" />
-                <ScalarProperty Name="Create" ColumnName="Create" />
-                <ScalarProperty Name="Read" ColumnName="Read" />
-                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
                 <ScalarProperty Name="StatutId" ColumnName="StatutId" />
               </MappingFragment>
             </EntityTypeMapping>

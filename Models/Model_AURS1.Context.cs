@@ -32,7 +32,7 @@ namespace GestionnaireUtilisateurs.Models
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Module> Module { get; set; }
         public virtual DbSet<SousModule> SousModule { get; set; }
-        public virtual DbSet<Statuts> Statuts { get; set; }
         public virtual DbSet<StatutRole> StatutRole { get; set; }
+        public virtual DbSet<Statuts> Statuts { get; set; }
     }
 }

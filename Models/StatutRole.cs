@@ -16,10 +16,10 @@ namespace GestionnaireUtilisateurs.Models
     {
         public string StatutId { get; set; }
         public string RoleId { get; set; }
-        public bool Read { get; set; }
-        public bool Create { get; set; }
+        public bool Lire { get; set; }
+        public bool Cree { get; set; }
         public bool Modifier { get; set; }
-        public bool Delete { get; set; }
+        public bool Supprimer { get; set; }
     
         public virtual AspNetRoles AspNetRoles { get; set; }
         public virtual Statuts Statuts { get; set; }

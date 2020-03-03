@@ -93,23 +93,23 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="StatutRole">
+      <EntityTypeMapping TypeName="aurs1Model.StatutRole">
+        <MappingFragment StoreEntitySet="StatutRole">
+          <ScalarProperty Name="Supprimer" ColumnName="Supprimer" />
+          <ScalarProperty Name="Modifier" ColumnName="Modifier" />
+          <ScalarProperty Name="Cree" ColumnName="Cree" />
+          <ScalarProperty Name="Lire" ColumnName="Lire" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="StatutId" ColumnName="StatutId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Statuts">
       <EntityTypeMapping TypeName="aurs1Model.Statuts">
         <MappingFragment StoreEntitySet="Statuts">
           <ScalarProperty Name="StatutDescription" ColumnName="StatutDescription" />
           <ScalarProperty Name="StatutName" ColumnName="StatutName" />
-          <ScalarProperty Name="StatutId" ColumnName="StatutId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="StatutRole">
-      <EntityTypeMapping TypeName="aurs1Model.StatutRole">
-        <MappingFragment StoreEntitySet="StatutRole">
-          <ScalarProperty Name="Delete" ColumnName="Delete" />
-          <ScalarProperty Name="Modifier" ColumnName="Modifier" />
-          <ScalarProperty Name="Create" ColumnName="Create" />
-          <ScalarProperty Name="Read" ColumnName="Read" />
-          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
           <ScalarProperty Name="StatutId" ColumnName="StatutId" />
         </MappingFragment>
       </EntityTypeMapping>
