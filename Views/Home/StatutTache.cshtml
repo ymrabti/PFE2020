@@ -212,20 +212,24 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="name">Nom du module</label>
+                    @using (Html.BeginForm("UserTacheAddModule", "Home", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label for="name">Nom du module</label>
 
-                        <input type="text" name="name" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="name">Description du module</label>
+                            <input type="text" name="ModuleName" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Description du module</label>
 
-                        <textarea class="form-control"></textarea>
-                    </div>
-                    <div class="modal-footer">
+                            <textarea name="ModuleDescription" class="form-control"></textarea>
+                        </div>
+                        <div class="modal-footer">
 
-                        <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
-                    </div>
+                            <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -241,20 +245,32 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="name">Nom du sous module</label>
+                    @using (Html.BeginForm("UserTacheAddSousModule", "Home", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label for="name">Nom du sous module</label>
+                            <input type="text" name="SousModuleName" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Description du sous module</label>
+                            <textarea name="SousModuleDescription" class="form-control"></textarea>
+                        </div>
 
-                        <input type="text" name="name" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="name">Description du sous module</label>
-
-                        <textarea class="form-control"></textarea>
-                    </div>
-                    <div class="modal-footer">
-
-                        <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
-                    </div>
+                        <div class="form-group">
+                            <label for="name">Module</label>
+                            <select class="form-control form-control-sm" name="ModuleId" id="ListOfModulesId">
+                                <option value=-1>--- Sélectionner un module ---</option>
+                                @foreach (var item in Model.modules)
+                                {
+                                    <option value="@item.ModuleId">@item.ModuleName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -270,20 +286,31 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="name">Nom du tâche</label>
-
-                        <input type="text" name="name" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="name">Description du tâche</label>
-
-                        <textarea class="form-control"></textarea>
-                    </div>
-                    <div class="modal-footer">
-
-                        <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
-                    </div>
+                    @using (Html.BeginForm("Test", "Home", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label for="name">Nom du tâche</label>
+                            <input type="text" name="Name" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Description du tâche</label>
+                            <textarea name="RoleDescription" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Sous Module</label>
+                            <select class="form-control form-control-sm" name="SousModuleId" id="ListOfSubModulesId">
+                                <option value=-1>--- Sélectionner un Sous module ---</option>
+                                @foreach (var item in Model.sousModules)
+                                {
+                                    <option value="@item.SousModuleId">@item.SousModuleName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

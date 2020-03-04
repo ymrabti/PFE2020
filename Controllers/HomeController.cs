@@ -21,6 +21,13 @@ namespace GestionnaireUtilisateurs.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddUser([Bind(Include = ",ModuleDescription")] AspNetUserRoles module)
+        {
+            return View();
+        }
         /// ///////////////////////              USER TACHE                    //////////////////////
         /// ///////////////////////              USER TACHE                    //////////////////////
         /// ///////////////////////              USER TACHE                    //////////////////////
@@ -245,10 +252,11 @@ namespace GestionnaireUtilisateurs.Controllers
             else
             {
                 var tache = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext())) ;
-                var tachee = tache.Create(new IdentityRole());
-                sousModules.SouModuleId = SousModuleId;
+                var tachee = tache.Create(new IdentityRole(sousModules.Name));
+                var identifiant = tachee.Succeeded;
+                //sousModules.SouModuleId = SousModuleId;
                 //database.AspNetRoles.Add(sousModules);database.SaveChanges();
-                ViewBag.Test += sousModules.Name + " * " + sousModules.RoleDescription + " * " + sousModules.SouModuleId;
+                ViewBag.Test += sousModules.Name + " * " + sousModules.RoleDescription + " * " + sousModules.Id + " * " + identifiant;
             }
             
             return View();

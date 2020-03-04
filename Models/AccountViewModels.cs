@@ -69,16 +69,13 @@ namespace GestionnaireUtilisateurs.Models
         [Display(Name = "Courrier électronique")]
         public string Email { get; set; }
         [Required]
-        [EmailAddress]
         [Display(Name = "Nom d'utilisateur")]
         public string UserName { get; set; }
         [Required]
-        [EmailAddress]
         [Display(Name = "CIN")]
         public string CIN { get; set; }
         [Required]
-        [EmailAddress]
-        [Display(Name = "CIN")]
+        [Display(Name = "Sexe ")]
         public string Sexe { get; set; }
 
         [Required]

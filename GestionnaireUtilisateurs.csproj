@@ -171,13 +171,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\ANRController.cs" />
-    <Compile Include="Controllers\ANURController.cs" />
+    <Compile Include="Controllers\AspNetRolesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Application.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
@@ -752,20 +752,15 @@
     <Content Include="Views\Home\taches.cshtml" />
     <Content Include="Views\Home\StatutTache.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\ANUR\Create.cshtml" />
-    <Content Include="Views\ANUR\Delete.cshtml" />
-    <Content Include="Views\ANUR\Details.cshtml" />
-    <Content Include="Views\ANUR\Edit.cshtml" />
-    <Content Include="Views\ANUR\Index.cshtml" />
-    <Content Include="Views\ANR\Create.cshtml" />
-    <Content Include="Views\ANR\Delete.cshtml" />
-    <Content Include="Views\ANR\Details.cshtml" />
-    <Content Include="Views\ANR\Edit.cshtml" />
-    <Content Include="Views\ANR\Index.cshtml" />
     <Content Include="Views\Home\SaveData.cshtml" />
     <Content Include="Views\Home\TableResult.cshtml" />
     <Content Include="Views\Home\IndexStatut.cshtml" />
     <Content Include="Views\Home\Test.cshtml" />
+    <Content Include="Views\AspNetRoles\Create.cshtml" />
+    <Content Include="Views\AspNetRoles\Delete.cshtml" />
+    <Content Include="Views\AspNetRoles\Details.cshtml" />
+    <Content Include="Views\AspNetRoles\Edit.cshtml" />
+    <Content Include="Views\AspNetRoles\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

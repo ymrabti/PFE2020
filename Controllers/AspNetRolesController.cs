@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
@@ -11,23 +10,25 @@ using GestionnaireUtilisateurs.Models;
 
 namespace GestionnaireUtilisateurs.Controllers
 {
-    public class ANRController : Controller
+    public class AspNetRolesController : Controller
     {
         private aurs1Entities db = new aurs1Entities();
 
-        public async Task<ActionResult> Index()
+        // GET: AspNetRoles
+        public ActionResult Index()
         {
             var aspNetRoles = db.AspNetRoles.Include(a => a.SousModule);
-            return View(await aspNetRoles.ToListAsync());
+            return View(aspNetRoles.ToList());
         }
 
-        public async Task<ActionResult> Details(string id)
+        // GET: AspNetRoles/Details/5
+        public ActionResult Details(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AspNetRoles aspNetRoles = await db.AspNetRoles.FindAsync(id);
+            AspNetRoles aspNetRoles = db.AspNetRoles.Find(id);
             if (aspNetRoles == null)
             {
                 return HttpNotFound();
@@ -35,27 +36,24 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(aspNetRoles);
         }
 
-        // GET: ANR/Create
+        // GET: AspNetRoles/Create
         public ActionResult Create()
         {
             ViewBag.SouModuleId = new SelectList(db.SousModule, "SousModuleId", "SousModuleName");
             return View();
         }
 
+        // POST: AspNetRoles/Create
+        // Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
+        // plus de détails, voir  https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(//[Bind(Include = "Id,Name,SouModuleId,RoleDescription")] AspNetRoles aspNetRoles,
-            string Id, string Name, int SouModuleId, string RoleDescription)
+        public ActionResult Create([Bind(Include = "Id,Name,SouModuleId,RoleDescription")] AspNetRoles aspNetRoles)
         {
-                AspNetRoles aspNetRoles = new AspNetRoles();
             if (ModelState.IsValid)
             {
-                aspNetRoles.Id = Id;
-                aspNetRoles.Name = Name;
-                aspNetRoles.SouModuleId = SouModuleId;
-                aspNetRoles.RoleDescription = RoleDescription;
                 db.AspNetRoles.Add(aspNetRoles);
-                await db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -63,14 +61,14 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(aspNetRoles);
         }
 
-        // GET: ANR/Edit/5
-        public async Task<ActionResult> Edit(string id)
+        // GET: AspNetRoles/Edit/5
+        public ActionResult Edit(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AspNetRoles aspNetRoles = await db.AspNetRoles.FindAsync(id);
+            AspNetRoles aspNetRoles = db.AspNetRoles.Find(id);
             if (aspNetRoles == null)
             {
                 return HttpNotFound();
@@ -79,28 +77,31 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(aspNetRoles);
         }
 
+        // POST: AspNetRoles/Edit/5
+        // Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
+        // plus de détails, voir  https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,SouModuleId,RoleDescription")] AspNetRoles aspNetRoles)
+        public ActionResult Edit([Bind(Include = "Id,Name,SouModuleId,RoleDescription")] AspNetRoles aspNetRoles)
         {
             if (ModelState.IsValid)
             {
                 db.Entry(aspNetRoles).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             ViewBag.SouModuleId = new SelectList(db.SousModule, "SousModuleId", "SousModuleName", aspNetRoles.SouModuleId);
             return View(aspNetRoles);
         }
 
-        // GET: ANR/Delete/5
-        public async Task<ActionResult> Delete(string id)
+        // GET: AspNetRoles/Delete/5
+        public ActionResult Delete(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AspNetRoles aspNetRoles = await db.AspNetRoles.FindAsync(id);
+            AspNetRoles aspNetRoles = db.AspNetRoles.Find(id);
             if (aspNetRoles == null)
             {
                 return HttpNotFound();
@@ -108,14 +109,14 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(aspNetRoles);
         }
 
-        // POST: ANR/Delete/5
+        // POST: AspNetRoles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(string id)
+        public ActionResult DeleteConfirmed(string id)
         {
-            AspNetRoles aspNetRoles = await db.AspNetRoles.FindAsync(id);
+            AspNetRoles aspNetRoles = db.AspNetRoles.Find(id);
             db.AspNetRoles.Remove(aspNetRoles);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
 
