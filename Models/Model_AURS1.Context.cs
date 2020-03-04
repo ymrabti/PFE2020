@@ -28,11 +28,11 @@ namespace GestionnaireUtilisateurs.Models
         public virtual DbSet<Application> Application { get; set; }
         public virtual DbSet<ApplicationModule> ApplicationModule { get; set; }
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
-        public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Module> Module { get; set; }
         public virtual DbSet<SousModule> SousModule { get; set; }
         public virtual DbSet<StatutRole> StatutRole { get; set; }
         public virtual DbSet<Statuts> Statuts { get; set; }
+        public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
     }
 }

@@ -47,8 +47,8 @@ namespace GestionnaireUtilisateurs.Models
         public string typeUtilisateur { get; set; }
         public Nullable<int> Organisme { get; set; }
     
+        public virtual Statuts Statuts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
-        public virtual Statuts Statuts { get; set; }
     }
 }

@@ -149,28 +149,28 @@
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(m => item.Read.Value , new {  @class = "custom-control-input",  Name = "Lire" , @id = "Lire_" + item.RoleId,  @onclick = "LireCheckBox(this,\"" + item.RoleId + "\")" })
+                                                                        @Html.CheckBoxFor(m => item.Read , new {  @class = "custom-control-input",  Name = "Lire" , @id = "Lire_" + item.RoleId,  @onclick = "LireCheckBox(this,\"" + item.RoleId + "\")" })
                                                                         @Html.Hidden("Read", item.Read, new { @id = "Read_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(m => item.Create.Value , new { @class = "custom-control-input",  Name = "Cree" ,  @id = "Cree_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Create_\")" })
+                                                                        @Html.CheckBoxFor(m => item.Create , new { @class = "custom-control-input",  Name = "Cree" ,  @id = "Cree_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Create_\")" })
                                                                         @Html.Hidden("Create", item.Create, new { @id = "Create_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(m => item.Update.Value , new { @class = "custom-control-input", Name = "Modifier" , @id = "Modifier_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Update_\")" })
+                                                                        @Html.CheckBoxFor(m => item.Update , new { @class = "custom-control-input", Name = "Modifier" , @id = "Modifier_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Update_\")" })
                                                                         @Html.Hidden("Update", item.Update, new { @id = "Update_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>
                                                                 </td>
                                                                 <td>
                                                                     <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(m => item.Delete.Value , new { @class = "custom-control-input", Name = "Supprimer" , @id = "Supprimer_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Delete_\")" })
+                                                                        @Html.CheckBoxFor(m => item.Delete , new { @class = "custom-control-input", Name = "Supprimer" , @id = "Supprimer_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Delete_\")" })
                                                                         @Html.Hidden("Delete", item.Delete, new { @id = "Delete_" + item.RoleId })
                                                                         <span class="custom-control-label"></span>
                                                                     </label>

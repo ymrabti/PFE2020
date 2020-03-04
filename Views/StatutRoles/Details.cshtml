@@ -1,0 +1,67 @@
+﻿@model GestionnaireUtilisateurs.Models.StatutRole
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>StatutRole</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Lire)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Lire)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cree)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cree)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Modifier)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Modifier)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Supprimer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Supprimer)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AspNetRoles.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AspNetRoles.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Statuts.StatutName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Statuts.StatutName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

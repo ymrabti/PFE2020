@@ -16,10 +16,10 @@ namespace GestionnaireUtilisateurs.Models
     {
         public string UserId { get; set; }
         public string RoleId { get; set; }
-        public Nullable<bool> Read { get; set; }
-        public Nullable<bool> Create { get; set; }
-        public Nullable<bool> Update { get; set; }
-        public Nullable<bool> Delete { get; set; }
+        public bool Read { get; set; }
+        public bool Create { get; set; }
+        public bool Update { get; set; }
+        public bool Delete { get; set; }
     
         public virtual AspNetRoles AspNetRoles { get; set; }
         public virtual AspNetUsers AspNetUsers { get; set; }

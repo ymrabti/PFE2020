@@ -30,18 +30,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="AspNetUserRoles">
-      <EntityTypeMapping TypeName="aurs1Model.AspNetUserRoles">
-        <MappingFragment StoreEntitySet="AspNetUserRoles">
-          <ScalarProperty Name="Delete" ColumnName="Delete" />
-          <ScalarProperty Name="Update" ColumnName="Update" />
-          <ScalarProperty Name="Create" ColumnName="Create" />
-          <ScalarProperty Name="Read" ColumnName="Read" />
-          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
-          <ScalarProperty Name="UserId" ColumnName="UserId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="AspNetUsers">
       <EntityTypeMapping TypeName="aurs1Model.AspNetUsers">
         <MappingFragment StoreEntitySet="AspNetUsers">
@@ -111,6 +99,18 @@
           <ScalarProperty Name="StatutDescription" ColumnName="StatutDescription" />
           <ScalarProperty Name="StatutName" ColumnName="StatutName" />
           <ScalarProperty Name="StatutId" ColumnName="StatutId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUserRoles">
+      <EntityTypeMapping TypeName="aurs1Model.AspNetUserRoles">
+        <MappingFragment StoreEntitySet="AspNetUserRoles">
+          <ScalarProperty Name="Delete" ColumnName="Delete" />
+          <ScalarProperty Name="Update" ColumnName="Update" />
+          <ScalarProperty Name="Create" ColumnName="Create" />
+          <ScalarProperty Name="Read" ColumnName="Read" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

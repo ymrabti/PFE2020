@@ -4,7 +4,6 @@
     <EntitySet Name="Application" EntityType="aurs1Model.Application" />
     <EntitySet Name="ApplicationModule" EntityType="aurs1Model.ApplicationModule" />
     <EntitySet Name="AspNetRoles" EntityType="aurs1Model.AspNetRoles" />
-    <EntitySet Name="AspNetUserRoles" EntityType="aurs1Model.AspNetUserRoles" />
     <EntitySet Name="AspNetUsers" EntityType="aurs1Model.AspNetUsers" />
     <EntitySet Name="Module" EntityType="aurs1Model.Module" />
     <EntitySet Name="SousModule" EntityType="aurs1Model.SousModule" />
@@ -22,17 +21,9 @@
       <End Role="SousModule" EntitySet="SousModule" />
       <End Role="AspNetRoles" EntitySet="AspNetRoles" />
     </AssociationSet>
-    <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
-      <End Role="AspNetRoles" EntitySet="AspNetRoles" />
-      <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
-    </AssociationSet>
     <AssociationSet Name="FK_StatutRole_AspNetRoles" Association="aurs1Model.FK_StatutRole_AspNetRoles">
       <End Role="AspNetRoles" EntitySet="AspNetRoles" />
       <End Role="StatutRole" EntitySet="StatutRole" />
-    </AssociationSet>
-    <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
-      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-      <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
     </AssociationSet>
     <AssociationSet Name="FK_AspNetUsers_Statuts" Association="aurs1Model.FK_AspNetUsers_Statuts">
       <End Role="Statuts" EntitySet="Statuts" />
@@ -45,6 +36,15 @@
     <AssociationSet Name="FK_StatutRole_Statuts" Association="aurs1Model.FK_StatutRole_Statuts">
       <End Role="Statuts" EntitySet="Statuts" />
       <End Role="StatutRole" EntitySet="StatutRole" />
+    </AssociationSet>
+    <EntitySet Name="AspNetUserRoles" EntityType="aurs1Model.AspNetUserRoles" />
+    <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+      <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+      <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Application">
@@ -77,22 +77,8 @@
     <Property Name="SouModuleId" Type="Int32" />
     <Property Name="RoleDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="SousModule" Relationship="aurs1Model.FK_AspNetRoles_SousModule" FromRole="AspNetRoles" ToRole="SousModule" />
-    <NavigationProperty Name="AspNetUserRoles" Relationship="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" FromRole="AspNetRoles" ToRole="AspNetUserRoles" />
     <NavigationProperty Name="StatutRole" Relationship="aurs1Model.FK_StatutRole_AspNetRoles" FromRole="AspNetRoles" ToRole="StatutRole" />
-  </EntityType>
-  <EntityType Name="AspNetUserRoles">
-    <Key>
-      <PropertyRef Name="UserId" />
-      <PropertyRef Name="RoleId" />
-    </Key>
-    <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="RoleId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="Read" Type="Boolean" />
-    <Property Name="Create" Type="Boolean" />
-    <Property Name="Update" Type="Boolean" />
-    <Property Name="Delete" Type="Boolean" />
-    <NavigationProperty Name="AspNetRoles" Relationship="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" FromRole="AspNetUserRoles" ToRole="AspNetRoles" />
-    <NavigationProperty Name="AspNetUsers" Relationship="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" FromRole="AspNetUserRoles" ToRole="AspNetUsers" />
+    <NavigationProperty Name="AspNetUserRoles" Relationship="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" FromRole="AspNetRoles" ToRole="AspNetUserRoles" />
   </EntityType>
   <EntityType Name="AspNetUsers">
     <Key>
@@ -124,8 +110,8 @@
     <Property Name="StatutId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
     <Property Name="typeUtilisateur" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="Organisme" Type="Int32" />
-    <NavigationProperty Name="AspNetUserRoles" Relationship="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserRoles" />
     <NavigationProperty Name="Statuts" Relationship="aurs1Model.FK_AspNetUsers_Statuts" FromRole="AspNetUsers" ToRole="Statuts" />
+    <NavigationProperty Name="AspNetUserRoles" Relationship="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserRoles" />
   </EntityType>
   <EntityType Name="Module">
     <Key>
@@ -208,20 +194,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
-    <End Type="aurs1Model.AspNetRoles" Role="AspNetRoles" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="aurs1Model.AspNetUserRoles" Role="AspNetUserRoles" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetRoles">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AspNetUserRoles">
-        <PropertyRef Name="RoleId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_StatutRole_AspNetRoles">
     <End Type="aurs1Model.AspNetRoles" Role="AspNetRoles" Multiplicity="1" />
     <End Type="aurs1Model.StatutRole" Role="StatutRole" Multiplicity="*" />
@@ -231,20 +203,6 @@
       </Principal>
       <Dependent Role="StatutRole">
         <PropertyRef Name="RoleId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
-    <End Type="aurs1Model.AspNetUsers" Role="AspNetUsers" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="aurs1Model.AspNetUserRoles" Role="AspNetUserRoles" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUsers">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AspNetUserRoles">
-        <PropertyRef Name="UserId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -281,6 +239,48 @@
       </Principal>
       <Dependent Role="StatutRole">
         <PropertyRef Name="StatutId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="AspNetUserRoles">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="RoleId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Read" Type="Boolean" Nullable="false" />
+    <Property Name="Create" Type="Boolean" Nullable="false" />
+    <Property Name="Update" Type="Boolean" Nullable="false" />
+    <Property Name="Delete" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="AspNetRoles" Relationship="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" FromRole="AspNetUserRoles" ToRole="AspNetRoles" />
+    <NavigationProperty Name="AspNetUsers" Relationship="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" FromRole="AspNetUserRoles" ToRole="AspNetUsers" />
+  </EntityType>
+  <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
+    <End Type="aurs1Model.AspNetRoles" Role="AspNetRoles" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="aurs1Model.AspNetUserRoles" Role="AspNetUserRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetRoles">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserRoles">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+    <End Type="aurs1Model.AspNetUsers" Role="AspNetUsers" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="aurs1Model.AspNetUserRoles" Role="AspNetUserRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserRoles">
+        <PropertyRef Name="UserId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

@@ -34,10 +34,10 @@
     </Key>
     <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
-    <Property Name="Read" Type="bit" />
-    <Property Name="Create" Type="bit" />
-    <Property Name="Update" Type="bit" />
-    <Property Name="Delete" Type="bit" />
+    <Property Name="Read" Type="bit" Nullable="false" />
+    <Property Name="Create" Type="bit" Nullable="false" />
+    <Property Name="Update" Type="bit" Nullable="false" />
+    <Property Name="Delete" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="AspNetUsers">
     <Key>
