@@ -19,8 +19,8 @@ namespace GestionnaireUtilisateurs.Controllers
         [Authorize]
         public ActionResult AddUser()
         {
-            ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
-            return View();
+            
+            return View(database.Statuts.ToList());
         }
 
         [HttpPost]
@@ -171,6 +171,17 @@ namespace GestionnaireUtilisateurs.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditModule(int CodeModule)
+        {
+            if (CodeModule == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var module = database.Module.Find(CodeModule);
+            return View(module);
+        }
         /// ///////////////////////             SUB MODULE                    //////////////////////
         /// ///////////////////////             SUB MODULE                    //////////////////////
         /// ///////////////////////             SUB MODULE                    //////////////////////
@@ -238,17 +249,15 @@ namespace GestionnaireUtilisateurs.Controllers
             return View();
         }
 
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Test([Bind(Include = "Id,UserNameAr,Nom,Prenom,Ville,CIN,Sexe,NomAr,PrenomAr,Intiulé,Adresse,demandeur,Email,EmailConfirmed,Password,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,StatutId,typeUtilisateur,Organisme")] AspNetUsers aspNetUsers
-            ,RegisterViewModel model)
+            )
         {
-            var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-            var tacheUse = new UserManager<IdentityUser>(new UserStore<IdentityUser>(new ApplicationDbContext()));
-            var result = tacheUse.Create(user, model.Password);
-            ViewBag.success = result.Succeeded;
+            //var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+            //var tacheUse = new UserManager<IdentityUser>(new UserStore<IdentityUser>(new ApplicationDbContext()));
+            //var result = tacheUse.Create(user, model.Password);
+            //ViewBag.success = result.Succeeded;
             //AspNetUsers users = new AspNetUsers();
             //users.Nom = Nom;users.Prenom = Prenom; users.NomAr = NomAr; users.PrenomAr = PrenomAr;
             //users.CIN = CIN; users.Ville = Ville; users.Email = Email; users.PhoneNumber = PhoneNumber;
@@ -263,5 +272,24 @@ namespace GestionnaireUtilisateurs.Controllers
             //database.AspNetRoles.Add(sousModules);database.SaveChanges();
             return View(aspNetUsers);
         }
+        //public ActionResult Inde(string id, int? courseID)
+        //{
+        //    var multiModels = new MultiModeles();
+        //    multiModels.aspNetUsers = database.AspNetUsers;
+        //    if (id != null)
+        //    {
+        //        ViewBag.InstructorID = id;
+        //        multiModels.aspNetUsers = multiModels.aspNetUsers.Where(i => i.Id == id).Single().Adresse;
+        //    }
+
+        //    if (courseID != null)
+        //    {
+        //        ViewBag.CourseID = courseID.Value;
+        //        viewModel.Enrollments = viewModel.Courses.Where(x => x.CourseID == courseID).Single().Enrollments;
+        //    }
+
+
+        //    return View(viewModel);
+        //}
     }
 }

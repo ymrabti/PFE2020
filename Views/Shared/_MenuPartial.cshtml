@@ -1,0 +1,99 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav flex-column">
+            <li class="nav-divider">
+                Menu
+            </li>
+
+            <li class="nav-item ">
+                <a class="nav-link" href="@Url.Action("Index", "Home")" aria-expanded="false"
+                   data-target="#submenu-1" aria-controls="submenu-1">
+                    <i class="fa fa-users"></i>Gestion des utilisateurs<span class="badge badge-success">6</span>
+                </a>
+            </li>
+
+            <li class="nav-item ">
+                <a class="nav-link" href="@Url.Action("IndexStatut", "Home")" aria-expanded="false"
+                   data-target="#submenu-1" aria-controls="submenu-1">
+                    <i class="fa fa-users"></i>Gestion des Statuts<span class="badge badge-success">6</span>
+                </a>
+            </li>
+
+            <li class="nav-item ">
+                <a class="nav-link"
+                   href="@Url.Action("module", "Home")" aria-expanded="false"
+                   data-target="#submenu-1" aria-controls="submenu-1">
+                    <i class="fas fa-clone"></i>Gestion des modules<span class="badge badge-success"></span>
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="@Url.Action("sousmodule", "Home")"
+                   aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1">
+                    <i class=" fas fa-folder-open"></i>Gestion des sous modules
+                    <span class="badge badge-success"></span>
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="@Url.Action("taches", "Home")"
+                   aria-expanded="false" data-target="#submenu-1"
+                   aria-controls="submenu-1">
+                    <i class="fas fa-qrcode">
+                    </i>Gestion des Tâches<span class="badge badge-success"></span>
+                </a>
+            </li>
+
+            <li class="nav-item ">
+                <a class="nav-link" href="@Url.Action("Index", "Home")" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-chart-line"></i>Tableau de bord <span class="badge badge-success">6</span></a>
+            </li>
+            @if (User.IsInRole("Bureau de Suivie") || User.IsInRole("Admin"))
+            {
+                <li class="nav-item ">
+                    <a class="nav-link" href="@Url.Action("Renseignement", "WorkflowAutorisation")" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-plus-circle"></i>Ajouter une demande </a>
+                </li>
+            }
+
+
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("ListeDossiersAut", "ListeDossiers")" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-list-alt"></i>Listes des demandes</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href=" @Url.Action("Index", "Prets")" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-folder-open"></i> Prêts</a>
+            </li>
+            @if (User.IsInRole("Secrétariat") || User.IsInRole("Technique") || User.IsInRole("Juridique") || User.IsInRole("Admin"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href=" @Url.Action("Index", "Sortie_sur_lieu")" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-building"></i> Sorties sur lieu</a>
+                </li>
+            }
+            @if (User.IsInRole("Secrétariat") || User.IsInRole("Technique") || User.IsInRole("Juridique") || User.IsInRole("Admin"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href=" @Url.Action("Index", "Seance_du_travail")" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-briefcase"></i> Séances de travail</a>
+                </li>
+            }
+
+            @if (User.IsInRole("Secrétariat") || User.IsInRole("Technique") || User.IsInRole("Juridique") || User.IsInRole("Admin"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href=" @Url.Action("Index", "Commission_Interne")" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-puzzle-piece"></i> Commissions internes</a>
+                </li>
+            }
+            @*<li class="nav-item">
+            <a class="nav-link" href="@Url.Action("Index", "Dashbord")" aria-expanded="false" data-target="#submenu-3" aria-controls="submenu-3"><i class="fas fa-fw fa-chart-pie"></i>Statistiques/Etats de sorties</a>
+        </li>*@
+        </ul>
+    </div>
+</body>
+</html>

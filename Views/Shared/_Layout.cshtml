@@ -1,127 +1,179 @@
-﻿<html>
-<head>
+﻿<head>
+    <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Agence urbaine rabat-salé</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-    <link rel="stylesheet" href="~/assets/vendor/fonts/circular-std/style.css">
-    <link rel="stylesheet" href="~/assets/vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="~/assets/libs/css/style.css">
-    <link rel="stylesheet" href="~/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
-    <link rel="stylesheet" href="~/assets/vendor/charts/chartist-bundle/chartist.css">
-    <link rel="stylesheet" href="~/assets/vendor/charts/morris-bundle/morris.css">
-    <link rel="stylesheet" href="~/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="~/assets/vendor/charts/c3charts/c3.css">
-    <link rel="stylesheet" href="~/assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/Content/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/fonts/circular-std/style.css">
+    <link rel="stylesheet" href="~/Content/assets/libs/css/style.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/vector-map/jqvmap.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/jvectormap/jquery-jvectormap-2.0.2.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/charts/chartist-bundle/chartist.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/charts/c3charts/c3.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/charts/morris-bundle/morris.css">
+    <link rel="stylesheet" href="~/Content/assets/vendor/daterangepicker/daterangepicker.css" type="text/css" />
+    <link rel="stylesheet" href="https://js.arcgis.com/3.27/esri/css/esri.css">
+    <link rel="stylesheet" href="~/Content/tablesaw/dist/tablesaw.css">
+    <link rel="stylesheet" href="~/Content/Chosen/chosen.css" />
+
+    <link rel="stylesheet" href="~/Content/barre/css/reset.css">
+    <link rel="stylesheet" href="~/Content/barre/css/style.css">
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Catamaran&display=swap">
-    <script src="~/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
-    <script src="~/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
-    <script src="~/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
-    <script src="~/assets/libs/js/main-js.js"></script>
-    <script src="~/assets/vendor/charts/sparkline/jquery.sparkline.js"></script>
-    <script src="~/assets/vendor/charts/morris-bundle/raphael.min.js"></script>
-    <script src="~/assets/vendor/charts/morris-bundle/morris.js"></script>
-    <script src="~/assets/vendor/charts/c3charts/c3.min.js"></script>
-    <script src="~/assets/vendor/charts/c3charts/d3-5.4.0.min.js"></script>
-    <script src="~/assets/vendor/charts/c3charts/C3chartjs.js"></script>
 </head>
 <body style="font-family: 'Catamaran', sans-serif; font-size:15px;background-color:#e9e9e9">
-    <div class="navbar navbar-inverse navbar-fixed-top">
-
+    <div class="dashboard-main-wrapper">
+        <!-- ============================================================== -->
+        <!-- navbar -->
+        <!-- ============================================================== -->
         <div class="dashboard-header">
             <nav class="navbar navbar-expand-lg bg-white fixed-top">
                 <a class="navbar-brand" href="https://www.aurs.org.ma/fr/">
-                    <img src="~/documentation/img/aurs.png" style="width: 16%;"> <h1 style="
-                                    color: #09aacc;
-                                    margin-left: 19%;
-                                    margin-bottom: 0%;
-                                    margin-top: -12%;
-                                    font-size: inherit;
-                                ">
+                    <img src="~/documentation/img/aurs.png" style="width: 16%;">
+                    <h1 style="
+                        color: #09aacc;
+                        margin-left: 19%;
+                        margin-bottom: 0%;
+                        margin-top: -12%;
+                        font-size: inherit;
+                    ">
                         Agence urbaine rabat-salé
                     </h1>
                 </a>
-
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse " id="navbarSupportedContent" style="margin:30px">
-                    @Html.Partial("~/Views/Shared/Disconnect.cshtml")
-                </div>
-                @Html.ActionLink("AURS", "Index", "Home")
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Accueil", "Index", "Home")</li>
-                    <li>@Html.ActionLink("À propos de", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-            </nav>
-
-        </div>
-
-    </div>
-
-    <div class="nav-left-sidebar sidebar-dark" style="margin-top:50px">
-        <div class="menu-list">
-            <nav class="navbar navbar-expand-lg navbar-light">
-                <a class="d-xl-none d-lg-none" href="#">Dashboard</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav flex-column">
-                        <li class="nav-divider">
-                            Menu
-                        </li>
-
-                        <li class="nav-item ">
-                            <a class="nav-link" href="@Url.Action("Index", "Home")" aria-expanded="false" 
-                               data-target="#submenu-1" aria-controls="submenu-1">
-                            <i class="fa fa-users"></i>Gestion des utilisateurs<span class="badge badge-success">6</span></a>
-                        </li>
-                        
-                        <li class="nav-item ">
-                            <a class="nav-link" href="@Url.Action("IndexStatut", "Home")" aria-expanded="false" 
-                               data-target="#submenu-1" aria-controls="submenu-1">
-                            <i class="fa fa-users"></i>Gestion des Statuts<span class="badge badge-success">6</span></a>
-                        </li>
-
-                        <li class="nav-item ">
-                            <a class="nav-link"
-                               href="@Url.Action("module", "Home")" aria-expanded="false"
-                               data-target="#submenu-1" aria-controls="submenu-1">
-                            <i class="fas fa-clone"></i>Gestion des modules<span class="badge badge-success"></span></a>
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link" href="@Url.Action("sousmodule", "Home")"
-                               aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1">
-                            <i class=" fas fa-folder-open"></i>Gestion des sous modules
-                            <span class="badge badge-success"></span></a>
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link" href="@Url.Action("taches", "Home")"
-                               aria-expanded="false" data-target="#submenu-1"
-                               aria-controls="submenu-1"><i class="fas fa-qrcode">
-                                   </i>Gestion des Tâches<span class="badge badge-success"></span></a>
-                        </li>
+                <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto navbar-right-top">
+                        <!-- Partial view login -->
+                        @Html.Partial("_LoginPartial")
                     </ul>
                 </div>
-
             </nav>
         </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Agence urbaine rabat-salé</p>
-        </footer>
-    </div>
+        <!-- ============================================================== -->
+        <!-- end navbar -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- left sidebar -->
+        <!-- ============================================================== -->
+        <div class="nav-left-sidebar sidebar-dark">
+            <div class="menu-list">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="d-xl-none d-lg-none" href="#">Dashboard</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    @Html.Partial("_MenuPartial");
+                    <!-- Menu -->
+                </nav>
+            </div>
+        </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+        <!-- ============================================================== -->
+        <!-- end left sidebar -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- wrapper  -->
+        <!-- ============================================================== -->
+        <div class="dashboard-wrapper">
+            <div class="dashboard-finance">
+                <div class="container-fluid dashboard-content">
+                    <!-- ============================================================== -->
+                    <!-- pageheader  -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- end pageheader  -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- end revenue year  -->
+                    <!-- ============================================================== -->
+
+
+                    <br />
+
+                    <div>
+                        @RenderBody()
+                    </div>
+
+
+                </div>
+                <!-- ============================================================== -->
+                <!-- end inventory turnover -->
+                <!-- ============================================================== -->
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- footer -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- end footer -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- end wrapper  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- end main wrapper  -->
+    <!-- ============================================================== -->
+    <!-- ============================================================== -->
+    <!-- jquery 3.3.1  -->
+    @RenderSection("Modal", false/*required*/)
+    <script src="~/Content/tablesaw/dist/tablesaw.js"></script>
+    <script src="~/Content/tablesaw/dist/tablesaw-init.js"></script>
+
+    <script src="~/Content/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <!-- bootstap bundle js -->
+    <script src="~/Content/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+    <!-- slimscroll js -->
+    <script src="~/Content/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <!-- chart chartist js -->
+    <script src="~/Content/assets/vendor/charts/chartist-bundle/chartist.min.js"></script>
+    <script src="~/Content/assets/vendor/charts/chartist-bundle/Chartistjs.js"></script>
+    <script src="~/Content/assets/vendor/charts/chartist-bundle/chartist-plugin-threshold.js"></script>
+    <!-- chart C3 js -->
+    <script src="~/Content/assets/vendor/charts/c3charts/c3.min.js"></script>
+    <script src="~/Content/assets/vendor/charts/c3charts/d3-5.4.0.min.js"></script>
+    <!-- chartjs js -->
+    <script src="~/Content/assets/vendor/charts/charts-bundle/Chart.bundle.js"></script>
+    <script src="~/Content/assets/vendor/charts/charts-bundle/chartjs.js"></script>
+    <!-- sparkline js -->
+    <script src="~/Content/assets/vendor/charts/sparkline/jquery.sparkline.js"></script>
+    <!-- dashboard finance js -->
+    <script src="~/Content/assets/libs/js/dashboard-finance.js"></script>
+    <!-- main js -->
+    <script src="~/Content/assets/libs/js/main-js.js"></script>
+    <!-- gauge js -->
+    <script src="~/Content/assets/vendor/gauge/gauge.min.js"></script>
+    <!-- morris js -->
+    <script src="~/Content/assets/vendor/charts/morris-bundle/raphael.min.js"></script>
+    <script src="~/Content/assets/vendor/charts/morris-bundle/morris.js"></script>
+    <script src="~/Content/assets/vendor/charts/morris-bundle/morrisjs.html"></script>
+    <!-- daterangepicker js -->
+    @*<script src="~/Content/script/WAZAN.js"></script>*@
+    <script src="~/Content/assets/vendor/full-calendar/js/moment.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0/jquery.serialize-object.min.js"></script>
+    <script src="~/Content/TableFilter/dist/tablefilter/tablefilter.js"></script>
+
+
+
+
+    <!-- <script src="../../../../cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script> -->
+    @*<script src="~/Content/script/jspdf.js"></script>
+        <script src="~/Content/script/jspdf.plugin.autotable.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.1/jspdf.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/2.1.0/jspdf.plugin.autotable.js"></script>*@
+    <script src="~/Content/script/pdf/jspdf.min.js"></script>
+    <script src="~/Content/script/pdf/jspdf.plugin.autotable.js"></script>
+    <script src="https://js.arcgis.com/3.27/"></script>
+    <script src="~/Content/barre/js/modernizr.js"></script>
+    <script src="~/Content/Chosen/chosen.jquery.js"></script>
+
+    @RenderSection("Scripts", false/*required*/)
+
 </body>
-</html>

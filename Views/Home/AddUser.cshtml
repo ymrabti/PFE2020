@@ -1,11 +1,11 @@
-﻿@model  GestionnaireUtilisateurs.Models.Statuts
+﻿@model IEnumerable<GestionnaireUtilisateurs.Models.Statuts>
 @{
     ViewBag.Title = "Créer un compte d'utilisateur";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="dashboard-main-wrapper" style="font-family: 'Catamaran', sans-serif; font-size:15px;background-color:#e9e9e9">
-    
+
 
     <div class="dashboard-wrapper">
         <div class="dashboard-finance">
@@ -26,7 +26,7 @@
                                         <label for="inputText12">Type d'utilisateur :</label>
                                         <br>
                                         @*@Html.RadioButton("typeUtilisateur", "Morale", new { @class = "custom-control-input" })
-        @Html.RadioButton("typeUtilisateur", "Physique", new { @class = "custom-control-input" })*@
+                                            @Html.RadioButton("typeUtilisateur", "Physique", new { @class = "custom-control-input" })*@
                                         <label class="custom-control custom-radio custom-control-inline">
                                             <input type="radio" name="typeUtilisateur" class="custom-control-input" value="Morale">
                                             <span class="custom-control-label">Morale</span>
@@ -136,15 +136,15 @@
                                             <div class="form-group">
 
                                                 <label for="StatutId">Statut</label>
-                                                @Html.DropDownList("StatutId" ,null,"> -- Statut -- <", htmlAttributes: new { @class = "form-control" })
-                                                @*<select class="form-control form-control-sm" name="StatutId">
+                                                @*@Html.DropDownList("StatutId" ,null,"> -- Statut -- <", htmlAttributes: new { @class = "form-control" })*@
+                                                <select class="form-control form-control-sm" name="StatutId" id="StatutId">
                                                     <option value="">Statut</option>
                                                     @foreach (var item in Model)
                                                     {
                                                         <option value="@item.StatutId">@item.StatutName</option>
                                                     }
-                                                </select>*@
-                                                                                    </div>
+                                                </select>
+                                            </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
@@ -206,3 +206,19 @@
         </div>
     </div>
 </div>
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            $("#StatutId").chosen({
+                disable_search: false,
+                create_option: true,
+                persistent_create_option: true,
+                skip_no_results: true,
+                placeholder_text_single: "-------- Indice --------",
+                no_results_text: "Aucun résultat ne correspond"
+            });
+        });
+
+    </script>
+}
