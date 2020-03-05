@@ -77,6 +77,9 @@ namespace GestionnaireUtilisateurs.Models
         [Required]
         [Display(Name = "Sexe ")]
         public string Sexe { get; set; }
+        [Required]
+        [Display(Name = "Numero de Telephone ")]
+        public string PhoneNumber { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]

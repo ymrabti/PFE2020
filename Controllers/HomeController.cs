@@ -19,6 +19,7 @@ namespace GestionnaireUtilisateurs.Controllers
         [Authorize]
         public ActionResult AddUser()
         {
+            ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
             return View();
         }
 
@@ -241,25 +242,26 @@ namespace GestionnaireUtilisateurs.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Test([Bind(Include = "Name,SousModuleId,RoleDescription")] AspNetRoles sousModules
-            ,int SousModuleId)
+        public ActionResult Test([Bind(Include = "Id,UserNameAr,Nom,Prenom,Ville,CIN,Sexe,NomAr,PrenomAr,Intiulé,Adresse,demandeur,Email,EmailConfirmed,Password,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,StatutId,typeUtilisateur,Organisme")] AspNetUsers aspNetUsers
+            ,RegisterViewModel model)
         {
-            ViewBag.Test = "";
-            if (sousModules==null)
-            {
-                ViewBag.Test += "NULL";
-            }
-            else
-            {
-                var tache = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext())) ;
-                var tachee = tache.Create(new IdentityRole(sousModules.Name));
-                var identifiant = tachee.Succeeded;
-                //sousModules.SouModuleId = SousModuleId;
-                //database.AspNetRoles.Add(sousModules);database.SaveChanges();
-                ViewBag.Test += sousModules.Name + " * " + sousModules.RoleDescription + " * " + sousModules.Id + " * " + identifiant;
-            }
-            
-            return View();
+            var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+            var tacheUse = new UserManager<IdentityUser>(new UserStore<IdentityUser>(new ApplicationDbContext()));
+            var result = tacheUse.Create(user, model.Password);
+            ViewBag.success = result.Succeeded;
+            //AspNetUsers users = new AspNetUsers();
+            //users.Nom = Nom;users.Prenom = Prenom; users.NomAr = NomAr; users.PrenomAr = PrenomAr;
+            //users.CIN = CIN; users.Ville = Ville; users.Email = Email; users.PhoneNumber = PhoneNumber;
+            //users.PasswordHash = Password; users.StatutId = StatutId;users.typeUtilisateur = typeUtilisateur;
+            //users.Sexe = Sexe;
+
+
+            //var tache = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext())) ;
+            //var tachee = tache.Create(new IdentityRole(sousModules.Name));
+            //var identifiant = tachee.Succeeded;
+            //sousModules.SouModuleId = SousModuleId;
+            //database.AspNetRoles.Add(sousModules);database.SaveChanges();
+            return View(aspNetUsers);
         }
     }
 }

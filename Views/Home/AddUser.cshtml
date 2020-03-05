@@ -1,4 +1,4 @@
-﻿
+﻿@model  GestionnaireUtilisateurs.Models.Statuts
 @{
     ViewBag.Title = "Créer un compte d'utilisateur";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -14,7 +14,9 @@
                     <div class="col-lg-12" style=" margin-left: auto; margin-right: auto;">
                         <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
                             <div class="card-body">
-                                <form action="@Url.Action("Index", "Home")" method="post">
+                                @using (Html.BeginForm("Test", "Home", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
                                     <div class="card-body">
 
                                         <h4> <span class="badge-dot badge-info"></span>   Créer un compte d'utilisateur</h4>
@@ -23,11 +25,15 @@
                                     <div class="form-group">
                                         <label for="inputText12">Type d'utilisateur :</label>
                                         <br>
+                                        @*@Html.RadioButton("typeUtilisateur", "Morale", new { @class = "custom-control-input" })
+        @Html.RadioButton("typeUtilisateur", "Physique", new { @class = "custom-control-input" })*@
                                         <label class="custom-control custom-radio custom-control-inline">
-                                            <input id="11" type="radio" name="typeUtilisateur" class="custom-control-input"><span class="custom-control-label">Morale</span>
+                                            <input type="radio" name="typeUtilisateur" class="custom-control-input" value="Morale">
+                                            <span class="custom-control-label">Morale</span>
                                         </label>
                                         <label class="custom-control custom-radio custom-control-inline">
-                                            <input id="22" type="radio" name="typeUtilisateur" class="custom-control-input" checked=""><span class="custom-control-label">Physique</span>
+                                            <input type="radio" name="typeUtilisateur" class="custom-control-input" checked="" value="Physique">
+                                            <span class="custom-control-label">Physique</span>
                                         </label>
                                     </div>
                                     <div class="row">
@@ -80,10 +86,12 @@
                                                 <label for="inputText12">Sexe :</label>
                                                 <br>
                                                 <label class="custom-control custom-radio custom-control-inline">
-                                                    <input type="radio" name="Sexe" class="custom-control-input" id="1Sexe"><span class="custom-control-label">Homme</span>
+                                                    <input type="radio" name="Sexe" class="custom-control-input" id="1Sexe" value="Homme">
+                                                    <span class="custom-control-label">Homme</span>
                                                 </label>
                                                 <label class="custom-control custom-radio custom-control-inline">
-                                                    <input type="radio" name="Sexe" class="custom-control-input" id="2Sexe"><span class="custom-control-label">Femme</span>
+                                                    <input type="radio" name="Sexe" class="custom-control-input" id="2Sexe" value="Femme">
+                                                    <span class="custom-control-label">Femme</span>
                                                 </label>
                                             </div>
                                         </div>
@@ -91,7 +99,6 @@
 
                                         </div>
                                     </div>
-
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
@@ -113,14 +120,14 @@
                                             <div class="form-group">
 
                                                 <label for="name">Mot de passe</label>
-                                                <input id="name" type="password" name="name" class="form-control">
+                                                <input id="namePassword" type="password" name="Password" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
 
                                                 <label for="name">Confirmer mot de passe</label>
-                                                <input id="name" type="password" name="name" class="form-control">
+                                                <input id="nameConfirmPassword" type="password" name="ConfirmPassword" class="form-control">
                                             </div>
                                         </div>
                                     </div>
@@ -128,20 +135,22 @@
                                         <div class="col-lg-6">
                                             <div class="form-group">
 
-                                                <label for="name">Statut</label>
-                                                <select class="form-control form-control-sm">
+                                                <label for="StatutId">Statut</label>
+                                                @Html.DropDownList("StatutId" ,null,"> -- Statut -- <", htmlAttributes: new { @class = "form-control" })
+                                                @*<select class="form-control form-control-sm" name="StatutId">
                                                     <option value="">Statut</option>
-                                                </select>
-                                            </div>
+                                                    @foreach (var item in Model)
+                                                    {
+                                                        <option value="@item.StatutId">@item.StatutName</option>
+                                                    }
+                                                </select>*@
+                                                                                    </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <br />
 
                                                 <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop"><i class=" fas fa-plus">  </i>    </button>
-
-
-
 
                                             </div>
                                         </div>
@@ -164,9 +173,7 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                </form>
-
+                                }
                             </div>
                         </div>
                     </div>
@@ -198,5 +205,4 @@
             </div>
         </div>
     </div>
-
 </div>
