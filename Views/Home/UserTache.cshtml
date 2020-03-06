@@ -42,7 +42,7 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             <br />
-                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#BackdropAddModulePartial"><i class=" fas fa-plus"></i></button>
+                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#BackdropAddModule"><i class=" fas fa-plus"></i></button>
                         </div>
                     </div>
                 </div>
@@ -203,6 +203,8 @@
 @section Modal{
 
     @Html.Action("AddModulePartial", "Home")
+    @Html.Action("AddSubModulePartial", "Home")
+    @Html.Action("AddTachePartial", "Home")
 
 }
 
@@ -211,6 +213,45 @@
 
 
     <script type="text/javascript">
+
+
+         function OnSuccess(data) {
+              
+                if (data.dd == "error") {
+                    if ($("#labelErrors").val() != undefined) {
+                        $("#labelErrors").remove();
+                        $("#lastDiv").append("<label id='labelErrors' style='color:red;font-weight:bold'><br />" + data.data + "</lable>")
+                    } else {
+                        $("#lastDiv").append("<label id='labelErrors' style='color:red;font-weight:bold'><br/>" + data.data + "</lable>")
+                    }
+
+                } else {
+                    if ($("#labelErrors").val() != undefined) {
+                        $("#labelErrors").remove();
+                    }
+                    $(".close").click();
+                    $('#myform')[0].reset();
+                    $('#Pet').empty();
+                    $('#Pet').append("<option value=''>-------- Pétitionnaire --------</option>")
+                    $.each(data.petits, function (i, item) {
+                        $('#Pet').append("<option value='" + item.Id + "' cin='" + item.CIN + "' nom='" + item.petPreFr + "' prenom='" + item.petFr +"'>" + item.petFr + " " + item.petPreFr + " " + item.CIN + "</option>")
+                    });
+                    $('#Pet').val(data.petitID);
+                    $('#Pet').trigger("liszt:updated");
+
+                    //$('#petArabe').empty();
+                    //$('#petArabe').append("<option value=''>-------- ???? ????? : -------- </option>")
+                    //$.each(data.petits, function (i, item) {
+                    //    $('#petArabe').append("<option value='" + item.Id + "'>" + item.petAr + " " + item.petPreAr + " " + item.CIN + "</option>")
+                    //});
+                    //$('#petArabe').val(data.petitID);
+                    //$('#petArabe').trigger("liszt:updated");
+                }
+
+            }
+            function OnFailure(data) {
+                alert(45);
+            }
         
         $(document).ready(function () {
             $("#ListOfModulesId").chosen({
@@ -245,13 +286,7 @@
             });
         });
 
-         function OnSuccess(data) {
-
-             alert("error");
-
-            }
-            function OnFailure(data) {
-            }
+         
 
         function LireCheckBox(checkbox, iden) {
             if (checkbox.checked == false) {

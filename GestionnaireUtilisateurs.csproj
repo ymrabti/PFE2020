@@ -1730,11 +1730,13 @@
     <Content Include="Views\StatutRoles\Details.cshtml" />
     <Content Include="Views\StatutRoles\Edit.cshtml" />
     <Content Include="Views\StatutRoles\Index.cshtml" />
-    <Content Include="Views\Home\Test.cshtml" />
     <Content Include="Views\Shared\_MenuPartial.cshtml" />
     <Content Include="Views\Shared\LayoutOld.cshtml" />
     <Content Include="Views\Home\AddModule.cshtml" />
     <Content Include="Views\Shared\_Modal.cshtml" />
+    <Content Include="Views\Shared\_SubModuleModal.cshtml" />
+    <Content Include="Views\Shared\_TacheModal.cshtml" />
+    <Content Include="Views\Shared\_StatutModal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

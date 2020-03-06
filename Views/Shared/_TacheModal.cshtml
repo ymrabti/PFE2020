@@ -1,0 +1,61 @@
+﻿
+@model GestionnaireUtilisateurs.Models.MultiModeles
+<div class="modal fade" id="BackdropAddTache" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Ajouter une tâche</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("Test", "Home", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        <label for="name">Nom du tâche</label>
+                        <input type="text" name="Name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Description du tâche</label>
+                        <textarea name="RoleDescription" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Sous Module</label>
+                        <select class="form-control form-control-sm" name="SousModuleId" id="ListOfSubModulesId">
+                            <option value=-1>--- Sélectionner un Sous module ---</option>
+                            @foreach (var item in Model.sousModules)
+                            {
+                                <option value="@item.SousModuleId">@item.SousModuleName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#ListOfSubModulesId").chosen({
+                disable_search: false,
+                create_option: true,
+                persistent_create_option: true,
+                skip_no_results: true,
+                placeholder_text_single: "-------- Indice --------",
+                no_results_text: "Aucun résultat ne correspond"
+            });
+        });
+    </script>
+
+   }

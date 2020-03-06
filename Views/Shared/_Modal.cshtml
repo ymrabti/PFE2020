@@ -1,38 +1,32 @@
-﻿
-<div id="BackdropAddModulePartial" class="modal fade" role="dialog" style="padding-right: 80px;">
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Ajouter un Module</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    @using (Ajax.BeginForm("AddModulePartial", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess", OnFailure = "OnFailure" }, new { @class = "form-horizontal", role = "form", id = "myform" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <div class="form-group">
-                            <label for="name">Nom du module</label>
-
-                            <input type="text" name="ModuleName" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Description du module</label>
-
-                            <textarea name="ModuleDescription" class="form-control"></textarea>
-                        </div>
-                        <div class="modal-footer">
-
-                            <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
-                        </div>
-                    }
-                </div>
+﻿<div class="modal fade" id="BackdropAddModule" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Ajouter un Module</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <div class="modal-body">
+                @using (Ajax.BeginForm("Test", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess", OnFailure = "OnFailure",UpdateTargetId="" }, new { @class = "form-horizontal", role = "form", id = "myform" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        <label for="name">Nom du module @ViewBag.module</label>
 
+                        <input type="text" name="ModuleName" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Description du module</label>
+
+                        <textarea name="ModuleDescription" class="form-control"></textarea>
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
+                    </div>
+                }
+            </div>
         </div>
     </div>
 </div>

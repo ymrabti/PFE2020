@@ -175,24 +175,6 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
         
-        public ActionResult AddModulePartial() {
-            return PartialView("_Modal");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AddModulePartial([Bind(Include = "ModuleName,ModuleDescription")] Module model)
-        {
-            var data = "";
-            if (ModelState.IsValid)
-            {
-                database.Module.Add(model);
-                var result = await database.SaveChangesAsync();
-                data += result;
-            }
-            return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
-        }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -206,6 +188,24 @@ namespace GestionnaireUtilisateurs.Controllers
                 return RedirectToAction("module");
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        }
+
+        public ActionResult AddModulePartial() {
+            return PartialView("_Modal");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AddModulePartial([Bind(Include = "ModuleName,ModuleDescription")] Module model)
+        {
+            var data = model.ModuleName;
+            if (ModelState.IsValid)
+            {
+                database.Module.Add(model);
+                var result = await database.SaveChangesAsync();
+                data += result;
+            }
+            return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -244,6 +244,26 @@ namespace GestionnaireUtilisateurs.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
+
+        public ActionResult AddSubModulePartial()
+        {
+            return PartialView("_SubModuleModal",multiModeles());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AddSubModulePartial([Bind(Include = "ModuleName,ModuleDescription")] Module model)
+        {
+            var data = "";
+            if (ModelState.IsValid)
+            {
+                database.Module.Add(model);
+                var result = await database.SaveChangesAsync();
+                data += result;
+            }
+            return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
+        }
+
         /// ///////////////////////             TACHES                    //////////////////////
         /// ///////////////////////             TACHES                    //////////////////////
         /// ///////////////////////             TACHES                    //////////////////////
@@ -267,10 +287,50 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
+
+        public ActionResult AddTachePartial()
+        {
+            return PartialView("_TacheModal", multiModeles());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AddTachePartial([Bind(Include = "ModuleName,ModuleDescription")] Module model)
+        {
+            var data = "";
+            if (ModelState.IsValid)
+            {
+                database.Module.Add(model);
+                var result = await database.SaveChangesAsync();
+                data += result;
+            }
+            return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
+        }
+
         /// ///////////////////////             AUTRES                    //////////////////////
         /// ///////////////////////             AUTRES                    //////////////////////
         /// ///////////////////////             AUTRES                    //////////////////////
 
+
+
+        public ActionResult AddStatutPartial()
+        {
+            return PartialView("_StatutModal");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AddStatutPartial([Bind(Include = "ModuleName,ModuleDescription")] Module model)
+        {
+            var data = "";
+            if (ModelState.IsValid)
+            {
+                database.Module.Add(model);
+                var result = await database.SaveChangesAsync();
+                data += result;
+            }
+            return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult About()
         {
             ViewBag.RoleId = new SelectList(database.AspNetRoles, "Id", "Name");
@@ -288,9 +348,10 @@ namespace GestionnaireUtilisateurs.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Test([Bind(Include = "Id,UserNameAr,Nom,Prenom,Ville,CIN,Sexe,NomAr,PrenomAr,Intiulé,Adresse,demandeur,Email,EmailConfirmed,Password,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,StatutId,typeUtilisateur,Organisme")] AspNetUsers aspNetUsers
+        public ActionResult Test(Module module
             )
         {
+            ViewBag.module = module.ModuleName;
             //var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
             //var tacheUse = new UserManager<IdentityUser>(new UserStore<IdentityUser>(new ApplicationDbContext()));
             //var result = tacheUse.Create(user, model.Password);
@@ -307,7 +368,7 @@ namespace GestionnaireUtilisateurs.Controllers
             //var identifiant = tachee.Succeeded;
             //sousModules.SouModuleId = SousModuleId;
             //database.AspNetRoles.Add(sousModules);database.SaveChanges();
-            return View(aspNetUsers);
+            return PartialView();
         }
         //public ActionResult Inde(string id, int? courseID)
         //{
