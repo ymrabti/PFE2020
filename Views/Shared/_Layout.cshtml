@@ -1,4 +1,8 @@
-﻿<head>
+﻿@model GestionnaireUtilisateurs.Models.MultiModeles
+@{
+
+}
+<head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
@@ -54,12 +58,6 @@
                 </div>
             </nav>
         </div>
-        <!-- ============================================================== -->
-        <!-- end navbar -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- left sidebar -->
-        <!-- ============================================================== -->
         <div class="nav-left-sidebar sidebar-dark">
             <div class="menu-list">
                 <nav class="navbar navbar-expand-lg navbar-light">
@@ -73,53 +71,156 @@
             </div>
         </div>
 
-        <!-- ============================================================== -->
-        <!-- end left sidebar -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- wrapper  -->
-        <!-- ============================================================== -->
         <div class="dashboard-wrapper">
             <div class="dashboard-finance">
                 <div class="container-fluid dashboard-content">
-                    <!-- ============================================================== -->
-                    <!-- pageheader  -->
-                    <!-- ============================================================== -->
-                    <!-- ============================================================== -->
-                    <!-- end pageheader  -->
-                    <!-- ============================================================== -->
-                    <!-- ============================================================== -->
-                    <!-- end revenue year  -->
-                    <!-- ============================================================== -->
-
-
                     <br />
-
-                    <div>
-                        @RenderBody()
-                    </div>
-
-
+                    @RenderBody()
                 </div>
-                <!-- ============================================================== -->
-                <!-- end inventory turnover -->
-                <!-- ============================================================== -->
             </div>
         </div>
-        <!-- ============================================================== -->
-        <!-- footer -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- end footer -->
+
+        <div class="modal fade" id="BackdropAddModule" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Ajouter un Module</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @using (Html.BeginForm("UserTacheAddModule", "Home", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-group">
+                                <label for="name">Nom du module</label>
+
+                                <input type="text" name="ModuleName" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Description du module</label>
+
+                                <textarea name="ModuleDescription" class="form-control"></textarea>
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="BackdropAddSubModule" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Ajouter un sous module</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @using (Html.BeginForm("UserTacheAddSousModule", "Home", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-group">
+                                <label for="name">Nom du sous module</label>
+                                <input type="text" name="SousModuleName" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Description du sous module</label>
+                                <textarea name="SousModuleDescription" class="form-control"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="name">Module</label>
+                                <select class="form-control form-control-sm" name="ModuleId" id="ListOfModulesId">
+                                    <option value=-1>--- Sélectionner un module ---</option>
+                                    @foreach (var item in Model.modules)
+                                    {
+                                        <option value="@item.ModuleId">@item.ModuleName</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="BackdropAddTache" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Ajouter une tâche</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @using (Html.BeginForm("Test", "Home", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-group">
+                                <label for="name">Nom du tâche</label>
+                                <input type="text" name="Name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Description du tâche</label>
+                                <textarea name="RoleDescription" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Sous Module</label>
+                                <select class="form-control form-control-sm" name="SousModuleId" id="ListOfSubModulesId">
+                                    <option value=-1>--- Sélectionner un Sous module ---</option>
+                                    @foreach (var item in Model.sousModules)
+                                    {
+                                        <option value="@item.SousModuleId">@item.SousModuleName</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="BackdropAddStatut" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Ajouter un Statut</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+
+
+                            <input id="name" type="text" name="name" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- ============================================================== -->
     </div>
-    <!-- ============================================================== -->
-    <!-- end wrapper  -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- end main wrapper  -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
     <!-- jquery 3.3.1  -->
     @RenderSection("Modal", false/*required*/)
     <script src="~/Content/tablesaw/dist/tablesaw.js"></script>

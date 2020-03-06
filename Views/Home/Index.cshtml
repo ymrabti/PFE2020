@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GestionnaireUtilisateurs.Models.AspNetUsers>
+﻿@model GestionnaireUtilisateurs.Models.MultiModeles
 
 
 @{
@@ -9,75 +9,80 @@
 
 
 
-<div class="dashboard-main-wrapper" style="font-family: 'Catamaran', sans-serif; font-size:15px;background-color:#e9e9e9">
+<div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+    <div class="card-body">
+        <div class="card-body border-top">
+            <div class="row" style="width:100%">
+                <a href="@Url.Action("AddUser", "Home")" class="btn btn" style="background-color:#09aacc ; color:white;">
+                    <i class="fa fa-plus"> Ajouter  </i>
+                </a>
+                @using (Html.BeginForm("EditUser", "Home", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="IdHidden" name="id" value="-1">
+                    <button disabled id="buttonModifie" type="submit" class="btn btn" style="background-color:#09aacc ; color:white;margin-left:10px;margin-right:10px;">
+                        <i class="fa fa-edit"> Modifier  </i>
+                    </button>
 
-    <div class="dashboard-wrapper">
-        <div class="dashboard-finance">
-            <div class="container-fluid dashboard-content">
-
-                <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
-                    <div class="card-body">
-                        <div class="card-body border-top">
-
-                            <a href="@Url.Action("AddUser", "Home")" class="btn btn" style="background-color:#09aacc ; color:white;">
-                                <i class="fa fa-plus"> Ajouter  </i>
-                            </a>
-                            <button type="button" class="btn btn" style="background-color:#09aacc ; color:white;">
-                                <i class="fa fa-edit"> Modifier  </i>
-                            </button>
-                            <button type="button" class="btn btn" style="background-color:#09aacc ; color:white;">
-                                <i class="fa fa-trash"> Supprimer  </i>
-                            </button>
-                            <a href="@Url.Action("StatutTache", "Home")" class="btn btn" style="background-color:#09aacc ; color:white; margin-left: 63%;">
-                                <i class="fa fa-sliders-h"> Gestion des roles  </i>
-                            </a>
-                        </div>
-                        <table data-tablesaw-mode="columntoggle" class="table table-bordered first" id="tableFilter">
-                            <thead>
-                                <tr>
-                                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">@Html.DisplayNameFor(model => model.Nom)</th>
-                                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">@Html.DisplayNameFor(model => model.Prenom)</th>
-                                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">@Html.DisplayNameFor(model => model.Email)</th>
-                                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">@Html.DisplayNameFor(model => model.Ville)</th>
-                                    <th></th>
-                                </tr>
-
-                            </thead>
-                            <tbody id="tableDemandePayee">
-                                @foreach (var item in Model)
-                                {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Nom)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Prenom)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Email)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Ville)
-                                    </td>
-                                    <td>
-                                        @Html.ActionLink("privilèges", "UserTache", new { id = item.Id })
-                                    </td>
-                                </tr>
-                                }
-                            </tbody>
-
-
-                        </table>
-
-                    </div>
-                </div>
-
+                }
+                @using (Html.BeginForm("DeleteUser", "Home", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="IdHidden2" name="id" value="-1">
+                    <button disabled id="buttonDelete" type="button" class="btn btn" style="background-color:#09aacc ; color:white;">
+                        <i class="fa fa-trash"> Supprimer  </i>
+                    </button>
+                }
+                @using (Html.BeginForm("UserTache", "Home", FormMethod.Get))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="IdHidden3" name="id" value="-1">
+                    <button disabled id="ManagementSelected" type="submit" class="btn btn" style="background-color:#09aacc ; color:white; margin-left: 63%;">
+                        <i class="fa fa-sliders-h"> Gestion des roles   </i>
+                    </button>
+                }
             </div>
         </div>
+        <table data-tablesaw-mode="columntoggle" class="table table-bordered first" id="tableFilter">
+            <thead>
+                <tr>
+                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Nom</th>
+                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Prenom</th>
+                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Email</th>
+                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Ville</th>
+
+                </tr>
+
+            </thead>
+            <tbody id="tabletargetted">
+                @foreach (var item in Model.aspNetUsers)
+                {
+                    <tr id="@item.Id">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nom)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Prenom)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Ville)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+
+        </table>
+
     </div>
 </div>
 
 
 
-
+@section Scripts{
+    <script src="~/Content/TableFilter/ReapetedFilter.js"></script>
+}
 

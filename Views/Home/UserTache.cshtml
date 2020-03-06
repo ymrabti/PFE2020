@@ -4,269 +4,33 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="dashboard-main-wrapper" style="font-family: 'Catamaran', sans-serif; font-size:15px;background-color:#e9e9e9">
+<div class="tab-content" style="text-align:center; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+    <div class="card-body">
 
-    <div class="dashboard-wrapper">
-        <div class="dashboard-finance">
-            <div class="container-fluid dashboard-content">
+        <span class="mr-2"> <span class="badge-dot badge-info"></span>Nom : @ViewBag.Nom &nbsp;&nbsp;</span>
+        <span class="mr-2"> <span class="badge-dot badge-info"></span>Prenom : @ViewBag.Prenom &nbsp;&nbsp;</span>
+        <span class="mr-2"> <span class="badge-dot badge-info"></span>Email : @ViewBag.Email &nbsp;&nbsp;</span>
+        <span class="mr-2"> <span class="badge-dot badge-info"></span>Statut : @ViewBag.StatusName</span>
 
-                <div class="tab-content" style="text-align:center; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
-                    <div class="card-body">
+    </div>
+</div>
+<br />
+<br />
+<div class="row">
+    <div class="col-lg-12" style=" margin-left: auto; margin-right: auto;">
+        <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+            <div class="card-body">
+                <div class="card-body">
 
-                        <span class="mr-2"> <span class="badge-dot badge-info"></span>Nom : @ViewBag.Nom &nbsp;&nbsp;</span>
-                        <span class="mr-2"> <span class="badge-dot badge-info"></span>Prenom : @ViewBag.Prenom &nbsp;&nbsp;</span>
-                        <span class="mr-2"> <span class="badge-dot badge-info"></span>Email : @ViewBag.Email &nbsp;&nbsp;</span>
-                        <span class="mr-2"> <span class="badge-dot badge-info"></span>Statut : @ViewBag.StatusName</span>
-
-                    </div>
+                    <h4> <span class="badge-dot badge-info"></span>  Gestion des roles</h4>
+                    <hr />
                 </div>
-                <br /> <br />
+
                 <div class="row">
-                    <div class="col-lg-12" style=" margin-left: auto; margin-right: auto;">
-                        <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
-                            <div class="card-body">
-                                <div class="card-body">
-
-                                    <h4> <span class="badge-dot badge-info"></span>  Gestion des roles</h4>
-                                    <hr />
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="name">Module</label>
-                                            <select class="form-control form-control-sm" name="ListOfModules" id="ListOfModulesId">
-                                                <option value=-1>--- Sélectionner un module ---</option>
-                                                @foreach (var item in Model.modules)
-                                                {
-                                                    <option value="@item.ModuleId">@item.ModuleName</option>
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <br />
-                                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop"><i class=" fas fa-plus"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="name">Sous module</label>
-                                            <select class="form-control form-control-sm" name="submoduleSelected" id="submoduleSelectedId">
-                                                <option value=-11>--- Sélectionner un Sous module ---</option>
-                                                @foreach (var item in Model.sousModules)
-                                                {
-                                                    <option value="@item.SousModuleId" name="@item.ModuleId" style="display:none">@item.SousModuleName</option>
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <br />
-                                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop1"><i class=" fas fa-plus"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-
-                                            <label for="name">tâche</label>
-                                            <select class="form-control form-control-sm" name="tacheSelected" id="tacheSelectedId">
-                                                <option value=-111>--- Sélectionner une tâche ---</option>
-                                                @foreach (var item in Model.aspNetRoles)
-                                                {
-                                                    <option value="@item.Id" name="@item.SouModuleId" style="display:none">@item.Name</option>
-                                                }
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <br />
-
-                                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop2"><i class=" fas fa-plus">  </i>    </button>
-
-
-
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-12" style="text-align: right;">
-                                    <div class="form-group">
-
-                                        <button id="btnAdd" type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i>&nbsp;&nbsp;&nbsp;     Ajouter au tableau </button>
-
-                                    </div>
-                                </div>
-
-                                @using (Html.BeginForm())
-                                {
-                                    @Html.AntiForgeryToken()
-                                    <div class="col-xl-12 col-lg-9 col-md-12 col-sm-12 col-12" style="margin-left: -1%;">
-                                        <div class="card">
-                                            <h5 class="card-header">Liste des Tâches</h5>
-                                            <div class="card-body">
-                                                <table class="table table-hover" id="table_roleUsers">
-                                                    <thead>
-                                                        <tr>
-
-                                                            <th>
-                                                                @Html.DisplayNameFor(model => Model.modules)
-                                                            </th>
-                                                            <th>
-                                                                @Html.DisplayNameFor(model => Model.sousModules)
-                                                            </th>
-                                                            <th>
-                                                                @Html.DisplayNameFor(model => Model.aspNetRoles)
-                                                            </th>
-                                                            <th scope="col">Consulter</th>
-                                                            <th scope="col">Crée</th>
-                                                            <th scope="col">Modifier</th>
-                                                            <th scope="col">Supprimer</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody name="tableRoles">
-
-                                                        @foreach (var item in Model.aspNetUserRoles)
-                                                        {
-                                                            <tr>
-                                                                <td>
-                                                                    @Html.DisplayFor(modelItem => item.AspNetRoles.SousModule.Module.ModuleName)
-                                                                </td>
-                                                                <td>
-                                                                    @Html.DisplayFor(modelItem => item.AspNetRoles.SousModule.SousModuleName)
-                                                                </td>
-                                                                <td>
-                                                                    @Html.Hidden("RoleId", item.RoleId, new { @id = item.RoleId })
-                                                                    @Html.Hidden("UserId", item.UserId, new { @id = "UserId_" + item.RoleId })
-                                                                    @Html.DisplayFor(m => item.AspNetRoles.Name, item.RoleId)
-                                                                </td>
-                                                                <td>
-                                                                    <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(m => item.Read , new {  @class = "custom-control-input",  Name = "Lire" , @id = "Lire_" + item.RoleId,  @onclick = "LireCheckBox(this,\"" + item.RoleId + "\")" })
-                                                                        @Html.Hidden("Read", item.Read, new { @id = "Read_" + item.RoleId })
-                                                                        <span class="custom-control-label"></span>
-                                                                    </label>
-                                                                </td>
-                                                                <td>
-                                                                    <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(m => item.Create , new { @class = "custom-control-input",  Name = "Cree" ,  @id = "Cree_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Create_\")" })
-                                                                        @Html.Hidden("Create", item.Create, new { @id = "Create_" + item.RoleId })
-                                                                        <span class="custom-control-label"></span>
-                                                                    </label>
-                                                                </td>
-                                                                <td>
-                                                                    <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(m => item.Update , new { @class = "custom-control-input", Name = "Modifier" , @id = "Modifier_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Update_\")" })
-                                                                        @Html.Hidden("Update", item.Update, new { @id = "Update_" + item.RoleId })
-                                                                        <span class="custom-control-label"></span>
-                                                                    </label>
-                                                                </td>
-                                                                <td>
-                                                                    <label class="be-checkbox custom-control custom-checkbox">
-                                                                        @Html.CheckBoxFor(m => item.Delete , new { @class = "custom-control-input", Name = "Supprimer" , @id = "Supprimer_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Delete_\")" })
-                                                                        @Html.Hidden("Delete", item.Delete, new { @id = "Delete_" + item.RoleId })
-                                                                        <span class="custom-control-label"></span>
-                                                                    </label>
-                                                                </td>
-                                                            </tr>
-                                                        }
-
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                @Html.ActionLink("Retour a la liste", "Index", "Home")
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6" style="text-align: right;">
-                                            <div class="form-group">
-                                                <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i>&nbsp;&nbsp;&nbsp;     Enregistrer </button>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                }
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Ajouter un Module</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    @using (Html.BeginForm("UserTacheAddModule","Home",FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken()
-                        <div class="form-group">
-                            <label for="name">Nom du module</label>
-
-                            <input type="text" name="ModuleName" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Description du module</label>
-
-                            <textarea name="ModuleDescription" class="form-control"></textarea>
-                        </div>
-                        <div class="modal-footer">
-
-                            <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
-                        </div>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="staticBackdrop1" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Ajouter un sous module</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    @using (Html.BeginForm("UserTacheAddSousModule","Home",FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken()
-                        <div class="form-group">
-                            <label for="name">Nom du sous module</label>
-                            <input type="text" name="SousModuleName" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Description du sous module</label>
-                            <textarea name="SousModuleDescription" class="form-control"></textarea>
-                        </div>
-
+                    <div class="col-lg-6">
                         <div class="form-group">
                             <label for="name">Module</label>
-                            <select class="form-control form-control-sm" name="ModuleId" id="ListOfModulesId">
+                            <select class="form-control form-control-sm" name="ListOfModules" id="ListOfModulesId">
                                 <option value=-1>--- Sélectionner un module ---</option>
                                 @foreach (var item in Model.modules)
                                 {
@@ -274,60 +38,220 @@
                                 }
                             </select>
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <br />
+                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#BackdropAddModulePartial"><i class=" fas fa-plus"></i></button>
                         </div>
-                    }
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="staticBackdrop2" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Ajouter une tâche</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    @using (Html.BeginForm("Test", "Home", FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="name">Nom du tâche</label>
-                            <input type="text" name="Name" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Description du tâche</label>
-                            <textarea name="RoleDescription" class="form-control"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Sous Module</label>
-                            <select class="form-control form-control-sm" name="SousModuleId" id="ListOfSubModulesId">
-                                <option value=-1>--- Sélectionner un Sous module ---</option>
+                            <label for="name">Sous module</label>
+                            <select class="form-control form-control-sm" name="submoduleSelected" id="submoduleSelectedId">
+                                <option value=-11>--- Sélectionner un Sous module ---</option>
                                 @foreach (var item in Model.sousModules)
                                 {
-                                    <option value="@item.SousModuleId">@item.SousModuleName</option>
+                                    <option value="@item.SousModuleId" name="@item.ModuleId" style="display:none">@item.SousModuleName</option>
                                 }
                             </select>
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <br />
+                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#BackdropAddSubModule"><i class=" fas fa-plus"></i></button>
                         </div>
-                    }
+                    </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+
+                            <label for="name">tâche</label>
+                            <select class="form-control form-control-sm" name="tacheSelected" id="tacheSelectedId">
+                                <option value=-111>--- Sélectionner une tâche ---</option>
+                                @foreach (var item in Model.aspNetRoles)
+                                {
+                                    <option value="@item.Id" name="@item.SouModuleId" style="display:none">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <br />
+
+                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#BackdropAddTache"><i class=" fas fa-plus">  </i>    </button>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12" style="text-align: right;">
+                    <div class="form-group">
+
+                        <button id="btnAdd" type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i>&nbsp;&nbsp;&nbsp;     Ajouter au tableau </button>
+
+                    </div>
+                </div>
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="col-xl-12 col-lg-9 col-md-12 col-sm-12 col-12" style="margin-left: -1%;">
+                        <div class="card">
+                            <h5 class="card-header">Liste des Tâches</h5>
+                            <div class="card-body">
+                                <table class="table table-hover" id="table_roleUsers">
+                                    <thead>
+                                        <tr>
+
+                                            <th>
+                                                @Html.DisplayNameFor(model => Model.modules)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => Model.sousModules)
+                                            </th>
+                                            <th>
+                                                @Html.DisplayNameFor(model => Model.aspNetRoles)
+                                            </th>
+                                            <th scope="col">Consulter</th>
+                                            <th scope="col">Crée</th>
+                                            <th scope="col">Modifier</th>
+                                            <th scope="col">Supprimer</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody name="tableRoles">
+
+                                        @foreach (var item in Model.aspNetUserRoles)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.AspNetRoles.SousModule.Module.ModuleName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.AspNetRoles.SousModule.SousModuleName)
+                                                </td>
+                                                <td>
+                                                    @Html.Hidden("RoleId", item.RoleId, new { @id = item.RoleId })
+                                                    @Html.Hidden("UserId", item.UserId, new { @id = "UserId_" + item.RoleId })
+                                                    @Html.DisplayFor(m => item.AspNetRoles.Name, item.RoleId)
+                                                </td>
+                                                <td>
+                                                    <label class="be-checkbox custom-control custom-checkbox">
+                                                        @Html.CheckBoxFor(m => item.Read, new { @class = "custom-control-input", Name = "Lire", @id = "Lire_" + item.RoleId, @onclick = "LireCheckBox(this,\"" + item.RoleId + "\")" })
+                                                        @Html.Hidden("Read", item.Read, new { @id = "Read_" + item.RoleId })
+                                                        <span class="custom-control-label"></span>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label class="be-checkbox custom-control custom-checkbox">
+                                                        @Html.CheckBoxFor(m => item.Create, new { @class = "custom-control-input", Name = "Cree", @id = "Cree_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Create_\")" })
+                                                        @Html.Hidden("Create", item.Create, new { @id = "Create_" + item.RoleId })
+                                                        <span class="custom-control-label"></span>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label class="be-checkbox custom-control custom-checkbox">
+                                                        @Html.CheckBoxFor(m => item.Update, new { @class = "custom-control-input", Name = "Modifier", @id = "Modifier_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Update_\")" })
+                                                        @Html.Hidden("Update", item.Update, new { @id = "Update_" + item.RoleId })
+                                                        <span class="custom-control-label"></span>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label class="be-checkbox custom-control custom-checkbox">
+                                                        @Html.CheckBoxFor(m => item.Delete, new { @class = "custom-control-input", Name = "Supprimer", @id = "Supprimer_" + item.RoleId, @onclick = "cudCheckBox(this,\"" + item.RoleId + "\",\"Delete_\")" })
+                                                        @Html.Hidden("Delete", item.Delete, new { @id = "Delete_" + item.RoleId })
+                                                        <span class="custom-control-label"></span>
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.ActionLink("Retour a la liste", "Index", "Home")
+                            </div>
+                        </div>
+                        <div class="col-lg-6" style="text-align: right;">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i>&nbsp;&nbsp;&nbsp;     Enregistrer </button>
+
+                            </div>
+                        </div>
+                    </div>
+
+                }
+
             </div>
         </div>
     </div>
-
 </div>
+
+@section Modal{
+
+    @Html.Action("AddModulePartial", "Home")
+
+}
 
 @section Scripts{
 
+
+
     <script type="text/javascript">
+        
+        $(document).ready(function () {
+            $("#ListOfModulesId").chosen({
+                disable_search: false,
+                create_option: true,
+                persistent_create_option: true,
+                skip_no_results: true,
+                placeholder_text_single: "-------- Indice --------",
+                no_results_text: "Aucun résultat ne correspond"
+            });
+        });
+        
+        $(document).ready(function () {
+            $("#submoduleSelectedId").chosen({
+                disable_search: false,
+                create_option: true,
+                persistent_create_option: true,
+                skip_no_results: true,
+                placeholder_text_single: "-------- Indice --------",
+                no_results_text: "Aucun résultat ne correspond"
+            });
+        });
+        
+        $(document).ready(function () {
+            $("#tacheSelectedId").chosen({
+                disable_search: false,
+                create_option: true,
+                persistent_create_option: true,
+                skip_no_results: true,
+                placeholder_text_single: "-------- Indice --------",
+                no_results_text: "Aucun résultat ne correspond"
+            });
+        });
+
+         function OnSuccess(data) {
+
+             alert("error");
+
+            }
+            function OnFailure(data) {
+            }
 
         function LireCheckBox(checkbox, iden) {
             if (checkbox.checked == false) {

@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace GestionnaireUtilisateurs.Controllers
@@ -10,17 +11,30 @@ namespace GestionnaireUtilisateurs.Controllers
     public class HomeController : Controller
     {
         aurs1Entities database = new aurs1Entities();
+        private MultiModeles multiModeles() {
+            var mModels = new MultiModeles
+            {
+                aspNetUsers = database.AspNetUsers.ToList(),
+                modules = database.Module.ToList()
+                ,
+                sousModules = database.SousModule.ToList(),
+                aspNetRoles = database.AspNetRoles.ToList()
+                ,
+                statuts = database.Statuts.ToList(),
+                statutRoles = database.StatutRole.ToList()
+            };
+            return mModels;
+        }
         [Authorize]
         public ActionResult Index()
         {
-            var user = database.AspNetUsers.ToList();
-            return View(user);
+            return View(multiModeles());
         }
         [Authorize]
         public ActionResult AddUser()
         {
             
-            return View(database.Statuts.ToList());
+            return View(multiModeles());
         }
 
         [HttpPost]
@@ -153,9 +167,32 @@ namespace GestionnaireUtilisateurs.Controllers
         [Authorize]
         public ActionResult module()
         {
-            return View(database.Module.ToList());
+            return View(multiModeles());
         }
         [Authorize]
+        public ActionResult AddModule() {
+            return View(multiModeles());
+        }
+
+        
+        public ActionResult AddModulePartial() {
+            return PartialView("_Modal");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AddModulePartial([Bind(Include = "ModuleName,ModuleDescription")] Module model)
+        {
+            var data = "";
+            if (ModelState.IsValid)
+            {
+                database.Module.Add(model);
+                var result = await database.SaveChangesAsync();
+                data += result;
+            }
+            return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -166,7 +203,7 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 database.Module.Add(module);
                 database.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("module");
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
