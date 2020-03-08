@@ -1,247 +1,44 @@
-﻿@model GestionnaireUtilisateurs.Models.AspNetUserRoles
-@{
-    ViewBag.Title = "Contact";
+﻿@{
+    ViewBag.Title = "A propos";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
-@using (Html.BeginForm("Contacter", "Home", FormMethod.Post))
+<div class="dashboard-wrapper">
+    <div class="dashboard-finance">
+        <div class="container-fluid dashboard-content">
+            <br />
+            <p id="paragraph">resultat</p>
+            @*@using (Ajax.BeginForm("Aboutir", new AjaxOptions { HttpMethod = "Post", OnSuccess = "ajaxSuccess", OnFailure = "ajaxError" }))
+            {
+                @Html.AntiForgeryToken()
+            }*@
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm" id="buttonContact"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
 {
-    @Html.AntiForgeryToken()
-    <input type="submit" name="answer" value="Accept" class="btn btn-success" />
-    <input type="submit" name="response" value="Decline" class="btn btn-danger" />
-    <input type="submit" name="answer" value="Defer" class="btn btn-warning" />
-    <table id="theTable">
-        <tbody name="tableRoles">
-
-            <tr>
-                <td>
-                    Gestion urbaine
-                </td>
-                <td>
-                    Instruction des dossiers de demande d'autorisations
-                </td>
-                <td>
-                    <input id="UserId" name="UserId" type="hidden" value="9808e386-ab00-4d8e-9396-602209a70df5">
-                    <input id="RoleId" name="RoleId" type="hidden" value="idroleadmin">
-                    Admin
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input checked="checked" class="custom-control-input" id="item_Read_Value" name="item_Read_Value" type="checkbox" value="true"><input name="item_Read_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input checked="checked" class="custom-control-input" id="item_Create_Value" name="item_Create_Value" type="checkbox" value="true"><input name="item_Create_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input checked="checked" class="custom-control-input" id="item_Update_Value" name="item_Update_Value" type="checkbox" value="true"><input name="item_Update_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input checked="checked" class="custom-control-input" id="item_Delete_Value" name="item_Delete_Value" type="checkbox" value="true"><input name="item_Delete_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Gestion urbaine
-                </td>
-                <td>
-                    Instruction des dossiers de demande d'autorisations
-                </td>
-                <td>
-                    <input id="UserId" name="UserId" type="hidden" value="9808e386-ab00-4d8e-9396-602209a70df5">
-                    <input id="RoleId" name="RoleId" type="hidden" value="sousmodule11">
-                    sousmodule11
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input checked="checked" class="custom-control-input" id="item_Read_Value" name="item_Read_Value" type="checkbox" value="true"><input name="item_Read_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input checked="checked" class="custom-control-input" id="item_Create_Value" name="item_Create_Value" type="checkbox" value="true"><input name="item_Create_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input checked="checked" class="custom-control-input" id="item_Update_Value" name="item_Update_Value" type="checkbox" value="true"><input name="item_Update_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input checked="checked" class="custom-control-input" id="item_Delete_Value" name="item_Delete_Value" type="checkbox" value="true"><input name="item_Delete_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Operations foncieres et de
-                    l'amenagement urbain
-
-                </td>
-                <td>
-                    Etude du marche foncier
-                </td>
-                <td>
-                    <input id="UserId" name="UserId" type="hidden" value="9808e386-ab00-4d8e-9396-602209a70df5">
-                    <input id="RoleId" name="RoleId" type="hidden" value="sousmodule110">
-                    sousmodule110
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input checked="checked" class="custom-control-input" id="item_Read_Value" name="item_Read_Value" type="checkbox" value="true"><input name="item_Read_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input class="custom-control-input" id="item_Create_Value" name="item_Create_Value" type="checkbox" value="true"><input name="item_Create_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input class="custom-control-input" id="item_Update_Value" name="item_Update_Value" type="checkbox" value="true"><input name="item_Update_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input class="custom-control-input" id="item_Delete_Value" name="item_Delete_Value" type="checkbox" value="true"><input name="item_Delete_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Operations foncieres et de
-                    l'amenagement urbain
-
-                </td>
-                <td>
-                    Gestion de la prospection des terrains et identification des opportunites
-                </td>
-                <td>
-                    <input id="UserId" name="UserId" type="hidden" value="9808e386-ab00-4d8e-9396-602209a70df5">
-                    <input id="RoleId" name="RoleId" type="hidden" value="sousmodule111">
-                    sousmodule111
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input checked="checked" class="custom-control-input" id="item_Read_Value" name="item_Read_Value" type="checkbox" value="true"><input name="item_Read_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input checked="checked" class="custom-control-input" id="item_Create_Value" name="item_Create_Value" type="checkbox" value="true"><input name="item_Create_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input class="custom-control-input" id="item_Update_Value" name="item_Update_Value" type="checkbox" value="true"><input name="item_Update_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input class="custom-control-input" id="item_Delete_Value" name="item_Delete_Value" type="checkbox" value="true"><input name="item_Delete_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Operations foncieres et de
-                    l'amenagement urbain
-
-                </td>
-                <td>
-                    Gestion des enquotes sur terrain et les etudes de faisabilite
-                </td>
-                <td>
-                    <input id="UserId" name="UserId" type="hidden" value="9808e386-ab00-4d8e-9396-602209a70df5">
-                    <input id="RoleId" name="RoleId" type="hidden" value="sousmodule212">
-                    sousmodule212
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input checked="checked" class="custom-control-input" id="item_Read_Value" name="item_Read_Value" type="checkbox" value="true"><input name="item_Read_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input class="custom-control-input" id="item_Create_Value" name="item_Create_Value" type="checkbox" value="true"><input name="item_Create_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input class="custom-control-input" id="item_Update_Value" name="item_Update_Value" type="checkbox" value="true"><input name="item_Update_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input class="custom-control-input" id="item_Delete_Value" name="item_Delete_Value" type="checkbox" value="true"><input name="item_Delete_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Operations transverses
-                </td>
-                <td>
-                    Gestion des pieces jointes
-                </td>
-                <td>
-                    <input id="UserId" name="UserId" type="hidden" value="9808e386-ab00-4d8e-9396-602209a70df5">
-                    <input id="RoleId" name="RoleId" type="hidden" value="sousmodule316">
-                    sousmodule316
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input checked="checked" class="custom-control-input" id="item_Read_Value" name="item_Read_Value" type="checkbox" value="true"><input name="item_Read_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input checked="checked" class="custom-control-input" id="item_Create_Value" name="item_Create_Value" type="checkbox" value="true"><input name="item_Create_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input checked="checked" class="custom-control-input" id="item_Update_Value" name="item_Update_Value" type="checkbox" value="true"><input name="item_Update_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-                <td>
-                    <label class="be-checkbox custom-control custom-checkbox">
-                        <input class="custom-control-input" id="item_Delete_Value" name="item_Delete_Value" type="checkbox" value="true"><input name="item_Delete_Value" type="hidden" value="false">
-                        <span class="custom-control-label"></span>
-                    </label>
-                </td>
-            </tr>
-
-        </tbody>
-    </table>
+    <script type="text/javascript">
+        $("body").on("click", "#buttonContact", function () {
+            $.ajax({
+                type: "POST",
+                url: "/Home/Aboutir",
+                data: JSON.stringify(null),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $.each(data.mdles, function (i, item) {
+                        $('#paragraph').append("   <br/>" +item.ModuleId + "   >>>  " + item.ModuleName   )
+                    });
+                },
+                error:function () {
+                    alert( "error.");
+                }
+            });
+        });
+    </script>
 }
+
+

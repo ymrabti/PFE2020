@@ -1018,6 +1018,7 @@
     <Content Include="Content\Chosen\chosen.proto.js" />
     <Content Include="Content\Chosen\chosen_old.css" />
     <Content Include="Content\TableFilter\.gitignore" />
+    <Content Include="Content\TableFilter\ajax.js" />
     <Content Include="Content\TableFilter\dist\starter.html" />
     <Content Include="Content\TableFilter\dist\tablefilter\style\colsVisibility.css" />
     <Content Include="Content\TableFilter\dist\tablefilter\style\filtersVisibility.css" />

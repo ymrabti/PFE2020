@@ -1,6 +1,4 @@
 ﻿using GestionnaireUtilisateurs.Models;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -11,7 +9,8 @@ namespace GestionnaireUtilisateurs.Controllers
     public class HomeController : Controller
     {
         aurs1Entities database = new aurs1Entities();
-        private MultiModeles multiModeles() {
+        private MultiModeles multiModeles()
+        {
             var mModels = new MultiModeles
             {
                 aspNetUsers = database.AspNetUsers.ToList(),
@@ -33,7 +32,7 @@ namespace GestionnaireUtilisateurs.Controllers
         [Authorize]
         public ActionResult AddUser()
         {
-            
+
             return View(multiModeles());
         }
 
@@ -76,7 +75,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UserTache( string[] Create, string[] Read, string[] Update, string[] Delete
+        public ActionResult UserTache(string[] Create, string[] Read, string[] Update, string[] Delete
             , string[] UserId, string[] RoleId)
         {
             if (ModelState.IsValid && Read.Length != 0)
@@ -84,7 +83,8 @@ namespace GestionnaireUtilisateurs.Controllers
                 var currentUser = UserId[0];
                 var aspNetUserRoles = database.AspNetUserRoles.Where(iden => iden.UserId == currentUser);
                 database.AspNetUserRoles.RemoveRange(aspNetUserRoles);
-                for (int i=0;i<Read.Length;i++) {
+                for (int i = 0; i < Read.Length; i++)
+                {
                     AspNetUserRoles NewRoleOfUser = new AspNetUserRoles();
                     NewRoleOfUser.UserId = UserId[0];
                     NewRoleOfUser.RoleId = RoleId[i];
@@ -170,11 +170,12 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(multiModeles());
         }
         [Authorize]
-        public ActionResult AddModule() {
+        public ActionResult AddModule()
+        {
             return View(multiModeles());
         }
 
-        
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -189,21 +190,28 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
-
-        public ActionResult AddModulePartial() {
+        public ActionResult AddModulePartial()
+        {
             return PartialView("_Modal");
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AddModulePartial([Bind(Include = "ModuleName,ModuleDescription")] Module model)
+        
+        public async Task<JsonResult> AddModulePartiale([Bind(Include = "ModuleName,ModuleDescription")] Module model)
         {
-            var data = model.ModuleName;
+            var data = new object();
             if (ModelState.IsValid)
             {
                 database.Module.Add(model);
                 var result = await database.SaveChangesAsync();
-                data += result;
+                var mdles = from p in database.Module.ToList()
+                            select new Module
+                            {
+                                ModuleId = p.ModuleId,
+                                ModuleName = p.ModuleName
+                            };
+
+                data = new { dd = "error", mdles };
+                return Json(data, JsonRequestBehavior.AllowGet);
             }
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }
@@ -247,7 +255,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
         public ActionResult AddSubModulePartial()
         {
-            return PartialView("_SubModuleModal",multiModeles());
+            return PartialView("_SubModuleModal", multiModeles());
         }
 
         [HttpPost]
@@ -307,9 +315,9 @@ namespace GestionnaireUtilisateurs.Controllers
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }
 
-        /// ///////////////////////             AUTRES                    //////////////////////
-        /// ///////////////////////             AUTRES                    //////////////////////
-        /// ///////////////////////             AUTRES                    //////////////////////
+        /// ///////////////////////             STATUT                    //////////////////////
+        /// ///////////////////////             STATUT                    //////////////////////
+        /// ///////////////////////             STATUT                    //////////////////////
 
 
 
@@ -331,14 +339,37 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }
+
+
+
+        /// ///////////////////////             AUTRES                    //////////////////////
+        /// ///////////////////////             AUTRES                    //////////////////////
+        /// ///////////////////////             AUTRES                    //////////////////////
+
+
+
         public ActionResult About()
         {
-            ViewBag.RoleId = new SelectList(database.AspNetRoles, "Id", "Name");
-            ViewBag.UserId = new SelectList(database.AspNetUsers, "Id", "UserNameAr");
-            return View(new AspNetUserRoles { });
+            return View();
         }
 
-
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public JsonResult Aboutir()
+        {
+            var mdles = from p in database.Module.ToList()
+                        select new Module
+                        {
+                            ModuleId = p.ModuleId,
+                            ModuleName = p.ModuleName
+                        };
+            //    return Json(mdles, JsonRequestBehavior.AllowGet);
+            //if (ModelState.IsValid)
+            //{
+            //}
+            var data = new { dd = "error",mdles};
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
@@ -346,12 +377,14 @@ namespace GestionnaireUtilisateurs.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Test(Module module
-            )
+        
+        public JsonResult Test([Bind(Include = "ModuleName,ModuleDescription")] Module module)
         {
-            ViewBag.module = module.ModuleName;
+            if (ModelState.IsValid)
+            {
+                database.Module.Add(module);
+            }
+            var insertedRecords = database.SaveChanges();
             //var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
             //var tacheUse = new UserManager<IdentityUser>(new UserStore<IdentityUser>(new ApplicationDbContext()));
             //var result = tacheUse.Create(user, model.Password);
@@ -368,7 +401,7 @@ namespace GestionnaireUtilisateurs.Controllers
             //var identifiant = tachee.Succeeded;
             //sousModules.SouModuleId = SousModuleId;
             //database.AspNetRoles.Add(sousModules);database.SaveChanges();
-            return PartialView();
+            return Json(new { dd = "error", data = insertedRecords }, JsonRequestBehavior.AllowGet);
         }
         //public ActionResult Inde(string id, int? courseID)
         //{

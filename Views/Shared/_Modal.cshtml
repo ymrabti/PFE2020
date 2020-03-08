@@ -8,24 +8,26 @@
                 </button>
             </div>
             <div class="modal-body">
-                @using (Ajax.BeginForm("Test", "Home", new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess", OnFailure = "OnFailure",UpdateTargetId="" }, new { @class = "form-horizontal", role = "form", id = "myform" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <div class="form-group">
-                        <label for="name">Nom du module @ViewBag.module</label>
+                @*@using (Ajax.BeginForm("AddModulePartiale", "Home"
+                        , new AjaxOptions { HttpMethod = "POST", OnSuccess = "OnSuccess", OnFailure = "OnFailure" }
+                        , new { @class = "form-horizontal", role = "form", id = "FormAddModule" }))
+                    {
+                        @Html.AntiForgeryToken()
+                    }*@
+                <div class="form-group">
+                    <label for="name">Nom du module </label>
 
-                        <input type="text" name="ModuleName" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="name">Description du module</label>
+                    <input type="text" name="ModuleName" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="name">Description du module</label>
 
-                        <textarea name="ModuleDescription" class="form-control"></textarea>
-                    </div>
-                    <div class="modal-footer">
+                    <textarea name="ModuleDescription" class="form-control"></textarea>
+                </div>
+                <div class="modal-footer">
 
-                        <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
-                    </div>
-                }
+                    <button type="submit" class="btn btn-sm" id="buttonSubmitModule"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
+                </div>
             </div>
         </div>
     </div>

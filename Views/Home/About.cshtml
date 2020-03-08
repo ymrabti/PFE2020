@@ -1,84 +1,54 @@
-﻿@model GestionnaireUtilisateurs.Models.AspNetUserRoles
-
-@{
-    ViewBag.Title = "About";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+﻿@{
+    ViewBag.Title = "A propos";
 }
 
-<h2>About</h2>
+<style>
+    #btn-show-modal {
+        background-color: #09aacc;
+        color: white;
+    }
+</style>
 
-@using (Html.BeginForm()) 
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>AspNetUserRoles</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.AspNetUsers.Email, "UserId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
-            </div>
-        </div>
+<div class="dashboard-wrapper">
+    <div class="dashboard-finance">
+        <div class="container-fluid dashboard-content">
+            <br />
+            @using (Ajax.BeginForm("About",new AjaxOptions { HttpMethod = "Post", OnSuccess = "ajaxSuccess",OnFailure="ajaxError" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <label for="name">Nom du module </label>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.AspNetRoles.Name, "RoleId", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("RoleId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.RoleId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Read, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Read)
-                    @Html.ValidationMessageFor(model => model.Read, "", new { @class = "text-danger" })
+                    <input type="text" name="ModuleName" class="form-control">
                 </div>
-            </div>
-        </div>
+                <div class="form-group">
+                    <label for="name">Description du module</label>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Create, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Create)
-                    @Html.ValidationMessageFor(model => model.Create, "", new { @class = "text-danger" })
+                    <textarea name="ModuleDescription" class="form-control"></textarea>
                 </div>
-            </div>
-        </div>
+                <div class="modal-footer">
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Update, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Update)
-                    @Html.ValidationMessageFor(model => model.Update, "", new { @class = "text-danger" })
+                    <button type="submit" class="btn btn-sm" id="buttonSubmitModule"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
                 </div>
-            </div>
-        </div>
+            }
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Delete, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.Delete)
-                    @Html.ValidationMessageFor(model => model.Delete, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
         </div>
     </div>
+</div>
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+          function ajaxSuccess() {
+                alert('this is ajaxSuccess');
+            }
+            function ajaxError() {
+                alert('this is ajaxError');
+            }
+
+    </script>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
+

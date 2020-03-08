@@ -27,6 +27,11 @@
     <link rel="stylesheet" href="~/Content/barre/css/style.css">
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Catamaran&display=swap">
+    <style>
+        #buttonSubmitModule{
+            background-color:#09aacc ; color:white;
+        }
+    </style>
 </head>
 <body style="font-family: 'Catamaran', sans-serif; font-size:15px;background-color:#e9e9e9">
     <div class="dashboard-main-wrapper">
@@ -79,13 +84,17 @@
                 </div>
             </div>
         </div>
-
+        
 
 
         <!-- ============================================================== -->
     </div>
     <!-- jquery 3.3.1  -->
     @RenderSection("Modal", false/*required*/)
+
+
+
+
     <script src="~/Content/tablesaw/dist/tablesaw.js"></script>
     <script src="~/Content/tablesaw/dist/tablesaw-init.js"></script>
 

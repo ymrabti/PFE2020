@@ -21,11 +21,9 @@
         <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
             <div class="card-body">
                 <div class="card-body">
-
                     <h4> <span class="badge-dot badge-info"></span>  Gestion des roles</h4>
                     <hr />
                 </div>
-
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
@@ -201,58 +199,44 @@
 </div>
 
 @section Modal{
-
     @Html.Action("AddModulePartial", "Home")
-    @Html.Action("AddSubModulePartial", "Home")
-    @Html.Action("AddTachePartial", "Home")
 
 }
 
 @section Scripts{
-
-
-
     <script type="text/javascript">
 
-
-         function OnSuccess(data) {
-              
-                if (data.dd == "error") {
-                    if ($("#labelErrors").val() != undefined) {
-                        $("#labelErrors").remove();
-                        $("#lastDiv").append("<label id='labelErrors' style='color:red;font-weight:bold'><br />" + data.data + "</lable>")
-                    } else {
-                        $("#lastDiv").append("<label id='labelErrors' style='color:red;font-weight:bold'><br/>" + data.data + "</lable>")
-                    }
-
-                } else {
-                    if ($("#labelErrors").val() != undefined) {
-                        $("#labelErrors").remove();
-                    }
+        $("body").on("click", "#buttonSubmitModule", function () {
+            var module = {};
+            var ModuleName = $('input[name="ModuleName"]').val();
+            var ModuleDescription = $('textarea[name="ModuleDescription"]').val();
+            module.ModuleName = ModuleName;
+            module.ModuleDescription = ModuleDescription;
+            //alert(ModuleName+"  "+ModuleDescription);
+            $.ajax({
+                type: "POST",
+                url: "/Home/AddModulePartiale",
+                data: JSON.stringify(module),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    alert("record inserted.");
+                    $('input[name="ModuleName"]').val('');  $('textarea[name="ModuleDescription"]').val('');
                     $(".close").click();
-                    $('#myform')[0].reset();
-                    $('#Pet').empty();
-                    $('#Pet').append("<option value=''>-------- Pétitionnaire --------</option>")
-                    $.each(data.petits, function (i, item) {
-                        $('#Pet').append("<option value='" + item.Id + "' cin='" + item.CIN + "' nom='" + item.petPreFr + "' prenom='" + item.petFr +"'>" + item.petFr + " " + item.petPreFr + " " + item.CIN + "</option>")
+                    $('#ListOfModulesId').empty();
+                    $('#ListOfModulesId').append("<option value=-1>--- Sélectionner un module ---</option>")
+                    $.each(data.mdles, function (i, item) {
+                        $('#ListOfModulesId').append("<option value='" + item.ModuleId + "'>" + item.ModuleName  + "</option>")
                     });
-                    $('#Pet').val(data.petitID);
-                    $('#Pet').trigger("liszt:updated");
-
-                    //$('#petArabe').empty();
-                    //$('#petArabe').append("<option value=''>-------- ???? ????? : -------- </option>")
-                    //$.each(data.petits, function (i, item) {
-                    //    $('#petArabe').append("<option value='" + item.Id + "'>" + item.petAr + " " + item.petPreAr + " " + item.CIN + "</option>")
-                    //});
-                    //$('#petArabe').val(data.petitID);
-                    //$('#petArabe').trigger("liszt:updated");
+                    //$('#ListOfModulesId').val(data.petitID);
+                    $('#ListOfModulesId').trigger("liszt:updated");
+                },
+                error:function () {
+                    alert( "error.");
                 }
+            });
+        });
 
-            }
-            function OnFailure(data) {
-                alert(45);
-            }
-        
         $(document).ready(function () {
             $("#ListOfModulesId").chosen({
                 disable_search: false,
@@ -263,7 +247,7 @@
                 no_results_text: "Aucun résultat ne correspond"
             });
         });
-        
+
         $(document).ready(function () {
             $("#submoduleSelectedId").chosen({
                 disable_search: false,
@@ -274,7 +258,7 @@
                 no_results_text: "Aucun résultat ne correspond"
             });
         });
-        
+
         $(document).ready(function () {
             $("#tacheSelectedId").chosen({
                 disable_search: false,
@@ -286,7 +270,6 @@
             });
         });
 
-         
 
         function LireCheckBox(checkbox, iden) {
             if (checkbox.checked == false) {
