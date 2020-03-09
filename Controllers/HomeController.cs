@@ -1,4 +1,6 @@
 ﻿using GestionnaireUtilisateurs.Models;
+using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -224,17 +226,70 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult EditModule(int CodeModule)
+
+        public ActionResult EditModule(int id)
         {
-            if (CodeModule == 0)
+            if (id == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var module = database.Module.Find(CodeModule);
+            var module = database.Module.Find(id);
+            if (module == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.ModuleName = module.ModuleName;
+            ViewBag.ModuleDescription = module.ModuleDescription;
+            ViewBag.ModuleId = module.ModuleId;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditModule([Bind(Include = "ModuleId,ModuleName,ModuleDescription")] Module module)
+        {
+            if (ModelState.IsValid)
+            {
+                if (module==null)
+                {
+                    return View(module);
+                }
+                database.Entry(module).State = EntityState.Modified;
+                database.SaveChanges();
+                return RedirectToAction("module");
+            }
             return View(module);
         }
+        public ActionResult DeleteModule(int id)
+        {
+            if (id+"" == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Module module = database.Module.Find(id);
+            if (module == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.ModuleName = module.ModuleName;
+            ViewBag.ModuleDescription = module.ModuleDescription;
+            ViewBag.ModuleId = module.ModuleId;
+            return View();
+        }
+
+        // POST: AspNetRoles/Delete/5
+        [HttpPost, ActionName("DeleteModule")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteModuleConfirmed(int id)
+        {
+            Module module = database.Module.Find(id);
+            database.Module.Remove(module);
+            database.SaveChanges();
+            return RedirectToAction("module");
+        }
+
+
         public ActionResult AddModulePartial()
         {
             return PartialView("_Modal");
@@ -260,6 +315,7 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }
+        
 
 
         /// ///////////////////////             SUB MODULE                    //////////////////////
@@ -345,16 +401,25 @@ namespace GestionnaireUtilisateurs.Controllers
             return PartialView("_TacheModal", multiModeles());
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AddTachePartiale([Bind(Include = "ModuleName,ModuleDescription")] Module model)
+        
+        public async Task<JsonResult> AddTachePartiale([Bind(Include = "Name,SouModuleId,RoleDescription")] AspNetRoles role)
         {
-            var data = "";
+            var data = new object();
             if (ModelState.IsValid)
             {
-                database.Module.Add(model);
+                var Rid = Guid.NewGuid(); role.Id = Rid.ToString();
+                database.AspNetRoles.Add(role);
                 var result = await database.SaveChangesAsync();
-                data += result;
+                var roles = from p in database.AspNetRoles.ToList()
+                            select new AspNetRoles
+                            {
+                                Id = p.Id,
+                                Name = p.Name,
+                                SouModuleId = p.SouModuleId
+                            };
+
+                data = new { dd = "error", roles };
+                return Json(data, JsonRequestBehavior.AllowGet);
             }
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }

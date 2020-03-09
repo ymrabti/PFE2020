@@ -1,34 +1,28 @@
-﻿@model GestionnaireUtilisateurs.Models.MultiModeles
-
-@{
-    ViewBag.Title = "Ajouter une Module";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-
-<div class="row">
+﻿<div class="row">
     <div class="col-md-6" style=" margin-left: auto; margin-right: auto;">
         <div class="card" style="text-align:center; background-color: white; width: 100%; padding-top:15px;box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
             <div class="card-body">
 
-                <h4> <span class="badge-dot badge-info"></span>   Ajout d'une modules</h4>
+                <h4> <span class="badge-dot badge-info"></span>  Modifier d'une modules</h4>
                 <hr />
-                @using (Html.BeginForm("UserTacheAddModule", "Home", FormMethod.Post))
+                @using (Html.BeginForm())
                 {
                     @Html.AntiForgeryToken()
+
                     <div class="form-horizontal">
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <input class="form-control" name="ModuleId" type="hidden" value="@ViewBag.ModuleId"/>
                         <div class="form-group">
-                            <label for="name" class = "col-md-12 control-label" style="font:bold">Nom Du Module</label>
+                            <label for="name" class="col-md-12 control-label">Nom Du Module</label>
                             <div class="col-md-10">
-                                <input class="form-control" name="ModuleName" type="text" />
+                                <input class="form-control" name="ModuleName" type="text" value="@ViewBag.ModuleName"/>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="name" class = "col-md-12 control-label" style="font:bold">Description Du Module</label>
+                            <label for="name" class="col-md-12 control-label">Description Du Module</label>
                             <div class="col-md-10">
-                                <textarea class="form-control" name="ModuleDescription"></textarea>
+                                <textarea class="form-control" name="ModuleDescription" >@ViewBag.ModuleDescription</textarea>
                             </div>
                         </div>
 
@@ -47,8 +41,8 @@
                 <div>
                     @Html.ActionLink("Back to List", "module")
                 </div>
-
             </div>
         </div>
     </div>
 </div>
+

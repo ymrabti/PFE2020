@@ -48,10 +48,11 @@ namespace GestionnaireUtilisateurs.Controllers
         // plus de détails, voir  https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,SouModuleId,RoleDescription")] AspNetRoles aspNetRoles)
+        public ActionResult Create([Bind(Include = "Name,SouModuleId,RoleDescription")] AspNetRoles aspNetRoles)
         {
             if (ModelState.IsValid)
             {
+                var Rid = Guid.NewGuid();aspNetRoles.Id = Rid.ToString();
                 db.AspNetRoles.Add(aspNetRoles);
                 db.SaveChanges();
                 return RedirectToAction("Index");

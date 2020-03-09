@@ -1017,6 +1017,7 @@
     <Content Include="Content\Chosen\chosen.jquery_old.js" />
     <Content Include="Content\Chosen\chosen.proto.js" />
     <Content Include="Content\Chosen\chosen_old.css" />
+    <Content Include="Content\CommonUserStatut.js" />
     <Content Include="Content\TableFilter\.gitignore" />
     <Content Include="Content\TableFilter\ajax.js" />
     <Content Include="Content\TableFilter\dist\starter.html" />
@@ -1738,6 +1739,8 @@
     <Content Include="Views\Shared\_SubModuleModal.cshtml" />
     <Content Include="Views\Shared\_TacheModal.cshtml" />
     <Content Include="Views\Shared\_StatutModal.cshtml" />
+    <Content Include="Views\Home\EditModule.cshtml" />
+    <Content Include="Views\Home\DeleteModule.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
