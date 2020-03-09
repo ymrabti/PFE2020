@@ -99,14 +99,48 @@ namespace GestionnaireUtilisateurs.Controllers
             return RedirectToAction("Index");
         }
 
+        /// ///////////////////////             STATUT                    //////////////////////
+        /// ///////////////////////             STATUT                    //////////////////////
+        /// ///////////////////////             STATUT                    //////////////////////
+
+
+        public ActionResult AddStatut()
+        {
+            return View();
+        }
+
+        public ActionResult EditStatut()
+        {
+            return View();
+        }
+
+        public ActionResult AddStatutPartial()
+        {
+            return PartialView("_StatutModal");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> AddStatutPartial([Bind(Include = "ModuleName,ModuleDescription")] Module model)
+        {
+            var data = "";
+            if (ModelState.IsValid)
+            {
+                database.Module.Add(model);
+                var result = await database.SaveChangesAsync();
+                data += result;
+            }
+            return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
+        }
+
+
         /// ///////////////////////              STATUT TACHE                    //////////////////////
         /// ///////////////////////              STATUT TACHE                    //////////////////////
         /// ///////////////////////              STATUT TACHE                    //////////////////////
         [Authorize]
         public ActionResult IndexStatut()
         {
-            var statuts = database.Statuts.ToList();
-            return View(statuts);
+            return View(multiModeles());
         }
 
         [Authorize]
@@ -190,6 +224,17 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditModule(int CodeModule)
+        {
+            if (CodeModule == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var module = database.Module.Find(CodeModule);
+            return View(module);
+        }
         public ActionResult AddModulePartial()
         {
             return PartialView("_Modal");
@@ -216,24 +261,14 @@ namespace GestionnaireUtilisateurs.Controllers
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult EditModule(int CodeModule)
-        {
-            if (CodeModule == 0)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var module = database.Module.Find(CodeModule);
-            return View(module);
-        }
+
         /// ///////////////////////             SUB MODULE                    //////////////////////
         /// ///////////////////////             SUB MODULE                    //////////////////////
         /// ///////////////////////             SUB MODULE                    //////////////////////
 
         public ActionResult sousmodule()
         {
-            return View(database.SousModule.ToList());
+            return View(multiModeles());
         }
         [Authorize]
 
@@ -258,16 +293,25 @@ namespace GestionnaireUtilisateurs.Controllers
             return PartialView("_SubModuleModal", multiModeles());
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AddSubModulePartial([Bind(Include = "ModuleName,ModuleDescription")] Module model)
+        
+        public async Task<JsonResult> AddSubModulePartiale([Bind(Include = "SousModuleName,SousModuleDescription,ModuleId")] 
+        SousModule sousModule)
         {
-            var data = "";
+            var data = new object();
             if (ModelState.IsValid)
             {
-                database.Module.Add(model);
+                database.SousModule.Add(sousModule);
                 var result = await database.SaveChangesAsync();
-                data += result;
+                var smdles = from p in database.SousModule.ToList()
+                            select new SousModule
+                            {
+                                SousModuleId = p.SousModuleId,
+                                SousModuleName = p.SousModuleName,
+                                ModuleId=p.ModuleId
+                            };
+
+                data = new { dd = "error", smdles };
+                return Json(data, JsonRequestBehavior.AllowGet);
             }
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }
@@ -303,7 +347,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AddTachePartial([Bind(Include = "ModuleName,ModuleDescription")] Module model)
+        public async Task<JsonResult> AddTachePartiale([Bind(Include = "ModuleName,ModuleDescription")] Module model)
         {
             var data = "";
             if (ModelState.IsValid)
@@ -314,32 +358,6 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }
-
-        /// ///////////////////////             STATUT                    //////////////////////
-        /// ///////////////////////             STATUT                    //////////////////////
-        /// ///////////////////////             STATUT                    //////////////////////
-
-
-
-        public ActionResult AddStatutPartial()
-        {
-            return PartialView("_StatutModal");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AddStatutPartial([Bind(Include = "ModuleName,ModuleDescription")] Module model)
-        {
-            var data = "";
-            if (ModelState.IsValid)
-            {
-                database.Module.Add(model);
-                var result = await database.SaveChangesAsync();
-                data += result;
-            }
-            return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
-        }
-
 
 
         /// ///////////////////////             AUTRES                    //////////////////////

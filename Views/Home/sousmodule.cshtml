@@ -1,62 +1,75 @@
-﻿@model IEnumerable<GestionnaireUtilisateurs.Models.SousModule>
+﻿@model GestionnaireUtilisateurs.Models.MultiModeles
 @{
     ViewBag.Title = "sousmodule";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+    <div class="card-body">
+        <h4> <span class="badge-dot badge-info"></span>   Gestion des sous modules</h4>
+        <div class="card-body border-top">
+            <div class="row">
 
-<div class="dashboard-main-wrapper">
-    <div class="dashboard-wrapper">
-        <div class="dashboard-finance">
-            <div class="container-fluid dashboard-content">
+                <a href="@Url.Action("AddSubModule", "Home")" class="btn btn" style="background-color:#09aacc ; color:white;">
+                    <i class="fa fa-plus"> Ajouter  </i>
+                </a>
+                @using (Html.BeginForm("EditSubModule", "Home", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="IdHidden" name="id" value="-1">
+                    <button disabled id="buttonModifie" type="submit" class="btn btn" style="background-color:#09aacc ; color:white;margin-left:10px;margin-right:10px;">
+                        <i class="fa fa-edit"> Modifier  </i>
+                    </button>
 
-                <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
-                    <div class="card-body">
-                        <h4> <span class="badge-dot badge-info"></span>   Gestion des sous modules</h4>
-                        <div class="card-body border-top">
-                            <button type="button" class="btn btn" style="background-color:#09aacc ; color:white;">
-                                <i class="fa fa-plus"> Ajouter  </i>
-                            </button>
-                            <button type="button" class="btn btn" style="background-color:#09aacc ; color:white;">
-                                <i class="fa fa-edit"> Modifier  </i>
-                            </button>
-                            <button type="button" class="btn btn" style="background-color:#09aacc ; color:white;">
-                                <i class="fa fa-trash"> Supprimer  </i>
-                            </button>
+                }
+                @using (Html.BeginForm("DeleteModule", "Home", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="IdHidden2" name="id" value="-1">
+                    <button disabled id="buttonDelete" type="button" class="btn btn" style="background-color:#09aacc ; color:white;">
+                        <i class="fa fa-trash"> Supprimer  </i>
+                    </button>
+                }
 
-                        </div>
-                        
-                        <table data-tablesaw-mode="columntoggle" class="table table-bordered first" >
-                            <thead>
-                                <tr>
-
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.SousModuleName)
-                                    </th>
-                                    <th>
-                                        @Html.DisplayNameFor(model => model.SousModuleDescription)
-                                    </th>
-                                    <th></th>
-                                </tr>
-
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.SousModuleName)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.SousModuleDescription)
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
             </div>
         </div>
+
+        <table data-tablesaw-mode="columntoggle" class="table table-bordered first" id="tableFilter">
+            <thead>
+                <tr>
+
+                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1">
+                        Nom du Sous Module
+                    </th>
+                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1">
+                        Description du Sous Module
+                    </th>
+                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1">
+                        Module
+                    </th>
+                </tr>
+
+            </thead>
+            <tbody id="tabletargetted">
+                @foreach (var item in Model.sousModules)
+                {
+                    <tr id="@item.SousModuleId">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SousModuleName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SousModuleDescription)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Module.ModuleName)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
+
+@section Scripts{
+    <script src="~/Content/TableFilter/ReapetedFilter.js"></script>
+}

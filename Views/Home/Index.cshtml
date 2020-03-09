@@ -2,7 +2,7 @@
 
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Utilisateurs";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -33,15 +33,15 @@
                         <i class="fa fa-trash"> Supprimer  </i>
                     </button>
                 }
-                @using (Html.BeginForm("UserTache", "Home", FormMethod.Get))
-                {
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" id="IdHidden3" name="id" value="-1">
-                    <button disabled id="ManagementSelected" type="submit" class="btn btn" style="background-color:#09aacc ; color:white; margin-left: 63%;">
-                        <i class="fa fa-sliders-h"> Gestion des roles   </i>
-                    </button>
-                }
             </div>
+            @using (Html.BeginForm("UserTache", "Home", FormMethod.Get))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="IdHidden3" name="id" value="-1">
+                <button disabled id="ManagementSelected" type="submit" class="btn btn" style="background-color:#09aacc ; color:white; margin-left: 63%;">
+                    <i class="fa fa-sliders-h"> Gestion des roles   </i>
+                </button>
+            }
         </div>
         <table data-tablesaw-mode="columntoggle" class="table table-bordered first" id="tableFilter">
             <thead>

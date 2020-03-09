@@ -2,7 +2,7 @@
 @model GestionnaireUtilisateurs.Models.MultiModeles
 
 @{
-    ViewBag.Title = "Taches des Statuts";
+    ViewBag.Title = ViewBag.Nom;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -29,12 +29,13 @@
                                     <h4> <span class="badge-dot badge-info"></span>  Gestion des roles</h4>
                                     <hr />
                                 </div>
+
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label for="name">Module</label>
                                             <select class="form-control form-control-sm" name="ListOfModules" id="ListOfModulesId">
-                                                <option value="">--- Sélectionner un module ---</option>
+                                                <option value=-1>--- Sélectionner un module ---</option>
                                                 @foreach (var item in Model.modules)
                                                 {
                                                     <option value="@item.ModuleId">@item.ModuleName</option>
@@ -45,7 +46,7 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <br />
-                                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop"><i class=" fas fa-plus"></i></button>
+                                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#BackdropAddModule"><i class=" fas fa-plus"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -54,7 +55,7 @@
                                         <div class="form-group">
                                             <label for="name">Sous module</label>
                                             <select class="form-control form-control-sm" name="submoduleSelected" id="submoduleSelectedId">
-                                                <option value="">--- Sélectionner un Sous module ---</option>
+                                                <option value=-11>--- Sélectionner un Sous module ---</option>
                                                 @foreach (var item in Model.sousModules)
                                                 {
                                                     <option value="@item.SousModuleId" name="@item.ModuleId" style="display:none">@item.SousModuleName</option>
@@ -65,7 +66,7 @@
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <br />
-                                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop1"><i class=" fas fa-plus"></i></button>
+                                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#BackdropAddSubModule"><i class=" fas fa-plus"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -87,7 +88,10 @@
                                         <div class="form-group">
                                             <br />
 
-                                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#staticBackdrop2"><i class=" fas fa-plus">  </i>    </button>
+                                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#BackdropAddTache"><i class=" fas fa-plus">  </i>    </button>
+
+
+
 
                                         </div>
                                     </div>
@@ -202,198 +206,43 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Ajouter un Module</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    @using (Html.BeginForm("UserTacheAddModule", "Home", FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken()
-                        <div class="form-group">
-                            <label for="name">Nom du module</label>
-
-                            <input type="text" name="ModuleName" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Description du module</label>
-
-                            <textarea name="ModuleDescription" class="form-control"></textarea>
-                        </div>
-                        <div class="modal-footer">
-
-                            <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
-                        </div>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="staticBackdrop1" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Ajouter un sous module</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    @using (Html.BeginForm("UserTacheAddSousModule", "Home", FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken()
-                        <div class="form-group">
-                            <label for="name">Nom du sous module</label>
-                            <input type="text" name="SousModuleName" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Description du sous module</label>
-                            <textarea name="SousModuleDescription" class="form-control"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="name">Module</label>
-                            <select class="form-control form-control-sm" name="ModuleId" id="ListOfModulesId">
-                                <option value=-1>--- Sélectionner un module ---</option>
-                                @foreach (var item in Model.modules)
-                                {
-                                    <option value="@item.ModuleId">@item.ModuleName</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
-                        </div>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="staticBackdrop2" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Ajouter une tâche</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    @using (Html.BeginForm("Test", "Home", FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken()
-                        <div class="form-group">
-                            <label for="name">Nom du tâche</label>
-                            <input type="text" name="Name" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Description du tâche</label>
-                            <textarea name="RoleDescription" class="form-control"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="name">Sous Module</label>
-                            <select class="form-control form-control-sm" name="SousModuleId" id="ListOfSubModulesId">
-                                <option value=-1>--- Sélectionner un Sous module ---</option>
-                                @foreach (var item in Model.sousModules)
-                                {
-                                    <option value="@item.SousModuleId">@item.SousModuleName</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
-                        </div>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
 
 </div>
 
-@section Scripts{
+@section Modal{
+    @Html.Action("AddModulePartial", "Home")
+    @Html.Action("AddSubModulePartial", "Home")
+    @Html.Action("AddTachePartial", "Home")
 
+}
+@section Scripts{
     <script type="text/javascript">
 
-        function LireCheckBox(checkbox, iden) {
-            if (checkbox.checked == false) {
-                document.getElementById("Cree_"  + iden).checked = false;
-                document.getElementById("Modifier_"  + iden).checked = false;
-                document.getElementById("Supprimer_"  + iden).checked = false;
-
-                document.getElementById("Read_"      + iden).value = false;
-                document.getElementById("Create_"      + iden).value = false;
-                document.getElementById("Update_"  + iden).value = false;
-                document.getElementById("Delete_" + iden).value = false;
-            }
-            else {document.getElementById("Read_" + iden).value = true;
-
-            }
-
-        }
-
-        function cudCheckBox(checkbox, iden, action) {
-            if (checkbox.checked == true) {
-
-                var checkread = document.getElementById("Lire_" + iden);
-                checkread.checked = true;
-                document.getElementById("Read_" + iden).value = true;
-
-                document.getElementById(action + iden).value = true;
-
-            }
-            else {document.getElementById(action + iden).value = false;
-            }
-        }
-
-        function deleteRow(id) {
-            if (confirm("Volez vous vraiment revoquer le role!")) {
-                var element = document.getElementById("row" + id);
-                element.parentNode.removeChild(element);
-            }
-            return true;
-        }
-
-        function returnLab() {
-            var labe = document.createElement("LABEL");
-            labe.className = "be-checkbox custom-control custom-checkbox";
-            return labe;
-        }
-
-        function returnSPAN() {
-            var spanne = document.createElement("SPAN");
-            spanne.className = "custom-control-label";
-            return spanne;
-        }
-
-        function explodeString(chaine, sep) {
-            var newStr = chaine.split(sep);
-            var stinng = "";
-            for (i = 0; i < newStr.length; i++) {
-                stinng += newStr[i];
-            }
-            return stinng;
-
-        }
-
-        function returnHidden(id,name,value) {
-
-            var elmnt = document.createElement("INPUT");
-            elmnt.setAttribute("id", id);
-            elmnt.setAttribute("name", name);
-            elmnt.setAttribute("value", value);
-            elmnt.setAttribute("type", "hidden");
-            return elmnt;
-        }
-
         $(document).ready(function () {
+            $("#ListOfModulesId").chosen({
+                disable_search: false,
+                create_option: true,
+                persistent_create_option: true,
+                skip_no_results: true,
+                placeholder_text_single: "-------- Indice --------",
+                no_results_text: "Aucun résultat ne correspond"
+            });
+            $("#submoduleSelectedId").chosen({
+                disable_search: false,
+                create_option: true,
+                persistent_create_option: true,
+                skip_no_results: true,
+                placeholder_text_single: "-------- Indice --------",
+                no_results_text: "Aucun résultat ne correspond"
+            });
+            $("#tacheSelectedId").chosen({
+                disable_search: false,
+                create_option: true,
+                persistent_create_option: true,
+                skip_no_results: true,
+                placeholder_text_single: "-------- Indice --------",
+                no_results_text: "Aucun résultat ne correspond"
+            });
 
             $("body").on("click", "#btnAdd", function () {
 
@@ -588,6 +437,7 @@
                 $('#submoduleSelectedId').trigger("liszt:updated");
 
             });
+
             $('#submoduleSelectedId').change(function () {
 
                 var e = document.getElementById("submoduleSelectedId");
@@ -610,22 +460,476 @@
 
         });
 
-        //$('body').on("click", "#getdata", function () {
-        //    var data = JSON.stringify(getAllData());
-        //    $.ajax({
-        //        url: '/Home/SaveData',
-        //        type: 'POST',
-        //        dataType: 'json',
-        //        contentType: 'application/json; charset=utf-8',
-        //        data: JSON.stringify({ 'getepassdata': data }),
-        //        success: function () {
-        //            alert("Data Added Successfully"+success);
-        //        },
-        //        error: function () {
-        //            alert("Error while inserting data");
-        //        }
-        //    });
-        //});
+        $("body").on("click", "#buttonSubmitModule", function () {
+            var module = {};
+            var ModuleName = $('input[name="ModuleName"]').val();
+            var ModuleDescription = $('textarea[name="ModuleDescription"]').val();
+            module.ModuleName = ModuleName;
+            module.ModuleDescription = ModuleDescription;
+            //alert(ModuleName+"  "+ModuleDescription);
+            $.ajax({
+                type: "POST",
+                url: "/Home/AddModulePartiale",
+                data: JSON.stringify(module),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    alert("record inserted.");
+                    $('input[name="ModuleName"]').val('');  $('textarea[name="ModuleDescription"]').val('');
+                    $(".close").click();
+                    $('#ListOfModulesId').empty();
+                    $('#ListOfModulesId').append("<option value=-1>--- Sélectionner un module ---</option>")
+                    $('#submodulemodulepopup').empty();
+                    $('#submodulemodulepopup').append("<option value=-1>--- Sélectionner un module ---</option>")
+                    $.each(data.mdles, function (i, item) {
+                        $('#ListOfModulesId').append("<option value='" + item.ModuleId + "'>" + item.ModuleName  + "</option>")
+                        $('#submodulemodulepopup').append("<option value='" + item.ModuleId + "'>" + item.ModuleName  + "</option>")
+                    });
+                    //$('#ListOfModulesId').val(data.petitID);
+                    $('#ListOfModulesId').trigger("liszt:updated");
+                    $('#submodulemodulepopup').trigger("liszt:updated");
+                },
+                error:function () {
+                    alert( "error.");
+                }
+            });
+        });
+
+        $("body").on("click", "#buttonSubmitSubModule", function () {
+            var sousmodule = {};
+            var SousModuleName = $('input[name="SousModuleName"]').val();
+            var SousModuleDescription = $('textarea[name="SousModuleDescription"]').val();
+            var ModuleId = $('#submodulemodulepopup').children("option:selected").val();
+            sousmodule.SousModuleName = SousModuleName;
+            sousmodule.SousModuleDescription = SousModuleDescription;
+            sousmodule.ModuleId = ModuleId;
+            //alert(ModuleName+"  "+ModuleDescription);
+            $.ajax({
+                type: "POST",
+                url: "/Home/AddSubModulePartiale",
+                data: JSON.stringify(sousmodule),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    alert("record inserted.");
+                    $('input[name="SousModuleName"]').val('');
+                    $('textarea[name="SousModuleDescription"]').val('');
+                    $(".close").click();
+                    $('#submoduleSelectedId').empty();
+                    $('#submoduleSelectedId').append("<option value=-11>--- Sélectionner un Sous module ---</option>");
+                    $('#ListOfSubModulesIdPopup').empty();
+                    $('#ListOfSubModulesIdPopup').append("<option value=-11>--- Sélectionner un Sous module ---</option>");
+                    $.each(data.smdles, function (i, item) {
+                        $('#submoduleSelectedId').append("<option value='" + item.SousModuleId + "'  name='"+ item.ModuleId+"'  style='display:none'>" + item.SousModuleName + "</option>");
+                        $('#ListOfSubModulesIdPopup').append("<option value='" + item.SousModuleId + "'  name='"+ item.ModuleId+"'>" + item.SousModuleName + "</option>");
+                    });
+                    //$('#ListOfModulesId').val(data.petitID);
+                    $('#submoduleSelectedId').trigger("liszt:updated");
+                    $('#ListOfSubModulesIdPopup').trigger("liszt:updated");
+                },
+                error:function () {
+                    alert( "error.");
+                }
+            });
+        });
+
+
+        function LireCheckBox(checkbox, iden) {
+            if (checkbox.checked == false) {
+                document.getElementById("Cree_"  + iden).checked = false;
+                document.getElementById("Modifier_"  + iden).checked = false;
+                document.getElementById("Supprimer_"  + iden).checked = false;
+
+                document.getElementById("Read_"      + iden).value = false;
+                document.getElementById("Create_"      + iden).value = false;
+                document.getElementById("Update_"  + iden).value = false;
+                document.getElementById("Delete_" + iden).value = false;
+            }
+            else {document.getElementById("Read_" + iden).value = true;
+
+            }
+
+        }
+
+        function cudCheckBox(checkbox, iden, action) {
+            if (checkbox.checked == true) {
+
+                var checkread = document.getElementById("Lire_" + iden);
+                checkread.checked = true;
+                document.getElementById("Read_" + iden).value = true;
+
+                document.getElementById(action + iden).value = true;
+
+            }
+            else {document.getElementById(action + iden).value = false;
+            }
+        }
+
+        function deleteRow(id) {
+            if (confirm("Volez vous vraiment revoquer le role!")) {
+                var element = document.getElementById("row" + id);
+                element.parentNode.removeChild(element);
+            }
+            return true;
+        }
+
+        function returnLab() {
+            var labe = document.createElement("LABEL");
+            labe.className = "be-checkbox custom-control custom-checkbox";
+            return labe;
+        }
+
+        function returnSPAN() {
+            var spanne = document.createElement("SPAN");
+            spanne.className = "custom-control-label";
+            return spanne;
+        }
+
+        function explodeString(chaine, sep) {
+            var newStr = chaine.split(sep);
+            var stinng = "";
+            for (i = 0; i < newStr.length; i++) {
+                stinng += newStr[i];
+            }
+            return stinng;
+
+        }
+
+        function returnHidden(id,name,value) {
+
+            var elmnt = document.createElement("INPUT");
+            elmnt.setAttribute("id", id);
+            elmnt.setAttribute("name", name);
+            elmnt.setAttribute("value", value);
+            elmnt.setAttribute("type", "hidden");
+            return elmnt;
+        }
+
+
+        /** $('body').on("click", "#getdata", function () {
+            var data = JSON.stringify(getAllData());
+            $.ajax({
+                url: '/Home/SaveData',
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({ 'getepassdata': data }),
+                success: function () {
+                    alert("Data Added Successfully"+success);
+                },
+                error: function () {
+                    alert("Error while inserting data");
+                }
+            });
+        });*/
 
     </script>
+    @*<script type="text/javascript">
+
+            function LireCheckBox(checkbox, iden) {
+                if (checkbox.checked == false) {
+                    document.getElementById("Cree_"  + iden).checked = false;
+                    document.getElementById("Modifier_"  + iden).checked = false;
+                    document.getElementById("Supprimer_"  + iden).checked = false;
+
+                    document.getElementById("Read_"      + iden).value = false;
+                    document.getElementById("Create_"      + iden).value = false;
+                    document.getElementById("Update_"  + iden).value = false;
+                    document.getElementById("Delete_" + iden).value = false;
+                }
+                else {document.getElementById("Read_" + iden).value = true;
+
+                }
+
+            }
+
+            function cudCheckBox(checkbox, iden, action) {
+                if (checkbox.checked == true) {
+
+                    var checkread = document.getElementById("Lire_" + iden);
+                    checkread.checked = true;
+                    document.getElementById("Read_" + iden).value = true;
+
+                    document.getElementById(action + iden).value = true;
+
+                }
+                else {document.getElementById(action + iden).value = false;
+                }
+            }
+
+            function deleteRow(id) {
+                if (confirm("Volez vous vraiment revoquer le role!")) {
+                    var element = document.getElementById("row" + id);
+                    element.parentNode.removeChild(element);
+                }
+                return true;
+            }
+
+            function returnLab() {
+                var labe = document.createElement("LABEL");
+                labe.className = "be-checkbox custom-control custom-checkbox";
+                return labe;
+            }
+
+            function returnSPAN() {
+                var spanne = document.createElement("SPAN");
+                spanne.className = "custom-control-label";
+                return spanne;
+            }
+
+            function explodeString(chaine, sep) {
+                var newStr = chaine.split(sep);
+                var stinng = "";
+                for (i = 0; i < newStr.length; i++) {
+                    stinng += newStr[i];
+                }
+                return stinng;
+
+            }
+
+            function returnHidden(id,name,value) {
+
+                var elmnt = document.createElement("INPUT");
+                elmnt.setAttribute("id", id);
+                elmnt.setAttribute("name", name);
+                elmnt.setAttribute("value", value);
+                elmnt.setAttribute("type", "hidden");
+                return elmnt;
+            }
+
+            $(document).ready(function () {
+
+                $("body").on("click", "#btnAdd", function () {
+
+                    //Get the reference of the Table's TBODY element.
+                    var tBody = $("#table_roleStatus > TBODY")[0];
+
+                    if ($("#tacheSelectedId option:selected").text().includes("--- Sélectionner") == true) {
+                        alert("toutes les champs obligatoires !");
+                    }
+                    else {
+                        var rowidnewcc =  $("#tacheSelectedId option:selected").val().trim();
+
+
+                        if ($("#" + rowidnewcc).length) {
+                            alert("deja exists sur le tableau");
+                        } else {
+
+                            var row = tBody.insertRow(-1);
+
+
+                            cell = $(row.insertCell(-1));
+                            cell.html($("#ListOfModulesId option:selected").text().trim());
+
+                            cell = $(row.insertCell(-1));
+                            cell.html($("#submoduleSelectedId option:selected").text().trim());
+
+                            cell = $(row.insertCell(-1));
+                            cell.html($("#tacheSelectedId option:selected").text().trim());
+                            cell.append(returnHidden(rowidnewcc,"RoleId",rowidnewcc));
+                            cell.append(returnHidden("StatutId_"+rowidnewcc,"StatutId","@ViewBag.StatutId"));
+
+                            /***************************** Lire *************************************/
+                            cell = $(row.insertCell(-1));
+
+                            var labr = returnLab(); var spanne = returnSPAN();
+                            var hiddn = returnHidden("Read" + "_" + rowidnewcc, "Read", false);
+
+                            var chkbxr = document.createElement("INPUT");
+                            chkbxr.className = "custom-control-input";
+                            chkbxr.setAttribute("type", "checkbox");
+                            chkbxr.setAttribute("name", "Lire");
+                            chkbxr.id = "Lire_" + rowidnewcc;
+                            chkbxr.onclick = function () {
+                                if (this.checked == false) {
+                                    document.getElementById("Cree_" + rowidnewcc).checked = false;
+                                    document.getElementById("Modifier_" + rowidnewcc).checked = false;
+                                    document.getElementById("Supprimer_" + rowidnewcc).checked = false;
+
+                                    document.getElementById("Read_" + rowidnewcc).value = false;
+                                    document.getElementById("Create_" + rowidnewcc).value = false;
+                                    document.getElementById("Update_" + rowidnewcc).value = false;
+                                    document.getElementById("Delete_" + rowidnewcc).value = false;
+                                }
+                                else {
+                                    //alert("Read_" + rowidnewcc);
+                                    document.getElementById("Read_" + rowidnewcc).value = true;
+
+                                }
+                            };
+
+
+                            labr.appendChild(hiddn);
+                            labr.appendChild(chkbxr);
+                            labr.appendChild(spanne);
+                            cell.append(labr);
+
+
+
+                            /***************************** Cree *************************************/
+
+                            cell = $(row.insertCell(-1));
+
+                            var labr = returnLab(); var spanne = returnSPAN();
+                            var hiddn = returnHidden("Create" + "_" + rowidnewcc, "Create", false);
+
+                            var chkbxr = document.createElement("INPUT");
+                            chkbxr.className = "custom-control-input";
+                            chkbxr.setAttribute("type", "checkbox");
+                            chkbxr.setAttribute("name", "Cree");
+                            chkbxr.id = "Cree_" + rowidnewcc;
+                            chkbxr.onclick = function () {
+                                if (this.checked == true) {
+
+                                    var checkread = document.getElementById("Lire_" + rowidnewcc);
+                                    checkread.checked = true;
+                                    document.getElementById("Read_" + rowidnewcc).value = true;
+
+                                    document.getElementById("Create_" + rowidnewcc).value = true;
+
+                                }
+                                else {
+                                    document.getElementById("Create_" + rowidnewcc).value = false;
+                                }
+                            };
+
+
+                            labr.appendChild(hiddn);
+                            labr.appendChild(chkbxr);
+                            labr.appendChild(spanne);
+                            cell.append(labr);
+
+
+                            /***************************** Modifier *************************************/
+                            cell = $(row.insertCell(-1));
+
+                            var labr = returnLab(); var spanne = returnSPAN();
+                            var hiddn = returnHidden("Update" + "_" + rowidnewcc, "Update", false);
+
+                            var chkbxr = document.createElement("INPUT");
+                            chkbxr.className = "custom-control-input";
+                            chkbxr.setAttribute("type", "checkbox");
+                            chkbxr.setAttribute("name", "Modifier");
+                            chkbxr.id = "Modifier_" + rowidnewcc;
+                            chkbxr.onclick = function () {
+                                if (this.checked == true) {
+
+                                    var checkread = document.getElementById("Lire_" + rowidnewcc);
+                                    checkread.checked = true;
+                                    document.getElementById("Read_" + rowidnewcc).value = true;
+
+                                    document.getElementById("Update_" + rowidnewcc).value = true;
+
+                                }
+                                else {
+                                    document.getElementById("Update_" + rowidnewcc).value = false;
+                                }
+                            };
+
+
+                            labr.appendChild(hiddn);
+                            labr.appendChild(chkbxr);
+                            labr.appendChild(spanne);
+                            cell.append(labr);
+
+
+                            /***************************** Supprimer *************************************/
+                            cell = $(row.insertCell(-1));
+
+                            var labr = returnLab(); var spanne = returnSPAN();
+                            var hiddn = returnHidden("Delete" + "_" + rowidnewcc, "Delete", false);
+
+                            var chkbxr = document.createElement("INPUT");
+                            chkbxr.className = "custom-control-input";
+                            chkbxr.setAttribute("type", "checkbox");
+                            chkbxr.setAttribute("name", "Supprimer");
+                            chkbxr.id = "Supprimer_" + rowidnewcc;
+                            chkbxr.onclick = function () {
+                                if (this.checked == true) {
+
+                                    var checkread = document.getElementById("Lire_" + rowidnewcc);
+                                    checkread.checked = true;
+                                    document.getElementById("Read_" + rowidnewcc).value = true;
+
+                                    document.getElementById("Delete_" + rowidnewcc).value = true;
+
+                                }
+                                else {
+                                    document.getElementById("Delete_" + rowidnewcc).value = false;
+                                }
+                            };
+
+
+                            labr.appendChild(hiddn);
+                            labr.appendChild(chkbxr);
+                            labr.appendChild(spanne);
+                            cell.append(labr);
+
+
+                        }
+
+                    }
+
+                });
+
+                $('#ListOfModulesId').change(function () {
+
+                    var e = document.getElementById("ListOfModulesId");
+                    var choix = e.options[e.selectedIndex].value;
+                    var Modulee = $(this).val();
+                    var com = $("#submoduleSelectedId > option");
+                    $("#submoduleSelectedId")[0].selectedIndex = 0;
+                    $("#tacheSelectedId")[0].selectedIndex = 0;
+                    var a = com[0].getAttribute("name");
+                    for (var i = 0; i < com.length; i++) {
+                        if (com[i].getAttribute("name") == Modulee || a == choix || a == -11) {
+                            com[i].style.display = "block";
+                        }
+                        else {
+                            com[i].style.display = "none";
+                        }
+                    }
+                    $('#submoduleSelectedId').trigger("liszt:updated");
+
+                });
+                $('#submoduleSelectedId').change(function () {
+
+                    var e = document.getElementById("submoduleSelectedId");
+                    var choix = e.options[e.selectedIndex].value;
+                    var SubModulee = $(this).val();
+                    var com = $("#tacheSelectedId > option");
+                    $("#tacheSelectedId")[0].selectedIndex = 0;
+                    var a = com[0].getAttribute("name");
+                    for (var i = 0; i < com.length; i++) {
+                        if (com[i].getAttribute("name") == SubModulee || a == choix || a == -111) {
+                            com[i].style.display = "block";
+                        }
+                        else {
+                            com[i].style.display = "none";
+                        }
+                    }
+                    $('#tacheSelectedId').trigger("liszt:updated");
+
+                });
+
+            });
+
+            //$('body').on("click", "#getdata", function () {
+            //    var data = JSON.stringify(getAllData());
+            //    $.ajax({
+            //        url: '/Home/SaveData',
+            //        type: 'POST',
+            //        dataType: 'json',
+            //        contentType: 'application/json; charset=utf-8',
+            //        data: JSON.stringify({ 'getepassdata': data }),
+            //        success: function () {
+            //            alert("Data Added Successfully"+success);
+            //        },
+            //        error: function () {
+            //            alert("Error while inserting data");
+            //        }
+            //    });
+            //});
+
+        </script>*@
 }
