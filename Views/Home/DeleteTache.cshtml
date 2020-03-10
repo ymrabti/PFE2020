@@ -1,10 +1,17 @@
-﻿<div class="row">
+﻿@{
+    ViewBag.Title = "Supprimer une Tache";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
     <div class="col-md-6" style=" margin-left: auto; margin-right: auto;">
         <div class="card" style="text-align:center; background-color: white; width: 100%; padding-top:15px;box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
             <div class="card-body">
                 <h4> <span class="badge-dot badge-info"></span>  Suppression d'une modules</h4>
                 <hr />
-                <h3>Vous etes sur de supprimer <span class="text-info">@ViewBag.ModuleName</span> ?</h3>
+                <h3>Vous etes sur de supprimer la Tache <span class="text-info">@ViewBag.RoleName</span>  ? </h3><br />
+                <h2>de Sous Module <span class="text-info">@ViewBag.SousModuleName</span></h2><br />
+                <h1>de Module <span class="text-info">@ViewBag.ModuleName</span></h1>
                 <div>
                     <hr />
 
@@ -13,8 +20,8 @@
                         @Html.AntiForgeryToken()
 
                         <div class="form-actions no-color">
-                            <input type="submit" value="Delete" class="btn btn-default btn-danger" /> |
-                            @Html.ActionLink("Back to List", "module")
+                            <input type="submit" value="Supprimer" class="btn btn-default btn-danger " /> |
+                            @Html.ActionLink("Retour a la List", "taches")
                         </div>
                     }
                 </div>
@@ -22,4 +29,3 @@
         </div>
     </div>
 </div>
-

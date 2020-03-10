@@ -1,0 +1,122 @@
+﻿@model GestionnaireUtilisateurs.Models.MultiModeles
+@{
+    ViewBag.Title = "Ajouter une Tache";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-6" style=" margin-left: auto; margin-right: auto;">
+        <div class="card" style="text-align:center; background-color: white; width: 100%; padding-top:15px;box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+            <div class="card-body">
+
+                <h4> <span class="badge-dot badge-info"></span>   Ajout d'une tache</h4>
+                <hr />
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            <label for="name" class="col-md-12 control-label" style="font:bold">Nom Du tache</label>
+                            <div class="col-md-10" style="position:center">
+                                <input class="form-control" name="Name" type="text" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name" class="col-md-12 control-label" style="font:bold">Description Du tache</label>
+                            <div class="col-md-10" style="position:center">
+                                <textarea class="form-control" name="RoleDescription"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name" class="col-md-12 control-label" style="font:bold">Module</label>
+                            <div class="col-md-10" style="position:center">
+                                <select class="form-control form-control-sm" name="ModuleId" id="selectmoduleparent">
+                                    <option value=-1>--- Sélectionner un module ---</option>
+                                    @foreach (var item in Model.modules)
+                                    {
+                                        <option value="@item.ModuleId">@item.ModuleName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-md-12 control-label" style="font:bold">Sous Module</label>
+                            <div class="col-md-10" style="position:center">
+                                <select class="form-control form-control-sm" name="SouModuleId" id="selectsousmoduleparent">
+                                    <option value=-1>--- Sélectionner un sous module ---</option>
+                                    @foreach (var item in Model.sousModules)
+                                    {
+                                        <option value="@item.SousModuleId" name="@item.ModuleId" style="display:none">@item.SousModuleName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10" style="position:center">
+
+                                <div class="modal-footer">
+
+                                    <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div>
+                    @Html.ActionLink("Back to List", "taches")
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        function functionChosen(id) {
+            $("#"+id).chosen({
+                disable_search: false,
+                create_option: false,
+                persistent_create_option: true,
+                skip_no_results: true,
+                placeholder_text_single: "-------- Indice --------",
+                no_results_text: "Aucun résultat ne correspond"
+            });
+        }
+        function functionChangeOptions(idchanged,idtargetted) {
+             
+            $('#'+idchanged).change(function () {
+
+                var e = document.getElementById(idchanged);
+                var choix = e.options[e.selectedIndex].value;
+                var Modulee = $(this).val();
+                var com = $("#"+idtargetted+" > option");
+                $("#"+idtargetted)[0].selectedIndex = 0;
+                var a = com[0].getAttribute("name");
+                for (var i = 0; i < com.length; i++) {
+                    if (com[i].getAttribute("name") == Modulee || a == choix || a == -11) {
+                        com[i].style.display = "block";
+                    }
+                    else {
+                        com[i].style.display = "none";
+                    }
+                }
+                $('#'+idtargetted).trigger("liszt:updated");
+
+            });
+
+        }
+        
+        functionChosen("selectmoduleparent");
+        functionChosen("selectsousmoduleparent");
+        functionChangeOptions("selectmoduleparent", "selectsousmoduleparent");
+    </script>
+}
+
+

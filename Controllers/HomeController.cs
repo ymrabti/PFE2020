@@ -111,10 +111,88 @@ namespace GestionnaireUtilisateurs.Controllers
             return View();
         }
 
-        public ActionResult EditStatut()
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddStatut([Bind(Include = "Name,SouModuleId,RoleDescription")] AspNetRoles Tache)
         {
+
+            if (ModelState.IsValid)
+            {
+                var Rid = Guid.NewGuid(); Tache.Id = Rid.ToString();
+                database.AspNetRoles.Add(Tache);
+                database.SaveChanges();
+                return RedirectToAction("taches");
+            }
+            return View(multiModeles());
+        }
+
+        [Authorize]
+        public ActionResult EditStatut(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var role = database.AspNetRoles.Find(id);
+            if (role == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.RoleName = role.Name;
+            ViewBag.RoleDescription = role.RoleDescription;
+            ViewBag.SousModuleId = role.SouModuleId;
+            ViewBag.ModuleId = role.SousModule.Module.ModuleId;
+            ViewBag.RoleId = role.Id;
+            return View(multiModeles());
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditStatut([Bind(Include = "Id,Name,RoleDescription,SouModuleId")] AspNetRoles role)
+        {
+            if (ModelState.IsValid)
+            {
+                if (role == null)
+                {
+                    return View(role);
+                }
+                database.Entry(role).State = EntityState.Modified;
+                database.SaveChanges();
+                return RedirectToAction("taches");
+            }
+            return View(multiModeles());
+        }
+
+
+        public ActionResult DeleteStatut(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var role = database.AspNetRoles.Find(id);
+            if (role == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.RoleName = role.Name;
+            ViewBag.SousModuleName = role.SousModule.SousModuleName;
+            ViewBag.ModuleName = role.SousModule.Module.ModuleName;
+            ViewBag.RoleId = role.Id;
             return View();
         }
+
+        [HttpPost, ActionName("DeleteStatut")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteStatutConfirmed(string id)
+        {
+            AspNetRoles role = database.AspNetRoles.Find(id);
+            database.AspNetRoles.Remove(role);
+            database.SaveChanges();
+            return RedirectToAction("taches");
+        }
+
+
 
         public ActionResult AddStatutPartial()
         {
@@ -211,8 +289,6 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(multiModeles());
         }
 
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult UserTacheAddModule([Bind(Include = "ModuleName,ModuleDescription")] Module module)
@@ -250,7 +326,7 @@ namespace GestionnaireUtilisateurs.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (module==null)
+                if (module == null)
                 {
                     return View(module);
                 }
@@ -262,7 +338,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
         public ActionResult DeleteModule(int id)
         {
-            if (id+"" == null)
+            if (id + "" == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
@@ -295,7 +371,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return PartialView("_Modal");
         }
 
-        
+
         public async Task<JsonResult> AddModulePartiale([Bind(Include = "ModuleName,ModuleDescription")] Module model)
         {
             var data = new object();
@@ -315,7 +391,7 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }
-        
+
 
 
         /// ///////////////////////             SUB MODULE                    //////////////////////
@@ -327,7 +403,10 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(multiModeles());
         }
         [Authorize]
-
+        public ActionResult AddSubModule()
+        {
+            return View(multiModeles());
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -338,11 +417,73 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 database.SousModule.Add(sousModule);
                 database.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("sousmodule");
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
+        [Authorize]
+        public ActionResult EditSubModule(int id)
+        {
+            if (id == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var sousmodule = database.SousModule.Find(id);
+            if (sousmodule == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.SousModuleName = sousmodule.SousModuleName;
+            ViewBag.SousModuleDescription = sousmodule.SousModuleDescription;
+            ViewBag.SousModuleId = sousmodule.SousModuleId;
+            ViewBag.ModuleId = sousmodule.ModuleId;
+            return View(multiModeles());
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditSubModule([Bind(Include = "SousModuleId,SousModuleName,SousModuleDescription,ModuleId")] SousModule sousModule)
+        {
+            if (ModelState.IsValid)
+            {
+                if (sousModule == null)
+                {
+                    return View(sousModule);
+                }
+                database.Entry(sousModule).State = EntityState.Modified;
+                database.SaveChanges();
+                return RedirectToAction("sousmodule");
+            }
+            return View(sousModule);
+        }
 
+        
+        public ActionResult DeleteSubModule(int id)
+        {
+            if (id + "" == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            SousModule sousModule = database.SousModule.Find(id);
+            if (sousModule == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.SousModuleName = sousModule.SousModuleName;
+            ViewBag.ModuleParent = sousModule.Module.ModuleName;
+            ViewBag.SousModuleId = sousModule.SousModuleId;
+            return View();
+        }
+
+        [HttpPost, ActionName("DeleteSubModule")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteSubModuleConfirmed(int id)
+        {
+            SousModule sousModule = database.SousModule.Find(id);
+            database.SousModule.Remove(sousModule);
+            database.SaveChanges();
+            return RedirectToAction("sousmodule");
+        }
 
         public ActionResult AddSubModulePartial()
         {
@@ -378,20 +519,93 @@ namespace GestionnaireUtilisateurs.Controllers
 
         public ActionResult taches()
         {
-            return View(database.AspNetRoles.ToList());
+            return View(multiModeles());
         }
+
+        [Authorize]
+        public ActionResult AddTache()
+        {
+            return View(multiModeles());
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UserTacheAddTache([Bind(Include = "Name,SousModuleId,RoleDescription")] AspNetRoles Tache)
+        public ActionResult AddTache([Bind(Include = "Name,SouModuleId,RoleDescription")] AspNetRoles Tache)
         {
 
             if (ModelState.IsValid)
             {
+                var Rid = Guid.NewGuid(); Tache.Id = Rid.ToString();
                 database.AspNetRoles.Add(Tache);
                 database.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("taches");
             }
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            return View(multiModeles());
+        }
+
+        [Authorize]
+        public ActionResult EditTache(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var role = database.AspNetRoles.Find(id);
+            if (role == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.RoleName = role.Name;
+            ViewBag.RoleDescription = role.RoleDescription;
+            ViewBag.SousModuleId = role.SouModuleId;
+            ViewBag.ModuleId = role.SousModule.Module.ModuleId;
+            ViewBag.RoleId = role.Id;
+            return View(multiModeles());
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditTache([Bind(Include = "Id,Name,RoleDescription,SouModuleId")] AspNetRoles role)
+        {
+            if (ModelState.IsValid)
+            {
+                if (role == null)
+                {
+                    return View(role);
+                }
+                database.Entry(role).State = EntityState.Modified;
+                database.SaveChanges();
+                return RedirectToAction("taches");
+            }
+            return View(multiModeles());
+        }
+
+
+        public ActionResult DeleteTache(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var role = database.AspNetRoles.Find(id);
+            if (role == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.RoleName = role.Name;
+            ViewBag.SousModuleName = role.SousModule.SousModuleName;
+            ViewBag.ModuleName = role.SousModule.Module.ModuleName;
+            ViewBag.RoleId = role.Id;
+            return View();
+        }
+
+        [HttpPost, ActionName("DeleteTache")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteTacheConfirmed(string id)
+        {
+            AspNetRoles role = database.AspNetRoles.Find(id);
+            database.AspNetRoles.Remove(role);
+            database.SaveChanges();
+            return RedirectToAction("taches");
         }
 
 
@@ -428,8 +642,6 @@ namespace GestionnaireUtilisateurs.Controllers
         /// ///////////////////////             AUTRES                    //////////////////////
         /// ///////////////////////             AUTRES                    //////////////////////
         /// ///////////////////////             AUTRES                    //////////////////////
-
-
 
         public ActionResult About()
         {

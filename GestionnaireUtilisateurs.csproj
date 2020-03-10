@@ -1741,6 +1741,12 @@
     <Content Include="Views\Shared\_StatutModal.cshtml" />
     <Content Include="Views\Home\EditModule.cshtml" />
     <Content Include="Views\Home\DeleteModule.cshtml" />
+    <Content Include="Views\Home\AddSubModule.cshtml" />
+    <Content Include="Views\Home\EditSubModule.cshtml" />
+    <Content Include="Views\Home\DeleteSubModule.cshtml" />
+    <Content Include="Views\Home\AddTache.cshtml" />
+    <Content Include="Views\Home\EditTache.cshtml" />
+    <Content Include="Views\Home\DeleteTache.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
