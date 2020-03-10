@@ -106,6 +106,7 @@ namespace GestionnaireUtilisateurs.Controllers
         /// ///////////////////////             STATUT                    //////////////////////
 
 
+        [Authorize]
         public ActionResult AddStatut()
         {
             return View();
@@ -114,17 +115,17 @@ namespace GestionnaireUtilisateurs.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddStatut([Bind(Include = "Name,SouModuleId,RoleDescription")] AspNetRoles Tache)
+        public ActionResult AddStatut([Bind(Include = "StatutName,StatutDescription")] Statuts statut)
         {
 
             if (ModelState.IsValid)
             {
-                var Rid = Guid.NewGuid(); Tache.Id = Rid.ToString();
-                database.AspNetRoles.Add(Tache);
+                var Sid = Guid.NewGuid(); statut.StatutId = Sid.ToString();
+                database.Statuts.Add(statut);
                 database.SaveChanges();
-                return RedirectToAction("taches");
+                return RedirectToAction("IndexStatut");
             }
-            return View(multiModeles());
+            return View();
         }
 
         [Authorize]
@@ -134,33 +135,31 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var role = database.AspNetRoles.Find(id);
-            if (role == null)
+            var statut = database.Statuts.Find(id);
+            if (statut == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.RoleName = role.Name;
-            ViewBag.RoleDescription = role.RoleDescription;
-            ViewBag.SousModuleId = role.SouModuleId;
-            ViewBag.ModuleId = role.SousModule.Module.ModuleId;
-            ViewBag.RoleId = role.Id;
-            return View(multiModeles());
+            ViewBag.statutId = statut.StatutId;
+            ViewBag.statutName = statut.StatutName;
+            ViewBag.statutDescription = statut.StatutDescription;
+            return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditStatut([Bind(Include = "Id,Name,RoleDescription,SouModuleId")] AspNetRoles role)
+        public ActionResult EditStatut([Bind(Include = "StatutId,StatutName,StatutDescription")] Statuts statut)
         {
             if (ModelState.IsValid)
             {
-                if (role == null)
+                if (statut == null)
                 {
-                    return View(role);
+                    return View();
                 }
-                database.Entry(role).State = EntityState.Modified;
+                database.Entry(statut).State = EntityState.Modified;
                 database.SaveChanges();
-                return RedirectToAction("taches");
+                return RedirectToAction("IndexStatut");
             }
-            return View(multiModeles());
+            return View();
         }
 
 
@@ -170,15 +169,12 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var role = database.AspNetRoles.Find(id);
-            if (role == null)
+            var statut = database.Statuts.Find(id);
+            if (statut == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.RoleName = role.Name;
-            ViewBag.SousModuleName = role.SousModule.SousModuleName;
-            ViewBag.ModuleName = role.SousModule.Module.ModuleName;
-            ViewBag.RoleId = role.Id;
+            ViewBag.statutName = statut.StatutName;
             return View();
         }
 
@@ -186,10 +182,10 @@ namespace GestionnaireUtilisateurs.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteStatutConfirmed(string id)
         {
-            AspNetRoles role = database.AspNetRoles.Find(id);
-            database.AspNetRoles.Remove(role);
+            Statuts statut = database.Statuts.Find(id);
+            database.Statuts.Remove(statut);
             database.SaveChanges();
-            return RedirectToAction("taches");
+            return RedirectToAction("IndexStatut");
         }
 
 

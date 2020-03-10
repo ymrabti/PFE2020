@@ -1747,6 +1747,9 @@
     <Content Include="Views\Home\AddTache.cshtml" />
     <Content Include="Views\Home\EditTache.cshtml" />
     <Content Include="Views\Home\DeleteTache.cshtml" />
+    <Content Include="Views\Home\AddStatut.cshtml" />
+    <Content Include="Views\Home\EditStatut.cshtml" />
+    <Content Include="Views\Home\DeleteStatut.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

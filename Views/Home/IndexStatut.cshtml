@@ -12,20 +12,19 @@
                 <a href="@Url.Action("AddStatut", "Home")" class="btn btn" style="background-color:#09aacc ; color:white;">
                     <i class="fa fa-plus"> Ajouter  </i>
                 </a>
-                @using (Html.BeginForm("EditStatut", "Home", FormMethod.Post))
+                @using (Html.BeginForm("EditStatut", "Home", FormMethod.Get))
                 {
                     @Html.AntiForgeryToken()
                     <input type="hidden" id="IdHidden" name="id" value="-1">
                     <button disabled id="buttonModifie" type="submit" class="btn btn" style="background-color:#09aacc ; color:white;margin-left:10px;margin-right:10px;">
                         <i class="fa fa-edit"> Modifier  </i>
                     </button>
-
                 }
-                @using (Html.BeginForm("DeleteStatut", "Home", FormMethod.Post))
+                @using (Html.BeginForm("DeleteStatut", "Home", FormMethod.Get))
                 {
                     @Html.AntiForgeryToken()
                     <input type="hidden" id="IdHidden2" name="id" value="-1">
-                    <button disabled id="buttonDelete" type="button" class="btn btn" style="background-color:#09aacc ; color:white;">
+                    <button disabled id="buttonDelete" type="submit" class="btn btn" style="background-color:#09aacc ; color:white;">
                         <i class="fa fa-trash"> Supprimer  </i>
                     </button>
                 }
