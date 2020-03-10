@@ -52,6 +52,7 @@ namespace GestionnaireUtilisateurs.Controllers
         {
             if (ModelState.IsValid)
             {
+                aspNetUsers.Id = Guid.NewGuid().ToString();
                 db.AspNetUsers.Add(aspNetUsers);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -84,12 +85,25 @@ namespace GestionnaireUtilisateurs.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,UserNameAr,Nom,Prenom,Ville,CIN,Sexe,NomAr,PrenomAr,Intiulé,Adresse,demandeur,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,StatutId,typeUtilisateur,Organisme")] AspNetUsers aspNetUsers)
         {
+            //if (ModelState.IsValid)
+            //{
+            //    db.Entry(aspNetUsers).State = EntityState.Modified;
+            //    db.SaveChanges();
+            //    return RedirectToAction("Index");
+            //}
+            //ViewBag.StatutId = new SelectList(db.Statuts, "StatutId", "StatutName", aspNetUsers.StatutId);
+            //return View(aspNetUsers);
             if (ModelState.IsValid)
             {
-                db.Entry(aspNetUsers).State = EntityState.Modified;
+                aspNetUsers.Id = Guid.NewGuid().ToString();
+                aspNetUsers.Email = Guid.NewGuid().ToString();
+                aspNetUsers.UserName = Guid.NewGuid().ToString();
+                
+                db.AspNetUsers.Add(aspNetUsers);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
             ViewBag.StatutId = new SelectList(db.Statuts, "StatutId", "StatutName", aspNetUsers.StatutId);
             return View(aspNetUsers);
         }
