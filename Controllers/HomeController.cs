@@ -1,16 +1,30 @@
 ﻿using GestionnaireUtilisateurs.Models;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 
 namespace GestionnaireUtilisateurs.Controllers
 {
     public class HomeController : Controller
     {
+        private ApplicationUserManager _userManager;
         aurs1Entities database = new aurs1Entities();
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
         private MultiModeles multiModeles()
         {
             var mModels = new MultiModeles
@@ -34,15 +48,50 @@ namespace GestionnaireUtilisateurs.Controllers
         [Authorize]
         public ActionResult AddUser()
         {
-
-            return View(multiModeles());
+            ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddUser([Bind(Include = ",ModuleDescription")] AspNetUserRoles module)
+        public async Task<ActionResult> AddUser(RegisterViewModel model)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
+                var user = new ApplicationUser
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber
+                };
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    var UserCreated = database.AspNetUsers.Find(user.Id);
+                    UserCreated.Nom =model.Nom;
+                    UserCreated.Prenom =model.Prenom;
+                    UserCreated.NomAr =model.NomAr;
+                    UserCreated.PrenomAr =model.PrenomAr;
+                    UserCreated.UserNameAr =model.PrenomAr+" "+model.NomAr;
+                    UserCreated.CIN =model.CIN;
+                    UserCreated.Ville =model.Ville;
+                    UserCreated.Sexe =model.Sexe;
+                    UserCreated.StatutId =model.StatutId;
+                    UserCreated.typeUtilisateur =model.typeUtilisateur;
+                    UserCreated.Intiulé =model.Entreprise;
+
+                    database.Entry(UserCreated).State = EntityState.Modified;
+                    var res = await database.SaveChangesAsync();
+                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    // await UserManager.SendEmailAsync(user.Id, "Confirmez votre compte", "Confirmez votre compte en cliquant <a href=\"" + callbackUrl + "\">ici</a>");
+
+                    return RedirectToAction("Index", "Home");
+                }
+                ViewBag.errors = result.Errors;
+            }
+            return View(model);
         }
         /// ///////////////////////              USER TACHE                    //////////////////////
         /// ///////////////////////              USER TACHE                    //////////////////////
@@ -197,7 +246,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AddStatutPartial([Bind(Include = "ModuleName,ModuleDescription")] Module model)
+        public async Task<JsonResult> AddStatutPartiale([Bind(Include = "ModuleName,ModuleDescription")] Module model)
         {
             var data = "";
             if (ModelState.IsValid)
@@ -668,32 +717,29 @@ namespace GestionnaireUtilisateurs.Controllers
             return View();
         }
 
-        
-        public JsonResult Test([Bind(Include = "ModuleName,ModuleDescription")] Module module)
+        [HttpPost]
+        public ActionResult Test(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                database.Module.Add(module);
-            }
-            var insertedRecords = database.SaveChanges();
-            //var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-            //var tacheUse = new UserManager<IdentityUser>(new UserStore<IdentityUser>(new ApplicationDbContext()));
-            //var result = tacheUse.Create(user, model.Password);
-            //ViewBag.success = result.Succeeded;
-            //AspNetUsers users = new AspNetUsers();
-            //users.Nom = Nom;users.Prenom = Prenom; users.NomAr = NomAr; users.PrenomAr = PrenomAr;
-            //users.CIN = CIN; users.Ville = Ville; users.Email = Email; users.PhoneNumber = PhoneNumber;
-            //users.PasswordHash = Password; users.StatutId = StatutId;users.typeUtilisateur = typeUtilisateur;
-            //users.Sexe = Sexe;
-
-
-            //var tache = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext())) ;
-            //var tachee = tache.Create(new IdentityRole(sousModules.Name));
-            //var identifiant = tachee.Succeeded;
-            //sousModules.SouModuleId = SousModuleId;
-            //database.AspNetRoles.Add(sousModules);database.SaveChanges();
-            return Json(new { dd = "error", data = insertedRecords }, JsonRequestBehavior.AllowGet);
+            ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
+            return View(model);
         }
+        //var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+        //var tacheUse = new UserManager<IdentityUser>(new UserStore<IdentityUser>(new ApplicationDbContext()));
+        //var result = tacheUse.Create(user, model.Password);
+        //ViewBag.success = result.Succeeded;
+        //AspNetUsers users = new AspNetUsers();
+        //users.Nom = Nom;users.Prenom = Prenom; users.NomAr = NomAr; users.PrenomAr = PrenomAr;
+        //users.CIN = CIN; users.Ville = Ville; users.Email = Email; users.PhoneNumber = PhoneNumber;
+        //users.PasswordHash = Password; users.StatutId = StatutId;users.typeUtilisateur = typeUtilisateur;
+        //users.Sexe = Sexe;
+
+
+        //var tache = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext())) ;
+        //var tachee = tache.Create(new IdentityRole(sousModules.Name));
+        //var identifiant = tachee.Succeeded;
+        //sousModules.SouModuleId = SousModuleId;
+        //database.AspNetRoles.Add(sousModules);database.SaveChanges();
+        //return Json(new { dd = "error", data = insertedRecords }, JsonRequestBehavior.AllowGet);
         //public ActionResult Inde(string id, int? courseID)
         //{
         //    var multiModels = new MultiModeles();

@@ -8,7 +8,7 @@
 <div class="col-lg-12" style=" margin-left: auto; margin-right: auto;">
     <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
         <div class="card-body">
-            @using (Html.BeginForm())
+            @using (Html.BeginForm("Test", "Home", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary("", new { @class = "text-danger" })
@@ -20,34 +20,19 @@
                 <div class="form-group">
                     @Html.LabelFor(m => m.typeUtilisateur, new { @class = "col-md-12 control-label", @style = "margin:10px" })
                     <br>
-                    <label class="custom-control custom-radio custom-control-inline">
-                        <input id="Morale" type="radio" name="typeUtilisateur" class="custom-control-input" value="Morale">
-                        <span class="custom-control-label">Morale</span>
-                    </label>
-                    <label class="custom-control custom-radio custom-control-inline">
-                        <input id="Physique" type="radio" name="typeUtilisateur" class="custom-control-input" checked="" value="Physique">
-                        <span class="custom-control-label">Physique</span>
-                    </label>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.Entreprise, new {id="labelentreprise", @class = "col-md-12 control-label", @style = "display:none;"})
-                            @Html.HiddenFor(m => m.Entreprise, new { @class = "form-control" })
-                        </div>
-                    </div>
+                    <h1>@Html.DisplayFor(m => m.typeUtilisateur)</h1>
                 </div>
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
                             @Html.LabelFor(m => m.Nom, new { @class = "col-md-12 control-label", @style = "margin:10px" })
-                            @Html.TextBoxFor(m => m.Nom, new { @class = "form-control" })
+                            @Html.DisplayFor(m => m.Nom, new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             @Html.LabelFor(m => m.Prenom, new { @class = "col-md-12 control-label", @style = "margin:10px" })
-                            @Html.TextBoxFor(m => m.Prenom, new { @class = "form-control" })
+                            @Html.DisplayFor(m => m.Prenom, new { @class = "form-control" })
                         </div>
                     </div>
                 </div>
@@ -55,13 +40,13 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             @Html.LabelFor(m => m.NomAr, new { @class = "col-md-12 control-label", @style = "margin:10px; margin-left: 80%;" })
-                            @Html.TextBoxFor(m => m.NomAr, new { @class = "form-control" })
+                            @Html.DisplayFor(m => m.NomAr, new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             @Html.LabelFor(m => m.PrenomAr, new { @class = "col-md-12 control-label", @style = "margin:10px ;margin-left: 80%;" })
-                            @Html.TextBoxFor(m => m.PrenomAr, new { @class = "form-control" })
+                            @Html.DisplayFor(m => m.PrenomAr, new { @class = "form-control" })
                         </div>
                     </div>
                 </div>
@@ -69,13 +54,13 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             @Html.LabelFor(m => m.CIN, new { @class = "col-md-12 control-label", @style = "margin:10px" })
-                            @Html.TextBoxFor(m => m.CIN, new { @class = "form-control" })
+                            @Html.DisplayFor(m => m.CIN, new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             @Html.LabelFor(m => m.Ville, new { @class = "col-md-12 control-label", @style = "margin:10px" })
-                            @Html.TextBoxFor(m => m.Ville, new { @class = "form-control" })
+                            @Html.DisplayFor(m => m.Ville, new { @class = "form-control" })
                         </div>
                     </div>
                 </div>
@@ -84,14 +69,7 @@
                         <div class="form-group">
                             @Html.LabelFor(m => m.Sexe, new { @class = "col-md-12 control-label", @style = "margin:10px" })
                             <br>
-                            <label class="custom-control custom-radio custom-control-inline">
-                                <input id="Homme" type="radio" name="Sexe" class="custom-control-input" value="Homme">
-                                <span class="custom-control-label">Homme</span>
-                            </label>
-                            <label class="custom-control custom-radio custom-control-inline">
-                                <input id="Femme" type="radio" name="Sexe" class="custom-control-input" value="Femme">
-                                <span class="custom-control-label">Femme</span>
-                            </label>
+                            <h1>@Html.DisplayFor(m => m.Sexe)</h1>
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -102,21 +80,13 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             @Html.LabelFor(m => m.Email, new { @class = "col-md-12 control-label", @style = "margin:10px" })
-                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                            @Html.DisplayFor(m => m.Email, new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-12 control-label", @style = "margin:10px" })
-                            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            @Html.LabelFor(m => m.UserName, new { @class = "col-md-12 control-label", @style = "margin:10px" })
-                            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                            @Html.DisplayFor(m => m.PhoneNumber, new { @class = "form-control" })
                         </div>
                     </div>
                 </div>
@@ -124,13 +94,13 @@
                     <div class="col-lg-6">
                         <div class="form-group">
                             @Html.LabelFor(m => m.Password, new { @class = "col-md-12 control-label", @style = "margin:10px" })
-                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                            @Html.DisplayFor(m => m.Password, new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
                             @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-12 control-label", @style = "margin:10px" })
-                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                            @Html.DisplayFor(m => m.ConfirmPassword, new { @class = "form-control" })
                         </div>
                     </div>
                 </div>
@@ -141,12 +111,12 @@
                             <label for="StatutId">Statut</label>
                             @*@Html.DropDownList("StatutId" ,null,"> -- Statut -- <", htmlAttributes: new { @class = "form-control" })*@
                             @*<select class="form-control form-control-sm" name="StatutId" id="StatutId">
-                                <option value="">Statut</option>
-                                @foreach (var item in Model.statuts)
-                                {
-                                    <option value="@item.StatutId">@item.StatutName</option>
-                                }
-                            </select>*@
+                                    <option value="">Statut</option>
+                                    @foreach (var item in Model.statuts)
+                                    {
+                                        <option value="@item.StatutId">@item.StatutName</option>
+                                    }
+                                </select>*@
                             @Html.DropDownList("StatutId", null, "> -- Statut -- <", htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
@@ -179,13 +149,6 @@
                 </div>
             }
         </div>
-        @if (ViewBag.errors != null)
-        {
-            foreach (string error in ViewBag.errors)
-            {
-                <span class="text-danger" style="margin:20px">@error</span><br />
-            }
-        }
     </div>
 </div>
 @section Modal
@@ -196,31 +159,7 @@
 
 @section Scripts{
     <script>
-        $('input[type=radio][name=Sexe]').change(function () {
-            if (this.value == 'Homme') {
-                $("#Femme").removeAttr("checked");
-                $("#Homme").attr("checked","");
-            }
-            else if (this.value == 'Femme') {
-                $("#Homme").removeAttr("checked");
-                $("#Femme").attr("checked","");
-            }
-        });
-        $('input[type=radio][name=typeUtilisateur]').change(function () {
-            if (this.value == 'Morale') {
-                $("#Physique").removeAttr("checked");
-                $("#Morale").attr("checked", "");
-                $("#Entreprise").attr("type","text");
-                document.getElementById('labelentreprise').style = "display:block;margin:10px;";
-            }
-            else if (this.value == 'Physique') {
-                $("#Morale").removeAttr("checked");
-                $("#Physique").attr("checked","");
-                $("#Entreprise").attr("type","hidden");
-                $("#Entreprise").attr("value","");
-                document.getElementById('labelentreprise').style = "display:none";
-            }
-        });
+
         $(document).ready(function () {
             $("#StatutId").chosen({
                 disable_search: false,

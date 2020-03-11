@@ -264,7 +264,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return View();
         }
 
-        //
+        
         // GET: /Account/ResetPasswordConfirmation
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
