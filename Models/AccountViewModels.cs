@@ -65,78 +65,152 @@ namespace GestionnaireUtilisateurs.Models
 
     public class RegisterParentViewModel
     {
+        public string Id { get; set; }
+
         [Required]
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Type D'Utilisateur")]
         public string typeUtilisateur { get; set; }
-        [Required]
+        
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Entreprise")]
         public string Entreprise { get; set; }
+        
         [Required]
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Nom")]
         public string Nom { get; set; }
+        
         [Required]
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Prenom")]
         public string Prenom { get; set; }
+        
         [Required]
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "الإسم العائلي")]
         public string NomAr { get; set; }
+        
         [Required]
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "الإسم الشخصي")]
         public string PrenomAr { get; set; }
+        
         [Required]
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "CIN")]
         public string CIN { get; set; }
+        
         [Required]
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Ville")]
         public string Ville { get; set; }
+        
         [Required]
         [Display(Name = "Sexe ")]
         public string Sexe { get; set; }
+        
         [Required]
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 3)]
         [EmailAddress]
         [Display(Name = "Courrier électronique")]
         public string Email { get; set; }
+        
         [Required]
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Numero de Telephone ")]
         public string PhoneNumber { get; set; }
-        [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
-        [Display(Name = "Nom d'utilisateur")]
-        public string UserName { get; set; }
+        
         [Required]
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Statut")]
         public string StatutId { get; set; }
+        
         [DataType(DataType.Password)]
         public string Password { get; set; }
+        
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Le mot de passe et le mot de passe de confirmation ne correspondent pas.")]
         public string ConfirmPassword { get; set; }
 
     }
 
-    public class RegisterViewModel:RegisterParentViewModel
+    public class RegisterViewModel
     {
+        [Required]
+        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
+        [Display(Name = "Type D'Utilisateur")]
+        public string typeUtilisateur { get; set; }
+        
+        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
+        [Display(Name = "Entreprise")]
+        public string Entreprise { get; set; }
+        
+        [Required]
+        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
+        [Display(Name = "Nom")]
+        public string Nom { get; set; }
+        
+        [Required]
+        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
+        [Display(Name = "Prenom")]
+        public string Prenom { get; set; }
+        
+        [Required]
+        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
+        [Display(Name = "الإسم العائلي")]
+        public string NomAr { get; set; }
+        
+        [Required]
+        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
+        [Display(Name = "الإسم الشخصي")]
+        public string PrenomAr { get; set; }
+        
+        [Required]
+        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
+        [Display(Name = "CIN")]
+        public string CIN { get; set; }
+        
+        [Required]
+        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
+        [Display(Name = "Ville")]
+        public string Ville { get; set; }
+        
+        [Required]
+        [Display(Name = "Sexe ")]
+        public string Sexe { get; set; }
+        
+        [Required]
+        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 3)]
+        [EmailAddress]
+        [Display(Name = "Courrier électronique")]
+        public string Email { get; set; }
+        
+        [Required]
+        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
+        [Display(Name = "Numero de Telephone ")]
+        public string PhoneNumber { get; set; }
+        
+        [Required]
+        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
+        [Display(Name = "Nom d'utilisateur")]
+        public string UserName { get; set; }
+        
+        [Required]
+        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
+        [Display(Name = "Statut")]
+        public string StatutId { get; set; }
+        
         [Required]
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Mot de passe")]
-        public new string Password { get; set; }
+        public string Password { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirmer le mot de passe ")]
         [Compare("Password", ErrorMessage = "Le mot de passe et le mot de passe de confirmation ne correspondent pas.")]
-        public new string ConfirmPassword { get; set; }
+        public string ConfirmPassword { get; set; }
     }
 
     public class ResetPasswordViewModel

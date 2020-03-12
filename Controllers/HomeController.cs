@@ -56,9 +56,9 @@ namespace GestionnaireUtilisateurs.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddUser(RegisterViewModel model)
         {
+            ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
             if (ModelState.IsValid)
             {
-                ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
                 var user = new ApplicationUser
                 {
                     UserName = model.UserName,
@@ -99,6 +99,7 @@ namespace GestionnaireUtilisateurs.Controllers
             ViewBag.Statuts = database.Statuts.ToList();
             var User = database.AspNetUsers.Find(id);
             RegisterParentViewModel viewModel = new RegisterParentViewModel ();
+            viewModel.Id = User.Id;
             viewModel.typeUtilisateur = User.typeUtilisateur;
             viewModel.Entreprise = User.Intiulé;
             viewModel.Nom = User.Nom;
@@ -117,16 +118,36 @@ namespace GestionnaireUtilisateurs.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditUser(AspNetUsers user)
+        public async Task<ActionResult> EditUser(RegisterParentViewModel parentViewModel)
         {
-            database.Entry(user).State = EntityState.Modified;
-            var res = await database.SaveChangesAsync();
-            if (res==0)
-            {
             ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
-                return View();
+            ViewBag.Statuts = database.Statuts.ToList();
+            if (ModelState.IsValid)
+            {
+                var user = new AspNetUsers();
+                user.Id = parentViewModel.Id;
+                user.typeUtilisateur = parentViewModel.typeUtilisateur;
+                user.Intiulé = parentViewModel.Entreprise;
+                user.Nom = parentViewModel.Nom;
+                user.NomAr = parentViewModel.NomAr;
+                user.Prenom = parentViewModel.Prenom;
+                user.PrenomAr = parentViewModel.PrenomAr;
+                user.CIN = parentViewModel.CIN;
+                user.Ville = parentViewModel.Ville;
+                user.Sexe = parentViewModel.Sexe;
+                user.Email = parentViewModel.Email;
+                user.PhoneNumber = parentViewModel.PhoneNumber;
+                user.StatutId = parentViewModel.StatutId;
+                //user.Id = parentViewModel.Id;
+                database.Entry(user).State = EntityState.Modified;
+                var res = await database.SaveChangesAsync();
+                if (res == 0)
+                {
+                    return View(parentViewModel);
+                }
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            return View(parentViewModel);
         }
 
 

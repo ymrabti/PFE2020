@@ -147,7 +147,7 @@
                                     <option value="@item.StatutId">@item.StatutName</option>
                                 }
                             </select>*@
-                            @Html.DropDownList("StatutId", null, "> -- Statut -- <", htmlAttributes: new { @class = "form-control" })
+                            @Html.DropDownList("StatutId", ViewBag.StatutId as SelectList, "> -- Statut -- <", htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="col-lg-6">

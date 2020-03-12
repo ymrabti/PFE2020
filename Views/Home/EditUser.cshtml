@@ -12,6 +12,7 @@
             {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary("", new { @class = "text-danger" })
+                @Html.HiddenFor(m => m.Id)
                 <div class="card-body">
 
                     <h4> <span class="badge-dot badge-info"></span>  <span class="btn-info">Modifier un compte d'utilisateur</span></h4>
@@ -51,6 +52,14 @@
                             <input id="Physique" type="radio" name="typeUtilisateur" class="custom-control-input" value="Physique" checked="">
                             <span class="custom-control-label">Physique</span>
                         </label>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.HiddenFor(m => m.Entreprise, new { id = "labelentreprise", @class = "col-md-12 control-label", @style = "margin:10px" })
+                                @Html.HiddenFor(m => m.Entreprise, new { @class = "form-control" })
+                            </div>
+                        </div>
                     </div>
 
                 }
@@ -162,7 +171,9 @@
                     </div>
                 </div>
             </div>*@
-                <span class="text-danger">info : ces deux champs n'est pas obligatoires , vous pouvez le laisser vides!</span><br /><br />
+                <span class="text-warning" style="position:center">
+                    info : ces deux champs n'est pas obligatoires , vous pouvez le laisser vides!
+                </span><br /><br />
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
