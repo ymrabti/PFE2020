@@ -1,6 +1,7 @@
 ﻿using GestionnaireUtilisateurs.Models;
 using Microsoft.AspNet.Identity.Owin;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -68,7 +69,9 @@ namespace GestionnaireUtilisateurs.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    var UserCreated = database.AspNetUsers.Find(user.Id);
+                    string uid = user.Id;
+                    string sid = model.StatutId;
+                    var UserCreated = database.AspNetUsers.Find(uid);
                     UserCreated.Nom =model.Nom;
                     UserCreated.Prenom =model.Prenom;
                     UserCreated.NomAr =model.NomAr;
@@ -77,11 +80,26 @@ namespace GestionnaireUtilisateurs.Controllers
                     UserCreated.CIN =model.CIN;
                     UserCreated.Ville =model.Ville;
                     UserCreated.Sexe =model.Sexe;
-                    UserCreated.StatutId =model.StatutId;
+                    UserCreated.StatutId =sid;
                     UserCreated.typeUtilisateur =model.typeUtilisateur;
                     UserCreated.Intiulé =model.Entreprise;
 
                     database.Entry(UserCreated).State = EntityState.Modified;
+
+                    var tachesfromstatut = database.StatutRole.Where(statut => statut.StatutId == sid).ToList();
+                    var userRoles = new List<AspNetUserRoles>();
+                    foreach (var element in tachesfromstatut)
+                    {
+                        AspNetUserRoles userRole = new AspNetUserRoles();
+                        userRole.UserId = uid;
+                        userRole.RoleId = element.RoleId;
+                        userRole.Create = element.Cree;
+                        userRole.Update = element.Modifier;
+                        userRole.Read = element.Lire;
+                        userRole.Delete = element.Supprimer;
+                        userRoles.Add(userRole);
+                    }
+                    database.AspNetUserRoles.AddRange(userRoles);
                     var res = await database.SaveChangesAsync();
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
