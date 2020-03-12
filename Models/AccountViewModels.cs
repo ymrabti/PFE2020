@@ -62,7 +62,8 @@ namespace GestionnaireUtilisateurs.Models
         public bool RememberMe { get; set; }
     }
 
-    public class RegisterViewModel
+
+    public class RegisterParentViewModel
     {
         [Required]
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
@@ -101,6 +102,7 @@ namespace GestionnaireUtilisateurs.Models
         public string Sexe { get; set; }
         [Required]
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 3)]
+        [EmailAddress]
         [Display(Name = "Courrier électronique")]
         public string Email { get; set; }
         [Required]
@@ -115,17 +117,26 @@ namespace GestionnaireUtilisateurs.Models
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Statut")]
         public string StatutId { get; set; }
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+        [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "Le mot de passe et le mot de passe de confirmation ne correspondent pas.")]
+        public string ConfirmPassword { get; set; }
 
+    }
+
+    public class RegisterViewModel:RegisterParentViewModel
+    {
         [Required]
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Mot de passe")]
-        public string Password { get; set; }
+        public new string Password { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirmer le mot de passe ")]
         [Compare("Password", ErrorMessage = "Le mot de passe et le mot de passe de confirmation ne correspondent pas.")]
-        public string ConfirmPassword { get; set; }
+        public new string ConfirmPassword { get; set; }
     }
 
     public class ResetPasswordViewModel

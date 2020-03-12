@@ -197,6 +197,7 @@
     <Compile Include="Models\AspNetUsers.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\HomeViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Model_AURS1.Context.cs">
@@ -1750,6 +1751,8 @@
     <Content Include="Views\Home\EditStatut.cshtml" />
     <Content Include="Views\Home\DeleteStatut.cshtml" />
     <Content Include="Views\Home\Test.cshtml" />
+    <Content Include="Views\Home\EditUser.cshtml" />
+    <Content Include="Views\Home\DeleteUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

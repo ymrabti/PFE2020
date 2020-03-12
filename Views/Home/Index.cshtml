@@ -16,7 +16,7 @@
                 <a href="@Url.Action("AddUser", "Home")" class="btn btn" style="background-color:#09aacc ; color:white;">
                     <i class="fa fa-plus"> Ajouter  </i>
                 </a>
-                @using (Html.BeginForm("EditUser", "Home", FormMethod.Post))
+                @using (Html.BeginForm("EditUser", "Home", FormMethod.Get))
                 {
                     @Html.AntiForgeryToken()
                     <input type="hidden" id="IdHidden" name="id" value="-1">
@@ -25,11 +25,11 @@
                     </button>
 
                 }
-                @using (Html.BeginForm("DeleteUser", "Home", FormMethod.Post))
+                @using (Html.BeginForm("DeleteUser", "Home", FormMethod.Get))
                 {
                     @Html.AntiForgeryToken()
                     <input type="hidden" id="IdHidden2" name="id" value="-1">
-                    <button disabled id="buttonDelete" type="button" class="btn btn" style="background-color:#09aacc ; color:white;">
+                    <button disabled id="buttonDelete" type="submit" class="btn btn" style="background-color:#09aacc ; color:white;">
                         <i class="fa fa-trash"> Supprimer  </i>
                     </button>
                 }

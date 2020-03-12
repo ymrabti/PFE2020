@@ -93,6 +93,69 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             return View(model);
         }
+
+        public ActionResult EditUser(string id)
+        {
+            ViewBag.Statuts = database.Statuts.ToList();
+            var User = database.AspNetUsers.Find(id);
+            RegisterParentViewModel viewModel = new RegisterParentViewModel ();
+            viewModel.typeUtilisateur = User.typeUtilisateur;
+            viewModel.Entreprise = User.Intiulé;
+            viewModel.Nom = User.Nom;
+            viewModel.Prenom = User.Prenom;
+            viewModel.NomAr = User.NomAr;
+            viewModel.PrenomAr = User.PrenomAr;
+            viewModel.CIN = User.CIN;
+            viewModel.Ville = User.Ville;
+            viewModel.Sexe = User.Sexe;
+            viewModel.Email = User.Email;
+            viewModel.PhoneNumber = User.PhoneNumber;
+            viewModel.Password = User.PasswordHash;
+            viewModel.StatutId = User.StatutId;
+            ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
+            return View(viewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditUser(AspNetUsers user)
+        {
+            database.Entry(user).State = EntityState.Modified;
+            var res = await database.SaveChangesAsync();
+            if (res==0)
+            {
+            ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
+                return View();
+            }
+            return RedirectToAction("Index");
+        }
+
+
+        public ActionResult DeleteUser(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var user = database.AspNetUsers.Find(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.statutName = user.Nom+" " +user.Prenom;
+            return View();
+        }
+
+        [HttpPost, ActionName("DeleteUser")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteUserConfirmed(string id)
+        {
+            var user = database.AspNetUsers.Find(id);
+            database.AspNetUsers.Remove(user);
+            database.SaveChanges();
+            return RedirectToAction("IndexStatut");
+        }
+
+
         /// ///////////////////////              USER TACHE                    //////////////////////
         /// ///////////////////////              USER TACHE                    //////////////////////
         /// ///////////////////////              USER TACHE                    //////////////////////

@@ -1,0 +1,286 @@
+﻿@model GestionnaireUtilisateurs.Models.RegisterParentViewModel
+@{
+    ViewBag.Title = "Modifier un compte d'utilisateur";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="col-lg-12" style=" margin-left: auto; margin-right: auto;">
+    <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+        <div class="card-body">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+                <div class="card-body">
+
+                    <h4> <span class="badge-dot badge-info"></span>  <span class="btn-info">Modifier un compte d'utilisateur</span></h4>
+                    <hr />
+                </div>
+                @Html.LabelFor(m => m.typeUtilisateur, new { @class = "col-md-12 control-label", @style = "margin:10px" })
+                <br>
+                if (Model.typeUtilisateur == "Morale")
+                {
+                    <div class="form-group">
+                        <label class="custom-control custom-radio custom-control-inline">
+                            <input id="Morale" type="radio" name="typeUtilisateur" class="custom-control-input" value="Morale" checked="">
+                            <span class="custom-control-label">Morale</span>
+                        </label>
+                        <label class="custom-control custom-radio custom-control-inline">
+                            <input id="Physique" type="radio" name="typeUtilisateur" class="custom-control-input" value="Physique">
+                            <span class="custom-control-label">Physique</span>
+                        </label>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.Entreprise, new { id = "labelentreprise", @class = "col-md-12 control-label", @style = "margin:10px" })
+                                @Html.TextBoxFor(m => m.Entreprise, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        <label class="custom-control custom-radio custom-control-inline">
+                            <input id="Morale" type="radio" name="typeUtilisateur" class="custom-control-input" value="Morale">
+                            <span class="custom-control-label">Morale</span>
+                        </label>
+                        <label class="custom-control custom-radio custom-control-inline">
+                            <input id="Physique" type="radio" name="typeUtilisateur" class="custom-control-input" value="Physique" checked="">
+                            <span class="custom-control-label">Physique</span>
+                        </label>
+                    </div>
+
+                }
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Nom, new { @class = "col-md-12 control-label", @style = "margin:10px" })
+                            @Html.TextBoxFor(m => m.Nom, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Prenom, new { @class = "col-md-12 control-label", @style = "margin:10px" })
+                            @Html.TextBoxFor(m => m.Prenom, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.NomAr, new { @class = "col-md-12 control-label", @style = "margin:10px; margin-left: 80%;" })
+                            @Html.TextBoxFor(m => m.NomAr, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.PrenomAr, new { @class = "col-md-12 control-label", @style = "margin:10px ;margin-left: 80%;" })
+                            @Html.TextBoxFor(m => m.PrenomAr, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.CIN, new { @class = "col-md-12 control-label", @style = "margin:10px" })
+                            @Html.TextBoxFor(m => m.CIN, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Ville, new { @class = "col-md-12 control-label", @style = "margin:10px" })
+                            @Html.TextBoxFor(m => m.Ville, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Sexe, new { @class = "col-md-12 control-label", @style = "margin:10px" })
+                            <br>
+                            @if (Model.Sexe == "Homme")
+                            {
+                                <label class="custom-control custom-radio custom-control-inline">
+                                    <input id="Homme" type="radio" name="Sexe" class="custom-control-input" value="Homme" checked>
+                                    <span class="custom-control-label">Homme</span>
+                                </label>
+                                <label class="custom-control custom-radio custom-control-inline">
+                                    <input id="Femme" type="radio" name="Sexe" class="custom-control-input" value="Femme">
+                                    <span class="custom-control-label">Femme</span>
+                                </label>
+                            }
+                            else if (Model.Sexe == "Femme")
+                            {
+                                <label class="custom-control custom-radio custom-control-inline">
+                                    <input id="Homme" type="radio" name="Sexe" class="custom-control-input" value="Homme">
+                                    <span class="custom-control-label">Homme</span>
+                                </label>
+                                <label class="custom-control custom-radio custom-control-inline">
+                                    <input id="Femme" type="radio" name="Sexe" class="custom-control-input" value="Femme" checked>
+                                    <span class="custom-control-label">Femme</span>
+                                </label>
+                            }
+                            else
+                            {
+                                <label class="custom-control custom-radio custom-control-inline">
+                                    <input id="Homme" type="radio" name="Sexe" class="custom-control-input" value="Homme">
+                                    <span class="custom-control-label">Homme</span>
+                                </label>
+                                <label class="custom-control custom-radio custom-control-inline">
+                                    <input id="Femme" type="radio" name="Sexe" class="custom-control-input" value="Femme">
+                                    <span class="custom-control-label">Femme</span>
+                                </label>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Email, new { @class = "col-md-12 control-label", @style = "margin:10px" })
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.PhoneNumber, new { @class = "col-md-12 control-label", @style = "margin:10px" })
+                            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                @*<div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.UserName, new { @class = "col-md-12 control-label", @style = "margin:10px" })
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>*@
+                <span class="text-danger">info : ces deux champs n'est pas obligatoires , vous pouvez le laisser vides!</span><br /><br />
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Password, new { @class = "col-md-12 control-label", @style = "margin:10px" })
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-12 control-label", @style = "margin:10px" })
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="StatutId">Statut</label>
+                            @*@Html.DropDownList("StatutId" ,null,"> -- Statut -- <", htmlAttributes: new { @class = "form-control" })*@
+                            <select class="form-control form-control-sm" name="StatutId" id="StatutId">
+                                <option value=""> >-------- Statut --------< </option>
+                                @foreach (var item in ViewBag.Statuts)
+                                {
+                                    if (item.StatutId == Model.StatutId)
+                                    {
+                                        <option value="@item.StatutId" selected>@item.StatutName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.StatutId">@item.StatutName</option>
+                                    }
+                                }
+                            </select>
+                            @*@Html.DropDownListFor(m=>m.StatutId, ViewBag.StatutId as SelectList, "> -- Statut -- <", htmlAttributes: new { @class = "form-control" })*@
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <br />
+
+                            <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" data-toggle="modal" data-target="#BackdropAddStatut"><i class=" fas fa-plus">  </i>    </button>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+
+                            <a href="@Url.Action("Index", "Home")">Retour a la liste</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6" style="text-align: right;">
+                        <div class="form-group">
+
+                            <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;">
+                                <i class=" fas fa-user-plus">  </i>&nbsp;&nbsp;&nbsp;     Créer un compte
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @if (ViewBag.errors != null)
+        {
+            foreach (string error in ViewBag.errors)
+            {
+                <span class="text-danger" style="margin:20px">@error</span><br />
+            }
+        }
+    </div>
+</div>
+@section Modal
+    {
+
+    @Html.Action("AddStatutPartial", "Home")
+}
+
+@section Scripts{
+    <script>
+        $('input[type=radio][name=Sexe]').change(function () {
+            if (this.value == 'Homme') {
+                $("#Femme").removeAttr("checked");
+                $("#Homme").attr("checked", "");
+            }
+            else if (this.value == 'Femme') {
+                $("#Homme").removeAttr("checked");
+                $("#Femme").attr("checked", "");
+            }
+        });
+        $('input[type=radio][name=typeUtilisateur]').change(function () {
+            if (this.value == 'Morale') {
+                $("#Physique").removeAttr("checked");
+                $("#Morale").attr("checked", "");
+                $("#Entreprise").attr("type", "text");
+                document.getElementById('labelentreprise').style = "display:block;margin:10px;";
+            }
+            else if (this.value == 'Physique') {
+                $("#Morale").removeAttr("checked");
+                $("#Physique").attr("checked", "");
+                $("#Entreprise").attr("type", "hidden");
+                $("#Entreprise").attr("value", "");
+                document.getElementById('labelentreprise').style = "display:none";
+            }
+        });
+        $(document).ready(function () {
+            $("#StatutId").chosen({
+                disable_search: false,
+                create_option: true,
+                persistent_create_option: true,
+                skip_no_results: true,
+                placeholder_text_single: "-------- Indice --------",
+                no_results_text: "Aucun résultat ne correspond"
+            });
+        });
+
+    </script>
+}
+
