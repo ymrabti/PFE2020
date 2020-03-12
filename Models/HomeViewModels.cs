@@ -11,8 +11,8 @@ namespace GestionnaireUtilisateurs.Models
         [Required]
         [Display(Name ="Nom du Statut")]
         [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
-        public string StautName { get; set; }
+        public string StatutName { get; set; }
         [Display(Name = "Description du Statut")]
-        public string StautDescription { get; set; }
+        public string StatutDescription { get; set; }
     }
 }

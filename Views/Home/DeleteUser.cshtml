@@ -1,8 +1,32 @@
 ﻿
 @{
-    ViewBag.Title = "DeleteUser";
+    ViewBag.Title = "Supprimer un utilisateur";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>DeleteUser</h2>
+    <div class="row">
+        <div class="col-md-6" style=" margin-left: auto; margin-right: auto;">
+            <div class="card" style="text-align:center; background-color: white; width: 100%; padding-top:15px;box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+                <div class="card-body">
+                    <h4> <span class="badge-dot badge-info"></span>  Suppression d'une modules</h4>
+                    <hr />
+                    <h3>Vous etes sur de supprimer l'utilisateur <span class="text-info">@ViewBag.utilisateur</span> ?</h3><br />
+                    <h2>de statut <span class="text-info">@ViewBag.statutName</span></h2>
+                    <div>
+                        <hr />
+
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-actions no-color">
+                                <input type="submit" value="Delete" class="btn btn-default btn-danger" /> |
+                                @Html.ActionLink("Back to List", "module")
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 

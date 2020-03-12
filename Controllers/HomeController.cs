@@ -124,8 +124,7 @@ namespace GestionnaireUtilisateurs.Controllers
             ViewBag.Statuts = database.Statuts.ToList();
             if (ModelState.IsValid)
             {
-                var user = new AspNetUsers();
-                user.Id = parentViewModel.Id;
+                var user = database.AspNetUsers.Find(parentViewModel.Id);
                 user.typeUtilisateur = parentViewModel.typeUtilisateur;
                 user.Intiulé = parentViewModel.Entreprise;
                 user.Nom = parentViewModel.Nom;
@@ -141,9 +140,21 @@ namespace GestionnaireUtilisateurs.Controllers
                 //user.Id = parentViewModel.Id;
                 database.Entry(user).State = EntityState.Modified;
                 var res = await database.SaveChangesAsync();
+                
                 if (res == 0)
                 {
                     return View(parentViewModel);
+                }
+                if (parentViewModel.Password!="") {
+                    var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                    var code = await userManager.GeneratePasswordResetTokenAsync(parentViewModel.Id);
+                    var result = await userManager.ResetPasswordAsync(parentViewModel.Id, code, parentViewModel.Password);
+                    if (!result.Succeeded)
+                    {
+                        //password does not meet standards
+                        ViewBag.errors = result.Errors;
+                        return View(parentViewModel);
+                    }
                 }
                 return RedirectToAction("Index");
             }
@@ -162,7 +173,8 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.statutName = user.Nom+" " +user.Prenom;
+            ViewBag.utilisateur = user.Nom+" " +user.Prenom;
+            ViewBag.statutName = user.Statuts.StatutName;
             return View();
         }
 
@@ -173,7 +185,7 @@ namespace GestionnaireUtilisateurs.Controllers
             var user = database.AspNetUsers.Find(id);
             database.AspNetUsers.Remove(user);
             database.SaveChanges();
-            return RedirectToAction("IndexStatut");
+            return RedirectToAction("Index");
         }
 
 
@@ -325,19 +337,27 @@ namespace GestionnaireUtilisateurs.Controllers
 
         public ActionResult AddStatutPartial()
         {
-            return PartialView("_StatutModal");
+            return PartialView("_StatutModal",new StatutsViewModel());
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<JsonResult> AddStatutPartiale([Bind(Include = "ModuleName,ModuleDescription")] Module model)
+        
+        public async Task<JsonResult> AddStatutPartiale([Bind(Include = "StatutName,StatutDescription")]Statuts Statut)
         {
-            var data = "";
+            var data = new object();
             if (ModelState.IsValid)
             {
-                database.Module.Add(model);
+                Statut.StatutId = Guid.NewGuid().ToString();
+                database.Statuts.Add(Statut);
                 var result = await database.SaveChangesAsync();
-                data += result;
+                var statutss = from p in database.Statuts.ToList()
+                            select new Statuts
+                            {
+                                StatutId = p.StatutId,
+                                StatutName = p.StatutName
+                            };
+
+                data = new { dd = "error", statutss };
+                return Json(data, JsonRequestBehavior.AllowGet);
             }
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }

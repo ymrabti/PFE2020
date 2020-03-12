@@ -32,7 +32,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="form-group">
-                            @Html.LabelFor(m => m.Entreprise, new {id="labelentreprise", @class = "col-md-12 control-label", @style = "display:none;"})
+                            @Html.LabelFor(m => m.Entreprise, new { id = "labelentreprise", @class = "col-md-12 control-label", @style = "display:none;" })
                             @Html.HiddenFor(m => m.Entreprise, new { @class = "form-control" })
                         </div>
                     </div>
@@ -141,13 +141,13 @@
                             <label for="StatutId">Statut</label>
                             @*@Html.DropDownList("StatutId" ,null,"> -- Statut -- <", htmlAttributes: new { @class = "form-control" })*@
                             @*<select class="form-control form-control-sm" name="StatutId" id="StatutId">
-                                <option value="">Statut</option>
-                                @foreach (var item in Model.statuts)
-                                {
-                                    <option value="@item.StatutId">@item.StatutName</option>
-                                }
-                            </select>*@
-                            @Html.DropDownList("StatutId", ViewBag.StatutId as SelectList, "> -- Statut -- <", htmlAttributes: new { @class = "form-control" })
+                                    <option value="">Statut</option>
+                                    @foreach (var item in Model.statuts)
+                                    {
+                                        <option value="@item.StatutId">@item.StatutName</option>
+                                    }
+                                </select>*@
+                            @Html.DropDownList("StatutId", ViewBag.StatutId as SelectList, "--- Sélectionner un Statut ---", htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -195,29 +195,32 @@
 }
 
 @section Scripts{
+    <script src="~/Content/statutAddEdit.js"></script>
     <script>
+
+
         $('input[type=radio][name=Sexe]').change(function () {
             if (this.value == 'Homme') {
                 $("#Femme").removeAttr("checked");
-                $("#Homme").attr("checked","");
+                $("#Homme").attr("checked", "");
             }
             else if (this.value == 'Femme') {
                 $("#Homme").removeAttr("checked");
-                $("#Femme").attr("checked","");
+                $("#Femme").attr("checked", "");
             }
         });
         $('input[type=radio][name=typeUtilisateur]').change(function () {
             if (this.value == 'Morale') {
                 $("#Physique").removeAttr("checked");
                 $("#Morale").attr("checked", "");
-                $("#Entreprise").attr("type","text");
+                $("#Entreprise").attr("type", "text");
                 document.getElementById('labelentreprise').style = "display:block;margin:10px;";
             }
             else if (this.value == 'Physique') {
                 $("#Morale").removeAttr("checked");
-                $("#Physique").attr("checked","");
-                $("#Entreprise").attr("type","hidden");
-                $("#Entreprise").attr("value","");
+                $("#Physique").attr("checked", "");
+                $("#Entreprise").attr("type", "hidden");
+                $("#Entreprise").attr("value", "");
                 document.getElementById('labelentreprise').style = "display:none";
             }
         });

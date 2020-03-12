@@ -1018,6 +1018,7 @@
     <Content Include="Content\Chosen\chosen.proto.js" />
     <Content Include="Content\Chosen\chosen_old.css" />
     <Content Include="Content\CommonUserStatut.js" />
+    <Content Include="Content\statutAddEdit.js" />
     <Content Include="Content\TableFilter\.gitignore" />
     <Content Include="Content\TableFilter\ajax.js" />
     <Content Include="Content\TableFilter\dist\starter.html" />

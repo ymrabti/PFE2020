@@ -1,4 +1,4 @@
-﻿
+﻿@model GestionnaireUtilisateurs.Models.StatutsViewModel
 <div class="modal fade" id="BackdropAddStatut" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -10,14 +10,17 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-
-
-                    <input id="name" type="text" name="name" class="form-control">
+                    @Html.LabelFor(nm=>nm.StatutName)
+                    @Html.TextBoxFor(m=>m.StatutName,new { @class="form-control"})
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(nm => nm.StatutDescription)
+                    @Html.TextAreaFor(parameter=>parameter.StatutDescription,new { @class="form-control"})
                 </div>
             </div>
             <div class="modal-footer">
 
-                <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
+                <button id="ButtonSubmitStatutPUP" type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Ajouter</button>
             </div>
         </div>
     </div>

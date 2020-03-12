@@ -164,13 +164,13 @@
                     </div>
                 </div>
                 @*<div class="row">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.UserName, new { @class = "col-md-12 control-label", @style = "margin:10px" })
-                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-                    </div>
-                </div>
-            </div>*@
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.UserName, new { @class = "col-md-12 control-label", @style = "margin:10px" })
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>*@
                 <span class="text-warning" style="position:center">
                     info : ces deux champs n'est pas obligatoires , vous pouvez le laisser vides!
                 </span><br /><br />
@@ -255,7 +255,9 @@
 }
 
 @section Scripts{
+    <script src="~/Content/statutAddEdit.js"></script>
     <script>
+
         $('input[type=radio][name=Sexe]').change(function () {
             if (this.value == 'Homme') {
                 $("#Femme").removeAttr("checked");
