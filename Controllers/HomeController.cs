@@ -361,6 +361,32 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }
+        public JsonResult ResetRolesFromStatut(string UserId)
+        {
+            var statutId = database.AspNetUsers.Find(UserId).StatutId;
+            if (statutId==null || statutId=="")
+            {
+                return Json(new { dd = "error" }, JsonRequestBehavior.AllowGet);
+            }
+            var tachesdestatut = database.StatutRole.Where(para => para.StatutId == statutId).ToList();
+            var data = new
+            {
+                dd = "success",
+                rolesstauts = tachesdestatut.Select(
+                    item => new
+                    {
+                        rowidnewcc = item.RoleId,
+                        r = item.Lire,
+                        c = item.Cree,
+                        u = item.Modifier,
+                        d = item.Supprimer,
+                        modulename = item.AspNetRoles.SousModule.Module.ModuleName,
+                        sousmodulename = item.AspNetRoles.SousModule.SousModuleName,
+                        tachename = item.AspNetRoles.Name
+                    })
+            };
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
 
 
         /// ///////////////////////              STATUT TACHE                    //////////////////////

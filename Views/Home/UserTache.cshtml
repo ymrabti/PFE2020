@@ -178,7 +178,7 @@
 
                                     </tbody>
                                 </table>
-                                <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;" id="reinitialisation">
+                                <button type="button" class="btn btn-sm" style="background-color:#09aacc ; color:white;margin:15px" id="reinitialisation">
                                     <i class="dz-loading">  </i>
                                     &nbsp;&nbsp;&nbsp;     réétablir les taches a partir du statut
                                 </button>
@@ -218,24 +218,218 @@
 
     <script src="~/Content/CommonUserStatut.js"></script>
     <script type="text/javascript">
+        var tBody = $("#table_roleTargetted > TBODY")[0];
+        function InsertRow(rowidnewcc,modulename,sousmodulename,tachename,c,r,u,d,tBody) {
+
+            var row = tBody.insertRow(-1);
+
+
+            cell = $(row.insertCell(-1));
+            cell.html(modulename);
+
+            cell = $(row.insertCell(-1));
+            cell.html(sousmodulename);
+
+            cell = $(row.insertCell(-1));
+            cell.html(tachename);
+
+            cell.append(returnHidden(rowidnewcc, "RoleId", rowidnewcc));
+            cell.append(returnHidden("@ViewBag.IdSelected"+"_" + rowidnewcc, "@ViewBag.IdSelected", "@ViewBag.UserId"));
+
+            /***************************** Lire *************************************/
+            cell = $(row.insertCell(-1));
+
+            var labr = returnLab(); var spanne = returnSPAN();
+            var hiddn = returnHidden("Read" + "_" + rowidnewcc, "Read", r);
+
+            var chkbxr = document.createElement("INPUT");
+            chkbxr.className = "custom-control-input";
+            chkbxr.setAttribute("type", "checkbox");
+            chkbxr.setAttribute("name", "Lire");
+            chkbxr.id = "Lire_" + rowidnewcc;
+            chkbxr.checked = r;
+            chkbxr.onclick = function () {
+                if (this.checked == false) {
+                    document.getElementById("Cree_" + rowidnewcc).checked = false;
+                    document.getElementById("Modifier_" + rowidnewcc).checked = false;
+                    document.getElementById("Supprimer_" + rowidnewcc).checked = false;
+
+                    document.getElementById("Read_" + rowidnewcc).value = false;
+                    document.getElementById("Create_" + rowidnewcc).value = false;
+                    document.getElementById("Update_" + rowidnewcc).value = false;
+                    document.getElementById("Delete_" + rowidnewcc).value = false;
+                }
+                else {
+                    //alert("Read_" + rowidnewcc);
+                    document.getElementById("Read_" + rowidnewcc).value = true;
+
+                }
+            };
+
+
+            labr.appendChild(hiddn);
+            labr.appendChild(chkbxr);
+            labr.appendChild(spanne);
+            cell.append(labr);
+
+
+
+            /***************************** Cree *************************************/
+
+            cell = $(row.insertCell(-1));
+
+            var labr = returnLab(); var spanne = returnSPAN();
+            var hiddn = returnHidden("Create" + "_" + rowidnewcc, "Create", c);
+
+            var chkbxr = document.createElement("INPUT");
+            chkbxr.className = "custom-control-input";
+            chkbxr.setAttribute("type", "checkbox");
+            chkbxr.setAttribute("name", "Cree");
+            chkbxr.id = "Cree_" + rowidnewcc;
+            chkbxr.checked = c;
+            chkbxr.onclick = function () {
+                if (this.checked == true) {
+
+                    var checkread = document.getElementById("Lire_" + rowidnewcc);
+                    checkread.checked = true;
+                    document.getElementById("Read_" + rowidnewcc).value = true;
+
+                    document.getElementById("Create_" + rowidnewcc).value = true;
+
+                }
+                else {
+                    document.getElementById("Create_" + rowidnewcc).value = false;
+                }
+            };
+
+
+            labr.appendChild(hiddn);
+            labr.appendChild(chkbxr);
+            labr.appendChild(spanne);
+            cell.append(labr);
+
+
+            /***************************** Modifier *************************************/
+            cell = $(row.insertCell(-1));
+
+            var labr = returnLab(); var spanne = returnSPAN();
+            var hiddn = returnHidden("Update" + "_" + rowidnewcc, "Update", u);
+
+            var chkbxr = document.createElement("INPUT");
+            chkbxr.className = "custom-control-input";
+            chkbxr.setAttribute("type", "checkbox");
+            chkbxr.setAttribute("name", "Modifier");
+            chkbxr.id = "Modifier_" + rowidnewcc;
+            chkbxr.checked = u;
+            chkbxr.onclick = function () {
+                if (this.checked == true) {
+
+                    var checkread = document.getElementById("Lire_" + rowidnewcc);
+                    checkread.checked = true;
+                    document.getElementById("Read_" + rowidnewcc).value = true;
+
+                    document.getElementById("Update_" + rowidnewcc).value = true;
+
+                }
+                else {
+                    document.getElementById("Update_" + rowidnewcc).value = false;
+                }
+            };
+
+
+            labr.appendChild(hiddn);
+            labr.appendChild(chkbxr);
+            labr.appendChild(spanne);
+            cell.append(labr);
+
+
+            /***************************** Supprimer *************************************/
+            cell = $(row.insertCell(-1));
+
+            var labr = returnLab(); var spanne = returnSPAN();
+            var hiddn = returnHidden("Delete" + "_" + rowidnewcc, "Delete", d);
+
+            var chkbxr = document.createElement("INPUT");
+            chkbxr.className = "custom-control-input";
+            chkbxr.setAttribute("type", "checkbox");
+            chkbxr.setAttribute("name", "Supprimer");
+            chkbxr.id = "Supprimer_" + rowidnewcc;
+            chkbxr.checked = d;
+            chkbxr.onclick = function () {
+                if (this.checked == true) {
+
+                    var checkread = document.getElementById("Lire_" + rowidnewcc);
+                    checkread.checked = true;
+                    document.getElementById("Read_" + rowidnewcc).value = true;
+
+                    document.getElementById("Delete_" + rowidnewcc).value = true;
+
+                }
+                else {
+                    document.getElementById("Delete_" + rowidnewcc).value = false;
+                }
+            };
+
+
+            labr.appendChild(hiddn);
+            labr.appendChild(chkbxr);
+            labr.appendChild(spanne);
+            cell.append(labr);
+
+        }
+
+        $("body").on("click", "#reinitialisation", function () {
+            var User = {};
+            User.UserId = "@ViewBag.UserId";
+            tBody = $("#table_roleTargetted > TBODY").empty();
+            $.ajax({
+                type: "POST",
+                url: "/Home/ResetRolesFromStatut",
+                data: JSON.stringify(User),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    if (data.dd == "error") {
+                        alert("erreur");
+                    }
+                    else {
+                        $.each(data.rolesstauts, function (i, item) {
+                            InsertRow(item.rowidnewcc, item.modulename, item.sousmodulename, item.tachename, item.c, item.r, item.u, item.d, tBody);
+                        });
+                    }
+                },
+                error: function () {
+                    alert("error !!");
+                }
+            });
+        });
+
 
         $("body").on("click", "#btnAdd", function () {
 
-    //Get the reference of the Table's TBODY element.
-    var tBody = $("#table_roleTargetted > TBODY")[0];
+            if ($("#tacheSelectedId option:selected").text().includes("--- Sélectionner") == true) {
+                alert("toutes les champs obligatoires !");
+            }
+            else {
+                var rowidnewcc = $("#tacheSelectedId option:selected").val().trim();
 
-    if ($("#tacheSelectedId option:selected").text().includes("--- Sélectionner") == true) {
-        alert("toutes les champs obligatoires !");
-    }
-    else {
-        var rowidnewcc = $("#tacheSelectedId option:selected").val().trim();
+                if ($("#" + rowidnewcc).length) {
+                    alert("deja exists sur le tableau");
+                } else
+                {
 
+                    InsertRow(rowidnewcc
+                        , $("#ListOfModulesId option:selected").text().trim()
+                        , $("#submoduleSelectedId option:selected").text().trim()
+                        , $("#tacheSelectedId option:selected").text().trim()
+                        , false, false ,false, false, tBody);
+                }
 
-        if ($("#" + rowidnewcc).length) {
-            alert("deja exists sur le tableau");
-        } else {
+            }
 
-            var row = tBody.insertRow(-1);
+        });
+        
+            @*var row = tBody.insertRow(-1);
 
 
             cell = $(row.insertCell(-1));
@@ -383,14 +577,6 @@
             labr.appendChild(hiddn);
             labr.appendChild(chkbxr);
             labr.appendChild(spanne);
-            cell.append(labr);
-
-
-        }
-
-    }
-
-});
-
+            cell.append(labr);*@
     </script>
 }
