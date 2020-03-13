@@ -1653,6 +1653,7 @@
     <Content Include="Content\assets\vendor\summernote\editor-fonts\summernote4c4d.ttf" />
     <Content Include="Content\assets\vendor\summernote\editor-fonts\summernote4c4d.woff" />
     <Content Include="Content\assets\vendor\summernote\editor-fonts\summernoted41d.eot" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.4.1-vsdoc.js" />
     <Content Include="Scripts\dashboard-finance.js" />
     <Content Include="Scripts\index.js" />
