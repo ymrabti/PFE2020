@@ -68,41 +68,33 @@ namespace GestionnaireUtilisateurs.Models
         public string Id { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Type D'Utilisateur *")]
         public string typeUtilisateur { get; set; }
         
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Entreprise")]
         public string Entreprise { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Nom *")]
         public string Nom { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Prenom *")]
         public string Prenom { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "الإسم العائلي *")]
         public string NomAr { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "الإسم الشخصي *")]
         public string PrenomAr { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "CIN *")]
         public string CIN { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Ville *")]
         public string Ville { get; set; }
         
@@ -111,18 +103,16 @@ namespace GestionnaireUtilisateurs.Models
         public string Sexe { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 3)]
         [EmailAddress]
         [Display(Name = "Courrier électronique *")]
         public string Email { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
+        [Phone]
         [Display(Name = "Numero de Telephone  *")]
         public string PhoneNumber { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Statut *")]
         public string StatutId { get; set; }
         
@@ -140,41 +130,33 @@ namespace GestionnaireUtilisateurs.Models
     public class RegisterViewModel
     {
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Type D'Utilisateur *")]
         public string typeUtilisateur { get; set; }
         
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Entreprise")]
         public string Entreprise { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Nom *")]
         public string Nom { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Prenom *")]
         public string Prenom { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "الإسم العائلي *")]
         public string NomAr { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "الإسم الشخصي *")]
         public string PrenomAr { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "CIN *")]
         public string CIN { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Ville *")]
         public string Ville { get; set; }
         
@@ -183,23 +165,20 @@ namespace GestionnaireUtilisateurs.Models
         public string Sexe { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 3)]
         [EmailAddress]
         [Display(Name = "Courrier électronique *")]
         public string Email { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
+        [Phone]
         [Display(Name = "Numero de Telephone  *")]
         public string PhoneNumber { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Nom d'utilisateur *")]
         public string UserName { get; set; }
         
         [Required]
-        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
         [Display(Name = "Statut *")]
         public string StatutId { get; set; }
         
