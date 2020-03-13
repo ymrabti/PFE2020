@@ -195,15 +195,15 @@
                             @*@Html.DropDownList("StatutId" ,null,"> -- Statut -- <", htmlAttributes: new { @class = "form-control" })*@
                             <select class="form-control form-control-sm" name="StatutId" id="StatutId">
                                 <option value=""> >-------- Statut --------< </option>
-                                @foreach (var item in ViewBag.Statuts)
+                                @foreach (var element in ViewBag.Statuts)
                                 {
-                                    if (item.StatutId == Model.StatutId)
+                                    if (element.StatutId == Model.StatutId)
                                     {
-                                        <option value="@item.StatutId" selected>@item.StatutName</option>
+                                        <option value="@element.StatutId" selected>@element.StatutName</option>
                                     }
                                     else
                                     {
-                                        <option value="@item.StatutId">@item.StatutName</option>
+                                        <option value="@element.StatutId">@element.StatutName</option>
                                     }
                                 }
                             </select>
@@ -231,7 +231,7 @@
                         <div class="form-group">
 
                             <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;">
-                                <i class=" fas fa-user-plus">  </i>&nbsp;&nbsp;&nbsp;     Créer un compte
+                                <i class=" fas editor">  </i>&nbsp;&nbsp;&nbsp;     Enregistrer
                             </button>
 
                         </div>

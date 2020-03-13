@@ -41,12 +41,12 @@ namespace GestionnaireUtilisateurs.Controllers
             };
             return mModels;
         }
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Index()
         {
             return View(multiModeles());
         }
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public ActionResult AddUser()
         {
             ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
@@ -112,6 +112,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Administrator")]
         public ActionResult EditUser(string id)
         {
             ViewBag.Statuts = database.Statuts.ToList();
@@ -155,7 +156,6 @@ namespace GestionnaireUtilisateurs.Controllers
                 user.Email = parentViewModel.Email;
                 user.PhoneNumber = parentViewModel.PhoneNumber;
                 user.StatutId = parentViewModel.StatutId;
-                //user.Id = parentViewModel.Id;
                 database.Entry(user).State = EntityState.Modified;
                 var res = await database.SaveChangesAsync();
                 
@@ -163,13 +163,18 @@ namespace GestionnaireUtilisateurs.Controllers
                 {
                     return View(parentViewModel);
                 }
-                if (parentViewModel.Password!="") {
+                if (parentViewModel.Password == "" || parentViewModel.Password == null || parentViewModel.Password == "null")
+                {
+                    return RedirectToAction("Index");
+                }
+                else {
                     var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
                     var code = await userManager.GeneratePasswordResetTokenAsync(parentViewModel.Id);
                     var result = await userManager.ResetPasswordAsync(parentViewModel.Id, code, parentViewModel.Password);
                     if (!result.Succeeded)
                     {
                         //password does not meet standards
+                        ViewBag.Statuts = database.Statuts.ToList();
                         ViewBag.errors = result.Errors;
                         return View(parentViewModel);
                     }
@@ -180,6 +185,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
+        [Authorize(Roles = "Administrator")]
         public ActionResult DeleteUser(string id)
         {
             if (id == null)
@@ -210,7 +216,8 @@ namespace GestionnaireUtilisateurs.Controllers
         /// ///////////////////////              USER TACHE                    //////////////////////
         /// ///////////////////////              USER TACHE                    //////////////////////
         /// ///////////////////////              USER TACHE                    //////////////////////
-        [Authorize]
+
+        [Authorize(Roles = "Administrator")]
         public ActionResult UserTache(string id)
         {
             if (id == null)
@@ -269,7 +276,8 @@ namespace GestionnaireUtilisateurs.Controllers
         /// ///////////////////////             STATUT                    //////////////////////
 
 
-        [Authorize]
+
+        [Authorize(Roles = "Administrator")]
         public ActionResult AddStatut()
         {
             return View();
@@ -291,7 +299,8 @@ namespace GestionnaireUtilisateurs.Controllers
             return View();
         }
 
-        [Authorize]
+
+        [Authorize(Roles = "Administrator")]
         public ActionResult EditStatut(string id)
         {
             if (id == null)
@@ -326,6 +335,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
+        [Authorize(Roles = "Administrator")]
         public ActionResult DeleteStatut(string id)
         {
             if (id == null)
@@ -353,6 +363,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
 
+        [Authorize(Roles = "Administrator")]
         public ActionResult AddStatutPartial()
         {
             return PartialView("_StatutModal",new StatutsViewModel());
@@ -410,13 +421,15 @@ namespace GestionnaireUtilisateurs.Controllers
         /// ///////////////////////              STATUT TACHE                    //////////////////////
         /// ///////////////////////              STATUT TACHE                    //////////////////////
         /// ///////////////////////              STATUT TACHE                    //////////////////////
-        [Authorize]
+
+        [Authorize(Roles = "Administrator")]
         public ActionResult IndexStatut()
         {
             return View(multiModeles());
         }
 
-        [Authorize]
+
+        [Authorize(Roles = "Administrator")]
         public ActionResult StatutTache(string id)
         {
             if (id == null)
@@ -471,12 +484,14 @@ namespace GestionnaireUtilisateurs.Controllers
         /// ///////////////////////              MODULE                    //////////////////////
         /// ///////////////////////              MODULE                    //////////////////////
 
-        [Authorize]
+
+        [Authorize(Roles = "Administrator")]
         public ActionResult module()
         {
             return View(multiModeles());
         }
-        [Authorize]
+
+        [Authorize(Roles = "Administrator")]
         public ActionResult AddModule()
         {
             return View(multiModeles());
@@ -496,6 +511,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
+        [Authorize(Roles = "Administrator")]
         public ActionResult EditModule(int id)
         {
             if (id == 0)
@@ -529,6 +545,9 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             return View(module);
         }
+
+
+        [Authorize(Roles = "Administrator")]
         public ActionResult DeleteModule(int id)
         {
             if (id + "" == null)
@@ -559,6 +578,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
+        [Authorize(Roles = "Administrator")]
         public ActionResult AddModulePartial()
         {
             return PartialView("_Modal");
@@ -591,11 +611,13 @@ namespace GestionnaireUtilisateurs.Controllers
         /// ///////////////////////             SUB MODULE                    //////////////////////
         /// ///////////////////////             SUB MODULE                    //////////////////////
 
+        [Authorize(Roles = "Administrator")]
         public ActionResult sousmodule()
         {
             return View(multiModeles());
         }
-        [Authorize]
+
+        [Authorize(Roles = "Administrator")]
         public ActionResult AddSubModule()
         {
             return View(multiModeles());
@@ -614,7 +636,8 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
-        [Authorize]
+
+        [Authorize(Roles = "Administrator")]
         public ActionResult EditSubModule(int id)
         {
             if (id == 0)
@@ -649,7 +672,8 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(sousModule);
         }
 
-        
+
+        [Authorize(Roles = "Administrator")]
         public ActionResult DeleteSubModule(int id)
         {
             if (id + "" == null)
@@ -678,6 +702,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return RedirectToAction("sousmodule");
         }
 
+        [Authorize(Roles = "Administrator")]
         public ActionResult AddSubModulePartial()
         {
             return PartialView("_SubModuleModal", multiModeles());
@@ -710,12 +735,14 @@ namespace GestionnaireUtilisateurs.Controllers
         /// ///////////////////////             TACHES                    //////////////////////
         /// ///////////////////////             TACHES                    //////////////////////
 
+        [Authorize(Roles = "Administrator")]
         public ActionResult taches()
         {
             return View(multiModeles());
         }
 
-        [Authorize]
+
+        [Authorize(Roles = "Administrator")]
         public ActionResult AddTache()
         {
             return View(multiModeles());
@@ -736,7 +763,8 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(multiModeles());
         }
 
-        [Authorize]
+
+        [Authorize(Roles = "Administrator")]
         public ActionResult EditTache(string id)
         {
             if (id == null)
@@ -773,6 +801,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
+        [Authorize(Roles = "Administrator")]
         public ActionResult DeleteTache(string id)
         {
             if (id == null)
@@ -803,6 +832,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
 
+        [Authorize(Roles = "Administrator")]
         public ActionResult AddTachePartial()
         {
             return PartialView("_TacheModal", multiModeles());
@@ -836,41 +866,41 @@ namespace GestionnaireUtilisateurs.Controllers
         /// ///////////////////////             AUTRES                    //////////////////////
         /// ///////////////////////             AUTRES                    //////////////////////
 
-        public ActionResult About()
-        {
-            return View();
-        }
+        //public ActionResult About()
+        //{
+        //    return View();
+        //}
 
-        [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public JsonResult Aboutir()
-        {
-            var mdles = from p in database.Module.ToList()
-                        select new Module
-                        {
-                            ModuleId = p.ModuleId,
-                            ModuleName = p.ModuleName
-                        };
-            //    return Json(mdles, JsonRequestBehavior.AllowGet);
-            //if (ModelState.IsValid)
-            //{
-            //}
-            var data = new { dd = "error",mdles};
-            return Json(data, JsonRequestBehavior.AllowGet);
-        }
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
+        //[HttpPost]
+        ////[ValidateAntiForgeryToken]
+        //public JsonResult Aboutir()
+        //{
+        //    var mdles = from p in database.Module.ToList()
+        //                select new Module
+        //                {
+        //                    ModuleId = p.ModuleId,
+        //                    ModuleName = p.ModuleName
+        //                };
+        //    //    return Json(mdles, JsonRequestBehavior.AllowGet);
+        //    //if (ModelState.IsValid)
+        //    //{
+        //    //}
+        //    var data = new { dd = "error",mdles};
+        //    return Json(data, JsonRequestBehavior.AllowGet);
+        //}
+        //public ActionResult Contact()
+        //{
+        //    ViewBag.Message = "Your contact page.";
 
-            return View();
-        }
+        //    return View();
+        //}
 
-        [HttpPost]
-        public ActionResult Test(RegisterViewModel model)
-        {
-            ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
-            return View(model);
-        }
+        //[HttpPost]
+        //public ActionResult Test(RegisterViewModel model)
+        //{
+        //    ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
+        //    return View(model);
+        //}
         //var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
         //var tacheUse = new UserManager<IdentityUser>(new UserStore<IdentityUser>(new ApplicationDbContext()));
         //var result = tacheUse.Create(user, model.Password);
