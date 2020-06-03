@@ -179,6 +179,12 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Activite_Derogation.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Affect_Derg_Comms.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Application.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
@@ -192,6 +198,36 @@
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AspNetUsers.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Autorisation_Derogation.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Avis_Org.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Commission.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\COMMUNES_RSK.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Courrier.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Demande_Derogation.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Document_Derogation.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EtatAvancement.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\FicheSuiveuse.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Forme_MaitreOeuvrage_DemDerg.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\HomeViewModels.cs" />
@@ -216,6 +252,27 @@
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MultiModeles.cs" />
+    <Compile Include="Models\Nature_Courrier.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Nature_Demande_Derg.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Nature_Projet_DemDerg.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Organisme.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\parcell.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PROVINCES_RSK.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\References_Foncieres.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SousModule.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
@@ -223,6 +280,21 @@
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Statuts.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Statut_Juridique_DemDerg.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Type_Avis.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TYPE_DOC.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\View_Affect_Com.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\View_Last_Affectation_Com.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

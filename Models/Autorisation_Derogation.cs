@@ -12,21 +12,23 @@ namespace GestionnaireUtilisateurs.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SousModule
+    public partial class Autorisation_Derogation
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SousModule()
+        public Autorisation_Derogation()
         {
-            this.AspNetRoles = new HashSet<AspNetRoles>();
+            this.Demande_Derogation = new HashSet<Demande_Derogation>();
         }
     
-        public int SousModuleId { get; set; }
-        public string SousModuleName { get; set; }
-        public string SousModuleDescription { get; set; }
-        public int ModuleId { get; set; }
+        public int Id_Autorisation { get; set; }
+        public Nullable<System.DateTime> Date_Demande_Autorisation { get; set; }
+        public Nullable<System.DateTime> Dae_Avis_Autorisation { get; set; }
+        public string Nature_Autorisation { get; set; }
+        public Nullable<System.DateTime> Date_Aut_Autorisation { get; set; }
+        public Nullable<System.DateTime> Date_Comt_Autorisation { get; set; }
+        public string EtatAvancemt_Autorisation { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AspNetRoles> AspNetRoles { get; set; }
-        public virtual Module Module { get; set; }
+        public virtual ICollection<Demande_Derogation> Demande_Derogation { get; set; }
     }
 }

@@ -12,21 +12,22 @@ namespace GestionnaireUtilisateurs.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SousModule
+    public partial class PROVINCES_RSK
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SousModule()
+        public PROVINCES_RSK()
         {
-            this.AspNetRoles = new HashSet<AspNetRoles>();
+            this.COMMUNES_RSK = new HashSet<COMMUNES_RSK>();
         }
     
-        public int SousModuleId { get; set; }
-        public string SousModuleName { get; set; }
-        public string SousModuleDescription { get; set; }
-        public int ModuleId { get; set; }
+        public int IdProv { get; set; }
+        public string Provicne { get; set; }
+        public Nullable<int> idreg { get; set; }
+        public string Region { get; set; }
+        public System.Data.Entity.Spatial.DbGeometry Shape { get; set; }
+        public byte[] GDB_GEOMATTR_DATA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AspNetRoles> AspNetRoles { get; set; }
-        public virtual Module Module { get; set; }
+        public virtual ICollection<COMMUNES_RSK> COMMUNES_RSK { get; set; }
     }
 }

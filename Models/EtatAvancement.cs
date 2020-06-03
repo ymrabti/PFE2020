@@ -12,21 +12,20 @@ namespace GestionnaireUtilisateurs.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SousModule
+    public partial class EtatAvancement
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SousModule()
+        public EtatAvancement()
         {
-            this.AspNetRoles = new HashSet<AspNetRoles>();
+            this.Demande_Derogation = new HashSet<Demande_Derogation>();
         }
     
-        public int SousModuleId { get; set; }
-        public string SousModuleName { get; set; }
-        public string SousModuleDescription { get; set; }
-        public int ModuleId { get; set; }
+        public int CodeEtat { get; set; }
+        public string Etat { get; set; }
+        public Nullable<System.TimeSpan> TempPrevue { get; set; }
+        public string Module { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AspNetRoles> AspNetRoles { get; set; }
-        public virtual Module Module { get; set; }
+        public virtual ICollection<Demande_Derogation> Demande_Derogation { get; set; }
     }
 }

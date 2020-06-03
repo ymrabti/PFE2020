@@ -11,8 +11,7 @@ namespace GestionnaireUtilisateurs.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Module
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -23,9 +22,7 @@ namespace GestionnaireUtilisateurs.Models
         }
     
         public int ModuleId { get; set; }
-        [Display(Name="Nom du Module")]
         public string ModuleName { get; set; }
-        [Display(Name = "Description du Module")]
         public string ModuleDescription { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

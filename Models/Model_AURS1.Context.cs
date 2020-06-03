@@ -25,14 +25,38 @@ namespace GestionnaireUtilisateurs.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Activite_Derogation> Activite_Derogation { get; set; }
+        public virtual DbSet<Affect_Derg_Comms> Affect_Derg_Comms { get; set; }
         public virtual DbSet<Application> Application { get; set; }
         public virtual DbSet<ApplicationModule> ApplicationModule { get; set; }
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
+        public virtual DbSet<Autorisation_Derogation> Autorisation_Derogation { get; set; }
+        public virtual DbSet<Avis_Org> Avis_Org { get; set; }
+        public virtual DbSet<Commission> Commission { get; set; }
+        public virtual DbSet<COMMUNES_RSK> COMMUNES_RSK { get; set; }
+        public virtual DbSet<Courrier> Courrier { get; set; }
+        public virtual DbSet<Demande_Derogation> Demande_Derogation { get; set; }
+        public virtual DbSet<Document_Derogation> Document_Derogation { get; set; }
+        public virtual DbSet<EtatAvancement> EtatAvancement { get; set; }
+        public virtual DbSet<FicheSuiveuse> FicheSuiveuse { get; set; }
+        public virtual DbSet<Forme_MaitreOeuvrage_DemDerg> Forme_MaitreOeuvrage_DemDerg { get; set; }
         public virtual DbSet<Module> Module { get; set; }
+        public virtual DbSet<Nature_Courrier> Nature_Courrier { get; set; }
+        public virtual DbSet<Nature_Demande_Derg> Nature_Demande_Derg { get; set; }
+        public virtual DbSet<Nature_Projet_DemDerg> Nature_Projet_DemDerg { get; set; }
+        public virtual DbSet<Organisme> Organisme { get; set; }
+        public virtual DbSet<parcell> parcell { get; set; }
+        public virtual DbSet<PROVINCES_RSK> PROVINCES_RSK { get; set; }
+        public virtual DbSet<References_Foncieres> References_Foncieres { get; set; }
         public virtual DbSet<SousModule> SousModule { get; set; }
+        public virtual DbSet<Statut_Juridique_DemDerg> Statut_Juridique_DemDerg { get; set; }
         public virtual DbSet<StatutRole> StatutRole { get; set; }
         public virtual DbSet<Statuts> Statuts { get; set; }
-        public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
+        public virtual DbSet<Type_Avis> Type_Avis { get; set; }
+        public virtual DbSet<TYPE_DOC> TYPE_DOC { get; set; }
+        public virtual DbSet<View_Affect_Com> View_Affect_Com { get; set; }
+        public virtual DbSet<View_Last_Affectation_Com> View_Last_Affectation_Com { get; set; }
     }
 }

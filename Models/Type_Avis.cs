@@ -12,21 +12,18 @@ namespace GestionnaireUtilisateurs.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SousModule
+    public partial class Type_Avis
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SousModule()
+        public Type_Avis()
         {
-            this.AspNetRoles = new HashSet<AspNetRoles>();
+            this.Avis_Org = new HashSet<Avis_Org>();
         }
     
-        public int SousModuleId { get; set; }
-        public string SousModuleName { get; set; }
-        public string SousModuleDescription { get; set; }
-        public int ModuleId { get; set; }
+        public int Id_TypAvis { get; set; }
+        public string Type_Avis1 { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AspNetRoles> AspNetRoles { get; set; }
-        public virtual Module Module { get; set; }
+        public virtual ICollection<Avis_Org> Avis_Org { get; set; }
     }
 }

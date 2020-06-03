@@ -1,5 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="aurs1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Activite_Derogation">
+    <Key>
+      <PropertyRef Name="Id_Activite_Derg" />
+    </Key>
+    <Property Name="Id_Activite_Derg" Type="int" Nullable="false" />
+    <Property Name="Code_Activite_Derg" Type="int" />
+    <Property Name="Activite_Activite_Derg" Type="varchar" MaxLength="100" />
+    <Property Name="Acteurs_Activite_Derg" Type="varchar" MaxLength="50" />
+    <Property Name="Temps_prevu_Activite_Derg" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Affect_Derg_Comms">
+    <Key>
+      <PropertyRef Name="FK_DemDerg_Aff_Com" />
+      <PropertyRef Name="FK_Commision" />
+    </Key>
+    <Property Name="FK_DemDerg_Aff_Com" Type="int" Nullable="false" />
+    <Property Name="FK_Commision" Type="int" Nullable="false" />
+    <Property Name="detail" Type="varchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="Application">
     <Key>
       <PropertyRef Name="ApplicationId" />
@@ -69,6 +88,140 @@
     <Property Name="StatutId" Type="nvarchar" MaxLength="128" />
     <Property Name="typeUtilisateur" Type="varchar" MaxLength="50" />
     <Property Name="Organisme" Type="int" />
+    <Property Name="Entreprise" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Autorisation_Derogation">
+    <Key>
+      <PropertyRef Name="Id_Autorisation" />
+    </Key>
+    <Property Name="Id_Autorisation" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date_Demande_Autorisation" Type="date" />
+    <Property Name="Dae_Avis_Autorisation" Type="date" />
+    <Property Name="Nature_Autorisation" Type="varchar" MaxLength="100" />
+    <Property Name="Date_Aut_Autorisation" Type="date" />
+    <Property Name="Date_Comt_Autorisation" Type="date" />
+    <Property Name="EtatAvancemt_Autorisation" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Avis_Org">
+    <Key>
+      <PropertyRef Name="FK_DemDerg" />
+      <PropertyRef Name="FK_Organisme" />
+    </Key>
+    <Property Name="FK_DemDerg" Type="int" Nullable="false" />
+    <Property Name="FK_Organisme" Type="int" Nullable="false" />
+    <Property Name="FK_TypAvis" Type="int" Nullable="false" />
+    <Property Name="Detail_Avis" Type="varchar" MaxLength="150" />
+  </EntityType>
+  <EntityType Name="Commission">
+    <Key>
+      <PropertyRef Name="Id_Commission" />
+    </Key>
+    <Property Name="Id_Commission" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Code_Commission" Type="int" />
+    <Property Name="Date_Commission" Type="datetime" />
+    <Property Name="Etat_Commission" Type="varchar" MaxLength="250" />
+  </EntityType>
+  <EntityType Name="COMMUNES_RSK">
+    <Key>
+      <PropertyRef Name="OBJECTID" />
+    </Key>
+    <Property Name="OBJECTID" Type="int" Nullable="false" />
+    <Property Name="IDCOM" Type="int" />
+    <Property Name="COMMUNE" Type="nvarchar" MaxLength="100" />
+    <Property Name="POPU" Type="int" />
+    <Property Name="POPR" Type="int" />
+    <Property Name="IDPROV" Type="int" />
+    <Property Name="CODEEPSG" Type="int" />
+    <Property Name="WKT" Type="nvarchar" MaxLength="254" />
+    <Property Name="code_commu" Type="nvarchar" MaxLength="50" />
+    <Property Name="Shape" Type="geometry" />
+    <Property Name="GDB_GEOMATTR_DATA" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="Courrier">
+    <Key>
+      <PropertyRef Name="id_Courrier" />
+    </Key>
+    <Property Name="id_Courrier" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Code_Courrier" Type="int" />
+    <Property Name="Date_Courier" Type="date" />
+    <Property Name="Source_Courrier" Type="varchar" MaxLength="100" />
+    <Property Name="Destination_Courrier" Type="varchar" MaxLength="100" />
+    <Property Name="url_Courrier" Type="varchar" MaxLength="100" />
+    <Property Name="FK_Nature_Courrier" Type="int" />
+    <Property Name="FK_DemDerg_Cour" Type="int" />
+  </EntityType>
+  <EntityType Name="Demande_Derogation">
+    <Key>
+      <PropertyRef Name="Id_DemDerg" />
+    </Key>
+    <Property Name="Id_DemDerg" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Code_DemDerg" Type="int" />
+    <Property Name="NumVersion_DemDerog" Type="int" />
+    <Property Name="Date_Arrivee_DemDerg" Type="datetime" />
+    <Property Name="Intitule_DemDerg" Type="varchar" MaxLength="50" />
+    <Property Name="Superficie_Terrain_DemDerg" Type="float" />
+    <Property Name="Maitre_Oeuvrage_DemDerg" Type="nvarchar" MaxLength="128" />
+    <Property Name="Maitre_Oeuvre_DemDerg" Type="nvarchar" MaxLength="128" />
+    <Property Name="Couverture_DemDerg" Type="bit" />
+    <Property Name="PrevisionUrbanistique_DemDerg" Type="int" />
+    <Property Name="Ratio_resid_DemDerg" Type="int" />
+    <Property Name="Ratio_touris_DemDerg" Type="int" />
+    <Property Name="Ratio_indus_DemDerg" Type="int" />
+    <Property Name="Ratio_Social_DemDerg" Type="int" />
+    <Property Name="Montant_Investissement_DemDerg" Type="float" />
+    <Property Name="Emploi_generer_DemDerg" Type="int" />
+    <Property Name="Dero_demande_DemDerg" Type="varchar" MaxLength="50" />
+    <Property Name="Duree_realisation_DemDerg" Type="varchar" MaxLength="50" />
+    <Property Name="Contribution_Projet_DemDerg" Type="varchar" MaxLength="50" />
+    <Property Name="Adresse_DemDerg" Type="varchar" MaxLength="150" />
+    <Property Name="Avis_Remarque_DemDerg" Type="varchar" MaxLength="250" />
+    <Property Name="Cloture_DemDerg" Type="bit" />
+    <Property Name="FK_DemDerg_Nature_Projet_DemDerg" Type="int" />
+    <Property Name="FK_DemDerg_StatutJuridique_DemDerg" Type="int" />
+    <Property Name="FK_DemDerg_FormeMaitreOeuvrage_DemDerg" Type="int" />
+    <Property Name="FK_DemDerg_Nature_Dem" Type="int" />
+    <Property Name="FK_DemDerg_EtatAvc" Type="int" />
+    <Property Name="Id_Autorisation" Type="int" />
+    <Property Name="Id_Commune" Type="int" />
+  </EntityType>
+  <EntityType Name="Document_Derogation">
+    <Key>
+      <PropertyRef Name="Id_Doc_Derog" />
+    </Key>
+    <Property Name="Id_Doc_Derog" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Code_Doc_Derg" Type="int" />
+    <Property Name="Intitule_Doc_Derg" Type="int" />
+    <Property Name="url_Doc_Derg" Type="varchar" MaxLength="300" />
+    <Property Name="FK_DemDerg_DocDerg" Type="int" />
+  </EntityType>
+  <EntityType Name="EtatAvancement">
+    <Key>
+      <PropertyRef Name="CodeEtat" />
+    </Key>
+    <Property Name="CodeEtat" Type="int" Nullable="false" />
+    <Property Name="Etat" Type="nvarchar(max)" />
+    <Property Name="TempPrevue" Type="time" Precision="7" />
+    <Property Name="Module" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="FicheSuiveuse">
+    <Key>
+      <PropertyRef Name="Id_FichSuiv" />
+    </Key>
+    <Property Name="Id_FichSuiv" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Code_FichSuiv" Type="int" />
+    <Property Name="Date_FichSuiv" Type="date" />
+    <Property Name="Debut_FichSuiv" Type="varchar" MaxLength="100" />
+    <Property Name="Fin_FichSuiv" Type="varchar" MaxLength="100" />
+    <Property Name="TempsRealise_FichSuiv" Type="varchar" MaxLength="50" />
+    <Property Name="Visa_FichSuiv" Type="varchar" MaxLength="50" />
+    <Property Name="FK_DemDerg_FicheSuiveuse" Type="int" />
+  </EntityType>
+  <EntityType Name="Forme_MaitreOeuvrage_DemDerg">
+    <Key>
+      <PropertyRef Name="Id_FormeMaitreOeuvrage_DemDerg" />
+    </Key>
+    <Property Name="Id_FormeMaitreOeuvrage_DemDerg" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FormeMaitreOeuvrage_DemDerg" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="Module">
     <Key>
@@ -78,6 +231,66 @@
     <Property Name="ModuleName" Type="text" Nullable="false" />
     <Property Name="ModuleDescription" Type="text" />
   </EntityType>
+  <EntityType Name="Nature_Courrier">
+    <Key>
+      <PropertyRef Name="Id_Nature_Courrier" />
+    </Key>
+    <Property Name="Id_Nature_Courrier" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nature_Courrier" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Nature_Demande_Derg">
+    <Key>
+      <PropertyRef Name="Id_NatureDemDerog" />
+    </Key>
+    <Property Name="Id_NatureDemDerog" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nature_Demande_Derogation" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Nature_Projet_DemDerg">
+    <Key>
+      <PropertyRef Name="Id_Nature_Projet_DemDerg" />
+    </Key>
+    <Property Name="Id_Nature_Projet_DemDerg" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nature_Projet_DemDerg" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Organisme">
+    <Key>
+      <PropertyRef Name="Id_Organisme" />
+    </Key>
+    <Property Name="Id_Organisme" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nom_Organisme" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="parcell">
+    <Key>
+      <PropertyRef Name="objectid" />
+    </Key>
+    <Property Name="objectid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="typefoncier" Type="nchar" MaxLength="10" />
+    <Property Name="numfoncier" Type="nvarchar" MaxLength="50" />
+    <Property Name="indice" Type="nvarchar" MaxLength="50" />
+    <Property Name="xcenteroid" Type="numeric" Precision="38" Scale="8" />
+    <Property Name="ycenteroid" Type="numeric" Precision="38" Scale="8" />
+    <Property Name="shape" Type="geometry" />
+    <Property Name="GDB_GEOMATTR_DATA" Type="varbinary(max)" />
+    <Property Name="Fk_DemDerog" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PROVINCES_RSK">
+    <Key>
+      <PropertyRef Name="IdProv" />
+    </Key>
+    <Property Name="IdProv" Type="int" Nullable="false" />
+    <Property Name="Provicne" Type="nvarchar" MaxLength="100" />
+    <Property Name="idreg" Type="int" />
+    <Property Name="Region" Type="nvarchar" MaxLength="50" />
+    <Property Name="Shape" Type="geometry" />
+    <Property Name="GDB_GEOMATTR_DATA" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="References_Foncieres">
+    <Key>
+      <PropertyRef Name="Id_RF" />
+    </Key>
+    <Property Name="Id_RF" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="NomRF" Type="nchar" MaxLength="100" Nullable="false" />
+  </EntityType>
   <EntityType Name="SousModule">
     <Key>
       <PropertyRef Name="SousModuleId" />
@@ -86,6 +299,13 @@
     <Property Name="SousModuleName" Type="text" Nullable="false" />
     <Property Name="SousModuleDescription" Type="text" />
     <Property Name="ModuleId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Statut_Juridique_DemDerg">
+    <Key>
+      <PropertyRef Name="Id_StatutJuridique_DemDerg" />
+    </Key>
+    <Property Name="Id_StatutJuridique_DemDerg" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StatutJuridique_DemDerg" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="StatutRole">
     <Key>
@@ -106,6 +326,47 @@
     <Property Name="StatutId" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="StatutName" Type="text" Nullable="false" />
     <Property Name="StatutDescription" Type="text" />
+  </EntityType>
+  <EntityType Name="Type_Avis">
+    <Key>
+      <PropertyRef Name="Id_TypAvis" />
+    </Key>
+    <Property Name="Id_TypAvis" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Type_Avis" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="TYPE_DOC">
+    <Key>
+      <PropertyRef Name="ID_DOCUMENT" />
+    </Key>
+    <Property Name="ID_DOCUMENT" Type="int" Nullable="false" />
+    <Property Name="OBJECTID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NOM_Document" Type="nvarchar" MaxLength="50" />
+    <Property Name="Obligation" Type="int" />
+  </EntityType>
+  <!--Erreurs détectées durant la génération :
+avertissement 6002: La table/vue 'aurs1.dbo.View_Affect_Com' n'a pas de clé primaire définie. La clé a été déduite et la définition a été créée en tant que table/vue en lecture seule.-->
+  <EntityType Name="View_Affect_Com">
+    <Key>
+      <PropertyRef Name="Id_DemDerg" />
+    </Key>
+    <Property Name="Expr1" Type="datetime" />
+    <Property Name="Id_DemDerg" Type="int" Nullable="false" />
+  </EntityType>
+  <!--Erreurs détectées durant la génération :
+avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas de clé primaire définie. La clé a été déduite et la définition a été créée en tant que table/vue en lecture seule.-->
+  <EntityType Name="View_Last_Affectation_Com">
+    <Key>
+      <PropertyRef Name="Id_Commission" />
+      <PropertyRef Name="FK_Commision" />
+      <PropertyRef Name="FK_DemDerg_Aff_Com" />
+      <PropertyRef Name="Id_DemDerg" />
+    </Key>
+    <Property Name="Id_Commission" Type="int" Nullable="false" />
+    <Property Name="Date_Commission" Type="datetime" />
+    <Property Name="FK_Commision" Type="int" Nullable="false" />
+    <Property Name="FK_DemDerg_Aff_Com" Type="int" Nullable="false" />
+    <Property Name="Expr1" Type="datetime" />
+    <Property Name="Id_DemDerg" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="FK_ApplicationModule_Application">
     <End Role="Application" Type="Self.Application" Multiplicity="1" />
@@ -155,6 +416,32 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Commision">
+    <End Role="Commission" Type="Self.Commission" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Affect_Derg_Comms" Type="Self.Affect_Derg_Comms" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Commission">
+        <PropertyRef Name="Id_Commission" />
+      </Principal>
+      <Dependent Role="Affect_Derg_Comms">
+        <PropertyRef Name="FK_Commision" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_COMMUNES_RSK_PROVINCES_RSK">
+    <End Role="PROVINCES_RSK" Type="Self.PROVINCES_RSK" Multiplicity="0..1" />
+    <End Role="COMMUNES_RSK" Type="Self.COMMUNES_RSK" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PROVINCES_RSK">
+        <PropertyRef Name="IdProv" />
+      </Principal>
+      <Dependent Role="COMMUNES_RSK">
+        <PropertyRef Name="IDPROV" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
     <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -180,6 +467,258 @@
       </Principal>
       <Dependent Role="AspNetUserRoles">
         <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Dem_Derog_Users_ouvrage">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Demande_Derogation">
+        <PropertyRef Name="Maitre_Oeuvrage_DemDerg" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Dem_Derog_Users_ouvre">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Demande_Derogation">
+        <PropertyRef Name="Maitre_Oeuvre_DemDerg" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Demande_Derogation_Autorisation_Derogation">
+    <End Role="Autorisation_Derogation" Type="Self.Autorisation_Derogation" Multiplicity="0..1" />
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Autorisation_Derogation">
+        <PropertyRef Name="Id_Autorisation" />
+      </Principal>
+      <Dependent Role="Demande_Derogation">
+        <PropertyRef Name="Id_Autorisation" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Demande_Derogation_COMMUNES_RSK">
+    <End Role="COMMUNES_RSK" Type="Self.COMMUNES_RSK" Multiplicity="0..1" />
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="COMMUNES_RSK">
+        <PropertyRef Name="OBJECTID" />
+      </Principal>
+      <Dependent Role="Demande_Derogation">
+        <PropertyRef Name="Id_Commune" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DemDerg">
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Avis_Org" Type="Self.Avis_Org" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Demande_Derogation">
+        <PropertyRef Name="Id_DemDerg" />
+      </Principal>
+      <Dependent Role="Avis_Org">
+        <PropertyRef Name="FK_DemDerg" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DemDerg_Aff_Com">
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Affect_Derg_Comms" Type="Self.Affect_Derg_Comms" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Demande_Derogation">
+        <PropertyRef Name="Id_DemDerg" />
+      </Principal>
+      <Dependent Role="Affect_Derg_Comms">
+        <PropertyRef Name="FK_DemDerg_Aff_Com" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DemDerg_Cour">
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Courrier" Type="Self.Courrier" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Demande_Derogation">
+        <PropertyRef Name="Id_DemDerg" />
+      </Principal>
+      <Dependent Role="Courrier">
+        <PropertyRef Name="FK_DemDerg_Cour" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DemDerg_DocDerg">
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Document_Derogation" Type="Self.Document_Derogation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Demande_Derogation">
+        <PropertyRef Name="Id_DemDerg" />
+      </Principal>
+      <Dependent Role="Document_Derogation">
+        <PropertyRef Name="Intitule_Doc_Derg" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DemDerg_EtatAvc">
+    <End Role="EtatAvancement" Type="Self.EtatAvancement" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EtatAvancement">
+        <PropertyRef Name="CodeEtat" />
+      </Principal>
+      <Dependent Role="Demande_Derogation">
+        <PropertyRef Name="FK_DemDerg_EtatAvc" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DemDerg_FicheSuiveuse">
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="FicheSuiveuse" Type="Self.FicheSuiveuse" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Demande_Derogation">
+        <PropertyRef Name="Id_DemDerg" />
+      </Principal>
+      <Dependent Role="FicheSuiveuse">
+        <PropertyRef Name="FK_DemDerg_FicheSuiveuse" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DemDerg_FormeMaitreOeuvrage_DemDerg">
+    <End Role="Forme_MaitreOeuvrage_DemDerg" Type="Self.Forme_MaitreOeuvrage_DemDerg" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Forme_MaitreOeuvrage_DemDerg">
+        <PropertyRef Name="Id_FormeMaitreOeuvrage_DemDerg" />
+      </Principal>
+      <Dependent Role="Demande_Derogation">
+        <PropertyRef Name="FK_DemDerg_FormeMaitreOeuvrage_DemDerg" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DemDerg_Nature_Dem">
+    <End Role="Nature_Demande_Derg" Type="Self.Nature_Demande_Derg" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Nature_Demande_Derg">
+        <PropertyRef Name="Id_NatureDemDerog" />
+      </Principal>
+      <Dependent Role="Demande_Derogation">
+        <PropertyRef Name="FK_DemDerg_Nature_Dem" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DemDerg_Nature_Projet_DemDerg">
+    <End Role="Nature_Projet_DemDerg" Type="Self.Nature_Projet_DemDerg" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Nature_Projet_DemDerg">
+        <PropertyRef Name="Id_Nature_Projet_DemDerg" />
+      </Principal>
+      <Dependent Role="Demande_Derogation">
+        <PropertyRef Name="FK_DemDerg_Nature_Projet_DemDerg" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DemDerg_StatutJuridique_DemDerg">
+    <End Role="Statut_Juridique_DemDerg" Type="Self.Statut_Juridique_DemDerg" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Statut_Juridique_DemDerg">
+        <PropertyRef Name="Id_StatutJuridique_DemDerg" />
+      </Principal>
+      <Dependent Role="Demande_Derogation">
+        <PropertyRef Name="FK_DemDerg_StatutJuridique_DemDerg" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Doc_Derg_TYPE_DOC">
+    <End Role="TYPE_DOC" Type="Self.TYPE_DOC" Multiplicity="0..1" />
+    <End Role="Document_Derogation" Type="Self.Document_Derogation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TYPE_DOC">
+        <PropertyRef Name="ID_DOCUMENT" />
+      </Principal>
+      <Dependent Role="Document_Derogation">
+        <PropertyRef Name="Intitule_Doc_Derg" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Nature_Courrier">
+    <End Role="Nature_Courrier" Type="Self.Nature_Courrier" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Courrier" Type="Self.Courrier" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Nature_Courrier">
+        <PropertyRef Name="Id_Nature_Courrier" />
+      </Principal>
+      <Dependent Role="Courrier">
+        <PropertyRef Name="FK_Nature_Courrier" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Organisme">
+    <End Role="Organisme" Type="Self.Organisme" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Avis_Org" Type="Self.Avis_Org" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Organisme">
+        <PropertyRef Name="Id_Organisme" />
+      </Principal>
+      <Dependent Role="Avis_Org">
+        <PropertyRef Name="FK_Organisme" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_parcell_Demande_Derogation">
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="1" />
+    <End Role="parcell" Type="Self.parcell" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Demande_Derogation">
+        <PropertyRef Name="Id_DemDerg" />
+      </Principal>
+      <Dependent Role="parcell">
+        <PropertyRef Name="Fk_DemDerog" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_parcell_References_Foncieres">
+    <End Role="References_Foncieres" Type="Self.References_Foncieres" Multiplicity="0..1" />
+    <End Role="parcell" Type="Self.parcell" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="References_Foncieres">
+        <PropertyRef Name="Id_RF" />
+      </Principal>
+      <Dependent Role="parcell">
+        <PropertyRef Name="typefoncier" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -219,16 +758,68 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_TypAvis">
+    <End Role="Type_Avis" Type="Self.Type_Avis" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Avis_Org" Type="Self.Avis_Org" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Type_Avis">
+        <PropertyRef Name="Id_TypAvis" />
+      </Principal>
+      <Dependent Role="Avis_Org">
+        <PropertyRef Name="FK_TypAvis" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="aurs1ModelStoreContainer">
+    <EntitySet Name="Activite_Derogation" EntityType="Self.Activite_Derogation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Affect_Derg_Comms" EntityType="Self.Affect_Derg_Comms" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Application" EntityType="Self.Application" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ApplicationModule" EntityType="Self.ApplicationModule" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Autorisation_Derogation" EntityType="Self.Autorisation_Derogation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Avis_Org" EntityType="Self.Avis_Org" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Commission" EntityType="Self.Commission" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="COMMUNES_RSK" EntityType="Self.COMMUNES_RSK" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Courrier" EntityType="Self.Courrier" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Demande_Derogation" EntityType="Self.Demande_Derogation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Document_Derogation" EntityType="Self.Document_Derogation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EtatAvancement" EntityType="Self.EtatAvancement" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FicheSuiveuse" EntityType="Self.FicheSuiveuse" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Forme_MaitreOeuvrage_DemDerg" EntityType="Self.Forme_MaitreOeuvrage_DemDerg" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Module" EntityType="Self.Module" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Nature_Courrier" EntityType="Self.Nature_Courrier" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Nature_Demande_Derg" EntityType="Self.Nature_Demande_Derg" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Nature_Projet_DemDerg" EntityType="Self.Nature_Projet_DemDerg" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Organisme" EntityType="Self.Organisme" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="parcell" EntityType="Self.parcell" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PROVINCES_RSK" EntityType="Self.PROVINCES_RSK" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="References_Foncieres" EntityType="Self.References_Foncieres" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SousModule" EntityType="Self.SousModule" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Statut_Juridique_DemDerg" EntityType="Self.Statut_Juridique_DemDerg" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="StatutRole" EntityType="Self.StatutRole" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Statuts" EntityType="Self.Statuts" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Type_Avis" EntityType="Self.Type_Avis" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TYPE_DOC" EntityType="Self.TYPE_DOC" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="View_Affect_Com" EntityType="Self.View_Affect_Com" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [View_Affect_Com].[Expr1] AS [Expr1], 
+    [View_Affect_Com].[Id_DemDerg] AS [Id_DemDerg]
+    FROM [dbo].[View_Affect_Com] AS [View_Affect_Com]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="View_Last_Affectation_Com" EntityType="Self.View_Last_Affectation_Com" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [View_Last_Affectation_Com].[Id_Commission] AS [Id_Commission], 
+    [View_Last_Affectation_Com].[Date_Commission] AS [Date_Commission], 
+    [View_Last_Affectation_Com].[FK_Commision] AS [FK_Commision], 
+    [View_Last_Affectation_Com].[FK_DemDerg_Aff_Com] AS [FK_DemDerg_Aff_Com], 
+    [View_Last_Affectation_Com].[Expr1] AS [Expr1], 
+    [View_Last_Affectation_Com].[Id_DemDerg] AS [Id_DemDerg]
+    FROM [dbo].[View_Last_Affectation_Com] AS [View_Last_Affectation_Com]</DefiningQuery>
+    </EntitySet>
     <AssociationSet Name="FK_ApplicationModule_Application" Association="Self.FK_ApplicationModule_Application">
       <End Role="Application" EntitySet="Application" />
       <End Role="ApplicationModule" EntitySet="ApplicationModule" />
@@ -245,6 +836,14 @@
       <End Role="Statuts" EntitySet="Statuts" />
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
     </AssociationSet>
+    <AssociationSet Name="FK_Commision" Association="Self.FK_Commision">
+      <End Role="Commission" EntitySet="Commission" />
+      <End Role="Affect_Derg_Comms" EntitySet="Affect_Derg_Comms" />
+    </AssociationSet>
+    <AssociationSet Name="FK_COMMUNES_RSK_PROVINCES_RSK" Association="Self.FK_COMMUNES_RSK_PROVINCES_RSK">
+      <End Role="PROVINCES_RSK" EntitySet="PROVINCES_RSK" />
+      <End Role="COMMUNES_RSK" EntitySet="COMMUNES_RSK" />
+    </AssociationSet>
     <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
       <End Role="AspNetRoles" EntitySet="AspNetRoles" />
       <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
@@ -252,6 +851,82 @@
     <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Dem_Derog_Users_ouvrage" Association="Self.FK_Dem_Derog_Users_ouvrage">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Dem_Derog_Users_ouvre" Association="Self.FK_Dem_Derog_Users_ouvre">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Demande_Derogation_Autorisation_Derogation" Association="Self.FK_Demande_Derogation_Autorisation_Derogation">
+      <End Role="Autorisation_Derogation" EntitySet="Autorisation_Derogation" />
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Demande_Derogation_COMMUNES_RSK" Association="Self.FK_Demande_Derogation_COMMUNES_RSK">
+      <End Role="COMMUNES_RSK" EntitySet="COMMUNES_RSK" />
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DemDerg" Association="Self.FK_DemDerg">
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+      <End Role="Avis_Org" EntitySet="Avis_Org" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DemDerg_Aff_Com" Association="Self.FK_DemDerg_Aff_Com">
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+      <End Role="Affect_Derg_Comms" EntitySet="Affect_Derg_Comms" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DemDerg_Cour" Association="Self.FK_DemDerg_Cour">
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+      <End Role="Courrier" EntitySet="Courrier" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DemDerg_DocDerg" Association="Self.FK_DemDerg_DocDerg">
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+      <End Role="Document_Derogation" EntitySet="Document_Derogation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DemDerg_EtatAvc" Association="Self.FK_DemDerg_EtatAvc">
+      <End Role="EtatAvancement" EntitySet="EtatAvancement" />
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DemDerg_FicheSuiveuse" Association="Self.FK_DemDerg_FicheSuiveuse">
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+      <End Role="FicheSuiveuse" EntitySet="FicheSuiveuse" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DemDerg_FormeMaitreOeuvrage_DemDerg" Association="Self.FK_DemDerg_FormeMaitreOeuvrage_DemDerg">
+      <End Role="Forme_MaitreOeuvrage_DemDerg" EntitySet="Forme_MaitreOeuvrage_DemDerg" />
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DemDerg_Nature_Dem" Association="Self.FK_DemDerg_Nature_Dem">
+      <End Role="Nature_Demande_Derg" EntitySet="Nature_Demande_Derg" />
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DemDerg_Nature_Projet_DemDerg" Association="Self.FK_DemDerg_Nature_Projet_DemDerg">
+      <End Role="Nature_Projet_DemDerg" EntitySet="Nature_Projet_DemDerg" />
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DemDerg_StatutJuridique_DemDerg" Association="Self.FK_DemDerg_StatutJuridique_DemDerg">
+      <End Role="Statut_Juridique_DemDerg" EntitySet="Statut_Juridique_DemDerg" />
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Doc_Derg_TYPE_DOC" Association="Self.FK_Doc_Derg_TYPE_DOC">
+      <End Role="TYPE_DOC" EntitySet="TYPE_DOC" />
+      <End Role="Document_Derogation" EntitySet="Document_Derogation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Nature_Courrier" Association="Self.FK_Nature_Courrier">
+      <End Role="Nature_Courrier" EntitySet="Nature_Courrier" />
+      <End Role="Courrier" EntitySet="Courrier" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Organisme" Association="Self.FK_Organisme">
+      <End Role="Organisme" EntitySet="Organisme" />
+      <End Role="Avis_Org" EntitySet="Avis_Org" />
+    </AssociationSet>
+    <AssociationSet Name="FK_parcell_Demande_Derogation" Association="Self.FK_parcell_Demande_Derogation">
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+      <End Role="parcell" EntitySet="parcell" />
+    </AssociationSet>
+    <AssociationSet Name="FK_parcell_References_Foncieres" Association="Self.FK_parcell_References_Foncieres">
+      <End Role="References_Foncieres" EntitySet="References_Foncieres" />
+      <End Role="parcell" EntitySet="parcell" />
     </AssociationSet>
     <AssociationSet Name="FK_SousModule_Module" Association="Self.FK_SousModule_Module">
       <End Role="Module" EntitySet="Module" />
@@ -264,6 +939,10 @@
     <AssociationSet Name="FK_StatutRole_Statuts" Association="Self.FK_StatutRole_Statuts">
       <End Role="Statuts" EntitySet="Statuts" />
       <End Role="StatutRole" EntitySet="StatutRole" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TypAvis" Association="Self.FK_TypAvis">
+      <End Role="Type_Avis" EntitySet="Type_Avis" />
+      <End Role="Avis_Org" EntitySet="Avis_Org" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

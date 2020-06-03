@@ -12,21 +12,20 @@ namespace GestionnaireUtilisateurs.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SousModule
+    public partial class Commission
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SousModule()
+        public Commission()
         {
-            this.AspNetRoles = new HashSet<AspNetRoles>();
+            this.Affect_Derg_Comms = new HashSet<Affect_Derg_Comms>();
         }
     
-        public int SousModuleId { get; set; }
-        public string SousModuleName { get; set; }
-        public string SousModuleDescription { get; set; }
-        public int ModuleId { get; set; }
+        public int Id_Commission { get; set; }
+        public Nullable<int> Code_Commission { get; set; }
+        public Nullable<System.DateTime> Date_Commission { get; set; }
+        public string Etat_Commission { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AspNetRoles> AspNetRoles { get; set; }
-        public virtual Module Module { get; set; }
+        public virtual ICollection<Affect_Derg_Comms> Affect_Derg_Comms { get; set; }
     }
 }

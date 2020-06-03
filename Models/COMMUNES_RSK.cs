@@ -12,21 +12,28 @@ namespace GestionnaireUtilisateurs.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SousModule
+    public partial class COMMUNES_RSK
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SousModule()
+        public COMMUNES_RSK()
         {
-            this.AspNetRoles = new HashSet<AspNetRoles>();
+            this.Demande_Derogation = new HashSet<Demande_Derogation>();
         }
     
-        public int SousModuleId { get; set; }
-        public string SousModuleName { get; set; }
-        public string SousModuleDescription { get; set; }
-        public int ModuleId { get; set; }
+        public int OBJECTID { get; set; }
+        public Nullable<int> IDCOM { get; set; }
+        public string COMMUNE { get; set; }
+        public Nullable<int> POPU { get; set; }
+        public Nullable<int> POPR { get; set; }
+        public Nullable<int> IDPROV { get; set; }
+        public Nullable<int> CODEEPSG { get; set; }
+        public string WKT { get; set; }
+        public string code_commu { get; set; }
+        public System.Data.Entity.Spatial.DbGeometry Shape { get; set; }
+        public byte[] GDB_GEOMATTR_DATA { get; set; }
     
+        public virtual PROVINCES_RSK PROVINCES_RSK { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AspNetRoles> AspNetRoles { get; set; }
-        public virtual Module Module { get; set; }
+        public virtual ICollection<Demande_Derogation> Demande_Derogation { get; set; }
     }
 }

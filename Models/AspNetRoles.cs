@@ -11,29 +11,25 @@ namespace GestionnaireUtilisateurs.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class AspNetRoles
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        
         public AspNetRoles()
         {
-            this.StatutRole = new HashSet<StatutRole>();
             this.AspNetUserRoles = new HashSet<AspNetUserRoles>();
+            this.StatutRole = new HashSet<StatutRole>();
         }
     
         public string Id { get; set; }
-        [Display(Name="Nom de la Tache")]
         public string Name { get; set; }
         public Nullable<int> SouModuleId { get; set; }
-        [Display(Name = "Description de la Tache")]
         public string RoleDescription { get; set; }
     
         public virtual SousModule SousModule { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<StatutRole> StatutRole { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<StatutRole> StatutRole { get; set; }
     }
 }

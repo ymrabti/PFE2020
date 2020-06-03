@@ -12,21 +12,20 @@ namespace GestionnaireUtilisateurs.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SousModule
+    public partial class TYPE_DOC
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SousModule()
+        public TYPE_DOC()
         {
-            this.AspNetRoles = new HashSet<AspNetRoles>();
+            this.Document_Derogation = new HashSet<Document_Derogation>();
         }
     
-        public int SousModuleId { get; set; }
-        public string SousModuleName { get; set; }
-        public string SousModuleDescription { get; set; }
-        public int ModuleId { get; set; }
+        public int ID_DOCUMENT { get; set; }
+        public int OBJECTID { get; set; }
+        public string NOM_Document { get; set; }
+        public Nullable<int> Obligation { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AspNetRoles> AspNetRoles { get; set; }
-        public virtual Module Module { get; set; }
+        public virtual ICollection<Document_Derogation> Document_Derogation { get; set; }
     }
 }

@@ -84,7 +84,7 @@ namespace GestionnaireUtilisateurs.Controllers
                     UserCreated.Sexe = model.Sexe;
                     UserCreated.StatutId = sid;
                     UserCreated.typeUtilisateur = model.typeUtilisateur;
-                    UserCreated.Intiulé = model.Entreprise;
+                    UserCreated.Entreprise = model.Entreprise;
 
                     database.Entry(UserCreated).State = EntityState.Modified;
 
@@ -122,7 +122,7 @@ namespace GestionnaireUtilisateurs.Controllers
             RegisterParentViewModel viewModel = new RegisterParentViewModel();
             viewModel.Id = User.Id;
             viewModel.typeUtilisateur = User.typeUtilisateur;
-            viewModel.Entreprise = User.Intiulé;
+            viewModel.Entreprise = User.Entreprise;
             viewModel.Nom = User.Nom;
             viewModel.Prenom = User.Prenom;
             viewModel.NomAr = User.NomAr;
@@ -152,7 +152,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 var new_statut = parentViewModel.StatutId;
                 var uid = parentViewModel.Id;
                 user.typeUtilisateur = parentViewModel.typeUtilisateur;
-                user.Intiulé = parentViewModel.Entreprise;
+                user.Entreprise = parentViewModel.Entreprise;
                 user.Nom = parentViewModel.Nom;
                 user.NomAr = parentViewModel.NomAr;
                 user.Prenom = parentViewModel.Prenom;
