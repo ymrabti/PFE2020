@@ -1,0 +1,35 @@
+﻿@model GestionnaireUtilisateurs.Models.Module
+
+@{
+    ViewBag.Title = "tester";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>tester</h2>
+
+<div>
+    <h4>Module</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ModuleName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModuleName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModuleDescription)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModuleDescription)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ModuleId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

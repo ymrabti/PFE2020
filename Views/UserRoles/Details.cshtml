@@ -1,0 +1,67 @@
+﻿@model GestionnaireUtilisateurs.Models.AspNetUserRoles
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>AspNetUserRoles</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Read)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Read)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Create)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Create)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Update)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Update)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Delete)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Delete)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AspNetRoles.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AspNetRoles.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AspNetUsers.UserNameAr)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AspNetUsers.UserNameAr)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

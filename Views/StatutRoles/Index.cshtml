@@ -1,0 +1,64 @@
+﻿@model IEnumerable<GestionnaireUtilisateurs.Models.StatutRole>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Lire)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cree)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Modifier)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Supprimer)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AspNetRoles.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Statuts.StatutName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Lire)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cree)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Modifier)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Supprimer)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AspNetRoles.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Statuts.StatutName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

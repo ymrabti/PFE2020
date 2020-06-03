@@ -8,85 +8,101 @@
     <div class="col-md-6" style=" margin-left: auto; margin-right: auto;">
         <div class="card" style="text-align:center; background-color: white; width: 100%; padding-top:15px;box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
             <div class="card-body">
-
-                <h4> <span class="badge-dot badge-info"></span>   Modifier d'une tache</h4>
-                <hr />
-                @using (Html.BeginForm())
+                @if (ViewBag.RoleName == "Administrator")
                 {
-                    @Html.AntiForgeryToken()
-                    <div class="form-horizontal">
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                        <input class="form-control" name="Id" type="hidden" value="@ViewBag.RoleId" />
-                        <div class="form-group">
-                            <label for="name" class="col-md-12 control-label" style="font:bold">Nom Du Role</label>
-                            <div class="col-md-10" style="position:center">
-                                <input class="form-control" name="Name" type="text" value="@ViewBag.RoleName"/>
-                            </div>
-                        </div>
+                    <center>
+                        <h1>
+                            <label class="text-danger" style="margin:10px">
+                                Impossible de modifier les information de ce role!
+                            </label>
+                        </h1>
+                    </center>
+                }
+                else
+                {
 
-                        <div class="form-group">
-                            <label for="name" class="col-md-12 control-label" style="font:bold">Description Du tache</label>
-                            <div class="col-md-10" style="position:center">
-                                <textarea class="form-control" name="RoleDescription">@ViewBag.RoleDescription</textarea>
+                    <h4> <span class="badge-dot badge-info"></span>   Modifier d'une tache</h4>
+                    <hr />
+                    using (Html.BeginForm("EditTache","Home",FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken();
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <input class="form-control" name="Id" type="hidden" value="@ViewBag.RoleId" />
+                            <div class="form-group">
+                                <label for="name" class="col-md-12 control-label" style="font:bold">Nom Du Role</label>
+                                <div class="col-md-10" style="position:center">
+                                    <input class="form-control" name="Name" type="text" value="@ViewBag.RoleName" />
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label for="name" class="col-md-12 control-label" style="font:bold">Module</label>
-                            <div class="col-md-10" style="position:center">
-                                <select class="form-control form-control-sm" name="ModuleId" id="selectmoduleparent">
-                                    <option value=-1>--- Sélectionner un module ---</option>
-                                    @foreach (var item in Model.modules)
-                                    {
-                                        if (item.ModuleId == ViewBag.ModuleId)
-                                        {
-                                            <option value="@item.ModuleId" selected>@item.ModuleName</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@item.ModuleId">@item.ModuleName</option>
-                                        }
-                                    }
-                                </select>
+                            <div class="form-group">
+                                <label for="name" class="col-md-12 control-label" style="font:bold">Description Du tache</label>
+                                <div class="col-md-10" style="position:center">
+                                    <textarea class="form-control" name="RoleDescription">@ViewBag.RoleDescription</textarea>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="name" class="col-md-12 control-label" style="font:bold">Sous Module</label>
-                            <div class="col-md-10" style="position:center">
-                                <select class="form-control form-control-sm" name="SouModuleId" id="selectsousmoduleparent">
-                                    <option value=-1>--- Sélectionner un sous module ---</option>
-                                    @foreach (var item in Model.sousModules)
-                                    {
-                                        if (item.ModuleId == ViewBag.ModuleId)
+
+                            <div class="form-group">
+                                <label for="name" class="col-md-12 control-label" style="font:bold">Module</label>
+                                <div class="col-md-10" style="position:center">
+                                    <select class="form-control form-control-sm" name="ModuleId" id="selectmoduleparent">
+                                        <option value=-1>--- Sélectionner un module ---</option>
+                                        @foreach (var item in Model.modules)
                                         {
-                                            if (item.SousModuleId == ViewBag.SousModuleId)
+                                            if (item.ModuleId == ViewBag.ModuleId)
                                             {
-                                                <option value="@item.SousModuleId" name="@item.ModuleId" selected>@item.SousModuleName</option>
+                                                <option value="@item.ModuleId" selected>@item.ModuleName</option>
                                             }
                                             else
                                             {
-                                                <option value="@item.SousModuleId" name="@item.ModuleId">@item.SousModuleName</option>
+                                                <option value="@item.ModuleId">@item.ModuleName</option>
                                             }
                                         }
-                                        else
-                                        {
-                                            <option value="@item.SousModuleId" name="@item.ModuleId" style="display:none">@item.SousModuleName</option>
-                                        }
-                                    }
-                                </select>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
+                            <div class="form-group">
+                                <label for="name" class="col-md-12 control-label" style="font:bold">Sous Module</label>
+                                <div class="col-md-10" style="position:center">
+                                    <select class="form-control form-control-sm" name="SouModuleId" id="selectsousmoduleparent">
+                                        <option value=-1>--- Sélectionner un sous module ---</option>
+                                        @foreach (var item in Model.sousModules)
+                                        {
+                                            if (item.ModuleId == ViewBag.ModuleId)
+                                            {
+                                                if (item.SousModuleId == ViewBag.SousModuleId)
+                                                {
+                                                    <option value="@item.SousModuleId" name="@item.ModuleId" selected>@item.SousModuleName</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.SousModuleId" name="@item.ModuleId">@item.SousModuleName</option>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.SousModuleId" name="@item.ModuleId" style="display:none">@item.SousModuleName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
 
-                        <div class="form-group">
-                            <div class="col-md-offset-2 col-md-10" style="position:center">
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10" style="position:center">
 
-                                <div class="modal-footer">
+                                    <div class="modal-footer">
 
-                                    <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;"><i class=" fas fa-plus">  </i> &nbsp;&nbsp;&nbsp; Modifier</button>
+                                        <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;">
+                                            Modifier
+                                            <i class=" fas fa-edit"></i> &nbsp;&nbsp;&nbsp;
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 }
 
                 <div>

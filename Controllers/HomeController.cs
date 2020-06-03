@@ -28,24 +28,25 @@ namespace GestionnaireUtilisateurs.Controllers
         }
         private MultiModeles multiModeles()
         {
+            var rolesAdmin = database.AspNetUserRoles.Where(ol => ol.AspNetRoles.Name == "Administrator");
             var mModels = new MultiModeles
             {
                 aspNetUsers = database.AspNetUsers.ToList(),
-                modules = database.Module.ToList()
-                ,
+                modules = database.Module.ToList(),
                 sousModules = database.SousModule.ToList(),
-                aspNetRoles = database.AspNetRoles.ToList()
-                ,
+                aspNetRoles = database.AspNetRoles.Where(p => p.Name != "Administrator").ToList(),
                 statuts = database.Statuts.ToList(),
                 statutRoles = database.StatutRole.ToList()
             };
             return mModels;
         }
+
         [Authorize(Roles = "Administrator")]
         public ActionResult Index()
         {
             return View(multiModeles());
         }
+
         [Authorize(Roles = "Administrator")]
         public ActionResult AddUser()
         {
@@ -53,6 +54,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddUser(RegisterViewModel model)
@@ -72,17 +74,17 @@ namespace GestionnaireUtilisateurs.Controllers
                     string uid = user.Id;
                     string sid = model.StatutId;
                     var UserCreated = database.AspNetUsers.Find(uid);
-                    UserCreated.Nom =model.Nom;
-                    UserCreated.Prenom =model.Prenom;
-                    UserCreated.NomAr =model.NomAr;
-                    UserCreated.PrenomAr =model.PrenomAr;
-                    UserCreated.UserNameAr =model.PrenomAr+" "+model.NomAr;
-                    UserCreated.CIN =model.CIN;
-                    UserCreated.Ville =model.Ville;
-                    UserCreated.Sexe =model.Sexe;
-                    UserCreated.StatutId =sid;
-                    UserCreated.typeUtilisateur =model.typeUtilisateur;
-                    UserCreated.Intiulé =model.Entreprise;
+                    UserCreated.Nom = model.Nom;
+                    UserCreated.Prenom = model.Prenom;
+                    UserCreated.NomAr = model.NomAr;
+                    UserCreated.PrenomAr = model.PrenomAr;
+                    UserCreated.UserNameAr = model.PrenomAr + " " + model.NomAr;
+                    UserCreated.CIN = model.CIN;
+                    UserCreated.Ville = model.Ville;
+                    UserCreated.Sexe = model.Sexe;
+                    UserCreated.StatutId = sid;
+                    UserCreated.typeUtilisateur = model.typeUtilisateur;
+                    UserCreated.Intiulé = model.Entreprise;
 
                     database.Entry(UserCreated).State = EntityState.Modified;
 
@@ -117,7 +119,7 @@ namespace GestionnaireUtilisateurs.Controllers
         {
             ViewBag.Statuts = database.Statuts.ToList();
             var User = database.AspNetUsers.Find(id);
-            RegisterParentViewModel viewModel = new RegisterParentViewModel ();
+            RegisterParentViewModel viewModel = new RegisterParentViewModel();
             viewModel.Id = User.Id;
             viewModel.typeUtilisateur = User.typeUtilisateur;
             viewModel.Entreprise = User.Intiulé;
@@ -135,6 +137,8 @@ namespace GestionnaireUtilisateurs.Controllers
             ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
             return View(viewModel);
         }
+
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditUser(RegisterParentViewModel parentViewModel)
@@ -144,6 +148,9 @@ namespace GestionnaireUtilisateurs.Controllers
             if (ModelState.IsValid)
             {
                 var user = database.AspNetUsers.Find(parentViewModel.Id);
+                var old_statut = user.StatutId;
+                var new_statut = parentViewModel.StatutId;
+                var uid = parentViewModel.Id;
                 user.typeUtilisateur = parentViewModel.typeUtilisateur;
                 user.Intiulé = parentViewModel.Entreprise;
                 user.Nom = parentViewModel.Nom;
@@ -158,16 +165,17 @@ namespace GestionnaireUtilisateurs.Controllers
                 user.StatutId = parentViewModel.StatutId;
                 database.Entry(user).State = EntityState.Modified;
                 var res = await database.SaveChangesAsync();
-                
+
                 if (res == 0)
                 {
                     return View(parentViewModel);
                 }
                 if (parentViewModel.Password == "" || parentViewModel.Password == null || parentViewModel.Password == "null")
                 {
-                    return RedirectToAction("Index");
+                    //return RedirectToAction("Index");
                 }
-                else {
+                else
+                {
                     var userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
                     var code = await userManager.GeneratePasswordResetTokenAsync(parentViewModel.Id);
                     var result = await userManager.ResetPasswordAsync(parentViewModel.Id, code, parentViewModel.Password);
@@ -178,6 +186,27 @@ namespace GestionnaireUtilisateurs.Controllers
                         ViewBag.errors = result.Errors;
                         return View(parentViewModel);
                     }
+                }
+                if (old_statut != new_statut)
+                {
+
+                    var aspNetUserRoles = database.AspNetUserRoles.Where(iden => iden.UserId == uid);
+                    database.AspNetUserRoles.RemoveRange(aspNetUserRoles);
+                    var tachesfromstatut = database.StatutRole.Where(statut => statut.StatutId == new_statut).ToList();
+                    var userRoles = new List<AspNetUserRoles>();
+                    foreach (var element in tachesfromstatut)
+                    {
+                        AspNetUserRoles userRole = new AspNetUserRoles();
+                        userRole.UserId = uid;
+                        userRole.RoleId = element.RoleId;
+                        userRole.Create = element.Cree;
+                        userRole.Update = element.Modifier;
+                        userRole.Read = element.Lire;
+                        userRole.Delete = element.Supprimer;
+                        userRoles.Add(userRole);
+                    }
+                    database.AspNetUserRoles.AddRange(userRoles);
+                    database.SaveChanges();
                 }
                 return RedirectToAction("Index");
             }
@@ -197,11 +226,12 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.utilisateur = user.Nom+" " +user.Prenom;
+            ViewBag.utilisateur = user.Nom + " " + user.Prenom;
             ViewBag.statutName = user.Statuts.StatutName;
             return View();
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost, ActionName("DeleteUser")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteUserConfirmed(string id)
@@ -239,12 +269,14 @@ namespace GestionnaireUtilisateurs.Controllers
             var model = new MultiModeles
             {
                 aspNetUserRoles = database.AspNetUserRoles.Where(user => user.UserId == id).ToList(),
-                aspNetRoles = database.AspNetRoles.ToList(),
+                aspNetRoles = database.AspNetRoles.Where(p => p.Name != "Administrator").ToList(),
                 modules = database.Module.ToList(),
                 sousModules = database.SousModule.ToList()
             };
             return View(model);
         }
+
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult UserTache(string[] Create, string[] Read, string[] Update, string[] Delete
@@ -366,10 +398,11 @@ namespace GestionnaireUtilisateurs.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult AddStatutPartial()
         {
-            return PartialView("_StatutModal",new StatutsViewModel());
+            return PartialView("_StatutModal", new StatutsViewModel());
         }
 
-        
+
+        [Authorize(Roles = "Administrator")]
         public async Task<JsonResult> AddStatutPartiale([Bind(Include = "StatutName,StatutDescription")]Statuts Statut)
         {
             var data = new object();
@@ -379,11 +412,11 @@ namespace GestionnaireUtilisateurs.Controllers
                 database.Statuts.Add(Statut);
                 var result = await database.SaveChangesAsync();
                 var statutss = from p in database.Statuts.ToList()
-                            select new Statuts
-                            {
-                                StatutId = p.StatutId,
-                                StatutName = p.StatutName
-                            };
+                               select new Statuts
+                               {
+                                   StatutId = p.StatutId,
+                                   StatutName = p.StatutName
+                               };
 
                 data = new { dd = "error", statutss };
                 return Json(data, JsonRequestBehavior.AllowGet);
@@ -393,7 +426,7 @@ namespace GestionnaireUtilisateurs.Controllers
         public JsonResult ResetRolesFromStatut(string UserId)
         {
             var statutId = database.AspNetUsers.Find(UserId).StatutId;
-            if (statutId==null || statutId=="")
+            if (statutId == null || statutId == "")
             {
                 return Json(new { dd = "error" }, JsonRequestBehavior.AllowGet);
             }
@@ -447,7 +480,7 @@ namespace GestionnaireUtilisateurs.Controllers
             var model = new MultiModeles
             {
                 statutRoles = database.StatutRole.Where(user => user.StatutId == id).ToList(),
-                aspNetRoles = database.AspNetRoles.ToList(),
+                aspNetRoles = database.AspNetRoles.Where(p => p.Name != "Administrator").ToList(),
                 modules = database.Module.ToList(),
                 sousModules = database.SousModule.ToList()
             };
@@ -708,8 +741,8 @@ namespace GestionnaireUtilisateurs.Controllers
             return PartialView("_SubModuleModal", multiModeles());
         }
 
-        
-        public async Task<JsonResult> AddSubModulePartiale([Bind(Include = "SousModuleName,SousModuleDescription,ModuleId")] 
+
+        public async Task<JsonResult> AddSubModulePartiale([Bind(Include = "SousModuleName,SousModuleDescription,ModuleId")]
         SousModule sousModule)
         {
             var data = new object();
@@ -718,12 +751,12 @@ namespace GestionnaireUtilisateurs.Controllers
                 database.SousModule.Add(sousModule);
                 var result = await database.SaveChangesAsync();
                 var smdles = from p in database.SousModule.ToList()
-                            select new SousModule
-                            {
-                                SousModuleId = p.SousModuleId,
-                                SousModuleName = p.SousModuleName,
-                                ModuleId=p.ModuleId
-                            };
+                             select new SousModule
+                             {
+                                 SousModuleId = p.SousModuleId,
+                                 SousModuleName = p.SousModuleName,
+                                 ModuleId = p.ModuleId
+                             };
 
                 data = new { dd = "error", smdles };
                 return Json(data, JsonRequestBehavior.AllowGet);
@@ -778,9 +811,12 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             ViewBag.RoleName = role.Name;
             ViewBag.RoleDescription = role.RoleDescription;
-            ViewBag.SousModuleId = role.SouModuleId;
-            ViewBag.ModuleId = role.SousModule.Module.ModuleId;
-            ViewBag.RoleId = role.Id;
+            if (role.Name != "Administrator")
+            {
+                ViewBag.SousModuleId = role.SouModuleId;
+                ViewBag.ModuleId = role.SousModule.Module.ModuleId;
+                ViewBag.RoleId = role.Id;
+            }
             return View(multiModeles());
         }
         [HttpPost]
@@ -814,8 +850,12 @@ namespace GestionnaireUtilisateurs.Controllers
                 return HttpNotFound();
             }
             ViewBag.RoleName = role.Name;
-            ViewBag.SousModuleName = role.SousModule.SousModuleName;
-            ViewBag.ModuleName = role.SousModule.Module.ModuleName;
+
+            if (role.Name != "Administrator")
+            {
+                ViewBag.SousModuleName = role.SousModule.SousModuleName;
+                ViewBag.ModuleName = role.SousModule.Module.ModuleName;
+            }
             ViewBag.RoleId = role.Id;
             return View();
         }
@@ -838,7 +878,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return PartialView("_TacheModal", multiModeles());
         }
 
-        
+
         public async Task<JsonResult> AddTachePartiale([Bind(Include = "Name,SouModuleId,RoleDescription")] AspNetRoles role)
         {
             var data = new object();
