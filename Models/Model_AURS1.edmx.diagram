@@ -5,39 +5,36 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="858040c852fe42089c4de916a1ff0ab6" Name="Diagram1" ZoomLevel="93">
-        <EntityTypeShape EntityType="aurs1Model.Activite_Derogation" Width="1.5" PointX="5.75" PointY="0.75" />
-        <EntityTypeShape EntityType="aurs1Model.Affect_Derg_Comms" Width="1.5" PointX="10.5" PointY="13.375" />
-        <EntityTypeShape EntityType="aurs1Model.Application" Width="1.5" PointX="1.5" PointY="41.125" />
+        <EntityTypeShape EntityType="aurs1Model.Affect_Derg_Comms" Width="1.5" PointX="7.5" PointY="14.375" />
+        <EntityTypeShape EntityType="aurs1Model.Application" Width="1.5" PointX="1.5" PointY="43.125" />
         <EntityTypeShape EntityType="aurs1Model.ApplicationModule" Width="1.5" PointX="3.75" PointY="4.125" />
         <EntityTypeShape EntityType="aurs1Model.AspNetRoles" Width="1.5" PointX="0.75" PointY="10.875" />
         <EntityTypeShape EntityType="aurs1Model.AspNetUserRoles" Width="1.5" PointX="8.25" PointY="17.125" />
         <EntityTypeShape EntityType="aurs1Model.AspNetUsers" Width="1.5" PointX="3" PointY="14.875" />
-        <EntityTypeShape EntityType="aurs1Model.Autorisation_Derogation" Width="1.5" PointX="3" PointY="25.625" />
-        <EntityTypeShape EntityType="aurs1Model.Avis_Org" Width="1.5" PointX="7.5" PointY="13.25" />
-        <EntityTypeShape EntityType="aurs1Model.Commission" Width="1.5" PointX="8.25" PointY="10.375" />
-        <EntityTypeShape EntityType="aurs1Model.COMMUNES_RSK" Width="1.5" PointX="3" PointY="36.375" />
-        <EntityTypeShape EntityType="aurs1Model.Courrier" Width="1.5" PointX="10.5" PointY="20.875" />
-        <EntityTypeShape EntityType="aurs1Model.Demande_Derogation" Width="1.5" PointX="5.25" PointY="13.625" />
-        <EntityTypeShape EntityType="aurs1Model.Document_Derogation" Width="1.5" PointX="7.5" PointY="21.25" />
-        <EntityTypeShape EntityType="aurs1Model.EtatAvancement" Width="1.5" PointX="3" PointY="31.25" />
-        <EntityTypeShape EntityType="aurs1Model.FicheSuiveuse" Width="1.5" PointX="7.5" PointY="33.5" />
-        <EntityTypeShape EntityType="aurs1Model.Forme_MaitreOeuvrage_DemDerg" Width="1.5" PointX="3" PointY="23.25" />
+        <EntityTypeShape EntityType="aurs1Model.Autorisation_Derogation" Width="1.5" PointX="3" PointY="32.875" />
+        <EntityTypeShape EntityType="aurs1Model.Avis_Org" Width="1.5" PointX="7.5" PointY="21.25" />
+        <EntityTypeShape EntityType="aurs1Model.Commission" Width="1.5" PointX="5.25" PointY="10.375" />
+        <EntityTypeShape EntityType="aurs1Model.Courrier" Width="1.5" PointX="10.5" PointY="16.875" />
+        <EntityTypeShape EntityType="aurs1Model.Demande_Derogation" Width="1.5" PointX="5.25" PointY="13.5" />
+        <EntityTypeShape EntityType="aurs1Model.Document_Derogation" Width="1.5" PointX="10.5" PointY="13.25" />
+        <EntityTypeShape EntityType="aurs1Model.EtatAvancement" Width="1.5" PointX="3" PointY="0.75" />
+        <EntityTypeShape EntityType="aurs1Model.FicheSuiveuse" Width="1.5" PointX="7.5" PointY="31.375" />
+        <EntityTypeShape EntityType="aurs1Model.Forme_MaitreOeuvrage_DemDerg" Width="1.5" PointX="3" PointY="36.125" />
         <EntityTypeShape EntityType="aurs1Model.Module" Width="1.5" PointX="1.5" PointY="4.125" />
-        <EntityTypeShape EntityType="aurs1Model.Nature_Courrier" Width="1.5" PointX="8.25" PointY="27.625" />
-        <EntityTypeShape EntityType="aurs1Model.Nature_Demande_Derg" Width="1.5" PointX="3" PointY="28.875" />
-        <EntityTypeShape EntityType="aurs1Model.Nature_Projet_DemDerg" Width="1.5" PointX="3" PointY="34" />
-        <EntityTypeShape EntityType="aurs1Model.Organisme" Width="1.5" PointX="5.25" PointY="7.75" />
-        <EntityTypeShape EntityType="aurs1Model.parcell" Width="1.5" PointX="10.5" PointY="16.75" />
-        <EntityTypeShape EntityType="aurs1Model.PROVINCES_RSK" Width="1.5" PointX="0.75" PointY="36.875" />
-        <EntityTypeShape EntityType="aurs1Model.References_Foncieres" Width="1.5" PointX="8.25" PointY="24.625" />
+        <EntityTypeShape EntityType="aurs1Model.Nature_Courrier" Width="1.5" PointX="8.25" PointY="24.625" />
+        <EntityTypeShape EntityType="aurs1Model.Nature_Demande_Derg" Width="1.5" PointX="3" PointY="23.5" />
+        <EntityTypeShape EntityType="aurs1Model.Nature_Projet_DemDerg" Width="1.5" PointX="3" PointY="25.875" />
+        <EntityTypeShape EntityType="aurs1Model.Organisme" Width="1.5" PointX="5.25" PointY="26.75" />
+        <EntityTypeShape EntityType="aurs1Model.parcell" Width="1.5" PointX="7.5" PointY="27.875" />
+        <EntityTypeShape EntityType="aurs1Model.References_Foncieres" Width="1.5" PointX="3" PointY="28.125" />
         <EntityTypeShape EntityType="aurs1Model.SousModule" Width="1.5" PointX="1.5" PointY="7" />
-        <EntityTypeShape EntityType="aurs1Model.Statut_Juridique_DemDerg" Width="1.5" PointX="3" PointY="0.875" />
+        <EntityTypeShape EntityType="aurs1Model.Statut_Juridique_DemDerg" Width="1.5" PointX="3" PointY="30.5" />
         <EntityTypeShape EntityType="aurs1Model.StatutRole" Width="1.5" PointX="3" PointY="10.75" />
         <EntityTypeShape EntityType="aurs1Model.Statuts" Width="1.5" PointX="0.75" PointY="14.125" />
-        <EntityTypeShape EntityType="aurs1Model.Type_Avis" Width="1.5" PointX="5.25" PointY="10.375" />
-        <EntityTypeShape EntityType="aurs1Model.TYPE_DOC" Width="1.5" PointX="5.25" PointY="24.375" />
-        <EntityTypeShape EntityType="aurs1Model.View_Affect_Com" Width="1.5" PointX="5.75" PointY="3.75" />
-        <EntityTypeShape EntityType="aurs1Model.View_Last_Affectation_Com" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="aurs1Model.Type_Avis" Width="1.5" PointX="5.25" PointY="24.375" />
+        <EntityTypeShape EntityType="aurs1Model.TYPE_DOC" Width="1.5" PointX="8.25" PointY="11.375" />
+        <EntityTypeShape EntityType="aurs1Model.View_Affect_Com" Width="1.5" PointX="5.75" PointY="4" />
+        <EntityTypeShape EntityType="aurs1Model.View_Last_Affectation_Com" Width="1.5" PointX="3.75" PointY="7" />
         <AssociationConnector Association="aurs1Model.FK_Commision" />
         <AssociationConnector Association="aurs1Model.FK_DemDerg_Aff_Com" />
         <AssociationConnector Association="aurs1Model.FK_ApplicationModule_Application" />
@@ -53,10 +50,9 @@
         <AssociationConnector Association="aurs1Model.FK_DemDerg" />
         <AssociationConnector Association="aurs1Model.FK_Organisme" />
         <AssociationConnector Association="aurs1Model.FK_TypAvis" />
-        <AssociationConnector Association="aurs1Model.FK_COMMUNES_RSK_PROVINCES_RSK" />
-        <AssociationConnector Association="aurs1Model.FK_Demande_Derogation_COMMUNES_RSK" />
         <AssociationConnector Association="aurs1Model.FK_DemDerg_Cour" />
         <AssociationConnector Association="aurs1Model.FK_Nature_Courrier" />
+        <AssociationConnector Association="aurs1Model.FK_Demande_Derogation_References_Foncieres" />
         <AssociationConnector Association="aurs1Model.FK_DemDerg_DocDerg" />
         <AssociationConnector Association="aurs1Model.FK_DemDerg_EtatAvc" />
         <AssociationConnector Association="aurs1Model.FK_DemDerg_FicheSuiveuse" />
@@ -67,8 +63,11 @@
         <AssociationConnector Association="aurs1Model.FK_parcell_Demande_Derogation" />
         <AssociationConnector Association="aurs1Model.FK_Doc_Derg_TYPE_DOC" />
         <AssociationConnector Association="aurs1Model.FK_SousModule_Module" />
-        <AssociationConnector Association="aurs1Model.FK_parcell_References_Foncieres" />
         <AssociationConnector Association="aurs1Model.FK_StatutRole_Statuts" />
+        <EntityTypeShape EntityType="aurs1Model.COMMUNES_RSK" Width="1.5" PointX="9.625" PointY="7" />
+        <EntityTypeShape EntityType="aurs1Model.PROVINCES_RSK" Width="1.5" PointX="7.375" PointY="7.5" />
+        <AssociationConnector Association="aurs1Model.FK_COMMUNES_RSK_PROVINCES_RSK" />
+        <AssociationConnector Association="aurs1Model.FK_Demande_Derogation_COMMUNES_RSK" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

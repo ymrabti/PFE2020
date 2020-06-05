@@ -15389,8 +15389,7 @@ module.exports = {
 			item = item.canvas;
 		}
 
-        // To prevent canvas finger
-        ing, some add - ons undefine the getContext
+		// To prevent canvas fingerprinting, some add-ons undefine the getContext
 		// method, for example: https://github.com/kkapsner/CanvasBlocker
 		// https://github.com/chartjs/Chart.js/issues/2807
 		var context = item && item.getContext && item.getContext('2d');

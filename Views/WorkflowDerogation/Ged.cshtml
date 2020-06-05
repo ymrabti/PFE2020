@@ -1,0 +1,269 @@
+﻿@model AURS_Derogation.Models.MultiModels
+@{
+    ViewBag.Title = "GED";
+    Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
+
+}
+<link href="~/Content/custumfileinput.css" rel="stylesheet" />
+<section>
+    <nav>
+        <ol class="cd-multi-steps text-bottom count">
+            <li style="right: 2px;" class="visited"><a href="#0">Renseignements</a></li>
+            <li style="right: 2px; top: 12px;" class="visited"><em>Siuation Géographique</em></li>
+            <li style="right: 2px;" class="current"><em>GED</em></li>
+            <li style="right: 2px;"><em>Programmation</em></li>
+            <li style="right: 2px;"><em>Avis</em></li>
+            <li style="right: 2px;"><em>Echanges</em></li>
+            <li style="right: 2px;"><em>Autorisation</em></li>
+            <li style="right: 2px;"><em>Cloture</em></li>
+        </ol>
+    </nav>
+</section>
+
+<div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+    <div class="card-body" id="">
+        <div class="row">
+            <div class="col-sm-4">
+                <label for="inputText11" style="font-size:12px;">N° de Dossier :</label>
+                <input type="text" class="form-control" value="@Model.DemDerg.Code_DemDerg" id="NumDossier" name="Code_DemDerg" disabled>
+            </div>
+            <div class="col-sm-4">
+                <label for="inputText11" style="font-size:12px;">Commune/Arrondissement :</label>
+                @if (Model.DemDerg.Derog_Commune.Count() == 0)
+                {<input type="text" class="form-control" value="Inconnue" id="communearrondissement" name="" disabled> }
+                else
+                {
+                    <input type="text" class="form-control" value="@Model.DemDerg.Derog_Commune.FirstOrDefault().COMMUNES.nom_commun" id="communearrondissement" name="" disabled>
+                }
+
+            </div>
+            <div class="col-sm-4">
+                <label for="inputText11" style="font-size:12px;">Référence foncière :</label>
+                @if (Model.DemDerg.References_Foncieres == null)
+                {<input type="text" id="dateNow" value="Inconnue" name="References_Foncieres" class="form-control" disabled> }
+                else
+                {<input type="text" id="dateNow" value="@Model.DemDerg.References_Foncieres.NomRF" name="References_Foncieres" class="form-control" disabled>}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+
+    <h5 class="card-header">Ajout des documents</h5>
+    <div class="card-body" id="">
+        <div class="form-horizontal">
+            <form>
+                <div class="row">
+                    <div class="col-lg-6" style="width:50%">
+                        <label for="inputText11" style="font-size:12px;">Intitulé :</label>
+                        <input type="text" class="form-control" id="IntitulDoc" name="Intitule_Doc_Derg">
+                        <br />
+                        @*<label for="inputText11" style="font-size:12px;">Document :</label>
+                            <input type="file" class="custom-file-input form-control " placeholder="Document" name="url_Doc_Derg" id="UrlDoc" /> <br />*@
+
+                        <div class="box" style="margin:20px">
+                            <input type="file" class="inputfile inputfile-1" name="url_Doc_Derg" id="UrlDoc" accept=".pdf,.jpeg,.jpg,.png,.gif">
+                            <label for="UrlDoc">
+                                <span id="labelNomDoc">Document ...</span>
+
+                            </label>
+                        </div>
+
+                        <input type="hidden" name="FK_DemDerg_DocDerg" value="@Model.DemDerg.Id_DemDerg" />
+
+                        <button type="button" class="btn btn-sm" style="background-color:#09aacc;color:white;margin-top: 1%;text-align: right;"
+                                name="enregistrer" value="0" onclick="javascript: addRow('listeDoc'); this.form.reset();">
+                            <i class="fa fa-check">Ajouter le document</i>
+                        </button>
+                    </div>
+                    <div class="col-lg-6" style="width:50%">
+                        <div class="listeDoc">
+                            <table class="table table-striped table-bordered first" id="listeDoc">
+                                <thead>
+                                    <tr>
+                                        <th>Intitulé :</th>
+                                        <th>Document :</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyDoc">
+                                    @foreach (var item in Model.DemDerg.Document_Derogation)
+                                    {
+                                        <tr>
+                                            <td>@Html.DisplayFor(modelItem => item.Intitule_Doc_Derg)</td>
+                                            <td>@Html.DisplayFor(modelItem => item.url_Doc_Derg)</td>
+                                            <td>
+                                                <i class="fa fa-minus-square" style="width:6%;color:#FF6347"></i>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+            <br /><br />
+            <center class="fixed-bottom">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                        <button type="submit" class="btn btn-lg" value="0" name="valider" id="btnSave" style="background-color:#09aacc; color:white">Enregister   <i class="fa fa-level-down-alt"></i></button>
+                        <button class="btn btn-lg" type="submit" id="btnsend" value="1" name="valider" style="background-color:#09aacc; color:white">Passer à l'etape suivante  <i class="fa fa-paper-plane"></i></button>
+                </div>
+            </center>
+        </div>
+    </div>
+</div>
+<script src="~/Content/dwnlds/jquery.slimscroll.js"></script>
+<script src="~/Content/dwnlds/bootstrap.bundle.js"></script>
+<script src="~/Content/dwnlds/chosen.jquery.js"></script>
+<script src="~/Content/dwnlds/jquery-1.8.3.js"></script>
+<script src="~/Content/dwnlds/jquery-3.3.1.min.js"></script>
+<script src="~/Content/dwnlds/jquery-ui.js"></script>
+<link href="~/Content/dwnlds/chosen.css" rel="stylesheet" />
+<link href="~/Content/dwnlds/jquery-ui.css" rel="stylesheet" />
+@*<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/4.0.0/bootstrap.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">*@
+<script src="~/Content/fileInputCustom.js"></script>
+<script language="javascript">
+   
+    function deleteRow(r) {
+        var i = r.parentNode.parentNode.rowIndex;
+        document.getElementById("listeDoc").deleteRow(i);
+
+    }
+
+    var stringArray = [];
+    function addRow(tableau) {
+        if (document.getElementById("UrlDoc").value != "") {
+            tableau = document.getElementById(tableau);
+
+            var tr = document.createElement('tr');
+
+            var td = document.createElement('td');
+            tableau.appendChild(tr);
+            td.innerHTML = document.getElementById("IntitulDoc").value;
+            tr.appendChild(td);
+
+            var td = document.createElement('td');
+            tableau.appendChild(tr);
+            td.innerHTML = document.getElementById("UrlDoc").value;
+            tr.appendChild(td);
+
+            var element = document.createElement("i");
+            element.setAttribute("class", "fa fa-minus-circle");
+            element.setAttribute("width", "6%")
+            element.style.color = "#FF6347";
+
+            element.onclick = function () {
+                con = (this.parentNode.parentNode.rowIndex) - 1;
+                stringArray.splice(con, 1);
+                deleteRow(this)
+
+            };
+            var td1 = document.createElement('td');
+            td1.appendChild(element);
+            tr.appendChild(td1);
+
+
+            tableau.appendChild(tr);
+            document.getElementById("labelNomDoc").innerHTML = "Document...";
+
+            var A = document.getElementById('IntitulDoc');
+            var B = document.getElementById('UrlDoc');
+            var II = @Model.DemDerg.Id_DemDerg;
+            var AA = A.value;
+            var BB = B.value;
+            stringArray.push({
+                "FK_DemDerg_DocDerg": II,
+                "Intitule_Doc_Derg": AA,
+                "url_Doc_Derg": BB,
+            });
+        }
+        else { alert("document vide!")}
+
+    }
+
+
+    $("#btnsend").click(function () {
+        if (stringArray.length == 0) {
+            alert("documents obligatoires!!");
+        }
+        else {
+            var formData = new FormData();
+            var json = JSON.stringify(stringArray);
+            formData.append("ged", json);
+            formData.append("id", @Model.DemDerg.Id_DemDerg);
+            formData.append("valider", document.getElementById('btnsend').value);
+            $.ajax({
+                type: "Post",
+                url: '@Url.Action("Ged", "WorkflowDerogation")',
+                contentType: false,
+                cache: false,
+                dataType: "json",
+                data: formData,
+                processData: false,
+                timeout: 30000,
+                //success: function (json) {
+                //    if (json.isRedirect) {
+                //        window.location.href = json.redirectUrl;
+                //    }
+                //},
+                success: function (data) {
+                    window.location.href = data;
+                },
+                //success: function () {
+                //    window.location.href = data;
+                //},
+                error: function (resultat, statut, erreur) {
+                    alert(erreur);
+                }
+            });
+
+            traditional: true
+        }
+
+
+    });
+
+
+    $("#btnSave").click(function () {
+        var formData = new FormData();
+        var json = JSON.stringify(stringArray);
+        formData.append("Ged", json);
+        formData.append("id", @Model.DemDerg.Id_DemDerg);
+        formData.append("valider", document.getElementById('btnSave').value);
+        $.ajax({
+            type: "Post",
+            url: '@Url.Action("Ged", "WorkflowDerogation")',
+            contentType: false,
+            cache: false,
+            dataType: "json",
+            data: formData,
+            processData: false,
+            success: function (data) {
+                window.location.href = data;
+            },
+            error: function (resultat, statut, erreur) {
+                alert(erreur);
+            }
+        });
+
+        traditional: true
+
+
+    });
+
+</script>
+
+

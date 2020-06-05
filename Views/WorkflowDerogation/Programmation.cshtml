@@ -1,0 +1,298 @@
+﻿@model AURS_Derogation.Models.MultiModels
+@{
+    ViewBag.Title = "Programmation";
+    Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
+    var codeCom = ViewBag.codeCom;
+    var idDerog = ViewBag.idDerog;
+    var exist = false;
+}
+
+<section @*class="fixed-top" style="margin-top:50px;background:rgba(0, 0, 0, 0.57)"*@>
+    <nav>
+        <ol class="cd-multi-steps text-bottom count">
+            <li style="right: 2px;" class="visited"><a href="#0">Renseignements</a></li>
+            <li style="right: 2px; top: 12px;" class="visited"><em>Siuation Géographique</em></li>
+            <li style="right: 2px;" class="visited"><em>GED</em></li>
+            <li style="right: 2px;" class="current"><em>Programmation</em></li>
+            <li style="right: 2px;"><em>Avis</em></li>
+            <li style="right: 2px;"><em>Echanges</em></li>
+            <li style="right: 2px;"><em>Autorisation</em></li>
+            <li style="right: 2px;"><em>Cloture</em></li>
+        </ol>
+    </nav>
+</section>
+<div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+    <div class="card-body" id="">
+        <div class="row">
+            <div class="col-sm-4">
+                <label for="inputText11" style="font-size:12px;">N° de Dossier :</label>
+                <input type="text" class="form-control" value="@Model.DemDerg.Code_DemDerg" id="NumDossier" name="Code_DemDerg" disabled>
+            </div>
+            <div class="col-sm-4">
+                <label for="inputText11" style="font-size:12px;">Commune/Arrondissement :</label>
+                @if (Model.DemDerg.Derog_Commune.Count() == 0)
+                {<input type="text" class="form-control" value="Inconnue" id="communearrondissement" name="" disabled> }
+                else
+                {
+                    <input type="text" class="form-control" value="@Model.DemDerg.Derog_Commune.FirstOrDefault().COMMUNES.nom_commun" id="communearrondissement" name="" disabled>
+                }
+
+            </div>
+            <div class="col-sm-4">
+                <label for="inputText11" style="font-size:12px;">Référence foncière :</label>
+                @if (Model.DemDerg.References_Foncieres == null)
+                {<input type="text" id="dateNow" value="Inconnue" name="References_Foncieres" class="form-control" disabled> }
+                else
+                {<input type="text" id="dateNow" value="@Model.DemDerg.References_Foncieres.NomRF" name="References_Foncieres" class="form-control" disabled>}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+    <div class="card-body">
+        <div class="form-horizontal">
+            @using (Html.BeginForm("CreateCommission", "WorkflowDerogation", FormMethod.Post, new { id = "formcreatecomm" }))
+            {
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">N° Commission : <label style="color:red">*</label></label>
+                            <input type="text" class="form-control" value="@codeCom" id="NumCom" name="Code_Commission" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">
+                                Date et Heure de la commission :
+                                <label style="color:red">
+                                    *
+                                </label>
+                            </label>
+                            <input type="datetime-local" class="form-control" @*value="2012-12-12T12:12"*@ id="Date_Commission" name="Date_Commission">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <input type="hidden" name="FK_DemDerg_Com" id="FK_DemDerg_Com" value="@Model.DemDerg.Id_DemDerg" />
+                        <button id="createcommission" onclick="submitforme()"
+                                class="btn btn-sm" style="background-color:#09aacc;color:white;margin-top: 4%;text-align: right;" name="enregistrer" value="2">
+                            <i class="fa fa-check">
+                                Créer la commision et affecter la demande courante
+                            </i>
+                        </button>
+                    </div>
+
+                </div>
+            }
+            <br />
+
+            <center><label style="font-weight: bold"><u>Liste des commissions programmées</u></label></center><br />
+            <br />
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered first">
+                    <thead>
+                        <tr>
+                            <th>Code :</th>
+                            <th>Date :</th>
+                            <th>Affectation :</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tbodyCom">
+                        @foreach (var item in Model.Comss)
+                        {
+                            <tr>
+                                <td style="width:20%">@Html.DisplayFor(modelItem => item.Code_Commission)</td>
+                                <td style="width:15%">
+                                    @Html.DisplayFor(modelItem => item.Date_Commission)
+                                    <input type="hidden" name="Id_Commission" value="@Html.DisplayFor(modelItem => item.Id_Commission)" />
+                                </td>
+                                @if (Model.AffectDergComs == null)
+                                {
+                                    <td style="width:15%">
+                                        <a href="@Url.Action("Programmation_Affectation", "WorkflowDerogation"
+                                                , new { FK_DemDerg_Com = Model.DemDerg.Id_DemDerg, Id_Commission = item.Id_Commission })">
+                                            A programmer
+                                        </a>
+                                    </td>
+
+                                }
+                                else if (item.Id_Commission == Model.ViewLestAffectCom.Id_Commission)
+                                {
+                                    <td style="width:15%;  color:#4CAF50;">Dernière programmation</td>
+                                }
+                                else
+                                {
+                                    foreach (var aff in Model.AffectDergComs)
+                                    {
+                                        if (aff.FK_Commision == item.Id_Commission)
+                                        {
+                                            <td style="width:15%; color:#0005ff;">Programmée</td>
+                                            exist = true;
+                                        }
+                                    }
+                                    if (exist == false)
+                                    {
+                                        <td style="width:15%">
+                                            <a href="@Url.Action("Programmation_Affectation", "WorkflowDerogation"
+                                                    , new { FK_DemDerg_Com = Model.DemDerg.Id_DemDerg, Id_Commission = item.Id_Commission })">
+                                                A programmer
+                                            </a>
+                                        </td>
+
+                                    }
+                                    else
+                                    {
+                                        exist = false;
+                                    }
+                                }
+                                @*foreach (var i in Model.AffectDergComs)
+                                    {
+                                    if (item.Id_Commission == Model.ViewLestAffectCom.Id_Commission)
+                                    {
+                                    <td style="width:15%;  color:#4CAF50;"><a href="">Dernière programmation</a></td>
+                                    break;
+                                    }
+                                    else if (item.Id_Commission == i.FK_Commision)
+                                    {
+                                    <td style="width:15%;"><a href="">Programmée</a></td>
+                                    break;
+                                    }
+                                    else
+                                    {
+                                    <td style="width:15%"><a href="@Url.Action("Programmation_Affectation"
+                                    , "WorkflowDerogation", new { FK_DemDerg_Com = Model.DemDerg.Id_DemDerg, Id_Commission = item.Id_Commission })">A programmer</a></td>
+                                    break;
+                                    }*@
+                            </tr>
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-sm-6">
+                </div>
+                <center class="fixed-bottom">
+                    <p class="text-right">
+                        @using (Html.BeginForm())
+                        {
+                            <button class="btn btn-lg" type="submit" value="0" name="enregistrer" style="background-color:#09aacc; color:white">
+                                Enregistrer  <i class="fa fa-level-down-alt"></i>
+                            </button>
+                            <button class="btn btn-lg" type="submit" value="1" name="enregistrer" style="background-color:#09aacc; color:white">
+                                Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
+                            </button>
+                        }
+                    </p>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function submitforme() {
+
+        if (document.getElementById('Date_Commission').value == "") { alert("date vide ou heure non saisis !!");  }
+        else { document.getElementById('formcreatecomm').submit();}
+    }
+    @*$("#createcommission").click(function () {
+        if (document.getElementById('Date_Commission').value == "") { alert("date vide ou heure non saisis !!"); }
+        else
+        {
+            var formData = new FormData();
+            formData.append("Code_Commission", document.getElementById('NumCom').value);
+            formData.append("Date_Commission", document.getElementById('Date_Commission').value);
+            formData.append("FK_DemDerg_Com", document.getElementById('FK_DemDerg_Com').value);
+            $.ajax({
+                type: "Post",
+                url: '@Url.Action("CreateCommission", "WorkflowDerogation")',
+                contentType: false,
+                cache: false,
+                dataType: "json",
+                data: formData,
+                processData: false,
+                timeout: 30000,
+                //success: function (json) {
+                //    if (json.isRedirect) {
+                //        window.location.href = json.redirectUrl;
+                //    }
+                //},
+                success: function (data) {
+                    alert("data : " + data);
+                },
+                //success: function () {
+                //    window.location.href = data;
+                //},
+                error: function (resultat, statut, erreur) {
+                    alert("error!");
+                }
+            });
+
+        }
+    }),
+
+    $("#btnsend").click(function () {
+        var formData = new FormData();
+        var json = JSON.stringify(stringArray);
+        formData.append("ged", json);
+        formData.append("id", @Model.DemDerg.Id_DemDerg);
+        formData.append("valider", document.getElementById('btnsend').value);
+        $.ajax({
+            type: "Post",
+            url: '@Url.Action("Ged", "WorkflowDerogation")',
+            contentType: false,
+            cache: false,
+            dataType: "json",
+            data: formData,
+            processData: false,
+            timeout: 30000,
+            //success: function (json) {
+            //    if (json.isRedirect) {
+            //        window.location.href = json.redirectUrl;
+            //    }
+            //},
+            success: function (data) {
+                window.location.href = data;
+            },
+            //success: function () {
+            //    window.location.href = data;
+            //},
+            error: function (resultat, statut, erreur) {
+                alert(erreur);
+            }
+        });
+    })*@
+
+        @*setInterval(function () {
+            var date = new Date();
+            var format = "YYYY-MMM-DD DDD";
+            dateConvert(date, format)
+        }, 1);
+
+        function dateConvert(dateobj, format) {
+            var year = dateobj.getFullYear();
+            var month = ("0" + (dateobj.getMonth() + 1)).slice(-2);
+            var date = ("0" + dateobj.getDate()).slice(-2);
+            var hours = ("0" + dateobj.getHours()).slice(-2);
+            var minutes = ("0" + dateobj.getMinutes()).slice(-2);
+            var seconds = ("0" + dateobj.getSeconds()).slice(-2);
+            var day = dateobj.getDay();
+            var months = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+            var converted_date = "";
+
+            switch (format) {
+                case "YYYY-MM-DD":
+                    converted_date = year + "-" + month + "-" + date;
+                    break;
+                case "YYYY-MMM-DD DDD":
+                    converted_date = year + "-" + months[parseInt(month) - 1] + "-" + date
+                        + " " + hours + ":" + minutes;
+                    break;
+            }
+            $('#dateNow').val(converted_date);
+        };*@
+</script>
+

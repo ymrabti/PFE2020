@@ -15,7 +15,6 @@ namespace GestionnaireUtilisateurs.Models
     public partial class parcell
     {
         public int objectid { get; set; }
-        public string typefoncier { get; set; }
         public string numfoncier { get; set; }
         public string indice { get; set; }
         public Nullable<decimal> xcenteroid { get; set; }
@@ -25,6 +24,5 @@ namespace GestionnaireUtilisateurs.Models
         public int Fk_DemDerog { get; set; }
     
         public virtual Demande_Derogation Demande_Derogation { get; set; }
-        public virtual References_Foncieres References_Foncieres { get; set; }
     }
 }

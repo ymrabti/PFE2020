@@ -24,5 +24,25 @@ namespace GestionnaireUtilisateurs.Models
         [DisplayName("Module")]
         public IEnumerable<Module> modules { get; set; }
         public IEnumerable<Application> applications { get; set; }
+
+
+        public IEnumerable<Commission> Comss { get; set; }
+        public IEnumerable<Demande_Derogation> DemDergs { get; set; }
+        public Demande_Derogation DemDerg { get; set; }
+        public IEnumerable<Forme_MaitreOeuvrage_DemDerg> ForMaitreOeuvrages { get; set; }
+        public IEnumerable<Nature_Courrier> NatCours { get; set; }
+        public IEnumerable<Nature_Demande_Derg> NatDemDerogs { get; set; }
+        public IEnumerable<Nature_Projet_DemDerg> NatPrjDerogs { get; set; }
+        public IEnumerable<Organisme> Orgs { get; set; }
+        public IEnumerable<Statut_Juridique_DemDerg> StatutJurds { get; set; }
+        public IEnumerable<Affect_Derg_Comms> AffectDergComs { get; set; }
+        public IEnumerable<Avis_Org> AvisOrgs { get; set; }
+        public IEnumerable<Type_Avis> TypAviss { get; set; }
+        public IEnumerable<EtatAvancement> EtatAvancements { get; set; }
+        public View_Last_Affectation_Com ViewLestAffectCom { get; set; }
+        public IEnumerable<PROVINCES_RSK> Provs { get; set; }
+        public IEnumerable<COMMUNES_RSK> Communes { get; set; }
+        public IEnumerable<References_Foncieres> References_Foncieres { get; set; }
+        public IEnumerable<parcell> Parcells { get; set; }
     }
 }

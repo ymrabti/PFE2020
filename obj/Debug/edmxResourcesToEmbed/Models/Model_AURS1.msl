@@ -1,17 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="aurs1ModelStoreContainer" CdmEntityContainer="aurs1Entities">
-    <EntitySetMapping Name="Activite_Derogation">
-      <EntityTypeMapping TypeName="aurs1Model.Activite_Derogation">
-        <MappingFragment StoreEntitySet="Activite_Derogation">
-          <ScalarProperty Name="Temps_prevu_Activite_Derg" ColumnName="Temps_prevu_Activite_Derg" />
-          <ScalarProperty Name="Acteurs_Activite_Derg" ColumnName="Acteurs_Activite_Derg" />
-          <ScalarProperty Name="Activite_Activite_Derg" ColumnName="Activite_Activite_Derg" />
-          <ScalarProperty Name="Code_Activite_Derg" ColumnName="Code_Activite_Derg" />
-          <ScalarProperty Name="Id_Activite_Derg" ColumnName="Id_Activite_Derg" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Affect_Derg_Comms">
       <EntityTypeMapping TypeName="aurs1Model.Affect_Derg_Comms">
         <MappingFragment StoreEntitySet="Affect_Derg_Comms">
@@ -128,23 +117,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="COMMUNES_RSK">
-      <EntityTypeMapping TypeName="aurs1Model.COMMUNES_RSK">
-        <MappingFragment StoreEntitySet="COMMUNES_RSK">
-          <ScalarProperty Name="GDB_GEOMATTR_DATA" ColumnName="GDB_GEOMATTR_DATA" />
-          <ScalarProperty Name="Shape" ColumnName="Shape" />
-          <ScalarProperty Name="code_commu" ColumnName="code_commu" />
-          <ScalarProperty Name="WKT" ColumnName="WKT" />
-          <ScalarProperty Name="CODEEPSG" ColumnName="CODEEPSG" />
-          <ScalarProperty Name="IDPROV" ColumnName="IDPROV" />
-          <ScalarProperty Name="POPR" ColumnName="POPR" />
-          <ScalarProperty Name="POPU" ColumnName="POPU" />
-          <ScalarProperty Name="COMMUNE" ColumnName="COMMUNE" />
-          <ScalarProperty Name="IDCOM" ColumnName="IDCOM" />
-          <ScalarProperty Name="OBJECTID" ColumnName="OBJECTID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Courrier">
       <EntityTypeMapping TypeName="aurs1Model.Courrier">
         <MappingFragment StoreEntitySet="Courrier">
@@ -162,6 +134,7 @@
     <EntitySetMapping Name="Demande_Derogation">
       <EntityTypeMapping TypeName="aurs1Model.Demande_Derogation">
         <MappingFragment StoreEntitySet="Demande_Derogation">
+          <ScalarProperty Name="Type_Terrain" ColumnName="Type_Terrain" />
           <ScalarProperty Name="Id_Commune" ColumnName="Id_Commune" />
           <ScalarProperty Name="Id_Autorisation" ColumnName="Id_Autorisation" />
           <ScalarProperty Name="FK_DemDerg_EtatAvc" ColumnName="FK_DemDerg_EtatAvc" />
@@ -288,20 +261,7 @@
           <ScalarProperty Name="xcenteroid" ColumnName="xcenteroid" />
           <ScalarProperty Name="indice" ColumnName="indice" />
           <ScalarProperty Name="numfoncier" ColumnName="numfoncier" />
-          <ScalarProperty Name="typefoncier" ColumnName="typefoncier" />
           <ScalarProperty Name="objectid" ColumnName="objectid" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="PROVINCES_RSK">
-      <EntityTypeMapping TypeName="aurs1Model.PROVINCES_RSK">
-        <MappingFragment StoreEntitySet="PROVINCES_RSK">
-          <ScalarProperty Name="GDB_GEOMATTR_DATA" ColumnName="GDB_GEOMATTR_DATA" />
-          <ScalarProperty Name="Shape" ColumnName="Shape" />
-          <ScalarProperty Name="Region" ColumnName="Region" />
-          <ScalarProperty Name="idreg" ColumnName="idreg" />
-          <ScalarProperty Name="Provicne" ColumnName="Provicne" />
-          <ScalarProperty Name="IdProv" ColumnName="IdProv" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -387,6 +347,34 @@
           <ScalarProperty Name="FK_Commision" ColumnName="FK_Commision" />
           <ScalarProperty Name="Date_Commission" ColumnName="Date_Commission" />
           <ScalarProperty Name="Id_Commission" ColumnName="Id_Commission" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="COMMUNES_RSK">
+      <EntityTypeMapping TypeName="aurs1Model.COMMUNES_RSK">
+        <MappingFragment StoreEntitySet="COMMUNES_RSK">
+          <ScalarProperty Name="GDB_GEOMATTR_DATA" ColumnName="GDB_GEOMATTR_DATA" />
+          <ScalarProperty Name="Shape" ColumnName="Shape" />
+          <ScalarProperty Name="code_commu" ColumnName="code_commu" />
+          <ScalarProperty Name="WKT" ColumnName="WKT" />
+          <ScalarProperty Name="CODEEPSG" ColumnName="CODEEPSG" />
+          <ScalarProperty Name="IDPROV" ColumnName="IDPROV" />
+          <ScalarProperty Name="POPR" ColumnName="POPR" />
+          <ScalarProperty Name="POPU" ColumnName="POPU" />
+          <ScalarProperty Name="COMMUNE" ColumnName="COMMUNE" />
+          <ScalarProperty Name="IDCOM" ColumnName="IDCOM" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PROVINCES_RSK">
+      <EntityTypeMapping TypeName="aurs1Model.PROVINCES_RSK">
+        <MappingFragment StoreEntitySet="PROVINCES_RSK">
+          <ScalarProperty Name="GDB_GEOMATTR_DATA" ColumnName="GDB_GEOMATTR_DATA" />
+          <ScalarProperty Name="Shape" ColumnName="Shape" />
+          <ScalarProperty Name="Region" ColumnName="Region" />
+          <ScalarProperty Name="idreg" ColumnName="idreg" />
+          <ScalarProperty Name="Provicne" ColumnName="Provicne" />
+          <ScalarProperty Name="IdProv" ColumnName="IdProv" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

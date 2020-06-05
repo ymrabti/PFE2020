@@ -1,0 +1,742 @@
+﻿@model AURS_Derogation.Models.MultiModels
+@{
+
+    ViewBag.Title = "AvisOrg";
+    Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
+    int idAURS = 1; int idCOMMUNE = 3; int idPrefecture = 2; int idDomaine = 4; int idConcernee = 5;
+
+    bool avisAURS = Model.AvisOrgs.Where(p => p.FK_Organisme == idAURS).Count() != 0;
+    int avisAURSDef = 0; string avisAURSDetail = "";
+    if (avisAURS)
+    {
+        avisAURSDef = Model.AvisOrgs.Where(p => p.FK_Organisme == idAURS).First().FK_TypAvis;
+        avisAURSDetail = Model.AvisOrgs.Where(p => p.FK_Organisme == idAURS).First().Detail_Avis;
+    }
+
+    bool avisCOMMUNE = Model.AvisOrgs.Where(p => p.FK_Organisme == idCOMMUNE).Count() != 0;
+    int avisCOMMUNEDef = 0; string avisCOMMUNEDetail = "";
+    if (avisCOMMUNE)
+    {
+        avisCOMMUNEDef = Model.AvisOrgs.Where(p => p.FK_Organisme == idCOMMUNE).First().FK_TypAvis;
+        avisCOMMUNEDetail = Model.AvisOrgs.Where(p => p.FK_Organisme == idCOMMUNE).First().Detail_Avis;
+    }
+
+    bool avisPrefecture = Model.AvisOrgs.Where(p => p.FK_Organisme == idPrefecture).Count() != 0;
+    int avisPrefectureDef = 0; string avisPrefectureDetail = "";
+    if (avisPrefecture)
+    {
+        avisPrefectureDef = Model.AvisOrgs.Where(p => p.FK_Organisme == idPrefecture).First().FK_TypAvis;
+        avisPrefectureDetail = Model.AvisOrgs.Where(p => p.FK_Organisme == idPrefecture).First().Detail_Avis;
+    }
+
+    bool avisDomaine = Model.AvisOrgs.Where(p => p.FK_Organisme == idDomaine).Count() != 0;
+    int avisDomaineDef = 0; string avisDomaineDetail = "";
+    if (avisDomaine)
+    {
+        avisDomaineDef = Model.AvisOrgs.Where(p => p.FK_Organisme == idDomaine).First().FK_TypAvis;
+        avisDomaineDetail = Model.AvisOrgs.Where(p => p.FK_Organisme == idDomaine).First().Detail_Avis;
+    }
+
+    bool avisConcernee = Model.AvisOrgs.Where(p => p.FK_Organisme == idConcernee).Count() != 0;
+    int avisConcerneeDef = 0; string avisConcerneeDetail = "";
+    if (avisConcernee)
+    {
+        avisConcerneeDef = Model.AvisOrgs.Where(p => p.FK_Organisme == idConcernee).First().FK_TypAvis;
+        avisConcerneeDetail = Model.AvisOrgs.Where(p => p.FK_Organisme == idConcernee).First().Detail_Avis;
+    }
+}
+<link rel="stylesheet" href="~/Content/barre/css/style.css">
+<link href="~/Content/custumfileinput.css" rel="stylesheet" />
+<section>
+    <nav>
+        <ol class="cd-multi-steps text-bottom count">
+            <li style="right: 2px;" class="visited"><a href="#0">Renseignements</a></li>
+            <li style="right: 2px; top: 12px;" class="visited"><em>Siuation Géographique</em></li>
+            <li style="right: 2px;" class="visited"><em>GED</em></li>
+            <li style="right: 2px;" class="visited"><em>Programmation</em></li>
+            <li style="right: 2px;" class="current"><em>Avis</em></li>
+            <li style="right: 2px;"><em>Echanges</em></li>
+            <li style="right: 2px;"><em>Autorisation</em></li>
+            <li style="right: 2px;"><em>Cloture</em></li>
+        </ol>
+    </nav>
+</section>
+<div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+    <div class="card-body" id="">
+        <div class="row">
+            <div class="col-sm-4">
+                <label for="inputText11" style="font-size:12px;">N° de Dossier :</label>
+                <input type="text" class="form-control" value="@Model.DemDerg.Code_DemDerg" id="NumDossier" name="Code_DemDerg" disabled>
+            </div>
+            <div class="col-sm-4">
+                <label for="inputText11" style="font-size:12px;">Commune/Arrondissement :</label>
+                @if (Model.DemDerg.Derog_Commune.Count() == 0)
+                {<input type="text" class="form-control" value="Inconnue" id="communearrondissement" name="" disabled> }
+                else
+                {
+                    <input type="text" class="form-control" value="@Model.DemDerg.Derog_Commune.FirstOrDefault().COMMUNES.nom_commun" id="communearrondissement" name="" disabled>
+                }
+
+            </div>
+            <div class="col-sm-4">
+                <label for="inputText11" style="font-size:12px;">Référence foncière :</label>
+                @if (Model.DemDerg.References_Foncieres == null)
+                {<input type="text" id="dateNow" value="Inconnue" name="References_Foncieres" class="form-control" disabled> }
+                else
+                {<input type="text" id="dateNow" value="@Model.DemDerg.References_Foncieres.NomRF" name="References_Foncieres" class="form-control" disabled>}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+    <div class="card-body" id="">
+        <div class="form-horizontal">
+            <div class="row">
+
+                @if (avisAURS)
+                {
+                    <div class="col-lg-3">
+                        <div class="form-group">
+
+                            <label for="inputText11" style="font-size:12px;">Avis AURS : <label style="color:red">*</label></label>
+
+                            <select class="form-control form-control-sm chzn-selec" id="avisAurs" name="avisAURS" disabled>
+                                <option value="">--- Avis AURS ---</option>
+                                @foreach (var item in Model.TypAviss)
+                                {
+                                    if (item.Id_TypAvis == avisAURSDef)
+                                    {
+                                        <option value="@Html.DisplayFor(modelItem => item.Id_TypAvis)" selected>@Html.DisplayFor(modelItem => item.Type_Avis1)</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@Html.DisplayFor(modelItem => item.Id_TypAvis)">@Html.DisplayFor(modelItem => item.Type_Avis1)</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Détail Avis :</label>
+                            <input class="form-control" type="text" id="detailAvisAurs" name="Detail_AvisAurs" value="@avisAURSDetail" readonly />
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-lg-3">
+                        <div class="form-group">
+
+                            <label for="inputText11" style="font-size:12px;">Avis AURS : <label style="color:red">*</label></label>
+                            <select class="form-control form-control-sm chzn-selec" id="avisAurs" name="avisAURS">
+                                <option value="">--- Avis AURS ---</option>
+                                @foreach (var item in Model.TypAviss)
+                                {
+                                    <option value="@Html.DisplayFor(modelItem => item.Id_TypAvis)">@Html.DisplayFor(modelItem => item.Type_Avis1)</option>
+                                }
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Détail Avis :</label>
+                            <input class="form-control" type="text" id="detailAvisAurs" name="Detail_AvisAurs" value="" />
+                        </div>
+                    </div>
+                }
+
+                @if (avisCOMMUNE)
+                {
+                    <div class="col-lg-3">
+                        <div class="form-group">
+
+                            <label for="inputText11" style="font-size:12px;">Avis Commune : <label style="color:red">*</label></label>
+                            <select class="form-control form-control-sm chzn-selec" id="avisCom" name="avisCom" disabled>
+                                <option value="">--- Avis Commune ---</option>
+                                @foreach (var item in Model.TypAviss)
+                                {
+                                    if (item.Id_TypAvis == avisCOMMUNEDef)
+                                    {
+                                        <option value="@Html.DisplayFor(modelItem => item.Id_TypAvis)" selected>@Html.DisplayFor(modelItem => item.Type_Avis1)</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@Html.DisplayFor(modelItem => item.Id_TypAvis)">@Html.DisplayFor(modelItem => item.Type_Avis1)</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Détail Avis :</label>
+                            <input class="form-control" type="text" id="detailAvisCom" name="detailAvisCom" value="@avisCOMMUNEDetail" readonly />
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Avis Commune : <label style="color:red">*</label></label>
+                            <select class="form-control form-control-sm chzn-selec" id="avisCom" name="avisCom">
+                                <option value="">--- Avis Commune ---</option>
+                                @foreach (var item in Model.TypAviss)
+                                {
+                                    <option value="@Html.DisplayFor(modelItem => item.Id_TypAvis)">@Html.DisplayFor(modelItem => item.Type_Avis1)</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Détail Avis :</label>
+                            <input class="form-control" type="text" id="detailAvisCom" name="detailAvisCom" value="" />
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="row">
+
+                @if (avisPrefecture)
+                {
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Avis Préfécture : <label style="color:red">*</label></label>
+                            <select class="form-control form-control-sm chzn-selec" id="avisPref" name="avisPref" disabled>
+                                <option value="">--- Avis Préfécture  ---</option>
+                                @foreach (var item in Model.TypAviss)
+                                {
+                                    if (item.Id_TypAvis == avisPrefectureDef)
+                                    {
+                                        <option value="@Html.DisplayFor(modelItem => item.Id_TypAvis)" selected>@Html.DisplayFor(modelItem => item.Type_Avis1)</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@Html.DisplayFor(modelItem => item.Id_TypAvis)">@Html.DisplayFor(modelItem => item.Type_Avis1)</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Détail Avis :</label>
+                            <input class="form-control" type="text" id="detailAvisPref" name="detailAvisPref" value="@avisPrefectureDetail" readonly />
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Avis Préfécture : <label style="color:red">*</label></label>
+                            <select class="form-control form-control-sm chzn-selec" id="avisPref" name="avisPref">
+                                <option value="">--- Avis Préfécture  ---</option>
+                                @foreach (var item in Model.TypAviss)
+                                {
+                                    <option value="@Html.DisplayFor(modelItem => item.Id_TypAvis)">@Html.DisplayFor(modelItem => item.Type_Avis1)</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Détail Avis :</label>
+                            <input class="form-control" type="text" id="detailAvisPref" name="detailAvisPref" value="" />
+                        </div>
+                    </div>
+                }
+
+                @if (avisConcernee)
+                {
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Avis Département régional concerné : <label style="color:red">*</label></label>
+                            <select class="form-control form-control-sm chzn-selec" id="avisDepReg2" name="avisDepReg" disabled>
+                                <option value="">--- Avis Département régional concerné ---</option>
+                                @foreach (var item in Model.TypAviss)
+                                {
+                                    if (item.Id_TypAvis == avisConcerneeDef)
+                                    {
+                                        <option value="@Html.DisplayFor(modelItem => item.Id_TypAvis)" selected>@Html.DisplayFor(modelItem => item.Type_Avis1)</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@Html.DisplayFor(modelItem => item.Id_TypAvis)">@Html.DisplayFor(modelItem => item.Type_Avis1)</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Détail Avis :</label>
+                            <input class="form-control" type="text" id="detailAvisDepReg2" name="detailAvisDepReg2" value="@avisConcerneeDetail" readonly />
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Avis Département régional concerné : <label style="color:red">*</label></label>
+                            <select class="form-control form-control-sm chzn-selec" id="avisDepReg2" name="avisDepReg">
+                                <option value="">--- Avis Département régional concerné ---</option>
+                                @foreach (var item in Model.TypAviss)
+                                {
+                                    <option value="@Html.DisplayFor(modelItem => item.Id_TypAvis)">@Html.DisplayFor(modelItem => item.Type_Avis1)</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Détail Avis :</label>
+                            <input class="form-control" type="text" name="detailAvisDepReg2" id="detailAvisDepReg2" value="" />
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="row">
+
+                @if (avisDomaine)
+                {
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Avis Domaine : <label style="color:red">*</label></label>
+                            <select class="form-control form-control-sm chzn-selec" id="avisDom" name="avisDom" disabled>
+                                <option value="">--- Avis Domaine  ---</option>
+                                @foreach (var item in Model.TypAviss)
+                                {
+                                    if (item.Id_TypAvis == avisDomaineDef)
+                                    {
+                                        <option value="@Html.DisplayFor(modelItem => item.Id_TypAvis)" selected>@Html.DisplayFor(modelItem => item.Type_Avis1)</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@Html.DisplayFor(modelItem => item.Id_TypAvis)">@Html.DisplayFor(modelItem => item.Type_Avis1)</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Détail Avis :</label>
+                            <input class="form-control" type="text" id="detailAvis_dom" name="detailAvis_dom" value="@avisDomaineDetail" readonly />
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Avis Domaine : <label style="color:red">*</label></label>
+                            <select class="form-control form-control-sm chzn-selec" id="avisDom" name="avisDom">
+                                <option value="">--- Avis Domaine  ---</option>
+                                @foreach (var item in Model.TypAviss)
+                                {
+                                    <option value="@Html.DisplayFor(modelItem => item.Id_TypAvis)">@Html.DisplayFor(modelItem => item.Type_Avis1)</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Détail Avis :</label>
+                            <input class="form-control" type="text" id="detailAvis_dom" name="detailAvis_dom" value="" />
+                        </div>
+                    </div>
+                }
+            </div>
+
+
+            <br />
+            <center><label style="font-weight: bold"><u>Avis des parties prenantes</u></label></center><br />
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label for="inputText11" style="font-size:12px;">Parties Prenantes : </label>
+                        <select class="form-control form-control-sm chzn-selec" id="typorg" name="typOrg">
+                            <option value="">--- Parties Prenantes  ---</option>
+                            @foreach (var item in Model.Orgs)
+                            {
+                                <option name="@item.Nom_Organisme" value="@Html.DisplayFor(modelItem => item.Id_Organisme)">@Html.DisplayFor(modelItem => item.Nom_Organisme)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputText11" style="font-size:12px;">Avis  : </label>
+                        <select class="form-control form-control-sm chzn-selec" id="avisOrg" name="avisOrg">
+                            <option value="">--- Avis  ---</option>
+                            @foreach (var item in Model.TypAviss)
+                            {
+                                <option name="@item.Type_Avis1" value="@Html.DisplayFor(modelItem => item.Id_TypAvis)">@Html.DisplayFor(modelItem => item.Type_Avis1)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="inputText11" style="font-size:12px;">Détail Avis :</label>
+                                <input class="form-control" type="text" id="detailAvis_Org" name="detailAvis_Org" value="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-9">
+                        </div>
+                        <div class="col-lg-3">
+                            <button type="button" class="btn btn-sm" style="background-color:#09aacc;color:white;margin-top: 0%;text-align: right;" name="enregistrer" value="0" onclick="javascript: addRow('tbodyDoc');">
+                                <i class="fa fa-check">Ajouter un avis</i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-6">
+                    <div class="listeAvis">
+                        <table class="table table-striped table-bordered first" id="listeAvis">
+                            <thead>
+                                <tr>
+                                    <th>Partie Prenante :</th>
+                                    <th>Avis :</th>
+                                    <th>Détail Avis :</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyDoc">
+                                @foreach (var item in Model.AvisOrgs.Where(a => a.FK_Organisme > 6))
+                                {
+                                    <tr id="@item.FK_Organisme">
+                                        <td>@Html.DisplayFor(modelItem => item.Organisme.Nom_Organisme)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Type_Avis.Type_Avis1)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Detail_Avis)</td>
+                                        <td><i class="fa fa-minus-square" style="width:1%;color:#4cff00"></i></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="inputText11" style="font-size:12px;">PV de la commission :</label><br />
+                        <input type="file" class="inputfile inputfile-1" name="url_Doc_Derg" id="url_Doc_Derg" @*value="@Model.DocDerg.url_Doc_Derg"*@ />
+                        <label for="url_Doc_Derg">
+                            @if (Model.DemDerg.Document_Derogation.Count() == 0)
+                            {
+                                <span id="labelNomDoc">
+                                    Document ...
+                                </span>
+                            }
+                            else
+                            {
+                                <span id="labelNomDoc">
+                                    @Model.DemDerg.Document_Derogation.FirstOrDefault().url_Doc_Derg
+                                </span>
+                            }
+
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <label for="inputText11" style="font-size:12px;">Remarque :</label>
+                        <input type="text" class="form-control" name="remarque" id="remarque" value="@Model.DemDerg.Avis_Remarque_DemDerg" /> <br />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <center class="fixed-bottom">
+                        <input type="hidden" name="FK_DemDerg" value="@Model.DemDerg.Id_DemDerg" />
+                        <button type="submit" class="btn btn-lg" value="0" name="valider" id="btnSave" style="background-color:#09aacc; color:white">Enregister   <i class="fa fa-level-down-alt"></i></button>
+                        <button type="submit" class="btn btn-lg" value="1" name="valider" id="btnsend" style="background-color:#09aacc; color:white">Passer à l'etape suivante  <i class="fa fa-paper-plane"></i></button>
+                    </center>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/Content/fileInputCustom.js"></script>
+<script language="javascript">
+    function deleteRow(r) {
+        var i = r.parentNode.parentNode.rowIndex;
+        document.getElementById("listeAvis").deleteRow(i);
+    }
+
+
+    var stringArray = [];
+    function addRow(tableau) {
+        if ($("#typorg option:selected").text().includes("---") == true || $("#avisOrg option:selected").text().includes("---") == true) {
+            alert("erreur !");
+        }
+        else {
+            if ($("#"+document.getElementById("typorg").value).length) {
+                alert("deja exists sur le tableau");
+            } else {
+                tableau = document.getElementById(tableau);
+
+                var tr = document.createElement('tr');
+                tr.setAttribute("id",document.getElementById("typorg").value);
+
+                var td = document.createElement('td');
+                tableau.appendChild(tr);
+                td.innerHTML = $("#typorg option:selected").text();
+                tr.appendChild(td);
+
+                var td = document.createElement('td');
+                tableau.appendChild(tr);
+                td.innerHTML = $("#avisOrg option:selected").text();
+                tr.appendChild(td);
+
+                var td = document.createElement('td');
+                tableau.appendChild(tr);
+                td.innerHTML = document.getElementById("detailAvis_Org").value;
+                tr.appendChild(td);
+
+                var element = document.createElement("i");
+                element.setAttribute("class", "fa fa-minus-circle");
+                element.setAttribute("width", "1%")
+                element.style.color = "#FF6347";
+
+                element.onclick = function () {
+                    con = (this.parentNode.parentNode.rowIndex) - 1;
+                    stringArray.splice(con, 1);
+                    deleteRow(this)
+
+                };
+                var td1 = document.createElement('td');
+                td1.appendChild(element);
+                td1.setAttribute("width", "3%");
+                tr.appendChild(td1);
+
+
+                tableau.appendChild(tr);
+
+
+                var A = document.getElementById('typorg');
+                var B = document.getElementById('avisOrg');
+                var C = document.getElementById('detailAvis_Org');
+                var II = @Model.DemDerg.Id_DemDerg;
+                var AA = A.value;
+                var BB = B.value;
+                var CC = C.value;
+                stringArray.push({
+                    "FK_DemDerg": II,
+                    "FK_Organisme": AA,
+                    "FK_TypAvis": BB,
+                    "Detail_Avis": CC
+                });
+
+            }
+
+        }
+
+    }
+
+    $("#avisAurs").change(function () {
+        if ($("#avisAurs").val() == "") {
+            $("#avisAurs").css("border-color", "red");
+        }
+        else {
+            $("#avisAurs").css("border-color", "green");
+        }
+
+    });
+    $("#avisCom").change(function () {
+        if ($("#avisCom").val() == "") {
+            $("#avisCom").css("border-color", "red");
+        }
+        else {
+            $("#avisCom").css("border-color", "green");
+        }
+
+    });
+    $("#avisPref").change(function () {
+        if ($("#avisPref").val() == "") {
+            $("#avisPref").css("border-color", "red");
+        }
+        else {
+            $("#avisPref").css("border-color", "green");
+        }
+    });
+    $("#avisDepReg2").change(function () {
+        if ($("#avisDepReg2").val() == "") {
+            $("#avisDepReg2").css("border-color", "red");
+        }
+        else {
+            $("#avisDepReg2").css("border-color", "green");
+        }
+    });
+    $("#avisDom").change(function () {
+        if ($("#avisDom").val() == "") {
+            $("#avisDom").css("border-color", "red");
+        }
+        else {
+            $("#avisDom").css("border-color", "green");
+        }
+    });
+
+    $("#btnsend").click(function () {
+        if ($("#avisAurs").val() == "") {
+            $("#avisAurs").css("border-color", "#dc3545");
+        }
+        else if ($("#avisCom").val() == "") {
+            $("#avisCom").css("border-color", "#dc3545");
+        }
+        else if ($("#avisPref").val() == "") {
+            $("#avisPref").css("border-color", "#dc3545");
+        }
+        else if ($("#avisDepReg2").val() == "") {
+            $("#avisDepReg2").css("border-color", "#dc3545");
+        }
+        else if ($("#avisDom").val() == "") {
+            $("#avisDom").css("border-color", "#dc3545");
+        }
+
+        else {
+            buttonSubmit("btnsend");
+        }
+    });
+
+
+    $("#btnSave").click(function () {
+        buttonSubmit("btnSave");
+    });
+
+    function buttonSubmit(buttonSV) {
+        var avis = {};
+        var II =@Model.DemDerg.Id_DemDerg;
+        var A = 1;
+        var B = document.getElementById('avisAurs').value;
+        var C = document.getElementById('detailAvisAurs').value;
+        if (B == "") {
+        } else {
+            stringArray.push({
+                "FK_DemDerg": II,
+                "FK_Organisme": A,
+                "FK_TypAvis": B,
+                "Detail_Avis": C
+            });
+        }
+
+
+        var A = 3;
+        var B = document.getElementById('avisCom').value;
+        var C = document.getElementById('detailAvisCom').value;
+        if (B == "") {
+        } else {
+            stringArray.push({
+                "FK_DemDerg": II,
+                "FK_Organisme": A,
+                "FK_TypAvis": B,
+                "Detail_Avis": C
+            });
+        }
+
+        var A = 4;
+        var B = document.getElementById('avisDom').value;
+        var C = document.getElementById('detailAvis_dom').value;
+        if (B == "") {
+        } else {
+            stringArray.push({
+                "FK_DemDerg": II,
+                "FK_Organisme": A,
+                "FK_TypAvis": B,
+                "Detail_Avis": C
+            });
+        }
+
+        var A = 5;
+        var B = document.getElementById('avisDepReg2').value;
+        var C = document.getElementById('detailAvisDepReg2').value;
+        if (B == "") {
+        } else {
+            stringArray.push({
+                "FK_DemDerg": II,
+                "FK_Organisme": A,
+                "FK_TypAvis": B,
+                "Detail_Avis": C
+            });
+        }
+
+        var A = 2;
+        var B = document.getElementById('avisPref').value;
+        var C = document.getElementById('detailAvisPref').value;
+        if (B == "") {
+        } else {
+            stringArray.push({
+                "FK_DemDerg": II,
+                "FK_Organisme": A,
+                "FK_TypAvis": B,
+                "Detail_Avis": C
+            });
+        }
+
+        //avis.array = stringArray;
+        var formData = new FormData();
+        var json = JSON.stringify(stringArray);
+        formData.append("avis", json);
+        formData.append("file", document.getElementById('url_Doc_Derg').value);
+        formData.append("req", document.getElementById('remarque').value);
+        formData.append("valider", document.getElementById(buttonSV).value);
+        formData.append("Id",    @Model.DemDerg.Id_DemDerg);
+
+        $.ajax({
+            type: "Post",
+            url: '@Url.Action("AvisOrg", "WorkflowDerogation")',
+            contentType: false,
+            cache: false,
+            dataType: "json",
+            data: formData,
+            processData: false,
+            success: function (data) {
+                window.location.href = data;
+            },
+            error: function () {
+                alert("errur !");
+            }
+        });
+
+        traditional: true
+
+    }
+
+</script>
+<script src="~/Content/dwnlds/jquery.slimscroll.js"></script>
+<script src="~/Content/dwnlds/bootstrap.bundle.js"></script>
+<script src="~/Content/dwnlds/chosen.jquery.js"></script>
+<script src="~/Content/dwnlds/jquery-1.8.3.js"></script>
+<script src="~/Content/dwnlds/jquery-3.3.1.min.js"></script>
+<script src="~/Content/dwnlds/jquery-ui.js"></script>
+<link href="~/Content/dwnlds/chosen.css" rel="stylesheet" />
+<link href="~/Content/dwnlds/jquery-ui.css" rel="stylesheet" />
+@*<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/4.0.0/bootstrap.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">*@
+

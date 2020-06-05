@@ -42,31 +42,45 @@
         HomeButton
     ) {
 
-        document.getElementById('suiv1').onclick = function () {
-                    
+        document.getElementById('suiv1').onclick = function () {                
             var prop;            
             if (document.getElementById('prop1').checked == true) { prop = "Non" }
             if (document.getElementById('prop2').checked == true) { prop = "Oui" }                     
             var typeTerrain;
             if (document.getElementById('typeTerrain1').checked == true) { typeTerrain = "TI" }
             if (document.getElementById('typeTerrain2').checked == true) { typeTerrain = "TNI" }
+            if (document.getElementById('typeTerrain3').checked == true) { typeTerrain = "R" }
             document.getElementById('divPiece').style.display = 'block';            
-            if (prop == "Oui" && typeTerrain == "TI" || prop == "Non" && typeTerrain == "TI") {
+
+            //if (prop == "Oui" && (typeTerrain == "TI" || typeTerrain == "R") || prop == "Non" && (typeTerrain == "TI" || typeTerrain == "R")) {
+            //        document.getElementById('tableTI').style.display = "block";
+            //        document.getElementById('tableTNI').style.display = "none";                   
+            //    }
+            //if (prop == "Oui" && typeTerrain == "TNI" || prop == "Non" && typeTerrain == "TNI") {
+            //        document.getElementById('tableTI').style.display = "none";
+            //        document.getElementById('tableTNI').style.display = "block";                   
+            //}
+
+            if (typeTerrain == "TI" || typeTerrain == "R") {
                     document.getElementById('tableTI').style.display = "block";
-                    document.getElementById('tableTNI').style.display = "none";                   
+                    document.getElementById('tableTNI').style.display = "none";
+                if (prop == "Non" && paHomologé == "Non") {
+                    $("#tableTI").append('<tr style="height: 40px;">'+
+                        '<td style = "width:70%" > <label for="input-select">Procuration</label></td>'+
+                        '<td><input type="file" id="CIN" name="file5"></td>'+
+                        '</tr>')
+                    }
                 }
-            if (prop == "Oui" && typeTerrain == "TNI" || prop == "Non" && typeTerrain == "TNI") {
+            if (typeTerrain == "TNI") {
                     document.getElementById('tableTI').style.display = "none";
-                    document.getElementById('tableTNI').style.display = "block";                   
+                    document.getElementById('tableTNI').style.display = "block"; 
+                    if (prop == "Non" && paHomologé == "Non") {
+                        $("#tableTNI").append('<tr style="height: 40px;">'+
+                            '<td style = "width:70%" > <label for="input-select">Procuration</label></td>'+
+                            '<td><input type="file" id="CIN" name="file9"></td>'+
+                            '</tr>')
+                        }
                 }                                   
         }
-
-
-    
-
-       
-
-       
-        
 
     });

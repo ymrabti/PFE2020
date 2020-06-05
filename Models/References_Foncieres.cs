@@ -17,13 +17,13 @@ namespace GestionnaireUtilisateurs.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public References_Foncieres()
         {
-            this.parcell = new HashSet<parcell>();
+            this.Demande_Derogation = new HashSet<Demande_Derogation>();
         }
     
         public string Id_RF { get; set; }
         public string NomRF { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<parcell> parcell { get; set; }
+        public virtual ICollection<Demande_Derogation> Demande_Derogation { get; set; }
     }
 }

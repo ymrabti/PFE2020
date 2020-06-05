@@ -1,0 +1,456 @@
+﻿@model AURS_Derogation.Models.MultiModels
+@{
+    ViewBag.Title = "Echanges";
+    Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
+}
+
+<section>
+    <nav>
+        <ol class="cd-multi-steps text-bottom count">
+            <li style="right: 2px;" class="visited"><a href="#0">Renseignements</a></li>
+            <li style="right: 2px; top: 12px;" class="visited"><em>Siuation Géographique</em></li>
+            <li style="right: 2px;" class="visited"><em>GED</em></li>
+            <li style="right: 2px;" class="visited"><em>Programmation</em></li>
+            <li style="right: 2px;" class="visited"><em>Avis</em></li>
+            <li style="right: 2px;" class="current"><em>Echanges</em></li>
+            <li style="right: 2px;"><em>Autorisation</em></li>
+            <li style="right: 2px;"><em>Cloture</em></li>
+        </ol>
+    </nav>
+</section>
+<div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+    <div class="card-body" id="">
+        <div class="row">
+            <div class="col-sm-4">
+                <label for="inputText11" style="font-size:12px;">N° de Dossier :</label>
+                <input type="text" class="form-control" value="@Model.DemDerg.Code_DemDerg" id="NumDossier" name="Code_DemDerg" disabled>
+            </div>
+            <div class="col-sm-4">
+                <label for="inputText11" style="font-size:12px;">Commune/Arrondissement :</label>
+                @if (Model.DemDerg.Derog_Commune.Count() == 0)
+                {<input type="text" class="form-control" value="Inconnue" id="communearrondissement" name="" disabled> }
+                else
+                {
+                    <input type="text" class="form-control" value="@Model.DemDerg.Derog_Commune.FirstOrDefault().COMMUNES.nom_commun" id="communearrondissement" name="" disabled>
+                }
+
+            </div>
+            <div class="col-sm-4">
+                <label for="inputText11" style="font-size:12px;">Référence foncière :</label>
+                @if (Model.DemDerg.References_Foncieres == null)
+                {<input type="text" id="dateNow" value="Inconnue" name="References_Foncieres" class="form-control" disabled> }
+                else
+                {<input type="text" id="dateNow" value="@Model.DemDerg.References_Foncieres.NomRF" name="References_Foncieres" class="form-control" disabled>}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="~/Content/custumfileinput.css" rel="stylesheet" />
+<div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+    <div class="card-body" id="">
+        <div class="form-horizontal">
+            <form id="form">
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+
+                            <label for="inputText11" style="font-size:12px;">Nature de courrier : <label style="color:red">*</label></label>
+                            <select class="form-control form-control-sm chzn-selec" id="natCour" name="natCour">
+                                <option value="">--- Nature de courrier ---</option>
+                                @foreach (var item in Model.NatCours)
+                                {
+                                    <option value="@Html.DisplayFor(modelItem => item.Id_Nature_Courrier)">@Html.DisplayFor(modelItem => item.Nature_Courrier1)</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Date : <label style="color:red">*</label></label>
+                            <input class="form-control" type="date" id="dateCour" name="dateCour" value="" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Source : <label style="color:red">*</label></label>
+                            <input class="form-control" type="text" id="source" name="source" value="" />
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Destination : <label style="color:red">*</label></label>
+                            <input class="form-control" type="text" id="dest" name="dest" value="" />
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Document : <label style="color:red">*</label></label><br />
+                            <input class="form-control inputfile inputfile-2" type="file" id="courrier" name="courrier" value="" />
+                            <label for="courrier">
+                                <span id="labelNomDoc">
+                                    Choisir ...
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-9">
+                        <button type="button" class="btn btn-sm" style="background-color:#09aacc;color:white;margin-top: 0%;text-align: right;" name="enregistrer" value="0" onclick="javascript: addRow('tbodyDoc'); ">
+                            <i class="fa fa-check">Ajouter le courrier</i>
+                        </button>
+                    </div>
+                    <div class="col-lg-3">
+
+                    </div>
+                </div>
+            </form>
+
+            <br />
+            <div class="listeCourrier">
+                <table class="table table-striped table-bordered first" id="listeCourrier">
+                    <thead>
+                        <tr>
+                            <th>Nature de courrier :</th>
+                            <th>Date  :</th>
+                            <th>Source :</th>
+                            <th>Destination  :</th>
+                            <th>Document :</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyDoc">
+                        @foreach (var item in Model.DemDerg.Courrier)
+                        {
+                            <tr>
+                                <td>@item.Nature_Courrier.Nature_Courrier1</td>
+                                <td style="width:10%">@Html.DisplayFor(modelItem => item.Date_Courier)</td>
+                                <td style="width:20%">@Html.DisplayFor(modelItem => item.Source_Courrier)</td>
+                                <td style="width:20%">@Html.DisplayFor(modelItem => item.Destination_Courrier)</td>
+                                <td style="width:20%">@Html.DisplayFor(modelItem => item.url_Courrier)</td>
+                                <td><i class="fa fa-minus-square" style="color:green"></i></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <br />
+            @*<div class="row">
+                    <div class="col-sm-6">
+                        <button class="buttonsReapeateds">
+                            fa fa-align-left   <i class="fa fa-align-left"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-angle-double-left   <i class="fa fa-angle-double-left"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-angle-left   <i class="fa fa-angle-left"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-arrow-alt-circle-left   <i class="fa fa-arrow-alt-circle-left"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-arrow-circle-left   <i class="fa fa-arrow-circle-left"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-arrow-left   <i class="fa fa-arrow-left"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-caret-left   <i class="fa fa-caret-left"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-caret-square-left   <i class="fa fa-caret-square-left"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-chevron-circle-left   <i class="fa fa-chevron-circle-left"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-chevron-left   <i class="fa fa-chevron-left"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-hand-point-left   <i class="fa fa-hand-point-left"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-pull-left   <i class="fa fa-pull-left"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-quote-left   <i class="fa fa-quote-left"></i>
+                        </button>
+                    </div>
+                    <div class="col-sm-6">
+                        <button class="buttonsReapeateds">
+                            fa fa-align-right   <i class="fa fa-align-right"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-angle-double-right   <i class="fa fa-angle-double-right"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-angle-right   <i class="fa fa-angle-right"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-arrow-alt-circle-right   <i class="fa fa-arrow-alt-circle-right"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-arrow-circle-right   <i class="fa fa-arrow-circle-right"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-arrow-right   <i class="fa fa-arrow-right"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-caret-right   <i class="fa fa-caret-right"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-caret-square-right   <i class="fa fa-caret-square-right"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-chevron-circle-right   <i class="fa fa-chevron-circle-right"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-chevron-right   <i class="fa fa-chevron-right"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-hand-point-right   <i class="fa fa-hand-point-right"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-pull-right   <i class="fa fa-pull-right"></i>
+                        </button>
+                        <button class="buttonsReapeateds">
+                            fa fa-quote-right   <i class="fa fa-quote-right"></i>
+                        </button>
+                    </div>
+                </div>*@
+            <center class="fixed-bottom">
+                <button type="submit" class="btn btn-lg buttonsReapeateds" value="0" name="valider" id="btnSave">
+                    Enregister   <i class="fa fa-level-down-alt"></i>
+                </button>
+                <button type="submit" class="btn btn-lg buttonsReapeateds" value="1" name="valider" id="btnsend">
+                    Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
+                </button>
+            </center>
+        </div>
+
+    </div>
+</div>
+<script src="~/Content/fileInputCustom.js"></script>
+
+<script language="javascript">
+    function deleteRow(r) {
+        var i = r.parentNode.parentNode.rowIndex;
+        document.getElementById("listeCourrier").deleteRow(i);
+    }
+</script>
+<script language="javascript">
+    $("#natCour").change(function () {
+        if ($("#natCour").val() == "") {
+            $("#natCour").css("border-color", "red");
+        }
+        else {
+            $("#natCour").css("border-color", "green");
+        }
+
+    });
+    $("#dateCour").change(function () {
+        if ($("#dateCour").val() == "") {
+            $("#dateCour").css("border-color", "red");
+        }
+        else {
+            $("#dateCour").css("border-color", "green");
+        }
+
+    });
+    $("#source").change(function () {
+        if ($("#source").val() == "") {
+            $("#source").css("border-color", "red");
+        }
+        else {
+            $("#source").css("border-color", "green");
+        }
+    });
+    $("#dest").change(function () {
+        if ($("#dest").val() == "") {
+            $("#dest").css("border-color", "red");
+        }
+        else {
+            $("#dest").css("border-color", "green");
+        }
+    });
+</script>
+<script language="javascript">
+    var stringArray = [];
+    function addRow(tableau) {
+        if ($("#natCour").val() == "") {
+            //form - control form - control - sm chzn - selec
+            //$("#natCour_chzn").find("a").css("border-color", "#dc3545");
+            $("#natCour").css("border-color", "#dc3545");
+        }
+        else if ($("#dateCour").val() == "") {
+            $("#dateCour").css("border-color", "#dc3545");
+        }
+        else if ($("#source").val() == "") {
+            $("#source").css("border-color", "#dc3545");
+        }
+        else if ($("#dest").val() == "") {
+            $("#dest").css("border-color", "#dc3545");
+        }
+        else if (document.getElementById("courrier").value  == "") {
+            alert("fichier obligatoire!!");
+        }
+
+        else {
+            tableau = document.getElementById(tableau);
+
+            var tr = document.createElement('tr');
+
+            var td = document.createElement('td');
+            tableau.appendChild(tr);
+            td.innerHTML = $("#natCour option:selected").text() ;
+            tr.appendChild(td);
+
+            var td = document.createElement('td');
+            tableau.appendChild(tr);
+            td.innerHTML = document.getElementById("dateCour").value;
+            tr.appendChild(td);
+
+            var td = document.createElement('td');
+            tableau.appendChild(tr);
+            td.innerHTML = document.getElementById("source").value;
+            tr.appendChild(td);
+
+            var td = document.createElement('td');
+            tableau.appendChild(tr);
+            td.innerHTML = document.getElementById("dest").value;
+            tr.appendChild(td);
+
+            var td = document.createElement('td');
+            tableau.appendChild(tr);
+            td.innerHTML = document.getElementById("courrier").value;
+            tr.appendChild(td);
+
+            var element = document.createElement("i");
+            element.setAttribute("class", "fa fa-minus-circle");
+            element.setAttribute("width", "1%")
+            element.style.color = "#FF6347";
+
+            element.onclick = function () {
+                con = (this.parentNode.parentNode.rowIndex) - 1;
+                stringArray.splice(con, 1);
+                deleteRow(this)
+
+            };
+            var td1 = document.createElement('td');
+            td1.appendChild(element);
+            td1.setAttribute("width", "3%");
+            tr.appendChild(td1);
+
+            tableau.appendChild(tr);
+            document.getElementById("labelNomDoc").innerHTML = "Choisir...";
+
+
+            var A = document.getElementById('natCour');
+            var B = document.getElementById('dateCour');
+            var C = document.getElementById('source');
+            var D = document.getElementById('dest');
+            var E = document.getElementById('courrier');
+            var II = @Model.DemDerg.Id_DemDerg;
+            var AA = A.value;
+            var BB = B.value;
+            var CC = C.value;
+            var DD = D.value;
+            var EE = E.value;
+            stringArray.push({
+                "FK_DemDerg_Cour": II,
+                "FK_Nature_Courrier": AA,
+                "Date_Courier": BB,
+                "Source_Courrier": CC,
+                "Destination_Courrier": DD,
+                "url_Courrier": EE
+            });
+            document.getElementById("form").reset();
+    }
+
+
+    }
+
+</script>
+
+<script language="javascript">
+
+    $("#btnsend").click(function () {
+        if (stringArray.length == 0) { alert("null"); }
+        else {
+            var formData = new FormData();
+        var json = JSON.stringify(stringArray);
+        formData.append("courrier", json);
+        formData.append("Id", @Model.DemDerg.Id_DemDerg);
+        formData.append("valider", document.getElementById('btnsend').value);
+
+        $.ajax({
+            type: "Post",
+            url: '@Url.Action("Echanges", "WorkflowDerogation")',
+            contentType: false,
+            cache: false,
+            dataType: "json",
+            data: formData,
+            processData: false,
+            success: function (data) {
+                window.location.href = data;
+            },
+            error: function (resultat, statut, erreur) {
+                alert(erreur);
+            }
+        });
+
+        traditional: true
+        }
+
+    });
+
+</script>
+
+
+<script language="javascript">
+
+        $("#btnSave").click(function () {
+            var avis = {};
+
+            var formData = new FormData();
+            var json = JSON.stringify(stringArray);
+            formData.append("courrier", json);
+            formData.append("Id", @Model.DemDerg.Id_DemDerg);
+            formData.append("valider", document.getElementById('btnSave'));
+
+            $.ajax({
+                type: "Post",
+                url: '@Url.Action("Echanges", "WorkflowDerogation")',
+                contentType: false,
+                cache: false,
+                dataType: "json",
+                data: formData,
+                processData: false,
+                success: function (data) {
+                    window.location.href = data;
+                },
+                error: function (resultat, statut, erreur) {
+                    alert(erreur);
+                }
+            });
+
+            traditional: true
+
+
+        });
+
+</script>
+<script src="~/Content/dwnlds/jquery.slimscroll.js"></script>
+<script src="~/Content/dwnlds/bootstrap.bundle.js"></script>
+<script src="~/Content/dwnlds/chosen.jquery.js"></script>
+<script src="~/Content/dwnlds/jquery-1.8.3.js"></script>
+<script src="~/Content/dwnlds/jquery-3.3.1.min.js"></script>
+<script src="~/Content/dwnlds/jquery-ui.js"></script>
+<link href="~/Content/dwnlds/chosen.css" rel="stylesheet" />
+<link href="~/Content/dwnlds/jquery-ui.css" rel="stylesheet" />

@@ -1,15 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="aurs1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <EntityType Name="Activite_Derogation">
-    <Key>
-      <PropertyRef Name="Id_Activite_Derg" />
-    </Key>
-    <Property Name="Id_Activite_Derg" Type="int" Nullable="false" />
-    <Property Name="Code_Activite_Derg" Type="int" />
-    <Property Name="Activite_Activite_Derg" Type="varchar" MaxLength="100" />
-    <Property Name="Acteurs_Activite_Derg" Type="varchar" MaxLength="50" />
-    <Property Name="Temps_prevu_Activite_Derg" Type="varchar" MaxLength="50" />
-  </EntityType>
   <EntityType Name="Affect_Derg_Comms">
     <Key>
       <PropertyRef Name="FK_DemDerg_Aff_Com" />
@@ -123,10 +113,9 @@
   </EntityType>
   <EntityType Name="COMMUNES_RSK">
     <Key>
-      <PropertyRef Name="OBJECTID" />
+      <PropertyRef Name="IDCOM" />
     </Key>
-    <Property Name="OBJECTID" Type="int" Nullable="false" />
-    <Property Name="IDCOM" Type="int" />
+    <Property Name="IDCOM" Type="int" Nullable="false" />
     <Property Name="COMMUNE" Type="nvarchar" MaxLength="100" />
     <Property Name="POPU" Type="int" />
     <Property Name="POPR" Type="int" />
@@ -183,6 +172,7 @@
     <Property Name="FK_DemDerg_EtatAvc" Type="int" />
     <Property Name="Id_Autorisation" Type="int" />
     <Property Name="Id_Commune" Type="int" />
+    <Property Name="Type_Terrain" Type="nchar" MaxLength="10" />
   </EntityType>
   <EntityType Name="Document_Derogation">
     <Key>
@@ -264,7 +254,6 @@
       <PropertyRef Name="objectid" />
     </Key>
     <Property Name="objectid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="typefoncier" Type="nchar" MaxLength="10" />
     <Property Name="numfoncier" Type="nvarchar" MaxLength="50" />
     <Property Name="indice" Type="nvarchar" MaxLength="50" />
     <Property Name="xcenteroid" Type="numeric" Precision="38" Scale="8" />
@@ -511,10 +500,22 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
     <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="COMMUNES_RSK">
-        <PropertyRef Name="OBJECTID" />
+        <PropertyRef Name="IDCOM" />
       </Principal>
       <Dependent Role="Demande_Derogation">
         <PropertyRef Name="Id_Commune" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Demande_Derogation_References_Foncieres">
+    <End Role="References_Foncieres" Type="Self.References_Foncieres" Multiplicity="0..1" />
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="References_Foncieres">
+        <PropertyRef Name="Id_RF" />
+      </Principal>
+      <Dependent Role="Demande_Derogation">
+        <PropertyRef Name="Type_Terrain" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -710,18 +711,6 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_parcell_References_Foncieres">
-    <End Role="References_Foncieres" Type="Self.References_Foncieres" Multiplicity="0..1" />
-    <End Role="parcell" Type="Self.parcell" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="References_Foncieres">
-        <PropertyRef Name="Id_RF" />
-      </Principal>
-      <Dependent Role="parcell">
-        <PropertyRef Name="typefoncier" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_SousModule_Module">
     <End Role="Module" Type="Self.Module" Multiplicity="1" />
     <End Role="SousModule" Type="Self.SousModule" Multiplicity="*" />
@@ -773,7 +762,6 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="aurs1ModelStoreContainer">
-    <EntitySet Name="Activite_Derogation" EntityType="Self.Activite_Derogation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Affect_Derg_Comms" EntityType="Self.Affect_Derg_Comms" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Application" EntityType="Self.Application" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ApplicationModule" EntityType="Self.ApplicationModule" Schema="dbo" store:Type="Tables" />
@@ -868,6 +856,10 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
       <End Role="COMMUNES_RSK" EntitySet="COMMUNES_RSK" />
       <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
     </AssociationSet>
+    <AssociationSet Name="FK_Demande_Derogation_References_Foncieres" Association="Self.FK_Demande_Derogation_References_Foncieres">
+      <End Role="References_Foncieres" EntitySet="References_Foncieres" />
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+    </AssociationSet>
     <AssociationSet Name="FK_DemDerg" Association="Self.FK_DemDerg">
       <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
       <End Role="Avis_Org" EntitySet="Avis_Org" />
@@ -922,10 +914,6 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
     </AssociationSet>
     <AssociationSet Name="FK_parcell_Demande_Derogation" Association="Self.FK_parcell_Demande_Derogation">
       <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
-      <End Role="parcell" EntitySet="parcell" />
-    </AssociationSet>
-    <AssociationSet Name="FK_parcell_References_Foncieres" Association="Self.FK_parcell_References_Foncieres">
-      <End Role="References_Foncieres" EntitySet="References_Foncieres" />
       <End Role="parcell" EntitySet="parcell" />
     </AssociationSet>
     <AssociationSet Name="FK_SousModule_Module" Association="Self.FK_SousModule_Module">

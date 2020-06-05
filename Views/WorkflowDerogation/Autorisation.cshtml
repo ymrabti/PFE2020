@@ -1,0 +1,296 @@
+﻿@model AURS_Derogation.Models.MultiModels
+@{
+    ViewBag.Title = "Autorisation";
+    Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
+}
+
+<section>
+    <nav>
+        <ol class="cd-multi-steps text-bottom count">
+            <li style="right: 2px;" class="visited"><a href="#0">Renseignements</a></li>
+            <li style="right: 2px; top: 12px;" class="visited"><em>Siuation Géographique</em></li>
+            <li style="right: 2px;" class="visited"><em>GED</em></li>
+            <li style="right: 2px;" class="visited"><em>Programmation</em></li>
+            <li style="right: 2px;" class="visited"><em>Avis</em></li>
+            <li style="right: 2px;" class="visited"><em>Echanges</em></li>
+            <li style="right: 2px;" class="current"><em>Autorisation</em></li>
+            <li style="right: 2px;"><em>Cloture</em></li>
+        </ol>
+    </nav>
+</section>
+<div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+    <div class="card-body" id="">
+        <div class="row">
+            <div class="col-sm-4">
+                <label for="inputText11" style="font-size:12px;">N° de Dossier :</label>
+                <input type="text" class="form-control" value="@Model.DemDerg.Code_DemDerg" id="NumDossier" name="Code_DemDerg" disabled>
+            </div>
+            <div class="col-sm-4">
+                <label for="inputText11" style="font-size:12px;">Commune/Arrondissement :</label>
+                @if (Model.DemDerg.Derog_Commune.Count() == 0)
+                {<input type="text" class="form-control" value="Inconnue" id="communearrondissement" name="" disabled> }
+                else
+                {
+                    <input type="text" class="form-control" value="@Model.DemDerg.Derog_Commune.FirstOrDefault().COMMUNES.nom_commun" id="communearrondissement" name="" disabled>
+                }
+
+            </div>
+            <div class="col-sm-4">
+                <label for="inputText11" style="font-size:12px;">Référence foncière :</label>
+                @if (Model.DemDerg.References_Foncieres == null)
+                {<input type="text" id="dateNow" value="Inconnue" name="References_Foncieres" class="form-control" disabled> }
+                else
+                {<input type="text" id="dateNow" value="@Model.DemDerg.References_Foncieres.NomRF" name="References_Foncieres" class="form-control" disabled>}
+
+            </div>
+        </div>
+    </div>
+</div>
+<center><h1><label class="text-danger" style="margin:10px"> @ViewBag.Message</label></h1></center>
+<div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+    <div class="card-body" id="">
+        <div class="form-horizontal">
+            @using (Html.BeginForm("Autorisation", "WorkflowDerogation", FormMethod.Post, new { id = "formsubmit" }))
+            {
+                if (Model.DemDerg.Autorisation_Derogation != null)
+                {
+                    <input type="hidden" id="Id_Aut" name="Id_Aut" value="@Model.DemDerg.Id_Autorisation" />
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="inputText11" style="font-size:12px;">Date de demande d'autorisation : </label>
+                                @if (Model.DemDerg.Autorisation_Derogation.Date_Demande_Autorisation == null)
+                                {
+                                    <input class="form-control" type="date" id="dateDemAut" name="Date_Demande_Autorisation" />
+                                }
+                                else
+                                {
+                                    <input class="form-control" type="date" id="dateDemAut" name="Date_Demande_Autorisation"
+                                           value="@Model.DemDerg.Autorisation_Derogation.Date_Demande_Autorisation.Value.ToString("yyyy-MM-dd")" />
+                                }
+
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="inputText11" style="font-size:12px;">Date de l'avis conforme : </label>
+                                @if (Model.DemDerg.Autorisation_Derogation.Dae_Avis_Autorisation == null)
+                                {
+                                    <input class="form-control" type="date" id="dateAvisConf" name="Dae_Avis_Autorisation" />
+                                }
+                                else
+                                {
+                                    <input class="form-control" type="date" id="dateAvisConf" name="Dae_Avis_Autorisation"
+                                           value="@Model.DemDerg.Autorisation_Derogation.Dae_Avis_Autorisation.Value.ToString("yyyy-MM-dd")" />
+                                }
+
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="inputText11" style="font-size:12px;">Nature de l'autorisation : <label style="color:red">*</label></label>
+                                @if (Model.DemDerg.Autorisation_Derogation.Nature_Autorisation == "")
+                                {
+                                    <input class="form-control" type="text" id="natAut" name="Nature_Autorisation" />
+                                }
+                                else
+                                {
+                                    <input class="form-control" type="text" id="natAut"
+                                           name="Nature_Autorisation" value="@Model.DemDerg.Autorisation_Derogation.Nature_Autorisation" />
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="inputText11" style="font-size:12px;">Date de l'autorisation : </label>
+                                @if (Model.DemDerg.Autorisation_Derogation.Date_Aut_Autorisation == null)
+                                {
+                                    <input class="form-control" type="date" id="dateAut" name="Date_Aut_Autorisation" />
+                                }
+                                else
+                                {
+                                    <input class="form-control" type="date" id="dateAut" name="Date_Aut_Autorisation"
+                                           value="@Model.DemDerg.Autorisation_Derogation.Date_Aut_Autorisation.Value.ToString("yyyy-MM-dd")" />
+                                }
+
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="inputText11" style="font-size:12px;">Date de commencement des travaux : </label>
+                                @if (Model.DemDerg.Autorisation_Derogation.Date_Comt_Autorisation == null)
+                                {
+                                    <input class="form-control" type="date" id="dateDebutTrv" name="Date_Comt_Autorisation" />
+                                }
+                                else
+                                {
+                                    <input class="form-control" type="date" id="dateDebutTrv" name="Date_Comt_Autorisation"
+                                           value="@Model.DemDerg.Autorisation_Derogation.Date_Comt_Autorisation.Value.ToString("yyyy-MM-dd")" />
+                                }
+
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="inputText11" style="font-size:12px;">Etat d'avancement du projet : </label>
+                                @if (Model.DemDerg.Autorisation_Derogation.EtatAvancemt_Autorisation == "")
+                                {
+                                    <input class="form-control" id="etatAvc"
+                                           name="EtatAvancemt_Autorisation" value="@Model.DemDerg.Autorisation_Derogation.EtatAvancemt_Autorisation" />
+                                }
+                                else
+                                {
+                                    <input class="form-control" id="etatAvc"
+                                           name="EtatAvancemt_Autorisation" value="@Model.DemDerg.Autorisation_Derogation.EtatAvancemt_Autorisation" />
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <input type="hidden" id="Id_Aut" name="Id_Aut" value=0 />
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="inputText11" style="font-size:12px;">Date de demande d'autorisation : </label>
+
+                                <input class="form-control" type="date" id="dateDemAut" name="Date_Demande_Autorisation" value="" />
+
+
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="inputText11" style="font-size:12px;">Date de l'avis conforme : </label>
+                                <input class="form-control" type="date" id="dateAvisConf" name="Dae_Avis_Autorisation" value="" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="inputText11" style="font-size:12px;">Nature de l'autorisation : <label style="color:red">*</label></label>
+                                <input class="form-control" type="text" id="natAut" name="Nature_Autorisation" value="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="inputText11" style="font-size:12px;">Date de l'autorisation : </label>
+                                <input class="form-control" type="date" id="dateAut" name="Date_Aut_Autorisation" value="" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="inputText11" style="font-size:12px;">Date de commencement des travaux : </label>
+                                <input class="form-control" type="date" id="dateDebutTrv" name="Date_Comt_Autorisation" value="" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+
+                                <label for="inputText11" style="font-size:12px;">Etat d'avancement du projet : </label>
+                                <input class="form-control" type="text" id="etatAvc" name="EtatAvancemt_Autorisation" value="" />
+                            </div>
+                        </div>
+                    </div>
+                }
+                <center class="fixed-bottom">
+                    <input type="hidden" value="@Model.DemDerg.Id_DemDerg" name="Fk_DEMDEROG" />
+                    <button type="submit" class="btn btn-lg" value="0" name="valider" id="btnSave" style="background-color:#09aacc; color:white">
+                        Enregister   <i class="fa fa-level-down-alt"></i>
+                    </button>
+                    <button type="submit" class="btn btn-lg" value="1" name="valider" id="btnsend" style="background-color:#09aacc; color:white">
+                        Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
+                    </button>
+
+                </center>
+            }
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script language="javascript">
+        $("#natAut").change(function () {
+            if ($("#natAut").val() == "") {
+                $("#natAut").css("border-color", "red");
+            }
+            else {
+                $("#natAut").css("border-color", "green");
+            }
+
+        });
+
+    </script>
+    <script language="javascript">
+
+
+        //$("#btnsend").click(function () {
+
+        //    if ($("#natAut").val() == "") {
+        //        $("#natAut").css("border-color", "red");
+        //    }
+        //    else {
+        //        //buttononclick("btnsend");
+        //        $("#btnSave").remove();
+        //        $("#formsubmit").submit();
+        //    }
+
+
+        //});
+        //$("#btnSave").click(function () {
+
+        //    if ($("#natAut").val() == "") {
+        //        $("#natAut").css("border-color", "red");
+        //    }
+        //    else {
+        //        $("#btnsend").remove();
+        //        $("#formsubmit").submit();
+        //    }
+
+
+        //});
+
+    </script>
+    <script language="javascript">
+
+        function buttononclick(nameAction) {
+            var data2send = {};
+            var formData = new FormData();
+            formData.append("Fk_DEMDEROG", "@Model.DemDerg.Id_DemDerg");
+            formData.append("Id_Aut", document.getElementById('Id_Aut').value);
+            formData.append("Date_Demande_Autorisation", document.getElementById('dateDemAut').value);
+            formData.append("Dae_Avis_Autorisation", document.getElementById('dateAvisConf').value);
+            formData.append("Nature_Autorisation", document.getElementById('natAut').value);
+            formData.append("Date_Aut_Autorisation", document.getElementById('dateAut').value);
+            formData.append("Date_Comt_Autorisation", document.getElementById('dateDebutTrv').value);
+            formData.append("EtatAvancemt_Autorisation", document.getElementById('etatAvc').value);
+            formData.append("valider", document.getElementById(nameAction).value);
+
+            $.ajax({
+                type: "Post",
+                url: '@Url.Action("Autorisation", "WorkflowDerogation")',
+                contentType: false,
+                cache: false,
+                dataType: "json",
+                data: formData,
+                processData: false,
+                success: function (data) {
+                    window.location.href = data;
+                },
+                error: function () {
+                    alert("erreur!");
+                }
+            });
+
+            traditional: true
+        }
+    </script>
+}

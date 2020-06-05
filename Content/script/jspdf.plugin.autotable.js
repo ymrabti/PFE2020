@@ -369,8 +369,7 @@ function addPage() {
     table.pageStartX = table.cursor.x;
     table.pageStartY = table.cursor.y;
     if (table.settings.showHeader === true || table.settings.showHeader === 'everyPage') {
-        painter_1.
-            Row(table.headerRow, table.hooks.drawHeaderRow, table.hooks.drawHeaderCell);
+        painter_1.printRow(table.headerRow, table.hooks.drawHeaderRow, table.hooks.drawHeaderCell);
     }
 }
 exports.addPage = addPage;

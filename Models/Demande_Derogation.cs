@@ -54,6 +54,7 @@ namespace GestionnaireUtilisateurs.Models
         public Nullable<int> FK_DemDerg_EtatAvc { get; set; }
         public Nullable<int> Id_Autorisation { get; set; }
         public Nullable<int> Id_Commune { get; set; }
+        public string Type_Terrain { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Affect_Derg_Comms> Affect_Derg_Comms { get; set; }
@@ -62,9 +63,9 @@ namespace GestionnaireUtilisateurs.Models
         public virtual Autorisation_Derogation Autorisation_Derogation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Avis_Org> Avis_Org { get; set; }
-        public virtual COMMUNES_RSK COMMUNES_RSK { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Courrier> Courrier { get; set; }
+        public virtual References_Foncieres References_Foncieres { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Document_Derogation> Document_Derogation { get; set; }
         public virtual EtatAvancement EtatAvancement { get; set; }
@@ -76,5 +77,6 @@ namespace GestionnaireUtilisateurs.Models
         public virtual Statut_Juridique_DemDerg Statut_Juridique_DemDerg { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<parcell> parcell { get; set; }
+        public virtual COMMUNES_RSK COMMUNES_RSK { get; set; }
     }
 }

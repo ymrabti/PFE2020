@@ -20,8 +20,7 @@ namespace GestionnaireUtilisateurs.Models
             this.Demande_Derogation = new HashSet<Demande_Derogation>();
         }
     
-        public int OBJECTID { get; set; }
-        public Nullable<int> IDCOM { get; set; }
+        public int IDCOM { get; set; }
         public string COMMUNE { get; set; }
         public Nullable<int> POPU { get; set; }
         public Nullable<int> POPR { get; set; }
