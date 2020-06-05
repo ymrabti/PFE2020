@@ -20,9 +20,9 @@ namespace GestionnaireUtilisateurs.Models
             this.Affect_Derg_Comms = new HashSet<Affect_Derg_Comms>();
             this.Avis_Org = new HashSet<Avis_Org>();
             this.Courrier = new HashSet<Courrier>();
-            this.Document_Derogation = new HashSet<Document_Derogation>();
             this.FicheSuiveuse = new HashSet<FicheSuiveuse>();
             this.parcell = new HashSet<parcell>();
+            this.Document_Derogation = new HashSet<Document_Derogation>();
         }
     
         public int Id_DemDerg { get; set; }
@@ -66,8 +66,6 @@ namespace GestionnaireUtilisateurs.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Courrier> Courrier { get; set; }
         public virtual References_Foncieres References_Foncieres { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Document_Derogation> Document_Derogation { get; set; }
         public virtual EtatAvancement EtatAvancement { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FicheSuiveuse> FicheSuiveuse { get; set; }
@@ -78,5 +76,7 @@ namespace GestionnaireUtilisateurs.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<parcell> parcell { get; set; }
         public virtual COMMUNES_RSK COMMUNES_RSK { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Document_Derogation> Document_Derogation { get; set; }
     }
 }

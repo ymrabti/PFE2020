@@ -571,7 +571,7 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
         <PropertyRef Name="Id_DemDerg" />
       </Principal>
       <Dependent Role="Document_Derogation">
-        <PropertyRef Name="Intitule_Doc_Derg" />
+        <PropertyRef Name="FK_DemDerg_DocDerg" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

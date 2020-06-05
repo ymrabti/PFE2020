@@ -167,17 +167,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Document_Derogation">
-      <EntityTypeMapping TypeName="aurs1Model.Document_Derogation">
-        <MappingFragment StoreEntitySet="Document_Derogation">
-          <ScalarProperty Name="FK_DemDerg_DocDerg" ColumnName="FK_DemDerg_DocDerg" />
-          <ScalarProperty Name="url_Doc_Derg" ColumnName="url_Doc_Derg" />
-          <ScalarProperty Name="Intitule_Doc_Derg" ColumnName="Intitule_Doc_Derg" />
-          <ScalarProperty Name="Code_Doc_Derg" ColumnName="Code_Doc_Derg" />
-          <ScalarProperty Name="Id_Doc_Derog" ColumnName="Id_Doc_Derog" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="EtatAvancement">
       <EntityTypeMapping TypeName="aurs1Model.EtatAvancement">
         <MappingFragment StoreEntitySet="EtatAvancement">
@@ -375,6 +364,17 @@
           <ScalarProperty Name="idreg" ColumnName="idreg" />
           <ScalarProperty Name="Provicne" ColumnName="Provicne" />
           <ScalarProperty Name="IdProv" ColumnName="IdProv" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Document_Derogation">
+      <EntityTypeMapping TypeName="aurs1Model.Document_Derogation">
+        <MappingFragment StoreEntitySet="Document_Derogation">
+          <ScalarProperty Name="FK_DemDerg_DocDerg" ColumnName="FK_DemDerg_DocDerg" />
+          <ScalarProperty Name="url_Doc_Derg" ColumnName="url_Doc_Derg" />
+          <ScalarProperty Name="Intitule_Doc_Derg" ColumnName="Intitule_Doc_Derg" />
+          <ScalarProperty Name="Code_Doc_Derg" ColumnName="Code_Doc_Derg" />
+          <ScalarProperty Name="Id_Doc_Derog" ColumnName="Id_Doc_Derog" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

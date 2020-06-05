@@ -1,4 +1,4 @@
-﻿@model AURS_Derogation.Models.MultiModels
+﻿@model GestionnaireUtilisateurs.Models.MultiModeles
 @{
     ViewBag.Title = "Cloture";
     Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
@@ -21,28 +21,30 @@
 
 <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
     <div class="card-body" id="">
-        <div class="row">
+        <div class="row" style="margin-bottom:10px">
             <div class="col-sm-4">
                 <label for="inputText11" style="font-size:12px;">N° de Dossier :</label>
-                <input type="text" class="form-control" value="@Model.DemDerg.Code_DemDerg" id="NumDossier" name="Code_DemDerg" disabled>
+                <input type="text" class="form-control" value="@Model.DemDerg.Code_DemDerg" disabled>
             </div>
             <div class="col-sm-4">
                 <label for="inputText11" style="font-size:12px;">Commune/Arrondissement :</label>
-                @if (Model.DemDerg.Derog_Commune.Count() == 0)
-                {<input type="text" class="form-control" value="Inconnue" id="communearrondissement" name="" disabled> }
+                @if (Model.DemDerg.COMMUNES_RSK == null)
+                {<input type="text" class="form-control" value="Inconnue" name="" disabled> }
                 else
-                {
-                    <input type="text" class="form-control" value="@Model.DemDerg.Derog_Commune.FirstOrDefault().COMMUNES.nom_commun" id="communearrondissement" name="" disabled>
-                }
-
+                {<input type="text" class="form-control" value="@Model.DemDerg.COMMUNES_RSK.COMMUNE" name="" disabled>}
             </div>
             <div class="col-sm-4">
                 <label for="inputText11" style="font-size:12px;">Référence foncière :</label>
                 @if (Model.DemDerg.References_Foncieres == null)
-                {<input type="text" id="dateNow" value="Inconnue" name="References_Foncieres" class="form-control" disabled> }
+                {<input type="text" value="Inconnue" class="form-control" disabled> }
                 else
-                {<input type="text" id="dateNow" value="@Model.DemDerg.References_Foncieres.NomRF" name="References_Foncieres" class="form-control" disabled>}
-
+                {<input type="text" value="@Model.DemDerg.References_Foncieres.NomRF" class="form-control" disabled>}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <label for="inputText11" style="font-size:12px;">Date et heure de demande :</label>
+                <input type="text" id="dateNow" value="@Model.DemDerg.Date_Arrivee_DemDerg" class="form-control" readonly="readonly">
             </div>
         </div>
     </div>

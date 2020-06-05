@@ -112,7 +112,7 @@ namespace AURS_Derogation.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Rensegnements(Demande_Derogation DemDerg, int enregistrer, string CommuneArrondissement)
+        public ActionResult Rensegnements(Demande_Derogation DemDerg, int enregistrer, int CommuneArrondissement)
         {
             ViewBag.Message = "";
             if (DemDerg.Type_Terrain == null)
@@ -122,7 +122,7 @@ namespace AURS_Derogation.Controllers
             }
             else
             {
-                var commune = db.COMMUNES_RSK.Where(P => P.code_commu == CommuneArrondissement).FirstOrDefault();
+                var commune = db.COMMUNES_RSK.Find(CommuneArrondissement);
                 if (commune != null)
                 {
                     DemDerg.COMMUNES_RSK = commune;
@@ -154,6 +154,87 @@ namespace AURS_Derogation.Controllers
             //ViewBag.FK_DemDerg_StatutJuridique_DemDerg = new SelectList(db.Statut_Juridique_DemDerg, "Id_StatutJuridique_DemDerg", "StatutJuridique_DemDerg", DemDerg.FK_DemDerg_StatutJuridique_DemDerg);
             //return View(DemDerg);
         }
+
+
+
+        public ActionResult Rensegnements_Fait(int Id_DemDerg)
+        {
+            ViewBag.Message = Workflow.Renseignements + " . " + Workflow.Situation_Géographique
+                + " . " + Workflow.GED + " . " + Workflow.Programmation + " . " + Workflow.Avis
+                + " . " + Workflow.Echanges + " . " + Workflow.Autorisation + " . " + Workflow.Cloture;
+
+            var demDerog = db.Demande_Derogation.ToList();
+            if (demDerog.Count() != 0)
+            {
+                ViewBag.numVers = demDerog[demDerog.Count() - 1].NumVersion_DemDerog + 1;
+            }
+            else
+            {
+                ViewBag.numVers = 1;
+            }
+
+            var multiTab = new MultiModeles
+            {
+                Provs = db.PROVINCES_RSK.ToList(),
+                Communes = db.COMMUNES_RSK.ToList(),
+                Parcells = db.parcell.ToList(),
+                DemDerg = db.Demande_Derogation.Find(Id_DemDerg),
+                NatDemDerogs = db.Nature_Demande_Derg.ToList(),
+                ForMaitreOeuvrages = db.Forme_MaitreOeuvrage_DemDerg.ToList(),
+                NatPrjDerogs = db.Nature_Projet_DemDerg.ToList(),
+                StatutJurds = db.Statut_Juridique_DemDerg.ToList(),
+                References_Foncieres = db.References_Foncieres.ToList()
+            };
+            //return View(multiTab);
+            return correctAction(15, Id_DemDerg, multiTab);
+        }
+
+        [HttpPost]
+        public ActionResult Rensegnements_Fait(Demande_Derogation DemDerg, int enregistrer/*, int Id_DemDerg*/)
+        {
+            var demExist = db.Demande_Derogation.Find(DemDerg.Id_DemDerg);
+
+            //demExist.Code_DemDerg = DemDerg.Code_DemDerg;
+            demExist.Intitule_DemDerg = DemDerg.Intitule_DemDerg;
+            demExist.Superficie_Terrain_DemDerg = DemDerg.Superficie_Terrain_DemDerg;
+            demExist.Maitre_Oeuvrage_DemDerg = DemDerg.Maitre_Oeuvrage_DemDerg;
+            demExist.Maitre_Oeuvre_DemDerg = DemDerg.Maitre_Oeuvre_DemDerg;
+            demExist.Couverture_DemDerg = DemDerg.Couverture_DemDerg;
+            demExist.PrevisionUrbanistique_DemDerg = DemDerg.PrevisionUrbanistique_DemDerg;
+            demExist.Ratio_indus_DemDerg = DemDerg.Ratio_indus_DemDerg;
+            demExist.Ratio_resid_DemDerg = DemDerg.Ratio_resid_DemDerg;
+            demExist.Ratio_Social_DemDerg = DemDerg.Ratio_Social_DemDerg;
+            demExist.Ratio_touris_DemDerg = DemDerg.Ratio_touris_DemDerg;
+            demExist.Montant_Investissement_DemDerg = DemDerg.Montant_Investissement_DemDerg;
+            demExist.Emploi_generer_DemDerg = DemDerg.Emploi_generer_DemDerg;
+            demExist.Dero_demande_DemDerg = DemDerg.Dero_demande_DemDerg;
+            demExist.Duree_realisation_DemDerg = DemDerg.Duree_realisation_DemDerg;
+            demExist.Contribution_Projet_DemDerg = DemDerg.Contribution_Projet_DemDerg;
+            demExist.Adresse_DemDerg = DemDerg.Adresse_DemDerg;
+            demExist.Avis_Remarque_DemDerg = DemDerg.Avis_Remarque_DemDerg;
+            demExist.Cloture_DemDerg = DemDerg.Cloture_DemDerg;
+            demExist.FK_DemDerg_Nature_Dem = DemDerg.FK_DemDerg_Nature_Dem;
+            demExist.FK_DemDerg_StatutJuridique_DemDerg = DemDerg.FK_DemDerg_StatutJuridique_DemDerg;
+            demExist.FK_DemDerg_FormeMaitreOeuvrage_DemDerg = DemDerg.FK_DemDerg_FormeMaitreOeuvrage_DemDerg;
+            demExist.FK_DemDerg_Nature_Projet_DemDerg = DemDerg.FK_DemDerg_Nature_Projet_DemDerg;
+
+            if (enregistrer == 0)
+            {
+                demExist.FK_DemDerg_EtatAvc = 15;
+                db.SaveChanges();
+                return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
+                //return RedirectToAction("Rensegnements_Fait", "WorkflowDerogation", new { Id_DemDerg = DemDerg.Id_DemDerg });
+            }
+            else
+            {
+                demExist.FK_DemDerg_EtatAvc = 16;
+                db.SaveChanges();
+                return RedirectToAction("SituationGeo", "WorkflowDerogation", new { Id_DemDerg = DemDerg.Id_DemDerg });
+                //return RedirectToAction("SituationGeo", "WorkflowDerogation", new { Id_DemDerg = DemDerg.Id_DemDerg });
+            }
+        }
+
+
 
 
         public ActionResult SituationGeo(int Id_DemDerg)
@@ -193,7 +274,8 @@ namespace AURS_Derogation.Controllers
 
             var multiTab = new MultiModeles()
             {
-                DemDerg = db.Demande_Derogation.Find(FK_DemDerg_DocDerg)
+                DemDerg = db.Demande_Derogation.Find(FK_DemDerg_DocDerg),
+                TYPE_DOCs=db.TYPE_DOC.ToList()
 
             };
 
@@ -201,7 +283,7 @@ namespace AURS_Derogation.Controllers
         }
 
         [HttpPost]
-        public JsonResult Ged(FormCollection form, HttpPostedFileBase[] url_Doc_Derg)
+        public JsonResult Ged(FormCollection form/*, HttpPostedFileBase[] url_Doc_Derg*/)
         {
             var av = form["ged"];
             var avv = JsonConvert.DeserializeObject<List<Document_Derogation>>(av);
@@ -686,82 +768,6 @@ namespace AURS_Derogation.Controllers
 
 
 
-        public ActionResult Rensegnements_Fait(int Id_DemDerg)
-        {
-            ViewBag.Message = Workflow.Renseignements + " . " + Workflow.Situation_Géographique
-                + " . " + Workflow.GED + " . " + Workflow.Programmation + " . " + Workflow.Avis
-                + " . " + Workflow.Echanges + " . " + Workflow.Autorisation + " . " + Workflow.Cloture;
-
-            var demDerog = db.Demande_Derogation.ToList();
-            if (demDerog.Count() != 0)
-            {
-                ViewBag.numVers = demDerog[demDerog.Count() - 1].NumVersion_DemDerog + 1;
-            }
-            else
-            {
-                ViewBag.numVers = 1;
-            }
-
-            var multiTab = new MultiModeles
-            {
-                Provs = db.PROVINCES_RSK.ToList(),
-                Communes = db.COMMUNES_RSK.ToList(),
-                Parcells = db.parcell.ToList(),
-                DemDerg = db.Demande_Derogation.Find(Id_DemDerg),
-                NatDemDerogs = db.Nature_Demande_Derg.ToList(),
-                ForMaitreOeuvrages = db.Forme_MaitreOeuvrage_DemDerg.ToList(),
-                NatPrjDerogs = db.Nature_Projet_DemDerg.ToList(),
-                StatutJurds = db.Statut_Juridique_DemDerg.ToList(),
-                References_Foncieres = db.References_Foncieres.ToList()
-            };
-            //return View(multiTab);
-            return correctAction(15, Id_DemDerg, multiTab);
-        }
-
-        [HttpPost]
-        public ActionResult Rensegnements_Fait(Demande_Derogation DemDerg, int enregistrer/*, int Id_DemDerg*/)
-        {
-            var demExist = db.Demande_Derogation.Find(DemDerg.Id_DemDerg);
-
-            demExist.Code_DemDerg = DemDerg.Code_DemDerg;
-            demExist.Intitule_DemDerg = DemDerg.Intitule_DemDerg;
-            demExist.Superficie_Terrain_DemDerg = DemDerg.Superficie_Terrain_DemDerg;
-            demExist.Maitre_Oeuvrage_DemDerg = DemDerg.Maitre_Oeuvrage_DemDerg;
-            demExist.Maitre_Oeuvre_DemDerg = DemDerg.Maitre_Oeuvre_DemDerg;
-            demExist.Couverture_DemDerg = DemDerg.Couverture_DemDerg;
-            demExist.PrevisionUrbanistique_DemDerg = DemDerg.PrevisionUrbanistique_DemDerg;
-            demExist.Ratio_indus_DemDerg = DemDerg.Ratio_indus_DemDerg;
-            demExist.Ratio_resid_DemDerg = DemDerg.Ratio_resid_DemDerg;
-            demExist.Ratio_Social_DemDerg = DemDerg.Ratio_Social_DemDerg;
-            demExist.Ratio_touris_DemDerg = DemDerg.Ratio_touris_DemDerg;
-            demExist.Montant_Investissement_DemDerg = DemDerg.Montant_Investissement_DemDerg;
-            demExist.Emploi_generer_DemDerg = DemDerg.Emploi_generer_DemDerg;
-            demExist.Dero_demande_DemDerg = DemDerg.Dero_demande_DemDerg;
-            demExist.Duree_realisation_DemDerg = DemDerg.Duree_realisation_DemDerg;
-            demExist.Contribution_Projet_DemDerg = DemDerg.Contribution_Projet_DemDerg;
-            demExist.Adresse_DemDerg = DemDerg.Adresse_DemDerg;
-            demExist.Avis_Remarque_DemDerg = DemDerg.Avis_Remarque_DemDerg;
-            demExist.Cloture_DemDerg = DemDerg.Cloture_DemDerg;
-            demExist.FK_DemDerg_Nature_Dem = DemDerg.FK_DemDerg_Nature_Dem;
-            demExist.FK_DemDerg_StatutJuridique_DemDerg = DemDerg.FK_DemDerg_StatutJuridique_DemDerg;
-            demExist.FK_DemDerg_FormeMaitreOeuvrage_DemDerg = DemDerg.FK_DemDerg_FormeMaitreOeuvrage_DemDerg;
-            demExist.FK_DemDerg_Nature_Projet_DemDerg = DemDerg.FK_DemDerg_Nature_Projet_DemDerg;
-
-            if (enregistrer == 0)
-            {
-                demExist.FK_DemDerg_EtatAvc = 15;
-                db.SaveChanges();
-                return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
-                //return RedirectToAction("Rensegnements_Fait", "WorkflowDerogation", new { Id_DemDerg = DemDerg.Id_DemDerg });
-            }
-            else
-            {
-                demExist.FK_DemDerg_EtatAvc = 16;
-                db.SaveChanges();
-                return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
-                //return RedirectToAction("SituationGeo", "WorkflowDerogation", new { Id_DemDerg = DemDerg.Id_DemDerg });
-            }
-        }
 
         public ActionResult WorkflowG(int idDemDerog)
         {

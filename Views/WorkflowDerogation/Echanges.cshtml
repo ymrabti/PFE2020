@@ -1,4 +1,4 @@
-﻿@model AURS_Derogation.Models.MultiModels
+﻿@model GestionnaireUtilisateurs.Models.MultiModeles
 @{
     ViewBag.Title = "Echanges";
     Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
@@ -20,28 +20,30 @@
 </section>
 <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
     <div class="card-body" id="">
-        <div class="row">
+        <div class="row" style="margin-bottom:10px">
             <div class="col-sm-4">
                 <label for="inputText11" style="font-size:12px;">N° de Dossier :</label>
-                <input type="text" class="form-control" value="@Model.DemDerg.Code_DemDerg" id="NumDossier" name="Code_DemDerg" disabled>
+                <input type="text" class="form-control" value="@Model.DemDerg.Code_DemDerg" disabled>
             </div>
             <div class="col-sm-4">
                 <label for="inputText11" style="font-size:12px;">Commune/Arrondissement :</label>
-                @if (Model.DemDerg.Derog_Commune.Count() == 0)
-                {<input type="text" class="form-control" value="Inconnue" id="communearrondissement" name="" disabled> }
+                @if (Model.DemDerg.COMMUNES_RSK == null)
+                {<input type="text" class="form-control" value="Inconnue" name="" disabled> }
                 else
-                {
-                    <input type="text" class="form-control" value="@Model.DemDerg.Derog_Commune.FirstOrDefault().COMMUNES.nom_commun" id="communearrondissement" name="" disabled>
-                }
-
+                {<input type="text" class="form-control" value="@Model.DemDerg.COMMUNES_RSK.COMMUNE" name="" disabled>}
             </div>
             <div class="col-sm-4">
                 <label for="inputText11" style="font-size:12px;">Référence foncière :</label>
                 @if (Model.DemDerg.References_Foncieres == null)
-                {<input type="text" id="dateNow" value="Inconnue" name="References_Foncieres" class="form-control" disabled> }
+                {<input type="text" value="Inconnue" class="form-control" disabled> }
                 else
-                {<input type="text" id="dateNow" value="@Model.DemDerg.References_Foncieres.NomRF" name="References_Foncieres" class="form-control" disabled>}
-
+                {<input type="text" value="@Model.DemDerg.References_Foncieres.NomRF" class="form-control" disabled>}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <label for="inputText11" style="font-size:12px;">Date et heure de demande :</label>
+                <input type="text" id="dateNow" value="@Model.DemDerg.Date_Arrivee_DemDerg" class="form-control" readonly="readonly">
             </div>
         </div>
     </div>
@@ -140,90 +142,7 @@
             </div>
 
             <br />
-            @*<div class="row">
-                    <div class="col-sm-6">
-                        <button class="buttonsReapeateds">
-                            fa fa-align-left   <i class="fa fa-align-left"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-angle-double-left   <i class="fa fa-angle-double-left"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-angle-left   <i class="fa fa-angle-left"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-arrow-alt-circle-left   <i class="fa fa-arrow-alt-circle-left"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-arrow-circle-left   <i class="fa fa-arrow-circle-left"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-arrow-left   <i class="fa fa-arrow-left"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-caret-left   <i class="fa fa-caret-left"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-caret-square-left   <i class="fa fa-caret-square-left"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-chevron-circle-left   <i class="fa fa-chevron-circle-left"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-chevron-left   <i class="fa fa-chevron-left"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-hand-point-left   <i class="fa fa-hand-point-left"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-pull-left   <i class="fa fa-pull-left"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-quote-left   <i class="fa fa-quote-left"></i>
-                        </button>
-                    </div>
-                    <div class="col-sm-6">
-                        <button class="buttonsReapeateds">
-                            fa fa-align-right   <i class="fa fa-align-right"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-angle-double-right   <i class="fa fa-angle-double-right"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-angle-right   <i class="fa fa-angle-right"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-arrow-alt-circle-right   <i class="fa fa-arrow-alt-circle-right"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-arrow-circle-right   <i class="fa fa-arrow-circle-right"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-arrow-right   <i class="fa fa-arrow-right"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-caret-right   <i class="fa fa-caret-right"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-caret-square-right   <i class="fa fa-caret-square-right"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-chevron-circle-right   <i class="fa fa-chevron-circle-right"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-chevron-right   <i class="fa fa-chevron-right"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-hand-point-right   <i class="fa fa-hand-point-right"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-pull-right   <i class="fa fa-pull-right"></i>
-                        </button>
-                        <button class="buttonsReapeateds">
-                            fa fa-quote-right   <i class="fa fa-quote-right"></i>
-                        </button>
-                    </div>
-                </div>*@
+            
             <center class="fixed-bottom">
                 <button type="submit" class="btn btn-lg buttonsReapeateds" value="0" name="valider" id="btnSave">
                     Enregister   <i class="fa fa-level-down-alt"></i>
@@ -381,7 +300,8 @@
 <script language="javascript">
 
     $("#btnsend").click(function () {
-        if (stringArray.length == 0) { alert("null"); }
+        var nombre = @Model.DemDerg.Courrier.Count();
+        if (stringArray.length == 0 && nombre==0) { alert("Courriers obligatoires!!"); }
         else {
             var formData = new FormData();
         var json = JSON.stringify(stringArray);

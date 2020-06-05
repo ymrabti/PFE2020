@@ -36,7 +36,6 @@ namespace GestionnaireUtilisateurs.Models
         public virtual DbSet<Commission> Commission { get; set; }
         public virtual DbSet<Courrier> Courrier { get; set; }
         public virtual DbSet<Demande_Derogation> Demande_Derogation { get; set; }
-        public virtual DbSet<Document_Derogation> Document_Derogation { get; set; }
         public virtual DbSet<EtatAvancement> EtatAvancement { get; set; }
         public virtual DbSet<FicheSuiveuse> FicheSuiveuse { get; set; }
         public virtual DbSet<Forme_MaitreOeuvrage_DemDerg> Forme_MaitreOeuvrage_DemDerg { get; set; }
@@ -57,5 +56,6 @@ namespace GestionnaireUtilisateurs.Models
         public virtual DbSet<View_Last_Affectation_Com> View_Last_Affectation_Com { get; set; }
         public virtual DbSet<COMMUNES_RSK> COMMUNES_RSK { get; set; }
         public virtual DbSet<PROVINCES_RSK> PROVINCES_RSK { get; set; }
+        public virtual DbSet<Document_Derogation> Document_Derogation { get; set; }
     }
 }

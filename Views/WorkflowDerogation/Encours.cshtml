@@ -14,10 +14,13 @@
     </ul>
     <div class="tab-content" id="myTabContent">*@
 <style>
-    .hoverdisables{}
-    .hoverdisables:hover{
-        cursor:none
+    .hoverdisables {
+        cursor: not-allowed
     }
+
+        .hoverdisables:hover {
+            cursor: cell
+        }
 </style>
 
 
@@ -111,9 +114,10 @@
                             Aller au Workflow
                             <i class="fa fa-external-link-alt"></i>
                         </button>
+
                     </center><br />
                 </form>
-                <center class="fixed-bottom">
+                <center>
                     @if (ViewBag.page == 1)
                     {
                         <button class="btn btn-lg buttonsReapeateds hoverdisables" disabled>
@@ -187,7 +191,7 @@
         };
         var tf = new TableFilter('tableFilter', filtersConfig);
         tf.init();
-                        
+
 
     </script>
 

@@ -44,5 +44,6 @@ namespace GestionnaireUtilisateurs.Models
         public IEnumerable<COMMUNES_RSK> Communes { get; set; }
         public IEnumerable<References_Foncieres> References_Foncieres { get; set; }
         public IEnumerable<parcell> Parcells { get; set; }
+        public IEnumerable<TYPE_DOC> TYPE_DOCs { get; set; }
     }
 }
