@@ -73,7 +73,7 @@ namespace AURS_Derogation.Controllers
                     {
                         return RedirectToAction("Cloture", "WorkflowDerogation", new { FK_DemDerg = IdDemDerog });
                     }
-                    else { return RedirectToAction("Encours", "WorkflowDerogation",new { page=1}); }
+                    else { return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 }); }
                 }
                 else
                 {
@@ -103,8 +103,8 @@ namespace AURS_Derogation.Controllers
                 StatutJurds = db.Statut_Juridique_DemDerg.ToList(),
                 Communes = db.COMMUNES_RSK.ToList(),
                 Provs = db.PROVINCES_RSK.ToList(),
-                References_Foncieres = db.References_Foncieres.ToList()
-
+                References_Foncieres = db.References_Foncieres.ToList(),
+                aspNetUsers = db.AspNetUsers.OrderBy(p=>p.Email).ToList()
             };
             return View(multiTab);
 
@@ -112,7 +112,7 @@ namespace AURS_Derogation.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Rensegnements(Demande_Derogation DemDerg, int enregistrer, int CommuneArrondissement)
+        public ActionResult Rensegnements(Demande_Derogation DemDerg, int enregistrer)
         {
             ViewBag.Message = "";
             if (DemDerg.Type_Terrain == null)
@@ -122,11 +122,6 @@ namespace AURS_Derogation.Controllers
             }
             else
             {
-                var commune = db.COMMUNES_RSK.Find(CommuneArrondissement);
-                if (commune != null)
-                {
-                    DemDerg.COMMUNES_RSK = commune;
-                }
                 DemDerg.Type_Terrain = DemDerg.Type_Terrain.Trim();
                 if (enregistrer == 0)
                 {
@@ -275,7 +270,7 @@ namespace AURS_Derogation.Controllers
             var multiTab = new MultiModeles()
             {
                 DemDerg = db.Demande_Derogation.Find(FK_DemDerg_DocDerg),
-                TYPE_DOCs=db.TYPE_DOC.ToList()
+                TYPE_DOCs = db.TYPE_DOC.ToList()
 
             };
 
@@ -639,12 +634,13 @@ namespace AURS_Derogation.Controllers
 
 
 
-        // GET: WorkflowDerogation
-        public ActionResult Encours(Int16 page)
+
+        public ActionResult Encours(Nullable<Int16> page)
         {
+            if (page==null) { page = 1; }
             int totale_resultats = db.Demande_Derogation.Count();
             int nombre_de_pages = totale_resultats / nombre_res_ppage + 1;
-            ViewBag.page = page;ViewBag.nombre_de_pages = nombre_de_pages;
+            ViewBag.page = page; ViewBag.nombre_de_pages = nombre_de_pages;
             if (page < 1)
             {
                 return RedirectToAction("Encours", new { page = 1 });
@@ -659,11 +655,11 @@ namespace AURS_Derogation.Controllers
                 {
                     DemDergs = db.Demande_Derogation
                     .OrderByDescending(p => p.Id_DemDerg)
-                    .Skip((page - 1) * nombre_res_ppage)
+                    .Skip((page.Value - 1) * nombre_res_ppage)
                     .Take(nombre_res_ppage)
                     .ToList()
                 };
-            return View(model);
+                return View(model);
             }
         }
 
@@ -771,7 +767,8 @@ namespace AURS_Derogation.Controllers
 
         public ActionResult WorkflowG(int idDemDerog)
         {
-            MultiModeles multiModeles = new MultiModeles {
+            MultiModeles multiModeles = new MultiModeles
+            {
                 DemDerg = db.Demande_Derogation.Find(idDemDerog)
             };
             return View(multiModeles);

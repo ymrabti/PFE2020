@@ -50,13 +50,13 @@
         geometryEngine
     ) {
 
-        /*
-              var map = new Map("map", {
-              basemap: "streets",
-              autoResize: "autoResize",
-              center: [-7, 35.6122],
-              zoom: 5
-              });*/
+
+        //var map = new Map("map", {
+        //    basemap: "topo",
+        //    autoResize: "autoResize",
+        //    center: [-7, 35.6122],
+        //    zoom: 5
+        //});
 
         var map;
         var array = [];
@@ -186,7 +186,7 @@
             });
 
             //add the scalebar
-            /* var scalebar = new Scalebar({
+             var scalebar = new Scalebar({
               map: map,
               scalebarUnit: "english"
             });
@@ -198,7 +198,7 @@
               map: map,
               layerInfos: legendLayers
             }, "legend");
-            legendDijit.startup();*/
+            legendDijit.startup();
         });
 
         /****************************************************************

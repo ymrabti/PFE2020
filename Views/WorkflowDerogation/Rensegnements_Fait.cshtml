@@ -23,72 +23,78 @@
     </nav>
 </section>
 
-@Html.Partial("WorkflowG",Model)
+@Html.Partial("WorkflowG", Model)
 
 
 <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
     <div class="card-body" id="">
         <div class="form-horizontal">
-            @using (Html.BeginForm("Rensegnements_Fait", "WorkflowDerogation", FormMethod.Post))
+            @using (Html.BeginForm("Rensegnements", "WorkflowDerogation", FormMethod.Post, new { id = "formsubmit" }))
             {
                 @Html.AntiForgeryToken()
-                @*<div class="row" style="margin-bottom:25px">
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label for="inputText11" style="font-size:12px;">Réference fonciere : <label style="color:red">*</label></label>
-                                <select class="form-control form-control-sm chzn-selec" id="selRef" name="Type_Terrain">
-                                    <option value="">--- Sélectionner une réference fonciere ---</option>
-                                    @foreach (var item in Model.References_Foncieres)
-                                    {
-                                        <option value="@item.Id_RF">@item.NomRF</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label for="inputText11" style="font-size:12px;">Préfecture :</label>
-                                <select class="form-control form-control-sm chzn-selec" id="Prefectures" name="Prefecture">
-                                    <option value="">-------- Sélectionner la préfecture : --------</option>
-                                    @foreach (var item in Model.Provs)
-                                    {
-                                        <option value="@item.code_province">@item.nom_province</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label for="inputText11" style="font-size:12px;">Commune/Arrondissement :</label>
-                                <select class="form-control form-control-sm chzn-selec" id="Arrondissements" name="CommuneArrondissement">
-                                    <option value="">-------- Sélectionner la Commune/Arrondissement : --------</option>
-                                    @foreach (var item in Model.Communes)
-                                    {
-                                        <option value="@item.code_commu" style="display:none">@item.nom_commun</option>
-                                    }
-                                </select>
-                            </div>
+                <div class="row" style="margin-bottom:25px">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Réference fonciere : <label style="color:red">*</label></label>
+                            <select required class="form-control form-control-sm chzn-selec" id="selRef" name="Type_Terrain"
+                                    oninvalid="this.setCustomValidity('Réference fonciere obligatoire !')" oninput="this.setCustomValidity('')">
+                                <option value="">--- Sélectionner une réference fonciere ---</option>
+                                @foreach (var item in Model.References_Foncieres)
+                                {
+                                    <option value="@item.Id_RF">@item.NomRF</option>
+                                }
+                            </select>
                         </div>
                     </div>
-                    <div class="row" style="margin-bottom:25px">
-                        <div class="col-sm-4">
-                            <label for="inputText11" style="font-size:12px;">N° de Dossier :</label>
-                            <input type="text" class="form-control" id="NumDossier" name="Code_DemDerg">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Préfecture :</label>
+                            <select class="form-control form-control-sm chzn-selec" id="Prefectures" name="Prefecture">
+                                <option value="">-------- Sélectionner la préfecture : --------</option>
+                                @foreach (var item in Model.Provs)
+                                {
+                                    <option value="@item.IdProv">@item.Provicne</option>
+                                }
+                            </select>
                         </div>
-                        <div class="col-sm-4">
-                            <label for="inputText11" style="font-size:12px;">N° de la version :</label>
-                            <input type="text" class="form-control" value="@numVers" id="NumVers" name="NumVersion_DemDerog" readonly="readonly">
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Commune/Arrondissement :</label>
+                            <select required class="form-control form-control-sm chzn-selec" id="Arrondissements" name="Id_Commune"
+                                    oninvalid="this.setCustomValidity('Commune/Arrondissement obligatoire !')" oninput="this.setCustomValidity('')">
+                                <option value="">-------- Sélectionner la Commune/Arrondissement : --------</option>
+                                @foreach (var item in Model.Communes)
+                                {
+                                    <option name="@item.PROVINCES_RSK.IdProv" value="@item.IDCOM" style="display:none">@item.COMMUNE</option>
+                                }
+                            </select>
                         </div>
-                        <div class="col-sm-4">
-                            <label for="inputText11" style="font-size:12px;">Date et heure de demande :</label>
-                            <input type="text" id="dateNow" value="@datenow" name="Date_Arrivee_DemDerg" class="form-control" readonly="readonly">
-                        </div>
-
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom:25px">
+                    <div class="col-sm-4">
+                        <label for="inputText11" style="font-size:12px;">N° de Dossier :</label>
+                        <input required type="number" class="form-control" id="NumDossier" name="Code_DemDerg"
+                               oninvalid="this.setCustomValidity('N° de Dossier obligatoire !')" oninput="this.setCustomValidity('')">
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="inputText11" style="font-size:12px;">N° de la version :</label>
+                        <input type="text" class="form-control" value="@numVers" id="NumVers" name="NumVersion_DemDerog" readonly="readonly"
+                               oninvalid="this.setCustomValidity('N° de la version obligatoire !')" oninput="this.setCustomValidity('')">
+                    </div>
+                    @*<div class="col-sm-4">
+                        <label for="inputText11" style="font-size:12px;">Date et heure de demande :</label>
+                        <input type="text" id="dateNow" value="@datenow" name="Date_Arrivee_DemDerg" class="form-control" readonly="readonly"
+                               oninvalid="this.setCustomValidity('Date et heure de demande obligatoire !')" oninput="this.setCustomValidity('')">
                     </div>*@
+
+                </div>
                 <div class="row" style="margin-bottom:25px">
                     <div class="col-lg-12" style="position:center">
                         <label for="inputText11" style="font-size:12px;">Intitulé :</label>
-                        <input type="text" class="form-control" id="intitule" value="" name="Intitule_DemDerg">
+                        <input required type="text" class="form-control" id="intitule" value="" name="Intitule_DemDerg"
+                               oninvalid="this.setCustomValidity('Intitulé obligatoire !')" oninput="this.setCustomValidity('')">
                     </div>
                 </div>
                 <br />
@@ -97,29 +103,32 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="inputText11" style="font-size:12px;">Nature demande :</label>
-                            <select class="form-control form-control-sm" id="natDem" name="FK_DemDerg_Nature_Dem">
+                            <select required class="form-control form-control-sm" id="natDem" name="FK_DemDerg_Nature_Dem"
+                                    oninvalid="this.setCustomValidity('Nature demande obligatoire !')" oninput="this.setCustomValidity('')">
                                 <option value="">-------- Sélectionner la nature de la demande --------</option>
                                 @foreach (var item in Model.NatDemDerogs)
                                 {
-                                    <option value="@item.Id_NatureDemDerog">@Html.DisplayFor(modelItem => item.nature_Demande_Derogation)</option>
+                                    <option value="@item.Id_NatureDemDerog">@item.nature_Demande_Derogation</option>
                                 }
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-4">
                         <label for="inputText11" style="font-size:12px;">Statut juridique :</label>
-                        <select class="form-control form-control-sm chzn-selec" id="StatJurd" name="FK_DemDerg_StatutJuridique_DemDerg">
+                        <select required class="form-control form-control-sm chzn-selec" id="StatJurd" name="FK_DemDerg_StatutJuridique_DemDerg"
+                                oninvalid="this.setCustomValidity('Statut juridique obligatoire !')" oninput="this.setCustomValidity('')">
                             <option value="">-------- Sélectionner le Statut juridique --------</option>
                             @foreach (var item in Model.StatutJurds)
                             {
-                                <option value="@Html.DisplayFor(modelItem => item.Id_StatutJuridique_DemDerg)">@Html.DisplayFor(modelItem => item.StatutJuridique_DemDerg)</option>
+                                <option value="@item.Id_StatutJuridique_DemDerg">@item.StatutJuridique_DemDerg</option>
                             }
                         </select>
                     </div>
                     <div class="col-sm-4">
 
                         <label for="inputText11" style="font-size:12px;">Superficie (m2) :</label>
-                        <input type="text" class="form-control" id="superficie" value="" name="Superficie_Terrain_DemDerg">
+                        <input required type="number" class="form-control" id="superficie" value="" name="Superficie_Terrain_DemDerg"
+                               oninvalid="this.setCustomValidity('Superficie obligatoire !')" oninput="this.setCustomValidity('')">
                     </div>
 
                 </div>
@@ -128,19 +137,34 @@
                 <div class="row" style="margin-bottom:25px">
                     <div class="col-sm-4">
                         <label for="inputText11" style="font-size:12px;">Maître d'ouvrage :</label>
-                        <input type="text" class="form-control" id="maitreOuvrage" value="" name="Maitre_Oeuvrage_DemDerg">
+                        <select required class="form-control form-control-sm chzn-selec" id="maitreOuvrage" name="Maitre_Oeuvrage_DemDerg"
+                                oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
+                            <option value="">-------- Sélectionner le maître d'ouvrage --------</option>
+                            @foreach (var item in Model.aspNetUsers)
+                            {
+                                <option value="@item.Id">@item.Email</option>
+                            }
+                        </select>
                     </div>
                     <div class="col-sm-4">
                         <label for="inputText11" style="font-size:12px;">Maître d'oeuvre :</label>
-                        <input type="text" class="form-control" id="maitreOeuvre" value="" name="Maitre_Oeuvre_DemDerg">
+                        <select required class="form-control form-control-sm chzn-selec" id="maitreOeuvre" name="Maitre_Oeuvre_DemDerg"
+                                oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
+                            <option value="">-------- Sélectionner le maître d'ouvre --------</option>
+                            @foreach (var item in Model.aspNetUsers)
+                            {
+                                <option value="@item.Id">@item.Email</option>
+                            }
+                        </select>
                     </div>
                     <div class="col-sm-4">
                         <label for="inputText11" style="font-size:12px;">Forme maître d'ouvrage :</label>
-                        <select class="form-control form-control-sm chzn-selec" id="ForMOuvrg" name="FK_DemDerg_FormeMaitreOeuvrage_DemDerg">
+                        <select required class="form-control form-control-sm chzn-selec" id="ForMOuvrg" name="FK_DemDerg_FormeMaitreOeuvrage_DemDerg"
+                                oninvalid="this.setCustomValidity('Forme maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
                             <option value="">-------- Sélectionner la forme maître d'ouvrage --------</option>
                             @foreach (var item in Model.ForMaitreOeuvrages)
                             {
-                                <option value="@Html.DisplayFor(modelItem => item.Id_FormeMaitreOeuvrage_DemDerg)">@Html.DisplayFor(modelItem => item.FormeMaitreOeuvrage_DemDerg)</option>
+                                <option value="@item.Id_FormeMaitreOeuvrage_DemDerg">@item.FormeMaitreOeuvrage_DemDerg</option>
                             }
                         </select>
                     </div>
@@ -150,41 +174,48 @@
                 <div class="row" style="margin-bottom:25px">
                     <div class="col-sm-4">
                         <label for="inputText11" style="font-size:12px;">Nature de projet :</label>
-                        <select class="form-control form-control-sm chzn-selec" id="NatPrj" name="FK_DemDerg_Nature_Projet_DemDerg">
+                        <select required class="form-control form-control-sm chzn-selec" id="NatPrj" name="FK_DemDerg_Nature_Projet_DemDerg"
+                                oninvalid="this.setCustomValidity('Nature de projet obligatoire !')" oninput="this.setCustomValidity('')">
                             <option value="">-------- Sélectionner la nature de projet --------</option>
                             @foreach (var item in Model.NatPrjDerogs)
                             {
-                                <option value="@Html.DisplayFor(modelItem => item.Id_Nature_Projet_DemDerg)">@Html.DisplayFor(modelItem => item.Nature_Projet_DemDerg1)</option>
+                                <option value="@item.Id_Nature_Projet_DemDerg">@item.Nature_Projet_DemDerg1</option>
                             }
                         </select>
                     </div>
                     <div class="col-sm-4">
-                        <label for="inputText11" style="font-size:12px;">Montant d'investissement :</label>
-                        <input type="text" class="form-control" id="montantInvest" value="" name="Montant_Investissement_DemDerg">
+                        <label for="inputText11" style="font-size:12px;">Montant d'investissement (en DH):</label>
+                        <input required type="number" class="form-control" id="montantInvest" value="" name="Montant_Investissement_DemDerg"
+                               oninvalid="this.setCustomValidity('Montant d\'investissement obligatoire !')" oninput="this.setCustomValidity('')">
                     </div>
                     <div class="col-sm-4">
                         <label for="inputText11" style="font-size:12px;">Dérogation demandée :</label>
-                        <input type="text" class="form-control" id="derogationDem" value="" name="Dero_demande_DemDerg">
+                        <input required type="text" class="form-control" id="derogationDem" value="" name="Dero_demande_DemDerg"
+                               oninvalid="this.setCustomValidity('Dérogation demandée obligatoire !')" oninput="this.setCustomValidity('')">
                     </div>
                 </div>
                 <div class="row" style="margin-bottom:25px">
                     <div class="col-sm-4">
                         <label for="inputText11" style="font-size:12px;">Localisation du projet :</label>
-                        <input type="text" class="form-control" id="localisationPrj" value="" name="Adresse_DemDerg">
+                        <input required type="text" class="form-control" id="localisationPrj" value="" name="Adresse_DemDerg"
+                               oninvalid="this.setCustomValidity('Localisation du projet obligatoire !')" oninput="this.setCustomValidity('')">
                     </div>
                     <div class="col-sm-4">
                         <label for="inputText11" style="font-size:12px;">Emplois induits :</label>
-                        <input type="text" class="form-control" id="emploisInd" value="" name="Emploi_generer_DemDerg">
+                        <input required type="text" class="form-control" id="emploisInd" value="" name="Emploi_generer_DemDerg"
+                               oninvalid="this.setCustomValidity('Emplois induits obligatoire !')" oninput="this.setCustomValidity('')">
                     </div>
                     <div class="col-sm-4">
-                        <label for="inputText11" style="font-size:12px;">Durée de réalisation :</label>
-                        <input type="text" class="form-control" id="dureeReal" value="" name="Duree_realisation_DemDerg">
+                        <label for="inputText11" style="font-size:12px;">Durée de réalisation (Jours) :</label>
+                        <input required type="number" class="form-control" id="dureeReal" value="" name="Duree_realisation_DemDerg"
+                               oninvalid="this.setCustomValidity('Durée de réalisation obligatoire !')" oninput="this.setCustomValidity('')">
                     </div>
                 </div>
                 <div class="row" style="margin-bottom:25px">
                     <div class="col-sm-4">
                         <label for="inputText11" style="font-size:12px;">Consistance :</label>
-                        <input type="text" class="form-control" id="contribution" value="" name="Contribution_Projet_DemDerg">
+                        <input required type="text" class="form-control" id="contribution" value="" name="Contribution_Projet_DemDerg"
+                               oninvalid="this.setCustomValidity('Consistance obligatoire !')" oninput="this.setCustomValidity('')">
                     </div>
                 </div>
                 <br />
@@ -193,22 +224,26 @@
 
                     <div class="col-sm-3">
                         <label for="inputText11" style="font-size:12px;">Ratio Résidentiel :</label>
-                        <input type="text" class="form-control" id="ratioResid" value="" name="Ratio_resid_DemDerg">
+                        <input required type="text" class="form-control" id="ratioResid" value="" name="Ratio_resid_DemDerg"
+                               oninvalid="this.setCustomValidity('Ratio Résidentiel obligatoire !')" oninput="this.setCustomValidity('')">
                     </div>
 
                     <div class="col-sm-3">
                         <label for="inputText11" style="font-size:12px;">Ratio Social :</label>
-                        <input type="text" class="form-control" id="ratioSoc" value="" name="Ratio_Social_DemDerg">
+                        <input required type="text" class="form-control" id="ratioSoc" value="" name="Ratio_Social_DemDerg"
+                               oninvalid="this.setCustomValidity('Ratio Social obligatoire !')" oninput="this.setCustomValidity('')">
                     </div>
 
                     <div class="col-sm-3">
                         <label for="inputText11" style="font-size:12px;">Ratio Touristique :</label>
-                        <input type="text" class="form-control" id="ratioTour" value="" name="Ratio_touris_DemDerg">
+                        <input required type="text" class="form-control" id="ratioTour" value="" name="Ratio_touris_DemDerg"
+                               oninvalid="this.setCustomValidity('Ratio Touristique obligatoire !')" oninput="this.setCustomValidity('')">
                     </div>
 
                     <div class="col-sm-3">
                         <label for="inputText11" style="font-size:12px;">Ratio Industriel :</label>
-                        <input type="text" class="form-control" id="rationInd" value="" name="Ratio_indus_DemDerg">
+                        <input required type="text" class="form-control" id="rationInd" value="" name="Ratio_indus_DemDerg"
+                               oninvalid="this.setCustomValidity('Ratio Industriel obligatoire !')" oninput="this.setCustomValidity('')">
                     </div>
 
                 </div>
@@ -224,48 +259,28 @@
                 </center>
 
             }
-
         </div>
     </div>
 </div>
-<script>
-    //setInterval(function () {
-    //    var date = new Date();
-    //    var format = "YYYY-MMM-DD DDD";
-    //    dateConvert(date, format)
-    //}, 1);
+<script language="javascript">
+    $("#selRef").change(function () {
+        if ($("#selRef").val() == "") {
+            $("#selRef").css("border-color", "red");
+        }
+        else {
+            $("#selRef").css("border-color", "green");
+        }
+    });
 
-    //function dateConvert(dateobj, format) {
-    //    var year = dateobj.getFullYear();
-    //    var month = ("0" + (dateobj.getMonth() + 1)).slice(-2);
-    //    var date = ("0" + dateobj.getDate()).slice(-2);
-    //    var hours = ("0" + dateobj.getHours()).slice(-2);
-    //    var minutes = ("0" + dateobj.getMinutes()).slice(-2);
-    //    var seconds = ("0" + dateobj.getSeconds()).slice(-2);
-    //    var day = dateobj.getDay();
-    //    var months = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
-    //    var converted_date = "";
-
-    //    switch (format) {
-    //        case "YYYY-MM-DD":
-    //            converted_date = year + "-" + month + "-" + date;
-    //            break;
-    //        case "YYYY-MMM-DD DDD":
-    //            converted_date = year + "-" + months[parseInt(month) - 1] + "-" + date
-    //                + " " + hours + ":" + minutes+ ":" + seconds;
-    //            break;
-    //    }
-    //    $('#dateNow').val(converted_date);
-    //};
+</script>
+<script language="javascript">
     $('#Prefectures').change(function () {
 
-        var e = document.getElementById("Prefectures");
-        var choix = e.options[e.selectedIndex].value;
         var Pref = $(this).val();
         var com = $("#Arrondissements > option");
         $("#Arrondissements")[0].selectedIndex = 0;
         for (var i = 0; i < com.length; i++) {
-            if (com[i].getAttribute("value").includes(Pref)) {
+            if (com[i].getAttribute("name") == Pref || com[i].getAttribute("value") == "") {
                 com[i].style.display = "block";
             }
             else {
@@ -275,4 +290,5 @@
         $('#Arrondissements').trigger("liszt:updated");
 
     });
+
 </script>

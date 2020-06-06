@@ -171,9 +171,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\EtatsSortieController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\pwController.cs" />
+    <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Controllers\WorkflowDerogationController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -1912,10 +1914,13 @@
     <Content Include="Views\WorkflowDerogation\Programmation.cshtml" />
     <Content Include="Views\WorkflowDerogation\Rensegnements.cshtml" />
     <Content Include="Views\WorkflowDerogation\Rensegnements_Fait.cshtml" />
-    <Content Include="Views\WorkflowDerogation\Renseignement_Derog.cshtml" />
     <Content Include="Views\WorkflowDerogation\SituationGeo.cshtml" />
     <Content Include="Views\Shared\_LayoutDerogation.cshtml" />
     <Content Include="Views\WorkflowDerogation\WorkflowG.cshtml" />
+    <Content Include="Views\EtatsSortie\Index.cshtml" />
+    <Content Include="Views\Statistics\Index.cshtml" />
+    <Content Include="Views\WorkflowDerogation\EncoursParProfils.cshtml" />
+    <Content Include="Views\Statistics\TableBord.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
