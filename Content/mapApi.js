@@ -22,8 +22,7 @@
     "esri/geometry/Point",
     "esri/dijit/HomeButton",
     "esri/geometry/geometryEngine",
-    "dojo/domReady!"
-],
+    "dojo/domReady!"],
     function (
         Map,
         FeatureLayer,
@@ -68,29 +67,35 @@
             // dom.byId("subtitle").innerHTML = response.itemInfo.item.snippet;
 
             map = response.map;
+
             var legendLayers = arcgisUtils.getLegendLayers(response);
+
             var legendDijit = new Legend({
                 map: map,
                 layerInfos: legendLayers
             }, "legend");
-            legendDijit.startup();
+                legendDijit.startup();
 
             var layerList = new LayerList({
                 map: response.map,
                 layers: arcgisUtils.getLayerList(response)
             }, "layerList");
-
-            layerList.startup();
+                layerList.startup();
 
             var basemapGallery = new BasemapGallery({
                 showArcGISBasemaps: true,
                 map: map
             }, "basemapGallery");
-            basemapGallery.startup();
+                basemapGallery.startup();
+
             basemapGallery.on("load", function () {
                 var tot = basemapGallery.basemaps.length;
                 for (var i = 0; i < tot + 1; i++) {
-                    if (basemapGallery.basemaps[i].title === "Canevas gris foncé" || basemapGallery.basemaps[i].title === "Streets (Night)" || basemapGallery.basemaps[i].title == "Nuances de gris" || basemapGallery.basemaps[i].title === "Navigation" || basemapGallery.basemaps[i].title === "Océans et bathymétrie") {
+                    if (basemapGallery.basemaps[i].title === "Canevas gris foncé"
+                        || basemapGallery.basemaps[i].title === "Streets (Night)"
+                        || basemapGallery.basemaps[i].title == "Nuances de gris"
+                        || basemapGallery.basemaps[i].title === "Navigation"
+                        || basemapGallery.basemaps[i].title === "Océans et bathymétrie") {
                         basemapGallery.remove(basemapGallery.basemaps[i].id);
                     }
                 }
@@ -130,8 +135,10 @@
                         btn.setAttribute("name", "update");
                         btn.onclick = function () {
                             var id = this.id;
-                            cell2.innerHTML = "<input type='text' class='form-control' id='new_lon' value='" + table.rows[id - 1].cells[1].innerHTML + "'/>";
-                            cell3.innerHTML = "<input type='text' class='form-control' id='new_lat' value='" + table.rows[id - 1].cells[2].innerHTML + "'/>";
+                            cell2.innerHTML = "<input type='text' class='form-control' id='new_lon' value='"
+                                + table.rows[id - 1].cells[1].innerHTML + "'/>";
+                            cell3.innerHTML = "<input type='text' class='form-control' id='new_lat' value='"
+                                + table.rows[id - 1].cells[2].innerHTML + "'/>";
 
 
                             var valider = document.createElement('input');
@@ -186,17 +193,17 @@
             });
 
             //add the scalebar
-             var scalebar = new Scalebar({
-              map: map,
-              scalebarUnit: "english"
+            var scalebar = new Scalebar({
+                map: map,
+                scalebarUnit: "english"
             });
-    
+
             //add the legend. Note that we use the utility method getLegendLayers to get
             //the layers to display in the legend from the createMap response.
             var legendLayers = arcgisUtils.getLegendLayers(response);
             var legendDijit = new Legend({
-              map: map,
-              layerInfos: legendLayers
+                map: map,
+                layerInfos: legendLayers
             }, "legend");
             legendDijit.startup();
         });
