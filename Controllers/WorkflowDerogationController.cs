@@ -181,7 +181,8 @@ namespace AURS_Derogation.Controllers
                 ForMaitreOeuvrages = db.Forme_MaitreOeuvrage_DemDerg.ToList(),
                 NatPrjDerogs = db.Nature_Projet_DemDerg.ToList(),
                 StatutJurds = db.Statut_Juridique_DemDerg.ToList(),
-                References_Foncieres = db.References_Foncieres.ToList()
+                References_Foncieres = db.References_Foncieres.ToList(),
+                Derogs_Demandees = db.derogs_demandees.OrderBy(u => u.last).ToList()
             };
             //return View(multiTab);
             return correctAction(15, Id_DemDerg, multiTab);
