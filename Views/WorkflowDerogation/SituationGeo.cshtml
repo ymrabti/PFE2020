@@ -22,7 +22,7 @@
 @Html.Partial("WorkflowG", Model)
 
 
-<link rel="stylesheet" href="https://js.arcgis.com/3.27/esri/css/esri.css">
+<link rel="stylesheet" href="http://localhost/arcgis_js_api/library/3.27/3.27/esri/css/esri.css">
 <div class="form-horizontal">
     @using (Html.BeginForm("SituationGeo", "WorkflowDerogation", FormMethod.Post))
     {
@@ -128,7 +128,8 @@
 
 
 
-    <script src="https://js.arcgis.com/3.27/"></script>
+    @*<script src="https://js.arcgis.com/3.27/"></script>*@
+    <script src="http://localhost/arcgis_js_api/library/3.27/3.27/init:js"></script>
     @*<script>
         require(["esri/map", "dojo/domReady!"], function (Map) {
             var map = new Map("map", {

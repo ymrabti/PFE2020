@@ -1,15 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="aurs1ModelStoreContainer" CdmEntityContainer="aurs1Entities">
-    <EntitySetMapping Name="Affect_Derg_Comms">
-      <EntityTypeMapping TypeName="aurs1Model.Affect_Derg_Comms">
-        <MappingFragment StoreEntitySet="Affect_Derg_Comms">
-          <ScalarProperty Name="detail" ColumnName="detail" />
-          <ScalarProperty Name="FK_Commision" ColumnName="FK_Commision" />
-          <ScalarProperty Name="FK_DemDerg_Aff_Com" ColumnName="FK_DemDerg_Aff_Com" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Application">
       <EntityTypeMapping TypeName="aurs1Model.Application">
         <MappingFragment StoreEntitySet="Application">
@@ -104,16 +95,34 @@
           <ScalarProperty Name="FK_TypAvis" ColumnName="FK_TypAvis" />
           <ScalarProperty Name="FK_Organisme" ColumnName="FK_Organisme" />
           <ScalarProperty Name="FK_DemDerg" ColumnName="FK_DemDerg" />
+          <ScalarProperty Name="Id_Avis" ColumnName="Id_Avis" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Commission">
       <EntityTypeMapping TypeName="aurs1Model.Commission">
         <MappingFragment StoreEntitySet="Commission">
+          <ScalarProperty Name="detail" ColumnName="detail" />
           <ScalarProperty Name="Etat_Commission" ColumnName="Etat_Commission" />
           <ScalarProperty Name="Date_Commission" ColumnName="Date_Commission" />
           <ScalarProperty Name="Code_Commission" ColumnName="Code_Commission" />
           <ScalarProperty Name="Id_Commission" ColumnName="Id_Commission" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="COMMUNES_RSK">
+      <EntityTypeMapping TypeName="aurs1Model.COMMUNES_RSK">
+        <MappingFragment StoreEntitySet="COMMUNES_RSK">
+          <ScalarProperty Name="GDB_GEOMATTR_DATA" ColumnName="GDB_GEOMATTR_DATA" />
+          <ScalarProperty Name="Shape" ColumnName="Shape" />
+          <ScalarProperty Name="code_commu" ColumnName="code_commu" />
+          <ScalarProperty Name="WKT" ColumnName="WKT" />
+          <ScalarProperty Name="CODEEPSG" ColumnName="CODEEPSG" />
+          <ScalarProperty Name="IDPROV" ColumnName="IDPROV" />
+          <ScalarProperty Name="POPR" ColumnName="POPR" />
+          <ScalarProperty Name="POPU" ColumnName="POPU" />
+          <ScalarProperty Name="COMMUNE" ColumnName="COMMUNE" />
+          <ScalarProperty Name="IDCOM" ColumnName="IDCOM" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -131,39 +140,23 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Demande_Derogation">
-      <EntityTypeMapping TypeName="aurs1Model.Demande_Derogation">
-        <MappingFragment StoreEntitySet="Demande_Derogation">
-          <ScalarProperty Name="Type_Terrain" ColumnName="Type_Terrain" />
-          <ScalarProperty Name="Id_Commune" ColumnName="Id_Commune" />
-          <ScalarProperty Name="Id_Autorisation" ColumnName="Id_Autorisation" />
-          <ScalarProperty Name="FK_DemDerg_EtatAvc" ColumnName="FK_DemDerg_EtatAvc" />
-          <ScalarProperty Name="FK_DemDerg_Nature_Dem" ColumnName="FK_DemDerg_Nature_Dem" />
-          <ScalarProperty Name="FK_DemDerg_FormeMaitreOeuvrage_DemDerg" ColumnName="FK_DemDerg_FormeMaitreOeuvrage_DemDerg" />
-          <ScalarProperty Name="FK_DemDerg_StatutJuridique_DemDerg" ColumnName="FK_DemDerg_StatutJuridique_DemDerg" />
-          <ScalarProperty Name="FK_DemDerg_Nature_Projet_DemDerg" ColumnName="FK_DemDerg_Nature_Projet_DemDerg" />
-          <ScalarProperty Name="Cloture_DemDerg" ColumnName="Cloture_DemDerg" />
-          <ScalarProperty Name="Avis_Remarque_DemDerg" ColumnName="Avis_Remarque_DemDerg" />
-          <ScalarProperty Name="Adresse_DemDerg" ColumnName="Adresse_DemDerg" />
-          <ScalarProperty Name="Contribution_Projet_DemDerg" ColumnName="Contribution_Projet_DemDerg" />
-          <ScalarProperty Name="Duree_realisation_DemDerg" ColumnName="Duree_realisation_DemDerg" />
-          <ScalarProperty Name="Dero_demande_DemDerg" ColumnName="Dero_demande_DemDerg" />
-          <ScalarProperty Name="Emploi_generer_DemDerg" ColumnName="Emploi_generer_DemDerg" />
-          <ScalarProperty Name="Montant_Investissement_DemDerg" ColumnName="Montant_Investissement_DemDerg" />
-          <ScalarProperty Name="Ratio_Social_DemDerg" ColumnName="Ratio_Social_DemDerg" />
-          <ScalarProperty Name="Ratio_indus_DemDerg" ColumnName="Ratio_indus_DemDerg" />
-          <ScalarProperty Name="Ratio_touris_DemDerg" ColumnName="Ratio_touris_DemDerg" />
-          <ScalarProperty Name="Ratio_resid_DemDerg" ColumnName="Ratio_resid_DemDerg" />
-          <ScalarProperty Name="PrevisionUrbanistique_DemDerg" ColumnName="PrevisionUrbanistique_DemDerg" />
-          <ScalarProperty Name="Couverture_DemDerg" ColumnName="Couverture_DemDerg" />
-          <ScalarProperty Name="Maitre_Oeuvre_DemDerg" ColumnName="Maitre_Oeuvre_DemDerg" />
-          <ScalarProperty Name="Maitre_Oeuvrage_DemDerg" ColumnName="Maitre_Oeuvrage_DemDerg" />
-          <ScalarProperty Name="Superficie_Terrain_DemDerg" ColumnName="Superficie_Terrain_DemDerg" />
-          <ScalarProperty Name="Intitule_DemDerg" ColumnName="Intitule_DemDerg" />
-          <ScalarProperty Name="Date_Arrivee_DemDerg" ColumnName="Date_Arrivee_DemDerg" />
-          <ScalarProperty Name="NumVersion_DemDerog" ColumnName="NumVersion_DemDerog" />
-          <ScalarProperty Name="Code_DemDerg" ColumnName="Code_DemDerg" />
-          <ScalarProperty Name="Id_DemDerg" ColumnName="Id_DemDerg" />
+    <EntitySetMapping Name="derogs_demandees">
+      <EntityTypeMapping TypeName="aurs1Model.derogs_demandees">
+        <MappingFragment StoreEntitySet="derogs_demandees">
+          <ScalarProperty Name="last" ColumnName="last" />
+          <ScalarProperty Name="NOM" ColumnName="NOM" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Document_Derogation">
+      <EntityTypeMapping TypeName="aurs1Model.Document_Derogation">
+        <MappingFragment StoreEntitySet="Document_Derogation">
+          <ScalarProperty Name="FK_DemDerg_DocDerg" ColumnName="FK_DemDerg_DocDerg" />
+          <ScalarProperty Name="url_Doc_Derg" ColumnName="url_Doc_Derg" />
+          <ScalarProperty Name="Intitule_Doc_Derg" ColumnName="Intitule_Doc_Derg" />
+          <ScalarProperty Name="Code_Doc_Derg" ColumnName="Code_Doc_Derg" />
+          <ScalarProperty Name="Id_Doc_Derog" ColumnName="Id_Doc_Derog" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -174,20 +167,6 @@
           <ScalarProperty Name="TempPrevue" ColumnName="TempPrevue" />
           <ScalarProperty Name="Etat" ColumnName="Etat" />
           <ScalarProperty Name="CodeEtat" ColumnName="CodeEtat" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="FicheSuiveuse">
-      <EntityTypeMapping TypeName="aurs1Model.FicheSuiveuse">
-        <MappingFragment StoreEntitySet="FicheSuiveuse">
-          <ScalarProperty Name="FK_DemDerg_FicheSuiveuse" ColumnName="FK_DemDerg_FicheSuiveuse" />
-          <ScalarProperty Name="Visa_FichSuiv" ColumnName="Visa_FichSuiv" />
-          <ScalarProperty Name="TempsRealise_FichSuiv" ColumnName="TempsRealise_FichSuiv" />
-          <ScalarProperty Name="Fin_FichSuiv" ColumnName="Fin_FichSuiv" />
-          <ScalarProperty Name="Debut_FichSuiv" ColumnName="Debut_FichSuiv" />
-          <ScalarProperty Name="Date_FichSuiv" ColumnName="Date_FichSuiv" />
-          <ScalarProperty Name="Code_FichSuiv" ColumnName="Code_FichSuiv" />
-          <ScalarProperty Name="Id_FichSuiv" ColumnName="Id_FichSuiv" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -227,6 +206,7 @@
     <EntitySetMapping Name="Nature_Projet_DemDerg">
       <EntityTypeMapping TypeName="aurs1Model.Nature_Projet_DemDerg">
         <MappingFragment StoreEntitySet="Nature_Projet_DemDerg">
+          <ScalarProperty Name="last" ColumnName="last" />
           <ScalarProperty Name="Nature_Projet_DemDerg1" ColumnName="Nature_Projet_DemDerg" />
           <ScalarProperty Name="Id_Nature_Projet_DemDerg" ColumnName="Id_Nature_Projet_DemDerg" />
         </MappingFragment>
@@ -254,6 +234,18 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="PROVINCES_RSK">
+      <EntityTypeMapping TypeName="aurs1Model.PROVINCES_RSK">
+        <MappingFragment StoreEntitySet="PROVINCES_RSK">
+          <ScalarProperty Name="GDB_GEOMATTR_DATA" ColumnName="GDB_GEOMATTR_DATA" />
+          <ScalarProperty Name="Shape" ColumnName="Shape" />
+          <ScalarProperty Name="Region" ColumnName="Region" />
+          <ScalarProperty Name="idreg" ColumnName="idreg" />
+          <ScalarProperty Name="Provicne" ColumnName="Provicne" />
+          <ScalarProperty Name="IdProv" ColumnName="IdProv" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="References_Foncieres">
       <EntityTypeMapping TypeName="aurs1Model.References_Foncieres">
         <MappingFragment StoreEntitySet="References_Foncieres">
@@ -275,6 +267,7 @@
     <EntitySetMapping Name="Statut_Juridique_DemDerg">
       <EntityTypeMapping TypeName="aurs1Model.Statut_Juridique_DemDerg">
         <MappingFragment StoreEntitySet="Statut_Juridique_DemDerg">
+          <ScalarProperty Name="last" ColumnName="last" />
           <ScalarProperty Name="StatutJuridique_DemDerg" ColumnName="StatutJuridique_DemDerg" />
           <ScalarProperty Name="Id_StatutJuridique_DemDerg" ColumnName="Id_StatutJuridique_DemDerg" />
         </MappingFragment>
@@ -319,62 +312,40 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="View_Affect_Com">
-      <EntityTypeMapping TypeName="aurs1Model.View_Affect_Com">
-        <MappingFragment StoreEntitySet="View_Affect_Com">
+    <EntitySetMapping Name="Demande_Derogation">
+      <EntityTypeMapping TypeName="aurs1Model.Demande_Derogation">
+        <MappingFragment StoreEntitySet="Demande_Derogation">
+          <ScalarProperty Name="Fk_Commission" ColumnName="Fk_Commission" />
+          <ScalarProperty Name="Contribution_Projet_DemDerg" ColumnName="Contribution_Projet_DemDerg" />
+          <ScalarProperty Name="Id_Autorisation" ColumnName="Id_Autorisation" />
+          <ScalarProperty Name="FK_DemDerg_EtatAvc" ColumnName="FK_DemDerg_EtatAvc" />
+          <ScalarProperty Name="FK_DemDerg_Nature_Dem" ColumnName="FK_DemDerg_Nature_Dem" />
+          <ScalarProperty Name="FK_DemDerg_FormeMaitreOeuvrage_DemDerg" ColumnName="FK_DemDerg_FormeMaitreOeuvrage_DemDerg" />
+          <ScalarProperty Name="FK_DemDerg_StatutJuridique_DemDerg" ColumnName="FK_DemDerg_StatutJuridique_DemDerg" />
+          <ScalarProperty Name="FK_DemDerg_Nature_Projet_DemDerg" ColumnName="FK_DemDerg_Nature_Projet_DemDerg" />
+          <ScalarProperty Name="Cloture_DemDerg" ColumnName="Cloture_DemDerg" />
+          <ScalarProperty Name="Avis_Remarque_DemDerg" ColumnName="Avis_Remarque_DemDerg" />
+          <ScalarProperty Name="Adresse_DemDerg" ColumnName="Adresse_DemDerg" />
+          <ScalarProperty Name="Id_Commune" ColumnName="Id_Commune" />
+          <ScalarProperty Name="Type_Terrain" ColumnName="Type_Terrain" />
+          <ScalarProperty Name="Duree_realisation_DemDerg" ColumnName="Duree_realisation_DemDerg" />
+          <ScalarProperty Name="Dero_demande_DemDerg" ColumnName="Dero_demande_DemDerg" />
+          <ScalarProperty Name="Emploi_generer_DemDerg" ColumnName="Emploi_generer_DemDerg" />
+          <ScalarProperty Name="Montant_Investissement_DemDerg" ColumnName="Montant_Investissement_DemDerg" />
+          <ScalarProperty Name="Ratio_Social_DemDerg" ColumnName="Ratio_Social_DemDerg" />
+          <ScalarProperty Name="Ratio_indus_DemDerg" ColumnName="Ratio_indus_DemDerg" />
+          <ScalarProperty Name="Ratio_touris_DemDerg" ColumnName="Ratio_touris_DemDerg" />
+          <ScalarProperty Name="Ratio_resid_DemDerg" ColumnName="Ratio_resid_DemDerg" />
+          <ScalarProperty Name="PrevisionUrbanistique_DemDerg" ColumnName="PrevisionUrbanistique_DemDerg" />
+          <ScalarProperty Name="Couverture_DemDerg" ColumnName="Couverture_DemDerg" />
+          <ScalarProperty Name="Maitre_Oeuvre_DemDerg" ColumnName="Maitre_Oeuvre_DemDerg" />
+          <ScalarProperty Name="Maitre_Oeuvrage_DemDerg" ColumnName="Maitre_Oeuvrage_DemDerg" />
+          <ScalarProperty Name="Superficie_Terrain_DemDerg" ColumnName="Superficie_Terrain_DemDerg" />
+          <ScalarProperty Name="Intitule_DemDerg" ColumnName="Intitule_DemDerg" />
+          <ScalarProperty Name="Date_Arrivee_DemDerg" ColumnName="Date_Arrivee_DemDerg" />
+          <ScalarProperty Name="NumVersion_DemDerog" ColumnName="NumVersion_DemDerog" />
+          <ScalarProperty Name="Code_DemDerg" ColumnName="Code_DemDerg" />
           <ScalarProperty Name="Id_DemDerg" ColumnName="Id_DemDerg" />
-          <ScalarProperty Name="Expr1" ColumnName="Expr1" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="View_Last_Affectation_Com">
-      <EntityTypeMapping TypeName="aurs1Model.View_Last_Affectation_Com">
-        <MappingFragment StoreEntitySet="View_Last_Affectation_Com">
-          <ScalarProperty Name="Id_DemDerg" ColumnName="Id_DemDerg" />
-          <ScalarProperty Name="Expr1" ColumnName="Expr1" />
-          <ScalarProperty Name="FK_DemDerg_Aff_Com" ColumnName="FK_DemDerg_Aff_Com" />
-          <ScalarProperty Name="FK_Commision" ColumnName="FK_Commision" />
-          <ScalarProperty Name="Date_Commission" ColumnName="Date_Commission" />
-          <ScalarProperty Name="Id_Commission" ColumnName="Id_Commission" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="COMMUNES_RSK">
-      <EntityTypeMapping TypeName="aurs1Model.COMMUNES_RSK">
-        <MappingFragment StoreEntitySet="COMMUNES_RSK">
-          <ScalarProperty Name="GDB_GEOMATTR_DATA" ColumnName="GDB_GEOMATTR_DATA" />
-          <ScalarProperty Name="Shape" ColumnName="Shape" />
-          <ScalarProperty Name="code_commu" ColumnName="code_commu" />
-          <ScalarProperty Name="WKT" ColumnName="WKT" />
-          <ScalarProperty Name="CODEEPSG" ColumnName="CODEEPSG" />
-          <ScalarProperty Name="IDPROV" ColumnName="IDPROV" />
-          <ScalarProperty Name="POPR" ColumnName="POPR" />
-          <ScalarProperty Name="POPU" ColumnName="POPU" />
-          <ScalarProperty Name="COMMUNE" ColumnName="COMMUNE" />
-          <ScalarProperty Name="IDCOM" ColumnName="IDCOM" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="PROVINCES_RSK">
-      <EntityTypeMapping TypeName="aurs1Model.PROVINCES_RSK">
-        <MappingFragment StoreEntitySet="PROVINCES_RSK">
-          <ScalarProperty Name="GDB_GEOMATTR_DATA" ColumnName="GDB_GEOMATTR_DATA" />
-          <ScalarProperty Name="Shape" ColumnName="Shape" />
-          <ScalarProperty Name="Region" ColumnName="Region" />
-          <ScalarProperty Name="idreg" ColumnName="idreg" />
-          <ScalarProperty Name="Provicne" ColumnName="Provicne" />
-          <ScalarProperty Name="IdProv" ColumnName="IdProv" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Document_Derogation">
-      <EntityTypeMapping TypeName="aurs1Model.Document_Derogation">
-        <MappingFragment StoreEntitySet="Document_Derogation">
-          <ScalarProperty Name="FK_DemDerg_DocDerg" ColumnName="FK_DemDerg_DocDerg" />
-          <ScalarProperty Name="url_Doc_Derg" ColumnName="url_Doc_Derg" />
-          <ScalarProperty Name="Intitule_Doc_Derg" ColumnName="Intitule_Doc_Derg" />
-          <ScalarProperty Name="Code_Doc_Derg" ColumnName="Code_Doc_Derg" />
-          <ScalarProperty Name="Id_Doc_Derog" ColumnName="Id_Doc_Derog" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

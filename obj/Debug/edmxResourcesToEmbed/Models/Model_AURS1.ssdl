@@ -1,14 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="aurs1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <EntityType Name="Affect_Derg_Comms">
-    <Key>
-      <PropertyRef Name="FK_DemDerg_Aff_Com" />
-      <PropertyRef Name="FK_Commision" />
-    </Key>
-    <Property Name="FK_DemDerg_Aff_Com" Type="int" Nullable="false" />
-    <Property Name="FK_Commision" Type="int" Nullable="false" />
-    <Property Name="detail" Type="varchar" MaxLength="50" />
-  </EntityType>
   <EntityType Name="Application">
     <Key>
       <PropertyRef Name="ApplicationId" />
@@ -94,10 +85,10 @@
   </EntityType>
   <EntityType Name="Avis_Org">
     <Key>
-      <PropertyRef Name="FK_DemDerg" />
-      <PropertyRef Name="FK_Organisme" />
+      <PropertyRef Name="Id_Avis" />
     </Key>
-    <Property Name="FK_DemDerg" Type="int" Nullable="false" />
+    <Property Name="Id_Avis" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FK_DemDerg" Type="int" />
     <Property Name="FK_Organisme" Type="int" Nullable="false" />
     <Property Name="FK_TypAvis" Type="int" Nullable="false" />
     <Property Name="Detail_Avis" Type="varchar" MaxLength="150" />
@@ -107,9 +98,10 @@
       <PropertyRef Name="Id_Commission" />
     </Key>
     <Property Name="Id_Commission" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Code_Commission" Type="int" />
-    <Property Name="Date_Commission" Type="datetime" />
+    <Property Name="Code_Commission" Type="int" Nullable="false" />
+    <Property Name="Date_Commission" Type="datetime" Nullable="false" />
     <Property Name="Etat_Commission" Type="varchar" MaxLength="250" />
+    <Property Name="detail" Type="varchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="COMMUNES_RSK">
     <Key>
@@ -144,35 +136,44 @@
       <PropertyRef Name="Id_DemDerg" />
     </Key>
     <Property Name="Id_DemDerg" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Code_DemDerg" Type="int" />
-    <Property Name="NumVersion_DemDerog" Type="int" />
-    <Property Name="Date_Arrivee_DemDerg" Type="datetime" />
-    <Property Name="Intitule_DemDerg" Type="varchar" MaxLength="50" />
-    <Property Name="Superficie_Terrain_DemDerg" Type="float" />
-    <Property Name="Maitre_Oeuvrage_DemDerg" Type="nvarchar" MaxLength="128" />
-    <Property Name="Maitre_Oeuvre_DemDerg" Type="nvarchar" MaxLength="128" />
-    <Property Name="Couverture_DemDerg" Type="bit" />
-    <Property Name="PrevisionUrbanistique_DemDerg" Type="int" />
-    <Property Name="Ratio_resid_DemDerg" Type="int" />
-    <Property Name="Ratio_touris_DemDerg" Type="int" />
-    <Property Name="Ratio_indus_DemDerg" Type="int" />
-    <Property Name="Ratio_Social_DemDerg" Type="int" />
-    <Property Name="Montant_Investissement_DemDerg" Type="float" />
-    <Property Name="Emploi_generer_DemDerg" Type="int" />
-    <Property Name="Dero_demande_DemDerg" Type="varchar" MaxLength="50" />
-    <Property Name="Duree_realisation_DemDerg" Type="varchar" MaxLength="50" />
-    <Property Name="Contribution_Projet_DemDerg" Type="varchar" MaxLength="50" />
-    <Property Name="Adresse_DemDerg" Type="varchar" MaxLength="150" />
+    <Property Name="Code_DemDerg" Type="int" Nullable="false" />
+    <Property Name="NumVersion_DemDerog" Type="int" Nullable="false" />
+    <Property Name="Date_Arrivee_DemDerg" Type="datetime" Nullable="false" />
+    <Property Name="Intitule_DemDerg" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Superficie_Terrain_DemDerg" Type="float" Nullable="false" />
+    <Property Name="Maitre_Oeuvrage_DemDerg" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Maitre_Oeuvre_DemDerg" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Couverture_DemDerg" Type="bit" Nullable="false" />
+    <Property Name="PrevisionUrbanistique_DemDerg" Type="nvarchar" MaxLength="1228" Nullable="false" />
+    <Property Name="Ratio_resid_DemDerg" Type="int" Nullable="false" />
+    <Property Name="Ratio_touris_DemDerg" Type="int" Nullable="false" />
+    <Property Name="Ratio_indus_DemDerg" Type="int" Nullable="false" />
+    <Property Name="Ratio_Social_DemDerg" Type="int" Nullable="false" />
+    <Property Name="Montant_Investissement_DemDerg" Type="float" Nullable="false" />
+    <Property Name="Emploi_generer_DemDerg" Type="int" Nullable="false" />
+    <Property Name="Dero_demande_DemDerg" Type="int" Nullable="false" />
+    <Property Name="Duree_realisation_DemDerg" Type="int" Nullable="false" />
+    <Property Name="Type_Terrain" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="Id_Commune" Type="int" Nullable="false" />
+    <Property Name="Adresse_DemDerg" Type="varchar" MaxLength="150" Nullable="false" />
     <Property Name="Avis_Remarque_DemDerg" Type="varchar" MaxLength="250" />
-    <Property Name="Cloture_DemDerg" Type="bit" />
-    <Property Name="FK_DemDerg_Nature_Projet_DemDerg" Type="int" />
-    <Property Name="FK_DemDerg_StatutJuridique_DemDerg" Type="int" />
-    <Property Name="FK_DemDerg_FormeMaitreOeuvrage_DemDerg" Type="int" />
-    <Property Name="FK_DemDerg_Nature_Dem" Type="int" />
-    <Property Name="FK_DemDerg_EtatAvc" Type="int" />
+    <Property Name="Cloture_DemDerg" Type="bit" Nullable="false" />
+    <Property Name="FK_DemDerg_Nature_Projet_DemDerg" Type="int" Nullable="false" />
+    <Property Name="FK_DemDerg_StatutJuridique_DemDerg" Type="int" Nullable="false" />
+    <Property Name="FK_DemDerg_FormeMaitreOeuvrage_DemDerg" Type="int" Nullable="false" />
+    <Property Name="FK_DemDerg_Nature_Dem" Type="int" Nullable="false" />
+    <Property Name="FK_DemDerg_EtatAvc" Type="int" Nullable="false" />
     <Property Name="Id_Autorisation" Type="int" />
-    <Property Name="Id_Commune" Type="int" />
-    <Property Name="Type_Terrain" Type="nchar" MaxLength="10" />
+    <Property Name="Contribution_Projet_DemDerg" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Fk_Commission" Type="int" />
+  </EntityType>
+  <EntityType Name="derogs_demandees">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NOM" Type="nvarchar" MaxLength="150" Nullable="false" />
+    <Property Name="last" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Document_Derogation">
     <Key>
@@ -192,19 +193,6 @@
     <Property Name="Etat" Type="nvarchar(max)" />
     <Property Name="TempPrevue" Type="time" Precision="7" />
     <Property Name="Module" Type="varchar" MaxLength="50" />
-  </EntityType>
-  <EntityType Name="FicheSuiveuse">
-    <Key>
-      <PropertyRef Name="Id_FichSuiv" />
-    </Key>
-    <Property Name="Id_FichSuiv" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Code_FichSuiv" Type="int" />
-    <Property Name="Date_FichSuiv" Type="date" />
-    <Property Name="Debut_FichSuiv" Type="varchar" MaxLength="100" />
-    <Property Name="Fin_FichSuiv" Type="varchar" MaxLength="100" />
-    <Property Name="TempsRealise_FichSuiv" Type="varchar" MaxLength="50" />
-    <Property Name="Visa_FichSuiv" Type="varchar" MaxLength="50" />
-    <Property Name="FK_DemDerg_FicheSuiveuse" Type="int" />
   </EntityType>
   <EntityType Name="Forme_MaitreOeuvrage_DemDerg">
     <Key>
@@ -240,7 +228,8 @@
       <PropertyRef Name="Id_Nature_Projet_DemDerg" />
     </Key>
     <Property Name="Id_Nature_Projet_DemDerg" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Nature_Projet_DemDerg" Type="varchar" MaxLength="100" />
+    <Property Name="Nature_Projet_DemDerg" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="last" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Organisme">
     <Key>
@@ -260,7 +249,7 @@
     <Property Name="ycenteroid" Type="numeric" Precision="38" Scale="8" />
     <Property Name="shape" Type="geometry" />
     <Property Name="GDB_GEOMATTR_DATA" Type="varbinary(max)" />
-    <Property Name="Fk_DemDerog" Type="int" Nullable="false" />
+    <Property Name="Fk_DemDerog" Type="int" />
   </EntityType>
   <EntityType Name="PROVINCES_RSK">
     <Key>
@@ -294,7 +283,8 @@
       <PropertyRef Name="Id_StatutJuridique_DemDerg" />
     </Key>
     <Property Name="Id_StatutJuridique_DemDerg" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="StatutJuridique_DemDerg" Type="varchar" MaxLength="100" />
+    <Property Name="StatutJuridique_DemDerg" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="last" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="StatutRole">
     <Key>
@@ -331,31 +321,6 @@
     <Property Name="OBJECTID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="NOM_Document" Type="nvarchar" MaxLength="50" />
     <Property Name="Obligation" Type="int" />
-  </EntityType>
-  <!--Erreurs détectées durant la génération :
-avertissement 6002: La table/vue 'aurs1.dbo.View_Affect_Com' n'a pas de clé primaire définie. La clé a été déduite et la définition a été créée en tant que table/vue en lecture seule.-->
-  <EntityType Name="View_Affect_Com">
-    <Key>
-      <PropertyRef Name="Id_DemDerg" />
-    </Key>
-    <Property Name="Expr1" Type="datetime" />
-    <Property Name="Id_DemDerg" Type="int" Nullable="false" />
-  </EntityType>
-  <!--Erreurs détectées durant la génération :
-avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas de clé primaire définie. La clé a été déduite et la définition a été créée en tant que table/vue en lecture seule.-->
-  <EntityType Name="View_Last_Affectation_Com">
-    <Key>
-      <PropertyRef Name="Id_Commission" />
-      <PropertyRef Name="FK_Commision" />
-      <PropertyRef Name="FK_DemDerg_Aff_Com" />
-      <PropertyRef Name="Id_DemDerg" />
-    </Key>
-    <Property Name="Id_Commission" Type="int" Nullable="false" />
-    <Property Name="Date_Commission" Type="datetime" />
-    <Property Name="FK_Commision" Type="int" Nullable="false" />
-    <Property Name="FK_DemDerg_Aff_Com" Type="int" Nullable="false" />
-    <Property Name="Expr1" Type="datetime" />
-    <Property Name="Id_DemDerg" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="FK_ApplicationModule_Application">
     <End Role="Application" Type="Self.Application" Multiplicity="1" />
@@ -405,20 +370,6 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Commision">
-    <End Role="Commission" Type="Self.Commission" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="Affect_Derg_Comms" Type="Self.Affect_Derg_Comms" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Commission">
-        <PropertyRef Name="Id_Commission" />
-      </Principal>
-      <Dependent Role="Affect_Derg_Comms">
-        <PropertyRef Name="FK_Commision" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_COMMUNES_RSK_PROVINCES_RSK">
     <End Role="PROVINCES_RSK" Type="Self.PROVINCES_RSK" Multiplicity="0..1" />
     <End Role="COMMUNES_RSK" Type="Self.COMMUNES_RSK" Multiplicity="*" />
@@ -460,7 +411,7 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Dem_Derog_Users_ouvrage">
-    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
     <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="AspNetUsers">
@@ -472,7 +423,7 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Dem_Derog_Users_ouvre">
-    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
     <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="AspNetUsers">
@@ -495,8 +446,20 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Demande_Derogation_Commission">
+    <End Role="Commission" Type="Self.Commission" Multiplicity="0..1" />
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Commission">
+        <PropertyRef Name="Id_Commission" />
+      </Principal>
+      <Dependent Role="Demande_Derogation">
+        <PropertyRef Name="Fk_Commission" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Demande_Derogation_COMMUNES_RSK">
-    <End Role="COMMUNES_RSK" Type="Self.COMMUNES_RSK" Multiplicity="0..1" />
+    <End Role="COMMUNES_RSK" Type="Self.COMMUNES_RSK" Multiplicity="1" />
     <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="COMMUNES_RSK">
@@ -507,8 +470,20 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Demande_Derogation_derogs_demandees">
+    <End Role="derogs_demandees" Type="Self.derogs_demandees" Multiplicity="1" />
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="derogs_demandees">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Demande_Derogation">
+        <PropertyRef Name="Dero_demande_DemDerg" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Demande_Derogation_References_Foncieres">
-    <End Role="References_Foncieres" Type="Self.References_Foncieres" Multiplicity="0..1" />
+    <End Role="References_Foncieres" Type="Self.References_Foncieres" Multiplicity="1" />
     <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="References_Foncieres">
@@ -520,7 +495,7 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_DemDerg">
-    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="1">
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="0..1">
       <OnDelete Action="Cascade" />
     </End>
     <End Role="Avis_Org" Type="Self.Avis_Org" Multiplicity="*" />
@@ -530,20 +505,6 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
       </Principal>
       <Dependent Role="Avis_Org">
         <PropertyRef Name="FK_DemDerg" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_DemDerg_Aff_Com">
-    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="Affect_Derg_Comms" Type="Self.Affect_Derg_Comms" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Demande_Derogation">
-        <PropertyRef Name="Id_DemDerg" />
-      </Principal>
-      <Dependent Role="Affect_Derg_Comms">
-        <PropertyRef Name="FK_DemDerg_Aff_Com" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -576,7 +537,7 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_DemDerg_EtatAvc">
-    <End Role="EtatAvancement" Type="Self.EtatAvancement" Multiplicity="0..1">
+    <End Role="EtatAvancement" Type="Self.EtatAvancement" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
     <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
@@ -589,22 +550,8 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_DemDerg_FicheSuiveuse">
-    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Role="FicheSuiveuse" Type="Self.FicheSuiveuse" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Demande_Derogation">
-        <PropertyRef Name="Id_DemDerg" />
-      </Principal>
-      <Dependent Role="FicheSuiveuse">
-        <PropertyRef Name="FK_DemDerg_FicheSuiveuse" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_DemDerg_FormeMaitreOeuvrage_DemDerg">
-    <End Role="Forme_MaitreOeuvrage_DemDerg" Type="Self.Forme_MaitreOeuvrage_DemDerg" Multiplicity="0..1">
+    <End Role="Forme_MaitreOeuvrage_DemDerg" Type="Self.Forme_MaitreOeuvrage_DemDerg" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
     <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
@@ -618,7 +565,7 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_DemDerg_Nature_Dem">
-    <End Role="Nature_Demande_Derg" Type="Self.Nature_Demande_Derg" Multiplicity="0..1">
+    <End Role="Nature_Demande_Derg" Type="Self.Nature_Demande_Derg" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
     <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
@@ -632,7 +579,7 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_DemDerg_Nature_Projet_DemDerg">
-    <End Role="Nature_Projet_DemDerg" Type="Self.Nature_Projet_DemDerg" Multiplicity="0..1">
+    <End Role="Nature_Projet_DemDerg" Type="Self.Nature_Projet_DemDerg" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
     <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
@@ -646,7 +593,7 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_DemDerg_StatutJuridique_DemDerg">
-    <End Role="Statut_Juridique_DemDerg" Type="Self.Statut_Juridique_DemDerg" Multiplicity="0..1">
+    <End Role="Statut_Juridique_DemDerg" Type="Self.Statut_Juridique_DemDerg" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
     <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
@@ -700,7 +647,7 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_parcell_Demande_Derogation">
-    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="1" />
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="0..1" />
     <End Role="parcell" Type="Self.parcell" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Demande_Derogation">
@@ -762,7 +709,6 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="aurs1ModelStoreContainer">
-    <EntitySet Name="Affect_Derg_Comms" EntityType="Self.Affect_Derg_Comms" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Application" EntityType="Self.Application" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ApplicationModule" EntityType="Self.ApplicationModule" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
@@ -774,9 +720,9 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
     <EntitySet Name="COMMUNES_RSK" EntityType="Self.COMMUNES_RSK" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Courrier" EntityType="Self.Courrier" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Demande_Derogation" EntityType="Self.Demande_Derogation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="derogs_demandees" EntityType="Self.derogs_demandees" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Document_Derogation" EntityType="Self.Document_Derogation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="EtatAvancement" EntityType="Self.EtatAvancement" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="FicheSuiveuse" EntityType="Self.FicheSuiveuse" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Forme_MaitreOeuvrage_DemDerg" EntityType="Self.Forme_MaitreOeuvrage_DemDerg" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Module" EntityType="Self.Module" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Nature_Courrier" EntityType="Self.Nature_Courrier" Schema="dbo" store:Type="Tables" />
@@ -792,22 +738,6 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
     <EntitySet Name="Statuts" EntityType="Self.Statuts" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Type_Avis" EntityType="Self.Type_Avis" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TYPE_DOC" EntityType="Self.TYPE_DOC" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="View_Affect_Com" EntityType="Self.View_Affect_Com" store:Type="Views" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [View_Affect_Com].[Expr1] AS [Expr1], 
-    [View_Affect_Com].[Id_DemDerg] AS [Id_DemDerg]
-    FROM [dbo].[View_Affect_Com] AS [View_Affect_Com]</DefiningQuery>
-    </EntitySet>
-    <EntitySet Name="View_Last_Affectation_Com" EntityType="Self.View_Last_Affectation_Com" store:Type="Views" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [View_Last_Affectation_Com].[Id_Commission] AS [Id_Commission], 
-    [View_Last_Affectation_Com].[Date_Commission] AS [Date_Commission], 
-    [View_Last_Affectation_Com].[FK_Commision] AS [FK_Commision], 
-    [View_Last_Affectation_Com].[FK_DemDerg_Aff_Com] AS [FK_DemDerg_Aff_Com], 
-    [View_Last_Affectation_Com].[Expr1] AS [Expr1], 
-    [View_Last_Affectation_Com].[Id_DemDerg] AS [Id_DemDerg]
-    FROM [dbo].[View_Last_Affectation_Com] AS [View_Last_Affectation_Com]</DefiningQuery>
-    </EntitySet>
     <AssociationSet Name="FK_ApplicationModule_Application" Association="Self.FK_ApplicationModule_Application">
       <End Role="Application" EntitySet="Application" />
       <End Role="ApplicationModule" EntitySet="ApplicationModule" />
@@ -823,10 +753,6 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
     <AssociationSet Name="FK_AspNetUsers_Statuts" Association="Self.FK_AspNetUsers_Statuts">
       <End Role="Statuts" EntitySet="Statuts" />
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Commision" Association="Self.FK_Commision">
-      <End Role="Commission" EntitySet="Commission" />
-      <End Role="Affect_Derg_Comms" EntitySet="Affect_Derg_Comms" />
     </AssociationSet>
     <AssociationSet Name="FK_COMMUNES_RSK_PROVINCES_RSK" Association="Self.FK_COMMUNES_RSK_PROVINCES_RSK">
       <End Role="PROVINCES_RSK" EntitySet="PROVINCES_RSK" />
@@ -852,8 +778,16 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
       <End Role="Autorisation_Derogation" EntitySet="Autorisation_Derogation" />
       <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
     </AssociationSet>
+    <AssociationSet Name="FK_Demande_Derogation_Commission" Association="Self.FK_Demande_Derogation_Commission">
+      <End Role="Commission" EntitySet="Commission" />
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+    </AssociationSet>
     <AssociationSet Name="FK_Demande_Derogation_COMMUNES_RSK" Association="Self.FK_Demande_Derogation_COMMUNES_RSK">
       <End Role="COMMUNES_RSK" EntitySet="COMMUNES_RSK" />
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Demande_Derogation_derogs_demandees" Association="Self.FK_Demande_Derogation_derogs_demandees">
+      <End Role="derogs_demandees" EntitySet="derogs_demandees" />
       <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
     </AssociationSet>
     <AssociationSet Name="FK_Demande_Derogation_References_Foncieres" Association="Self.FK_Demande_Derogation_References_Foncieres">
@@ -863,10 +797,6 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
     <AssociationSet Name="FK_DemDerg" Association="Self.FK_DemDerg">
       <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
       <End Role="Avis_Org" EntitySet="Avis_Org" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DemDerg_Aff_Com" Association="Self.FK_DemDerg_Aff_Com">
-      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
-      <End Role="Affect_Derg_Comms" EntitySet="Affect_Derg_Comms" />
     </AssociationSet>
     <AssociationSet Name="FK_DemDerg_Cour" Association="Self.FK_DemDerg_Cour">
       <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
@@ -879,10 +809,6 @@ avertissement 6002: La table/vue 'aurs1.dbo.View_Last_Affectation_Com' n'a pas d
     <AssociationSet Name="FK_DemDerg_EtatAvc" Association="Self.FK_DemDerg_EtatAvc">
       <End Role="EtatAvancement" EntitySet="EtatAvancement" />
       <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
-    </AssociationSet>
-    <AssociationSet Name="FK_DemDerg_FicheSuiveuse" Association="Self.FK_DemDerg_FicheSuiveuse">
-      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
-      <End Role="FicheSuiveuse" EntitySet="FicheSuiveuse" />
     </AssociationSet>
     <AssociationSet Name="FK_DemDerg_FormeMaitreOeuvrage_DemDerg" Association="Self.FK_DemDerg_FormeMaitreOeuvrage_DemDerg">
       <End Role="Forme_MaitreOeuvrage_DemDerg" EntitySet="Forme_MaitreOeuvrage_DemDerg" />

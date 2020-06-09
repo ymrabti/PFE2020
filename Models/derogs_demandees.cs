@@ -12,19 +12,17 @@ namespace GestionnaireUtilisateurs.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Commission
+    public partial class derogs_demandees
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Commission()
+        public derogs_demandees()
         {
             this.Demande_Derogation = new HashSet<Demande_Derogation>();
         }
     
-        public int Id_Commission { get; set; }
-        public int Code_Commission { get; set; }
-        public System.DateTime Date_Commission { get; set; }
-        public string Etat_Commission { get; set; }
-        public string detail { get; set; }
+        public int ID { get; set; }
+        public string NOM { get; set; }
+        public bool last { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Demande_Derogation> Demande_Derogation { get; set; }

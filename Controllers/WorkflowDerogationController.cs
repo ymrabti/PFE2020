@@ -38,7 +38,7 @@ namespace AURS_Derogation.Controllers
             }
             else
             {
-                int etat = demande.FK_DemDerg_EtatAvc.Value;
+                int etat = demande.FK_DemDerg_EtatAvc;
                 if (idTache != etat)
                 {
                     if (etat == 15)
@@ -104,7 +104,8 @@ namespace AURS_Derogation.Controllers
                 Communes = db.COMMUNES_RSK.ToList(),
                 Provs = db.PROVINCES_RSK.ToList(),
                 References_Foncieres = db.References_Foncieres.ToList(),
-                aspNetUsers = db.AspNetUsers.OrderBy(p=>p.Email).ToList()
+                aspNetUsers = db.AspNetUsers.OrderBy(p=>p.Email).ToList(),
+                Derogs_Demandees = db.derogs_demandees.OrderBy(u=>u.last).ToList()
             };
             return View(multiTab);
 
@@ -123,6 +124,8 @@ namespace AURS_Derogation.Controllers
             else
             {
                 DemDerg.Type_Terrain = DemDerg.Type_Terrain.Trim();
+                DemDerg.Cloture_DemDerg = false;
+                DemDerg.Couverture_DemDerg = false;
                 if (enregistrer == 0)
                 {
                     DemDerg.FK_DemDerg_EtatAvc = 15;
@@ -330,16 +333,6 @@ namespace AURS_Derogation.Controllers
                 Comss = db.Commission.Where(v => v.Date_Commission > DateTime.Today).OrderBy(var => var.Date_Commission).ToList(),
                 DemDerg = db.Demande_Derogation.Find(FK_DemDerg_Com)
             };
-            if (db.Affect_Derg_Comms.Where(p => p.FK_DemDerg_Aff_Com == FK_DemDerg_Com).ToList().Count() == 0)
-            {
-                multiTab.AffectDergComs = null;
-                multiTab.ViewLestAffectCom = null;
-            }
-            else
-            {
-                multiTab.AffectDergComs = db.Affect_Derg_Comms.Where(p => p.FK_DemDerg_Aff_Com == FK_DemDerg_Com).ToList();
-                multiTab.ViewLestAffectCom = db.View_Last_Affectation_Com.Where(p => p.Id_DemDerg == FK_DemDerg_Com).Single();
-            }
             return correctAction(18, FK_DemDerg_Com.Value, multiTab);
         }
 
@@ -375,15 +368,8 @@ namespace AURS_Derogation.Controllers
                 db.Commission.Add(commission);
                 db.SaveChanges();
 
-                Affect_Derg_Comms affDergCom = new Affect_Derg_Comms();
-                var comList = db.Commission.ToList();
-                if (comList.Count() != 0)
-                {
-                    var lastidCom = comList[comList.Count() - 1].Id_Commission;
-                    affDergCom.FK_Commision = lastidCom;
-                }
-                affDergCom.FK_DemDerg_Aff_Com = FK_DemDerg_Com;
-                db.Affect_Derg_Comms.Add(affDergCom);
+                Demande_Derogation demande = db.Demande_Derogation.Find(FK_DemDerg_Com);
+                demande.Commission = commission;db.Entry(demande).State = EntityState.Modified;
                 db.SaveChanges();
             }
 
@@ -393,12 +379,9 @@ namespace AURS_Derogation.Controllers
 
         public ActionResult Programmation_Affectation(int FK_DemDerg_Com, int Id_Commission)
         {
-            var affDergCom = new Affect_Derg_Comms
-            {
-                FK_Commision = Id_Commission,
-                FK_DemDerg_Aff_Com = FK_DemDerg_Com
-            };
-            db.Affect_Derg_Comms.Add(affDergCom);
+            Demande_Derogation demande = db.Demande_Derogation.Find(FK_DemDerg_Com);
+            demande.Fk_Commission = Id_Commission; 
+            db.Entry(demande).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Programmation", "WorkflowDerogation", new { FK_DemDerg_Com });
         }

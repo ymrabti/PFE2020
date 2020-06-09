@@ -22,6 +22,7 @@ namespace GestionnaireUtilisateurs.Models
     
         public int Id_Nature_Projet_DemDerg { get; set; }
         public string Nature_Projet_DemDerg1 { get; set; }
+        public bool last { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Demande_Derogation> Demande_Derogation { get; set; }

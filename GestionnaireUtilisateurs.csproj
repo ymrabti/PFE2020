@@ -182,9 +182,6 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Affect_Derg_Comms.cs">
-      <DependentUpon>Model_AURS1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Application.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
@@ -218,13 +215,13 @@
     <Compile Include="Models\Demande_Derogation.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\derogs_demandees.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Document_Derogation.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EtatAvancement.cs">
-      <DependentUpon>Model_AURS1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\FicheSuiveuse.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Forme_MaitreOeuvrage_DemDerg.cs">
@@ -289,12 +286,6 @@
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TYPE_DOC.cs">
-      <DependentUpon>Model_AURS1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\View_Affect_Com.cs">
-      <DependentUpon>Model_AURS1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\View_Last_Affectation_Com.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

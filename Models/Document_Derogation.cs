@@ -20,7 +20,7 @@ namespace GestionnaireUtilisateurs.Models
         public string url_Doc_Derg { get; set; }
         public Nullable<int> FK_DemDerg_DocDerg { get; set; }
     
-        public virtual Demande_Derogation Demande_Derogation { get; set; }
         public virtual TYPE_DOC TYPE_DOC { get; set; }
+        public virtual Demande_Derogation Demande_Derogation { get; set; }
     }
 }

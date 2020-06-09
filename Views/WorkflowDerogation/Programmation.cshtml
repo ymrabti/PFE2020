@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
     var codeCom = ViewBag.codeCom;
     var idDerog = ViewBag.idDerog;
-    var exist = false;
+    //var exist = false;
 }
 
 <section @*class="fixed-top" style="margin-top:50px;background:rgba(0, 0, 0, 0.57)"*@>
@@ -81,7 +81,7 @@
                                     @Html.DisplayFor(modelItem => item.Date_Commission)
                                     <input type="hidden" name="Id_Commission" value="@Html.DisplayFor(modelItem => item.Id_Commission)" />
                                 </td>
-                                @if (Model.AffectDergComs == null)
+                                @if (item != Model.DemDerg.Commission)
                                 {
                                     <td style="width:15%">
                                         <a href="@Url.Action("Programmation_Affectation", "WorkflowDerogation"
@@ -91,53 +91,58 @@
                                     </td>
 
                                 }
-                                else if (item.Id_Commission == Model.ViewLestAffectCom.Id_Commission)
-                                {
-                                    <td style="width:15%;  color:#4CAF50;">Dernière programmation</td>
-                                }
                                 else
                                 {
-                                    foreach (var aff in Model.AffectDergComs)
+
+                                    <td style="width:15%; color:#0005ff;">Programmée</td>
+                                }
+                                @*else if (item.Id_Commission == Model.ViewLestAffectCom.Id_Commission)
                                     {
-                                        if (aff.FK_Commision == item.Id_Commission)
+                                        <td style="width:15%;  color:#4CAF50;">Dernière programmation</td>
+                                    }
+                                    else
+                                    {
+                                        foreach (var aff in Model.AffectDergComs)
                                         {
-                                            <td style="width:15%; color:#0005ff;">Programmée</td>
-                                            exist = true;
+                                            if (aff.FK_Commision == item.Id_Commission)
+                                            {
+                                                <td style="width:15%; color:#0005ff;">Programmée</td>
+                                                exist = true;
+                                            }
+                                        }
+                                        if (exist == false)
+                                        {
+                                            <td style="width:15%">
+                                                <a href="@Url.Action("Programmation_Affectation", "WorkflowDerogation"
+                                                        , new { FK_DemDerg_Com = Model.DemDerg.Id_DemDerg, Id_Commission = item.Id_Commission })">
+                                                    A programmer
+                                                </a>
+                                            </td>
+
+                                        }
+                                        else
+                                        {
+                                            exist = false;
                                         }
                                     }
-                                    if (exist == false)
-                                    {
-                                        <td style="width:15%">
-                                            <a href="@Url.Action("Programmation_Affectation", "WorkflowDerogation"
-                                                    , new { FK_DemDerg_Com = Model.DemDerg.Id_DemDerg, Id_Commission = item.Id_Commission })">
-                                                A programmer
-                                            </a>
-                                        </td>
-
-                                    }
-                                    else
-                                    {
-                                        exist = false;
-                                    }
-                                }
-                                @*foreach (var i in Model.AffectDergComs)
-                                    {
-                                    if (item.Id_Commission == Model.ViewLestAffectCom.Id_Commission)
-                                    {
-                                    <td style="width:15%;  color:#4CAF50;"><a href="">Dernière programmation</a></td>
-                                    break;
-                                    }
-                                    else if (item.Id_Commission == i.FK_Commision)
-                                    {
-                                    <td style="width:15%;"><a href="">Programmée</a></td>
-                                    break;
-                                    }
-                                    else
-                                    {
-                                    <td style="width:15%"><a href="@Url.Action("Programmation_Affectation"
-                                    , "WorkflowDerogation", new { FK_DemDerg_Com = Model.DemDerg.Id_DemDerg, Id_Commission = item.Id_Commission })">A programmer</a></td>
-                                    break;
-                                    }*@
+                                    foreach (var i in Model.AffectDergComs)
+                                        {
+                                        if (item.Id_Commission == Model.ViewLestAffectCom.Id_Commission)
+                                        {
+                                        <td style="width:15%;  color:#4CAF50;"><a href="">Dernière programmation</a></td>
+                                        break;
+                                        }
+                                        else if (item.Id_Commission == i.FK_Commision)
+                                        {
+                                        <td style="width:15%;"><a href="">Programmée</a></td>
+                                        break;
+                                        }
+                                        else
+                                        {
+                                        <td style="width:15%"><a href="@Url.Action("Programmation_Affectation"
+                                        , "WorkflowDerogation", new { FK_DemDerg_Com = Model.DemDerg.Id_DemDerg, Id_Commission = item.Id_Commission })">A programmer</a></td>
+                                        break;
+                                        }*@
                             </tr>
                         }
                     </tbody>

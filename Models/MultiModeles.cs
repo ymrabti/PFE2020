@@ -35,15 +35,14 @@ namespace GestionnaireUtilisateurs.Models
         public IEnumerable<Nature_Projet_DemDerg> NatPrjDerogs { get; set; }
         public IEnumerable<Organisme> Orgs { get; set; }
         public IEnumerable<Statut_Juridique_DemDerg> StatutJurds { get; set; }
-        public IEnumerable<Affect_Derg_Comms> AffectDergComs { get; set; }
         public IEnumerable<Avis_Org> AvisOrgs { get; set; }
         public IEnumerable<Type_Avis> TypAviss { get; set; }
         public IEnumerable<EtatAvancement> EtatAvancements { get; set; }
-        public View_Last_Affectation_Com ViewLestAffectCom { get; set; }
         public IEnumerable<PROVINCES_RSK> Provs { get; set; }
         public IEnumerable<COMMUNES_RSK> Communes { get; set; }
         public IEnumerable<References_Foncieres> References_Foncieres { get; set; }
         public IEnumerable<parcell> Parcells { get; set; }
         public IEnumerable<TYPE_DOC> TYPE_DOCs { get; set; }
+        public IEnumerable<derogs_demandees> Derogs_Demandees { get; set; }
     }
 }
