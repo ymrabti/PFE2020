@@ -38,7 +38,15 @@
             <ul>
                 @foreach (var user in Model.aspNetUsers)
                 {
-                    <li>@user.Email ( @user.Demande_Derogation.Count() en Maitre d'ouvre et @user.Demande_Derogation1.Count() en Maitre d'ouvrage)</li>
+                    if (user.AspNetUserRoles.Where(o => o.AspNetRoles.Name == "Administrator").Count() != 0)
+                    {
+                        <li><span style="color:red"> @user.Email ( @user.Demande_Derogation.Count() en Maitre d'ouvre et @user.Demande_Derogation1.Count() en Maitre d'ouvrage) (Administrator)</span></li>
+                    }
+                    else
+                    {
+                        <li>@user.Email ( @user.Demande_Derogation.Count() en Maitre d'ouvre et @user.Demande_Derogation1.Count() en Maitre d'ouvrage)</li>
+                    }
+
                 }
             </ul>
         </div>

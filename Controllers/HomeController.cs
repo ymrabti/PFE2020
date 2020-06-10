@@ -16,6 +16,7 @@ namespace GestionnaireUtilisateurs.Controllers
     {
         private ApplicationUserManager _userManager;
         aurs1Entities database = new aurs1Entities();
+        private const string Administrator = "Administrator";
         public ApplicationUserManager UserManager
         {
             get
@@ -29,33 +30,33 @@ namespace GestionnaireUtilisateurs.Controllers
         }
         private MultiModeles multiModeles()
         {
-            var rolesAdmin = database.AspNetUserRoles.Where(ol => ol.AspNetRoles.Name == "Administrator");
+            var rolesAdmin = database.AspNetUserRoles.Where(ol => ol.AspNetRoles.Name == Administrator);
             var mModels = new MultiModeles
             {
-                aspNetUsers = database.AspNetUsers.ToList(),
+                aspNetUsers = database.AspNetUsers.Where(i => i.AspNetUserRoles.Where(ii => ii.AspNetRoles.Name == Administrator).Count() == 0).ToList(),
                 modules = database.Module.ToList(),
                 sousModules = database.SousModule.ToList(),
-                aspNetRoles = database.AspNetRoles.Where(p => p.Name != "Administrator").ToList(),
+                aspNetRoles = database.AspNetRoles.Where(p => p.Name != Administrator).ToList(),
                 statuts = database.Statuts.ToList(),
                 statutRoles = database.StatutRole.ToList()
             };
             return mModels;
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult Index()
         {
             return View(multiModeles());
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult AddUser()
         {
             ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
             return View();
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddUser(RegisterViewModel model)
@@ -115,7 +116,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult EditUser(string id)
         {
             ViewBag.Statuts = database.Statuts.ToList();
@@ -139,7 +140,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(viewModel);
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditUser(RegisterParentViewModel parentViewModel)
@@ -191,7 +192,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 if (old_statut != new_statut)
                 {
 
-                    var aspNetUserRoles = user.AspNetUserRoles.Where(u=>u.AspNetRoles.Name!= "Administrator");
+                    var aspNetUserRoles = user.AspNetUserRoles.Where(u => u.AspNetRoles.Name != Administrator);
                     database.AspNetUserRoles.RemoveRange(aspNetUserRoles);
                     var tachesfromstatut = database.StatutRole.Where(statut => statut.StatutId == new_statut).ToList();
                     var userRoles = new List<AspNetUserRoles>();
@@ -215,7 +216,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult DeleteUser(string id)
         {
             if (id == null)
@@ -227,16 +228,16 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 return HttpNotFound();
             }
-            if (user.Nom=="")
+            if (user.Nom == "")
             {
-                if (user.Prenom=="") { ViewBag.utilisateur = "sans nom"; } else { ViewBag.utilisateur =  user.Prenom; }
+                if (user.Prenom == "") { ViewBag.utilisateur = "sans nom"; } else { ViewBag.utilisateur = user.Prenom; }
             }
             else
             {
                 if (user.Prenom == "") { ViewBag.utilisateur = user.Nom; } else { ViewBag.utilisateur = user.Nom + " " + user.Prenom; }
             }
-            
-            if (user.Statuts==null)
+
+            if (user.Statuts == null)
             {
                 ViewBag.statutName = "";
             }
@@ -244,7 +245,7 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 ViewBag.statutName = user.Statuts.StatutName;
             }
-            
+
             var multiModeles = new MultiModeles
             {
                 aspNetUserRoles = user.AspNetUserRoles,
@@ -253,14 +254,14 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(multiModeles);
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         [HttpPost, ActionName("DeleteUser")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteUserConfirmed(string id)
         {
 
             var user = database.AspNetUsers.Find(id);
-            if (user.AspNetUserRoles.Where(a => a.AspNetRoles.Name == "Administrator").Count() == 0)
+            if (user.AspNetUserRoles.Where(a => a.AspNetRoles.Name == Administrator).Count() == 0)
             {
                 var userRoles = user.AspNetUserRoles;
                 database.AspNetUserRoles.RemoveRange(userRoles);
@@ -301,7 +302,7 @@ namespace GestionnaireUtilisateurs.Controllers
         /// ///////////////////////              USER TACHE                    //////////////////////
         /// ///////////////////////              USER TACHE                    //////////////////////
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult UserTache(string id)
         {
             if (id == null)
@@ -322,15 +323,15 @@ namespace GestionnaireUtilisateurs.Controllers
 
             var model = new MultiModeles
             {
-                aspNetUserRoles = aspNetUser.AspNetUserRoles.Where(p => p.AspNetRoles.Name != "Administrator"),
-                aspNetRoles = database.AspNetRoles.Where(p => p.Name != "Administrator").ToList(),
+                aspNetUserRoles = aspNetUser.AspNetUserRoles.Where(p => p.AspNetRoles.Name != Administrator),
+                aspNetRoles = database.AspNetRoles.Where(p => p.Name != Administrator).ToList(),
                 modules = database.Module.ToList(),
                 sousModules = database.SousModule.ToList()
             };
             return View(model);
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult UserTache(string[] Create, string[] Read, string[] Update, string[] Delete
@@ -340,13 +341,13 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 var currentUser = UserId[0];
                 var user = database.AspNetUsers.Find(currentUser);
-                var aspNetUserRoles = user.AspNetUserRoles.Where(u => u.AspNetRoles.Name != "Administrator");
+                var aspNetUserRoles = user.AspNetUserRoles.Where(u => u.AspNetRoles.Name != Administrator);
                 database.AspNetUserRoles.RemoveRange(aspNetUserRoles);
                 for (int i = 0; i < Read.Length; i++)
                 {
                     var reoleIdi = RoleId[i];
                     var role = database.AspNetRoles.Find(reoleIdi);
-                    if (role.Name!= "Administrator")
+                    if (role.Name != Administrator)
                     {
                         AspNetUserRoles NewRoleOfUser = new AspNetUserRoles();
                         NewRoleOfUser.UserId = UserId[0];
@@ -357,7 +358,7 @@ namespace GestionnaireUtilisateurs.Controllers
                         NewRoleOfUser.Delete = Delete[i].ToUpper().Equals("TRUE");
                         database.AspNetUserRoles.Add(NewRoleOfUser);
                     }
-                    
+
                 }
                 database.SaveChanges();
             }
@@ -370,7 +371,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult AddStatut()
         {
             return View();
@@ -393,7 +394,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult EditStatut(string id)
         {
             if (id == null)
@@ -428,7 +429,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult DeleteStatut(string id)
         {
             if (id == null)
@@ -454,15 +455,20 @@ namespace GestionnaireUtilisateurs.Controllers
         public ActionResult DeleteStatutConfirmed(string id)
         {
             Statuts statut = database.Statuts.Find(id);
-
-            var statutRoles = statut.StatutRole;
-            database.StatutRole.RemoveRange(statutRoles);
-
             var users = statut.AspNetUsers;
+            int Admins = 0;
 
             foreach (var user in users)
             {
-                if (user.AspNetUserRoles.Where(a => a.AspNetRoles.Name == "Administrator").Count() == 0)
+                Admins += user.AspNetUserRoles.Where(a => a.AspNetRoles.Name == Administrator).Count();
+            }
+            if (Admins==0)
+            {
+                var statutRoles = statut.StatutRole;
+                database.StatutRole.RemoveRange(statutRoles);
+
+
+                foreach (var user in users)
                 {
                     var userRoles = user.AspNetUserRoles;
                     database.AspNetUserRoles.RemoveRange(userRoles);
@@ -492,22 +498,23 @@ namespace GestionnaireUtilisateurs.Controllers
                     database.Demande_Derogation.RemoveRange(movrage);
                     database.AspNetUsers.Remove(user);
                 }
+                database.Statuts.Remove(statut);
+                database.SaveChanges();
             }
-            database.Statuts.Remove(statut);
-            database.SaveChanges();
+            
             return RedirectToAction("IndexStatut");
         }
 
 
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult AddStatutPartial()
         {
             return PartialView("_StatutModal", new StatutsViewModel());
         }
 
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public async Task<JsonResult> AddStatutPartiale([Bind(Include = "StatutName,StatutDescription")]Statuts Statut)
         {
             var data = new object();
@@ -530,12 +537,12 @@ namespace GestionnaireUtilisateurs.Controllers
         }
         public JsonResult ResetRolesFromStatut(string UserId)
         {
-            var statutId = database.AspNetUsers.Find(UserId).StatutId;
-            if (statutId == null || statutId == "")
+            var statut = database.AspNetUsers.Find(UserId).Statuts;
+            if (statut == null)
             {
                 return Json(new { dd = "error" }, JsonRequestBehavior.AllowGet);
             }
-            var tachesdestatut = database.StatutRole.Where(para => para.StatutId == statutId).ToList();
+            var tachesdestatut = statut.StatutRole.Where(z => z.AspNetRoles.Name != Administrator).ToList();
             var data = new
             {
                 dd = "success",
@@ -560,14 +567,14 @@ namespace GestionnaireUtilisateurs.Controllers
         /// ///////////////////////              STATUT TACHE                    //////////////////////
         /// ///////////////////////              STATUT TACHE                    //////////////////////
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult IndexStatut()
         {
             return View(multiModeles());
         }
 
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult StatutTache(string id)
         {
             if (id == null)
@@ -585,7 +592,7 @@ namespace GestionnaireUtilisateurs.Controllers
             var model = new MultiModeles
             {
                 statutRoles = database.StatutRole.Where(user => user.StatutId == id).ToList(),
-                aspNetRoles = database.AspNetRoles.Where(p => p.Name != "Administrator").ToList(),
+                aspNetRoles = database.AspNetRoles.Where(p => p.Name != Administrator).ToList(),
                 modules = database.Module.ToList(),
                 sousModules = database.SousModule.ToList()
             };
@@ -600,8 +607,10 @@ namespace GestionnaireUtilisateurs.Controllers
             if (ModelState.IsValid && Read.Length != 0)
             {
                 var currentStatut = StatutId[0];
-                var statutRole = database.StatutRole.Where(iden => iden.StatutId == currentStatut);
+                var _statut = database.Statuts.Find(currentStatut);
+                var statutRole = _statut.StatutRole;
                 database.StatutRole.RemoveRange(statutRole);
+
                 for (int i = 0; i < Read.Length; i++)
                 {
                     StatutRole NewRoleOfStatut = new StatutRole();
@@ -613,6 +622,29 @@ namespace GestionnaireUtilisateurs.Controllers
                     NewRoleOfStatut.Supprimer = Delete[i].ToUpper().Equals("TRUE");
                     database.StatutRole.Add(NewRoleOfStatut);
                 }
+                var userOfStatut = _statut.AspNetUsers
+                    .Where(i => i.AspNetUserRoles.Where(ii => ii.AspNetRoles.Name == Administrator).Count() == 0);
+                foreach (var user in userOfStatut)
+                {
+                    var userRoles = user.AspNetUserRoles;
+                    database.AspNetUserRoles.RemoveRange(userRoles);
+
+                    var newUserRoles = new List<AspNetUserRoles>();
+                    for (int i = 0; i < Read.Length; i++)
+                    {
+                        var userRole = new AspNetUserRoles
+                        {
+                            UserId = user.Id,
+                            RoleId = RoleId[i],
+                            Read = Read[i].ToUpper().Equals("TRUE"),
+                            Create = Create[i].ToUpper().Equals("TRUE"),
+                            Update = Update[i].ToUpper().Equals("TRUE"),
+                            Delete = Delete[i].ToUpper().Equals("TRUE")
+                        };
+                        newUserRoles.Add(userRole);
+                    }
+                    database.AspNetUserRoles.AddRange(newUserRoles);
+                }
                 database.SaveChanges();
             }
             return RedirectToAction("IndexStatut");
@@ -623,13 +655,13 @@ namespace GestionnaireUtilisateurs.Controllers
         /// ///////////////////////              MODULE                    //////////////////////
 
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult module()
         {
             return View(multiModeles());
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult AddModule()
         {
             return View(multiModeles());
@@ -649,7 +681,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult EditModule(int id)
         {
             if (id == 0)
@@ -685,7 +717,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult DeleteModule(int id)
         {
             if (id + "" == null)
@@ -723,7 +755,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 var roles = sousModule.AspNetRoles;
                 foreach (var role in roles)
                 {
-                    var userRoles = role.AspNetUserRoles.Where(u => u.AspNetRoles.Name != "Administrator");
+                    var userRoles = role.AspNetUserRoles.Where(u => u.AspNetRoles.Name != Administrator);
                     var statutsRoles = role.StatutRole;
                     database.AspNetUserRoles.RemoveRange(userRoles);
                     database.StatutRole.RemoveRange(statutsRoles);
@@ -737,7 +769,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult AddModulePartial()
         {
             return PartialView("_Modal");
@@ -770,13 +802,13 @@ namespace GestionnaireUtilisateurs.Controllers
         /// ///////////////////////             SUB MODULE                    //////////////////////
         /// ///////////////////////             SUB MODULE                    //////////////////////
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult sousmodule()
         {
             return View(multiModeles());
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult AddSubModule()
         {
             return View(multiModeles());
@@ -796,7 +828,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult EditSubModule(int id)
         {
             if (id == 0)
@@ -832,7 +864,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult DeleteSubModule(int id)
         {
             if (id + "" == null)
@@ -864,7 +896,7 @@ namespace GestionnaireUtilisateurs.Controllers
             var roles = sousModule.AspNetRoles;
             foreach (var role in roles)
             {
-                var userRoles = role.AspNetUserRoles.Where(u => u.AspNetRoles.Name != "Administrator");
+                var userRoles = role.AspNetUserRoles.Where(u => u.AspNetRoles.Name != Administrator);
                 var statutsRoles = role.StatutRole;
                 database.AspNetUserRoles.RemoveRange(userRoles);
                 database.StatutRole.RemoveRange(statutsRoles);
@@ -875,7 +907,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return RedirectToAction("sousmodule");
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult AddSubModulePartial()
         {
             return PartialView("_SubModuleModal", multiModeles());
@@ -908,14 +940,14 @@ namespace GestionnaireUtilisateurs.Controllers
         /// ///////////////////////             TACHES                    //////////////////////
         /// ///////////////////////             TACHES                    //////////////////////
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult taches()
         {
             return View(multiModeles());
         }
 
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult AddTache()
         {
             return View(multiModeles());
@@ -943,7 +975,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult EditTache(string id)
         {
             if (id == null)
@@ -957,7 +989,7 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             ViewBag.RoleName = role.Name;
             ViewBag.RoleDescription = role.RoleDescription;
-            if (role.Name != "Administrator")
+            if (role.Name != Administrator)
             {
                 ViewBag.SousModuleId = role.SouModuleId;
                 ViewBag.ModuleId = role.SousModule.Module.ModuleId;
@@ -975,15 +1007,21 @@ namespace GestionnaireUtilisateurs.Controllers
                 {
                     return View(role);
                 }
-                database.Entry(role).State = EntityState.Modified;
-                database.SaveChanges();
+                string rn = role.Name;
+                var nexist = database.AspNetRoles.Where(u => u.Name == rn).Count()==0;
+                if (nexist)
+                {
+                    database.Entry(role).State = EntityState.Modified;
+                    database.SaveChanges();
+                }
+                
                 return RedirectToAction("taches");
             }
             return View(multiModeles());
         }
 
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult DeleteTache(string id)
         {
             if (id == null)
@@ -1009,7 +1047,7 @@ namespace GestionnaireUtilisateurs.Controllers
         public ActionResult DeleteTacheConfirmed(string id)
         {
             AspNetRoles role = database.AspNetRoles.Find(id);
-            var userRoles = role.AspNetUserRoles.Where(u => u.AspNetRoles.Name != "Administrator");
+            var userRoles = role.AspNetUserRoles.Where(u => u.AspNetRoles.Name != Administrator);
             var statutsRoles = role.StatutRole;
             database.AspNetUserRoles.RemoveRange(userRoles);
             database.StatutRole.RemoveRange(statutsRoles);
@@ -1020,7 +1058,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = Administrator)]
         public ActionResult AddTachePartial()
         {
             return PartialView("_TacheModal", multiModeles());
@@ -1041,7 +1079,7 @@ namespace GestionnaireUtilisateurs.Controllers
                     var result = await database.SaveChangesAsync();
 
                 }
-                var roles = from p in database.AspNetRoles.Where(u => u.Name != "Administrator").ToList()
+                var roles = from p in database.AspNetRoles.Where(u => u.Name != Administrator).ToList()
                             select new AspNetRoles
                             {
                                 Id = p.Id,
@@ -1055,7 +1093,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }
 
-        
+
         /// ///////////////////////             AUTRES                    //////////////////////
         /// ///////////////////////             AUTRES                    //////////////////////
         /// ///////////////////////             AUTRES                    //////////////////////

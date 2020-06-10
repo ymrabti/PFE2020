@@ -1914,6 +1914,7 @@
     <Content Include="Views\WorkflowDerogation\EncoursParProfils.cshtml" />
     <Content Include="Views\Statistics\TableBord.cshtml" />
     <Content Include="Views\Home\AURS.cshtml" />
+    <Content Include="Views\Shared\_NavBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

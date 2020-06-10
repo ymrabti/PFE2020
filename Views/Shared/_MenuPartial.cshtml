@@ -14,7 +14,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav flex-column">
             <li class="nav-divider">
-                Menu
+                Menu administrateur
             </li>
             @if (User.IsInRole("Administrator"))
             {
@@ -64,6 +64,17 @@
                    aria-controls="submenu-1">
                     <i class="fas fa-qrcode">
                     </i>Demandes en cours<span class="badge badge-success"></span>
+                </a>
+            </li>
+            <li class="nav-divider">
+                menu utilisateur
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="@Url.Action("ChangePassword", "pw")"
+                   aria-expanded="false" data-target="#submenu-1"
+                   aria-controls="submenu-1">
+                    <i class="fas fa-lock">
+                    </i>Changer Votre mot de passe<span class="badge badge-success"></span>
                 </a>
             </li>
             @*<li class="nav-item ">

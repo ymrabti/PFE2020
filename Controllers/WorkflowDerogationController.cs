@@ -24,6 +24,18 @@ namespace AURS_Derogation.Controllers
     public class WorkflowDerogationController : Controller
     {
         static int nombre_res_ppage = 5;
+        private const string Administrator = "Administrator";
+
+        private const string _Rensegnement = "Rensegnement";
+        private const string _Programmation = "Programmation";
+        private const string _Autorisation = "Autorisation";
+
+        private const string _GED = "GED";
+        private const string _Avis = "Avis";
+        private const string _SitGeo = "Situation Géographique";
+
+        private const string _Cloture = "Cloture";
+        private const string _Echanges = "Echanges";
         public ActionResult correctAction(int idTache, int IdDemDerog, MultiModeles multiTab)
         {
             if (IdDemDerog == 0)
@@ -82,6 +94,7 @@ namespace AURS_Derogation.Controllers
             }
         }
         public aurs1Entities db = new aurs1Entities();
+        [Authorize(Roles =Administrator+","+_Rensegnement)]
         public ActionResult Rensegnements()
         {
             var demDerog = db.Demande_Derogation.ToList();
@@ -155,6 +168,7 @@ namespace AURS_Derogation.Controllers
 
 
 
+        [Authorize(Roles = Administrator + "," + _Rensegnement)]
         public ActionResult Rensegnements_Fait(int Id_DemDerg)
         {
             ViewBag.Message = Workflow.Renseignements + " . " + Workflow.Situation_Géographique
@@ -236,6 +250,7 @@ namespace AURS_Derogation.Controllers
 
 
 
+        [Authorize(Roles = Administrator + "," + _SitGeo)]
         public ActionResult SituationGeo(int Id_DemDerg)
         {
             var multiTab = new MultiModeles
@@ -268,6 +283,7 @@ namespace AURS_Derogation.Controllers
         }
 
 
+        [Authorize(Roles = Administrator + "," + _GED)]
         public ActionResult Ged(int FK_DemDerg_DocDerg)
         {
 
@@ -317,6 +333,7 @@ namespace AURS_Derogation.Controllers
 
 
 
+        [Authorize(Roles = Administrator + "," + _Programmation)]
         public ActionResult Programmation(int? FK_DemDerg_Com)
         {
             ViewBag.idDerog = FK_DemDerg_Com;
@@ -358,6 +375,7 @@ namespace AURS_Derogation.Controllers
         }
 
 
+        [Authorize(Roles = Administrator + "," + _Programmation)]
         public ActionResult CreateCommission(Commission commission, int FK_DemDerg_Com)
         {
             if (commission.Date_Commission != null)
@@ -378,6 +396,7 @@ namespace AURS_Derogation.Controllers
             return RedirectToAction("Programmation", "WorkflowDerogation", new { FK_DemDerg_Com });
         }
 
+        [Authorize(Roles = Administrator + "," + _Programmation)]
         public ActionResult Programmation_Affectation(int FK_DemDerg_Com, int Id_Commission)
         {
             Demande_Derogation demande = db.Demande_Derogation.Find(FK_DemDerg_Com);
@@ -390,6 +409,7 @@ namespace AURS_Derogation.Controllers
 
 
 
+        [Authorize(Roles = Administrator + "," + _Avis)]
         public ActionResult AvisOrg(int FK_DemDerg)
         {
             var multiTab = new MultiModeles
@@ -470,6 +490,7 @@ namespace AURS_Derogation.Controllers
 
 
 
+        [Authorize(Roles = Administrator + "," + _Echanges)]
         public ActionResult Echanges(int FK_DemDerg)
         {
             var multiTab = new MultiModeles
@@ -529,6 +550,7 @@ namespace AURS_Derogation.Controllers
 
 
 
+        [Authorize(Roles = Administrator + "," + _Autorisation)]
         public ActionResult Autorisation(int FK_DemDerg)
         {
             var multiTab = new MultiModeles
@@ -588,6 +610,7 @@ namespace AURS_Derogation.Controllers
 
 
 
+        [Authorize(Roles = Administrator + "," + _Cloture)]
         public ActionResult Cloture(int FK_DemDerg)
         {
             var multiTab = new MultiModeles
@@ -619,6 +642,9 @@ namespace AURS_Derogation.Controllers
 
 
 
+        [Authorize(Roles = Administrator + "," + _Rensegnement 
+            + "," + _SitGeo + "," + _GED + "," + _Echanges + ","
+            + _Autorisation + "," + _Cloture + "," + _Avis + "," + _Programmation)]
         public ActionResult Encours(Nullable<Int16> page)
         {
             if (page==null) { page = 1; }
@@ -749,6 +775,9 @@ namespace AURS_Derogation.Controllers
 
 
 
+        [Authorize(Roles = Administrator + "," + _Rensegnement
+            + "," + _SitGeo + "," + _GED + "," + _Echanges + ","
+            + _Autorisation + "," + _Cloture + "," + _Avis + "," + _Programmation)]
         public ActionResult WorkflowG(int idDemDerog)
         {
             MultiModeles multiModeles = new MultiModeles
