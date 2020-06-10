@@ -46,7 +46,7 @@
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label for="inputText11" style="font-size:12px;">Préfecture :</label>
-                            <select class="form-control form-control-sm chzn-selec" id="Prefectures" name="Prefecture">
+                            <select class="form-control form-control-sm" id="Prefectures" name="Prefecture">
                                 <option value="">-------- Sélectionner la préfecture : --------</option>
                                 @foreach (var item in Model.Provs)
                                 {
@@ -105,7 +105,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <label for="inputText11" style="font-size:12px;">Nature demande :</label>
-                            <select required class="form-control form-control-sm" id="natDem" name="FK_DemDerg_Nature_Dem"
+                            <select required class="form-control form-control-sm chzn-selec" id="natDem" name="FK_DemDerg_Nature_Dem"
                                     oninvalid="this.setCustomValidity('Nature demande obligatoire !')" oninput="this.setCustomValidity('')">
                                 <option value="">-------- Sélectionner la nature de la demande --------</option>
                                 @foreach (var item in Model.NatDemDerogs)
@@ -125,6 +125,7 @@
                                 <option value="@item.Id_StatutJuridique_DemDerg">@item.StatutJuridique_DemDerg</option>
                             }
                         </select>
+                        <input type="hidden" class="form-control" id="StJrAut" value="" name="StJrAut" />
                     </div>
                     <div class="col-sm-4">
 
@@ -184,6 +185,7 @@
                                 <option value="@item.Id_Nature_Projet_DemDerg">@item.Nature_Projet_DemDerg1</option>
                             }
                         </select>
+                        <input type="hidden" class="form-control" id="NatPrjAut" value="" name="NatPrjAut" />
                     </div>
                     <div class="col-sm-4">
                         <label for="inputText11" style="font-size:12px;">Montant d'investissement (en DH):</label>
@@ -200,6 +202,7 @@
                                 <option value="@item.ID">@item.NOM</option>
                             }
                         </select>
+                        <input type="hidden" class="form-control" id="derogationDemAut" value="" name="derogationDemAut" />
                     </div>
                 </div>
                 <div class="row" style="margin-bottom:25px">
@@ -270,6 +273,20 @@
     </div>
 </div>
 <script language="javascript">
+    //$(document).ready(function () {
+    //    var elements = document.getElementsByClassName("chzn-selec");
+    //    for (i = 0; i < elements.length; i++) {
+    //        var id = elements[i].getAttribute('id');
+    //        $('#' + id).chosen({
+    //            disable_search: false,
+    //            create_option: false,
+    //            persistent_create_option: false,
+    //            skip_no_results: true,
+    //            placeholder_text_single: "-------- Indice --------",
+    //            no_results_text: "Aucun résultat ne correspond : "
+    //        });
+    //    }
+    //})
     $("#selRef").change(function () {
         if ($("#selRef").val() == "") {
             $("#selRef").css("border-color", "red");
@@ -278,7 +295,45 @@
             $("#selRef").css("border-color", "green");
         }
     });
-
+    $("#StatJurd").change(function () {
+        var element = document.getElementById("StJrAut");
+        element.setAttribute("value", "");
+        element.removeAttribute("type");
+        if ($("#StatJurd").val() == 4) {
+            element.setAttribute("type", "text");
+            element.setAttribute("required", "");
+        }
+        else {
+            element.setAttribute("type", "hidden");
+            element.removeAttribute("required");
+        }
+    });
+    $("#NatPrj").change(function () {
+        var element = document.getElementById("NatPrjAut");
+        element.setAttribute("value", "");
+        element.removeAttribute("type");
+        if ($("#NatPrj").val() == 13) {
+            element.setAttribute("type", "text");
+            element.setAttribute("required", "");
+        }
+        else {
+            element.setAttribute("type", "hidden");
+            element.removeAttribute("required");
+        }
+    });
+    $("#derogationDem").change(function () {
+        var element = document.getElementById("derogationDemAut");
+        element.setAttribute("value", "");
+        element.removeAttribute("type");
+        if ($("#derogationDem").val() == 5) {
+            element.setAttribute("type", "text");
+            element.setAttribute("required", "");
+        }
+        else {
+            element.setAttribute("type", "hidden");
+            element.removeAttribute("required");
+        }
+    });
 </script>
 <script language="javascript">
     $('#Prefectures').change(function () {

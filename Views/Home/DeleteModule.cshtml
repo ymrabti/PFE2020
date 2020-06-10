@@ -1,6 +1,14 @@
-﻿<div class="row">
+﻿@model GestionnaireUtilisateurs.Models.MultiModeles
+@{
+    ViewBag.Title = "Suppression D'une Module";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row">
     <div class="col-md-6" style=" margin-left: auto; margin-right: auto;">
-        <div class="card" style="text-align:center; background-color: white; width: 100%; padding-top:15px;box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+        <div class="card unnamedClass">
             <div class="card-body">
                 <h4> <span class="badge-dot badge-info"></span>  Suppression d'une modules</h4>
                 <hr />
@@ -17,8 +25,25 @@
                             @Html.ActionLink("Back to List", "module")
                         </div>
                     }
+
                 </div>
             </div>
+            <center><label style="font-weight: bold;font-style:oblique"><u>Utilisations </u></label></center><br />
+            <label style="font-style:oblique">Applicaion Module</label>
+            <ul>
+                @foreach (var appModule in Model.applicationModules)
+                {
+                    <li>@appModule.description</li>
+                }
+            </ul>
+            <br />
+            <label style="font-style:oblique">Sous Modules</label>
+            <ul>
+                @foreach (var sousModule in Model.sousModules)
+                {
+                    <li>@sousModule.SousModuleName</li>
+                }
+            </ul>
         </div>
     </div>
 </div>

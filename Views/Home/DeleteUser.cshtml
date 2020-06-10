@@ -1,4 +1,4 @@
-﻿
+﻿@model GestionnaireUtilisateurs.Models.MultiModeles
 @{
     ViewBag.Title = "Supprimer un utilisateur";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,7 +6,7 @@
 
     <div class="row">
         <div class="col-md-6" style=" margin-left: auto; margin-right: auto;">
-            <div class="card" style="text-align:center; background-color: white; width: 100%; padding-top:15px;box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+            <div class="card unnamedClass">
                 <div class="card-body">
                     <h4> <span class="badge-dot badge-info"></span>  Suppression d'une modules</h4>
                     <hr />
@@ -26,6 +26,22 @@
                         }
                     </div>
                 </div>
+                <center><label style="font-weight: bold;font-style:oblique"><u>Utilisations </u></label></center><br />
+                <label style="font-style:oblique">User Role</label>
+                <ul>
+                    @foreach (var userRole in Model.aspNetUserRoles)
+                    {
+                        <li>@userRole.AspNetUsers.Email +  @userRole.AspNetRoles.Name</li>
+                    }
+                </ul>
+                <br />
+                <label style="font-style:oblique">Demandes derogations</label>
+                <ul>
+                    @foreach (var demderg in Model.DemDergs)
+                    {
+                        <li>@demderg.Intitule_DemDerg</li>
+                    }
+                </ul>
             </div>
         </div>
     </div>

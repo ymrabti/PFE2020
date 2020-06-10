@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col-md-6" style=" margin-left: auto; margin-right: auto;">
-        <div class="card" style="text-align:center; background-color: white; width: 100%; padding-top:15px;box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+        <div class="card unnamedClass">
             <div class="card-body">
                 @if (ViewBag.RoleName == "Administrator")
                 {
@@ -32,22 +32,22 @@
                             <div class="form-group">
                                 <label for="name" class="col-md-12 control-label" style="font:bold">Nom Du Role</label>
                                 <div class="col-md-10" style="position:center">
-                                    <input class="form-control" name="Name" type="text" value="@ViewBag.RoleName" />
+                                    <input required class="form-control" name="Name" type="text" value="@ViewBag.RoleName" />
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="name" class="col-md-12 control-label" style="font:bold">Description Du tache</label>
                                 <div class="col-md-10" style="position:center">
-                                    <textarea class="form-control" name="RoleDescription">@ViewBag.RoleDescription</textarea>
+                                    <textarea required class="form-control" name="RoleDescription">@ViewBag.RoleDescription</textarea>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="name" class="col-md-12 control-label" style="font:bold">Module</label>
                                 <div class="col-md-10" style="position:center">
-                                    <select class="form-control form-control-sm" name="ModuleId" id="selectmoduleparent">
-                                        <option value=-1>--- Sélectionner un module ---</option>
+                                    <select required class="form-control form-control-sm" name="ModuleId" id="selectmoduleparent">
+                                        <option value="">--- Sélectionner un module ---</option>
                                         @foreach (var item in Model.modules)
                                         {
                                             if (item.ModuleId == ViewBag.ModuleId)
@@ -65,8 +65,8 @@
                             <div class="form-group">
                                 <label for="name" class="col-md-12 control-label" style="font:bold">Sous Module</label>
                                 <div class="col-md-10" style="position:center">
-                                    <select class="form-control form-control-sm" name="SouModuleId" id="selectsousmoduleparent">
-                                        <option value=-1>--- Sélectionner un sous module ---</option>
+                                    <select required class="form-control form-control-sm" name="SouModuleId" id="selectsousmoduleparent">
+                                        <option value="">--- Sélectionner un sous module ---</option>
                                         @foreach (var item in Model.sousModules)
                                         {
                                             if (item.ModuleId == ViewBag.ModuleId)
@@ -130,15 +130,12 @@
         function functionChangeOptions(idchanged, idtargetted) {
 
             $('#' + idchanged).change(function () {
-
-                var e = document.getElementById(idchanged);
-                var choix = e.options[e.selectedIndex].value;
                 var Modulee = $(this).val();
                 var com = $("#" + idtargetted + " > option");
                 $("#" + idtargetted)[0].selectedIndex = 0;
                 var a = com[0].getAttribute("name");
                 for (var i = 0; i < com.length; i++) {
-                    if (com[i].getAttribute("name") == Modulee || a == choix || a == -11) {
+                    if (com[i].getAttribute("name") == Modulee || com[i].getAttribute("value") =="") {
                         com[i].style.display = "block";
                     }
                     else {
@@ -151,8 +148,8 @@
 
         }
 
-        functionChosen("selectmoduleparent");
-        functionChosen("selectsousmoduleparent");
+        //functionChosen("selectmoduleparent");
+        //functionChosen("selectsousmoduleparent");
         functionChangeOptions("selectmoduleparent", "selectsousmoduleparent");
     </script>
 }

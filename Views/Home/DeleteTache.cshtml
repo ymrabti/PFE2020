@@ -1,18 +1,19 @@
-﻿@{
+﻿@model GestionnaireUtilisateurs.Models.MultiModeles
+@{
     ViewBag.Title = "Supprimer une Tache";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="row">
     <div class="col-md-6" style=" margin-left: auto; margin-right: auto;">
-        <div class="card" style="text-align:center; background-color: white; width: 100%; padding-top:15px;box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+        <div class="card unnamedClass">
             <div class="card-body">
-                @if (ViewBag.RoleName == "Administrator")
+                @if (Model.Tache.Name == "Administrator")
                 {
                     <center>
                         <h1>
                             <label class="text-danger" style="margin:10px">
-                                Impossible de supprimer ce role!
+                                Impossible de supprimer ce Tache!
                             </label>
                         </h1>
                     </center>
@@ -21,9 +22,12 @@
                 {
                     <h4> <span class="badge-dot badge-info"></span>  Suppression d'une modules</h4>
                     <hr />
-                    <h3>Vous etes sur de supprimer la Tache <span class="text-info">@ViewBag.RoleName</span>  ? </h3><br />
-                    <h2>de Sous Module <span class="text-info">@ViewBag.SousModuleName</span></h2><br />
-                    <h1>de Module <span class="text-info">@ViewBag.ModuleName</span></h1>
+                    <h3>Vous etes sur de supprimer la Tache <span class="text-info">@Model.Tache.Name</span>  ? </h3><br />
+                    if (Model.Tache.SousModule != null)
+                    {
+                        <h2>de Sous Module <span class="text-info">@Model.Tache.SousModule.SousModuleName</span></h2><br />
+                        <h1>de Module <span class="text-info">@Model.Tache.SousModule.Module.ModuleName</span></h1>
+                    }
                     <div>
                         <hr />
 
@@ -32,9 +36,26 @@
                             @Html.AntiForgeryToken()
 
                             <div class="form-actions no-color">
-                                <input type="submit" value="Supprimer" class="btn btn-default btn-danger " /> 
+                                <input type="submit" value="Supprimer" class="btn btn-default btn-danger " />
                             </div>
                         }
+                        <center><label style="font-weight: bold"><u>Utilisations </u></label></center><br />
+                        <label style="font-style:oblique">Utilisatateur Tache</label>
+
+                        <ul>
+                            @foreach (var userRole in Model.aspNetUserRoles)
+                            {
+                                <li>@userRole.AspNetUsers.Email  @userRole.AspNetRoles.Name</li>
+                            }
+                        </ul><br />
+                        <label style="font-style:oblique">Statut Tache</label>
+
+                        <ul>
+                            @foreach (var statutRole in Model.statutRoles)
+                            {
+                                <li>@statutRole.Statuts.StatutName   @statutRole.AspNetRoles.Name</li>
+                            }
+                        </ul>
                     </div>
                 }
                 <br />

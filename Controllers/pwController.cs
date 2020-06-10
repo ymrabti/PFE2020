@@ -17,6 +17,8 @@ namespace GestionnaireUtilisateurs.Controllers
 
         public pwController()
         {
+            //var passwordResult = _userManager.PasswordHasher.VerifyHashedPassword("", "");
+            //if (passwordResult.) { }
         }
 
         public pwController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -49,8 +51,6 @@ namespace GestionnaireUtilisateurs.Controllers
             }
         }
 
-        //
-        // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
@@ -75,14 +75,12 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
         
-        // GET: /Manage/ChangePassword
+        [Authorize]
         public ActionResult ChangePassword()
         {
             return View();
         }
 
-        //
-        // POST: /Manage/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
@@ -105,7 +103,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(model);
         }
 
-        //
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && _userManager != null)

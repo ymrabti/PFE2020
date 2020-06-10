@@ -34,9 +34,9 @@
                 <div class="form-group">
                     <dic class="row">
                         <div class="col-sm-4">
-                            <input required type="text" id="xx" class="form-control" style="margin-bottom:10px" placeholder="X">
+                            <input required type="number" id="xx" class="form-control" placeholder="X" style="margin-bottom:10px">
 
-                            <input required data-target="Entrer Y" type="text" id="yy" class="form-control" placeholder="Y">
+                            <input required type="number" id="yy" class="form-control" placeholder="Y" data-target="Entrer Y">
                             <br />
                             <button class="btn btn-space btn-primary" type="button" style="position:absolute;right:10px" id="addCoord" name="enregistrer">Ajouter coordonnées</button>
                             <br /><br /><br />
@@ -129,7 +129,7 @@
 
 
     @*<script src="https://js.arcgis.com/3.27/"></script>*@
-    <script src="http://localhost/arcgis_js_api/library/3.27/3.27/init:js"></script>
+    <script src="http://localhost/arcgis_js_api/library/3.27/3.27/init.js"></script>
     @*<script>
         require(["esri/map", "dojo/domReady!"], function (Map) {
             var map = new Map("map", {

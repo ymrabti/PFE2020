@@ -1,4 +1,5 @@
 ﻿using GestionnaireUtilisateurs.Models;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
@@ -190,7 +191,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 if (old_statut != new_statut)
                 {
 
-                    var aspNetUserRoles = database.AspNetUserRoles.Where(iden => iden.UserId == uid);
+                    var aspNetUserRoles = user.AspNetUserRoles.Where(u=>u.AspNetRoles.Name!= "Administrator");
                     database.AspNetUserRoles.RemoveRange(aspNetUserRoles);
                     var tachesfromstatut = database.StatutRole.Where(statut => statut.StatutId == new_statut).ToList();
                     var userRoles = new List<AspNetUserRoles>();
@@ -226,9 +227,30 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.utilisateur = user.Nom + " " + user.Prenom;
-            ViewBag.statutName = user.Statuts.StatutName;
-            return View();
+            if (user.Nom=="")
+            {
+                if (user.Prenom=="") { ViewBag.utilisateur = "sans nom"; } else { ViewBag.utilisateur =  user.Prenom; }
+            }
+            else
+            {
+                if (user.Prenom == "") { ViewBag.utilisateur = user.Nom; } else { ViewBag.utilisateur = user.Nom + " " + user.Prenom; }
+            }
+            
+            if (user.Statuts==null)
+            {
+                ViewBag.statutName = "";
+            }
+            else
+            {
+                ViewBag.statutName = user.Statuts.StatutName;
+            }
+            
+            var multiModeles = new MultiModeles
+            {
+                aspNetUserRoles = user.AspNetUserRoles,
+                DemDergs = database.Demande_Derogation.Where(p => p.Maitre_Oeuvrage_DemDerg == id || p.Maitre_Oeuvre_DemDerg == id).ToList()
+            };
+            return View(multiModeles);
         }
 
         [Authorize(Roles = "Administrator")]
@@ -236,9 +258,41 @@ namespace GestionnaireUtilisateurs.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteUserConfirmed(string id)
         {
+
             var user = database.AspNetUsers.Find(id);
-            database.AspNetUsers.Remove(user);
-            database.SaveChanges();
+            if (user.AspNetUserRoles.Where(a => a.AspNetRoles.Name == "Administrator").Count() == 0)
+            {
+                var userRoles = user.AspNetUserRoles;
+                database.AspNetUserRoles.RemoveRange(userRoles);
+
+                var movre = user.Demande_Derogation;
+                foreach (var mo in movre)
+                {
+                    var avis = mo.Avis_Org; var courriers = mo.Courrier;
+                    var documents = mo.Document_Derogation; var parcells = mo.parcell;
+                    database.Avis_Org.RemoveRange(avis);
+                    database.Courrier.RemoveRange(courriers);
+                    database.Document_Derogation.RemoveRange(documents);
+                    database.parcell.RemoveRange(parcells);
+                }
+                database.Demande_Derogation.RemoveRange(movre);
+
+                var movrage = user.Demande_Derogation1;
+                foreach (var mo in movrage)
+                {
+                    var avis = mo.Avis_Org; var courriers = mo.Courrier;
+                    var documents = mo.Document_Derogation; var parcells = mo.parcell;
+                    database.Avis_Org.RemoveRange(avis);
+                    database.Courrier.RemoveRange(courriers);
+                    database.Document_Derogation.RemoveRange(documents);
+                    database.parcell.RemoveRange(parcells);
+                }
+                database.Demande_Derogation.RemoveRange(movrage);
+
+                database.AspNetUsers.Remove(user);
+                database.SaveChanges();
+            }
+
             return RedirectToAction("Index");
         }
 
@@ -268,7 +322,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
             var model = new MultiModeles
             {
-                aspNetUserRoles = database.AspNetUserRoles.Where(user => user.UserId == id).ToList(),
+                aspNetUserRoles = aspNetUser.AspNetUserRoles.Where(p => p.AspNetRoles.Name != "Administrator"),
                 aspNetRoles = database.AspNetRoles.Where(p => p.Name != "Administrator").ToList(),
                 modules = database.Module.ToList(),
                 sousModules = database.SousModule.ToList()
@@ -285,18 +339,25 @@ namespace GestionnaireUtilisateurs.Controllers
             if (ModelState.IsValid && Read.Length != 0)
             {
                 var currentUser = UserId[0];
-                var aspNetUserRoles = database.AspNetUserRoles.Where(iden => iden.UserId == currentUser);
+                var user = database.AspNetUsers.Find(currentUser);
+                var aspNetUserRoles = user.AspNetUserRoles.Where(u => u.AspNetRoles.Name != "Administrator");
                 database.AspNetUserRoles.RemoveRange(aspNetUserRoles);
                 for (int i = 0; i < Read.Length; i++)
                 {
-                    AspNetUserRoles NewRoleOfUser = new AspNetUserRoles();
-                    NewRoleOfUser.UserId = UserId[0];
-                    NewRoleOfUser.RoleId = RoleId[i];
-                    NewRoleOfUser.Read = Read[i].ToUpper().Equals("TRUE");
-                    NewRoleOfUser.Create = Create[i].ToUpper().Equals("TRUE");
-                    NewRoleOfUser.Update = Update[i].ToUpper().Equals("TRUE");
-                    NewRoleOfUser.Delete = Delete[i].ToUpper().Equals("TRUE");
-                    database.AspNetUserRoles.Add(NewRoleOfUser);
+                    var reoleIdi = RoleId[i];
+                    var role = database.AspNetRoles.Find(reoleIdi);
+                    if (role.Name!= "Administrator")
+                    {
+                        AspNetUserRoles NewRoleOfUser = new AspNetUserRoles();
+                        NewRoleOfUser.UserId = UserId[0];
+                        NewRoleOfUser.RoleId = RoleId[i];
+                        NewRoleOfUser.Read = Read[i].ToUpper().Equals("TRUE");
+                        NewRoleOfUser.Create = Create[i].ToUpper().Equals("TRUE");
+                        NewRoleOfUser.Update = Update[i].ToUpper().Equals("TRUE");
+                        NewRoleOfUser.Delete = Delete[i].ToUpper().Equals("TRUE");
+                        database.AspNetUserRoles.Add(NewRoleOfUser);
+                    }
+                    
                 }
                 database.SaveChanges();
             }
@@ -380,7 +441,12 @@ namespace GestionnaireUtilisateurs.Controllers
                 return HttpNotFound();
             }
             ViewBag.statutName = statut.StatutName;
-            return View();
+            var multiModeles = new MultiModeles
+            {
+                aspNetUsers = statut.AspNetUsers,
+                statutRoles = statut.StatutRole
+            };
+            return View(multiModeles);
         }
 
         [HttpPost, ActionName("DeleteStatut")]
@@ -388,6 +454,45 @@ namespace GestionnaireUtilisateurs.Controllers
         public ActionResult DeleteStatutConfirmed(string id)
         {
             Statuts statut = database.Statuts.Find(id);
+
+            var statutRoles = statut.StatutRole;
+            database.StatutRole.RemoveRange(statutRoles);
+
+            var users = statut.AspNetUsers;
+
+            foreach (var user in users)
+            {
+                if (user.AspNetUserRoles.Where(a => a.AspNetRoles.Name == "Administrator").Count() == 0)
+                {
+                    var userRoles = user.AspNetUserRoles;
+                    database.AspNetUserRoles.RemoveRange(userRoles);
+
+                    var movre = user.Demande_Derogation;
+                    foreach (var mo in movre)
+                    {
+                        var avis = mo.Avis_Org; var courriers = mo.Courrier;
+                        var documents = mo.Document_Derogation; var parcells = mo.parcell;
+                        database.Avis_Org.RemoveRange(avis);
+                        database.Courrier.RemoveRange(courriers);
+                        database.Document_Derogation.RemoveRange(documents);
+                        database.parcell.RemoveRange(parcells);
+                    }
+                    database.Demande_Derogation.RemoveRange(movre);
+
+                    var movrage = user.Demande_Derogation1;
+                    foreach (var mo in movrage)
+                    {
+                        var avis = mo.Avis_Org; var courriers = mo.Courrier;
+                        var documents = mo.Document_Derogation; var parcells = mo.parcell;
+                        database.Avis_Org.RemoveRange(avis);
+                        database.Courrier.RemoveRange(courriers);
+                        database.Document_Derogation.RemoveRange(documents);
+                        database.parcell.RemoveRange(parcells);
+                    }
+                    database.Demande_Derogation.RemoveRange(movrage);
+                    database.AspNetUsers.Remove(user);
+                }
+            }
             database.Statuts.Remove(statut);
             database.SaveChanges();
             return RedirectToAction("IndexStatut");
@@ -596,7 +701,12 @@ namespace GestionnaireUtilisateurs.Controllers
             ViewBag.ModuleName = module.ModuleName;
             ViewBag.ModuleDescription = module.ModuleDescription;
             ViewBag.ModuleId = module.ModuleId;
-            return View();
+            var multiModeles = new MultiModeles
+            {
+                applicationModules = module.ApplicationModule,
+                sousModules = module.SousModule
+            };
+            return View(multiModeles);
         }
 
         // POST: AspNetRoles/Delete/5
@@ -605,6 +715,22 @@ namespace GestionnaireUtilisateurs.Controllers
         public ActionResult DeleteModuleConfirmed(int id)
         {
             Module module = database.Module.Find(id);
+            var applicationModules = module.ApplicationModule;
+            database.ApplicationModule.RemoveRange(applicationModules);
+            var sousmodules = module.SousModule;
+            foreach (var sousModule in sousmodules)
+            {
+                var roles = sousModule.AspNetRoles;
+                foreach (var role in roles)
+                {
+                    var userRoles = role.AspNetUserRoles.Where(u => u.AspNetRoles.Name != "Administrator");
+                    var statutsRoles = role.StatutRole;
+                    database.AspNetUserRoles.RemoveRange(userRoles);
+                    database.StatutRole.RemoveRange(statutsRoles);
+                }
+                database.AspNetRoles.RemoveRange(roles);
+            }
+            database.SousModule.RemoveRange(sousmodules);
             database.Module.Remove(module);
             database.SaveChanges();
             return RedirectToAction("module");
@@ -722,7 +848,12 @@ namespace GestionnaireUtilisateurs.Controllers
             ViewBag.SousModuleName = sousModule.SousModuleName;
             ViewBag.ModuleParent = sousModule.Module.ModuleName;
             ViewBag.SousModuleId = sousModule.SousModuleId;
-            return View();
+
+            var multiModeles = new MultiModeles
+            {
+                aspNetRoles = sousModule.AspNetRoles
+            };
+            return View(multiModeles);
         }
 
         [HttpPost, ActionName("DeleteSubModule")]
@@ -730,6 +861,15 @@ namespace GestionnaireUtilisateurs.Controllers
         public ActionResult DeleteSubModuleConfirmed(int id)
         {
             SousModule sousModule = database.SousModule.Find(id);
+            var roles = sousModule.AspNetRoles;
+            foreach (var role in roles)
+            {
+                var userRoles = role.AspNetUserRoles.Where(u => u.AspNetRoles.Name != "Administrator");
+                var statutsRoles = role.StatutRole;
+                database.AspNetUserRoles.RemoveRange(userRoles);
+                database.StatutRole.RemoveRange(statutsRoles);
+            }
+            database.AspNetRoles.RemoveRange(roles);
             database.SousModule.Remove(sousModule);
             database.SaveChanges();
             return RedirectToAction("sousmodule");
@@ -788,9 +928,15 @@ namespace GestionnaireUtilisateurs.Controllers
 
             if (ModelState.IsValid)
             {
-                var Rid = Guid.NewGuid(); Tache.Id = Rid.ToString();
-                database.AspNetRoles.Add(Tache);
-                database.SaveChanges();
+                string nom = Tache.Name;
+                var roles = database.AspNetRoles.Where(i => i.Name == nom);
+                if (roles.Count() == 0)
+                {
+                    var Rid = Guid.NewGuid(); Tache.Id = Rid.ToString();
+                    database.AspNetRoles.Add(Tache);
+                    database.SaveChanges();
+                }
+
                 return RedirectToAction("taches");
             }
             return View(multiModeles());
@@ -849,15 +995,13 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.RoleName = role.Name;
-
-            if (role.Name != "Administrator")
+            var multiModeles = new MultiModeles
             {
-                ViewBag.SousModuleName = role.SousModule.SousModuleName;
-                ViewBag.ModuleName = role.SousModule.Module.ModuleName;
-            }
-            ViewBag.RoleId = role.Id;
-            return View();
+                Tache = role,
+                statutRoles = role.StatutRole,
+                aspNetUserRoles = role.AspNetUserRoles
+            };
+            return View(multiModeles);
         }
 
         [HttpPost, ActionName("DeleteTache")]
@@ -865,6 +1009,10 @@ namespace GestionnaireUtilisateurs.Controllers
         public ActionResult DeleteTacheConfirmed(string id)
         {
             AspNetRoles role = database.AspNetRoles.Find(id);
+            var userRoles = role.AspNetUserRoles.Where(u => u.AspNetRoles.Name != "Administrator");
+            var statutsRoles = role.StatutRole;
+            database.AspNetUserRoles.RemoveRange(userRoles);
+            database.StatutRole.RemoveRange(statutsRoles);
             database.AspNetRoles.Remove(role);
             database.SaveChanges();
             return RedirectToAction("taches");
@@ -885,9 +1033,15 @@ namespace GestionnaireUtilisateurs.Controllers
             if (ModelState.IsValid)
             {
                 var Rid = Guid.NewGuid(); role.Id = Rid.ToString();
-                database.AspNetRoles.Add(role);
-                var result = await database.SaveChangesAsync();
-                var roles = from p in database.AspNetRoles.ToList()
+                string nom = role.Name;
+                var roless = database.AspNetRoles.Where(i => i.Name == nom);
+                if (roless.Count() == 0)
+                {
+                    database.AspNetRoles.Add(role);
+                    var result = await database.SaveChangesAsync();
+
+                }
+                var roles = from p in database.AspNetRoles.Where(u => u.Name != "Administrator").ToList()
                             select new AspNetRoles
                             {
                                 Id = p.Id,
@@ -901,10 +1055,15 @@ namespace GestionnaireUtilisateurs.Controllers
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }
 
-
+        
         /// ///////////////////////             AUTRES                    //////////////////////
         /// ///////////////////////             AUTRES                    //////////////////////
         /// ///////////////////////             AUTRES                    //////////////////////
+        [Authorize]
+        public ActionResult AURS()
+        {
+            return View();
+        }
 
         //public ActionResult About()
         //{

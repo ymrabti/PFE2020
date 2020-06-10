@@ -14,6 +14,8 @@ namespace GestionnaireUtilisateurs.Models
 
         [DisplayName("Tache")]
         public IEnumerable<AspNetRoles> aspNetRoles { get; set; }
+        public AspNetRoles Tache { get; set; }
+        public IEnumerable<ApplicationModule> applicationModules { get; set; }
         public IEnumerable<AspNetUserRoles> aspNetUserRoles { get; set; }
         public IEnumerable<Statuts> statuts { get; set; }
         public IEnumerable<StatutRole> statutRoles { get; set; }

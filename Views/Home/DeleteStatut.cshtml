@@ -1,42 +1,47 @@
-﻿
+﻿@model GestionnaireUtilisateurs.Models.MultiModeles
 @{
     ViewBag.Title = "Supprimer une Statut";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <div class="row">
-        <div class="col-md-6" style=" margin-left: auto; margin-right: auto;">
-            <div class="card cardoverrideded" >
-                <div class="card-body">
-                    <h4> <span class="badge-dot badge-info"></span>  Suppression d'une statut</h4>
+<div class="row">
+    <div class="col-md-6" style=" margin-left: auto; margin-right: auto;">
+        <div class="card unnamedClass">
+            <div class="card-body">
+                <h4> <span class="badge-dot badge-info"></span>  Suppression d'une statut</h4>
+                <hr />
+                <h3>Vous etes sur de supprimer <span class="text-info">@ViewBag.statutName</span> ?</h3>
+                <div>
                     <hr />
-                    <h3>Vous etes sur de supprimer <span class="text-info">@ViewBag.statutName</span> ?</h3>
-                    <div>
-                        <hr />
 
-                        @using (Html.BeginForm())
-                        {
-                            @Html.AntiForgeryToken()
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
 
-                            <div class="form-actions no-color">
-                                <input type="submit" value="Supprimer" class="btn btn-default btn-danger" /> |
-                                @Html.ActionLink("Back to List", "IndexStatut")
-                            </div>
-                        }
-                    </div>
+                        <div class="form-actions no-color">
+                            <input type="submit" value="Supprimer" class="btn btn-default btn-danger" /> |
+                            @Html.ActionLink("Back to List", "IndexStatut")
+                        </div>
+                    }
                 </div>
             </div>
+            <center><label style="font-weight: bold;font-style:oblique"><u>Utilisations </u></label></center><br />
+            <label style="font-style:oblique">Statut Role</label>
+            <ul>
+                @foreach (var statutRole in Model.statutRoles)
+                {
+                    <li>@statutRole.Statuts.StatutName +  @statutRole.AspNetRoles.Name</li>
+                }
+            </ul>
+            <br />
+            <label style="font-style:oblique">Utilisateurs</label>
+            <ul>
+                @foreach (var user in Model.aspNetUsers)
+                {
+                    <li>@user.Email ( @user.Demande_Derogation.Count() en Maitre d'ouvre et @user.Demande_Derogation1.Count() en Maitre d'ouvrage)</li>
+                }
+            </ul>
         </div>
     </div>
-@section Styles{
-    <style>
-        .cardoverrideded{
-            text-align:center;
-            background-color: white; 
-            width: 100%; 
-            padding-top:15px;
-            box-shadow: 0 17px 41px -21px black;
-            border-top:5px solid #09aacc;
-        }
-    </style>
-    }
+</div>
+

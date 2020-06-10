@@ -1128,6 +1128,7 @@
     <Content Include="Content\dwnlds\VectorTileLayerImpl.js" />
     <Content Include="Content\esri.css" />
     <Content Include="Content\fileInputCustom.js" />
+    <Content Include="Content\GeneralSteel.css" />
     <Content Include="Content\img\basemaps.png" />
     <Content Include="Content\img\down.png" />
     <Content Include="Content\img\Err.png" />
@@ -1912,6 +1913,7 @@
     <Content Include="Views\Statistics\Index.cshtml" />
     <Content Include="Views\WorkflowDerogation\EncoursParProfils.cshtml" />
     <Content Include="Views\Statistics\TableBord.cshtml" />
+    <Content Include="Views\Home\AURS.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
