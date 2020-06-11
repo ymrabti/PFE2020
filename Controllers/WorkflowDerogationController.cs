@@ -8,7 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
-namespace AURS_Derogation.Controllers
+namespace GestionnaireUtilisateurs.Controllers
 {
     public enum Workflow
     {
@@ -36,6 +36,12 @@ namespace AURS_Derogation.Controllers
 
         private const string _Cloture = "Cloture";
         private const string _Echanges = "Echanges";
+
+        public const string _WorkflowDerogationExeptAdmin = _Rensegnement
+            + "," + _SitGeo + "," + _GED + "," + _Echanges + ","
+            + _Autorisation + "," + _Cloture + "," + _Avis + "," + _Programmation;
+
+        public const string _WorkflowDerogation = Administrator + "," + _WorkflowDerogationExeptAdmin;
         public ActionResult correctAction(int idTache, int IdDemDerog, MultiModeles multiTab)
         {
             if (IdDemDerog == 0)
@@ -642,9 +648,7 @@ namespace AURS_Derogation.Controllers
 
 
 
-        [Authorize(Roles = Administrator + "," + _Rensegnement 
-            + "," + _SitGeo + "," + _GED + "," + _Echanges + ","
-            + _Autorisation + "," + _Cloture + "," + _Avis + "," + _Programmation)]
+        [Authorize(Roles = _WorkflowDerogation)]
         public ActionResult Encours(Nullable<Int16> page)
         {
             if (page==null) { page = 1; }
@@ -775,9 +779,7 @@ namespace AURS_Derogation.Controllers
 
 
 
-        [Authorize(Roles = Administrator + "," + _Rensegnement
-            + "," + _SitGeo + "," + _GED + "," + _Echanges + ","
-            + _Autorisation + "," + _Cloture + "," + _Avis + "," + _Programmation)]
+        [Authorize(Roles = _WorkflowDerogation)]
         public ActionResult WorkflowG(int idDemDerog)
         {
             MultiModeles multiModeles = new MultiModeles

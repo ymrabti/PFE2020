@@ -72,14 +72,32 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 return View(model);
             }
-
+            bool admin = User.IsInRole(HomeController.Administrator);
+            bool derogationUser = User.IsInRole(WorkflowDerogationController._WorkflowDerogationExeptAdmin);
+            bool Other = !derogationUser;
             // Ceci ne comptabilise pas les échecs de connexion pour le verrouillage du compte
             // Pour que les échecs de mot de passe déclenchent le verrouillage du compte, utilisez shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    if (returnUrl=="/"|| returnUrl .Contains( "/Home")) {
+                        if (User.IsInRole(HomeController.Administrator)) 
+                        {
+                            return RedirectToLocal(returnUrl); 
+                        }
+
+                        if (User.IsInRole(WorkflowDerogationController._WorkflowDerogationExeptAdmin)) 
+                        {
+                            return RedirectToLocal("/WorkflowDerogation/Encours");
+                        }
+
+                        else {
+                            return RedirectToLocal("/Home/AURS"); 
+                        }
+                        
+                    }
+                    else { return RedirectToLocal(returnUrl); }
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:

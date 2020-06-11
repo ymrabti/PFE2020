@@ -31,24 +31,10 @@
 </head>
 <body style="font-family: 'Catamaran', sans-serif; font-size:15px;background-color:#e9e9e9">
     <div class="dashboard-main-wrapper">
-        <!-- ============================================================== -->
-        <!-- navbar -->
-        <!-- ============================================================== -->
         <div class="dashboard-header">
             @Html.Partial("_NavBar")
         </div>
-        <div class="nav-left-sidebar sidebar-dark">
-            <div class="menu-list">
-                <nav class="navbar navbar-expand-lg navbar-light">
-                    <a class="d-xl-none d-lg-none" href="#">Dashboard</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    @Html.Partial("_MenuPartial");
-                    <!-- Menu -->
-                </nav>
-            </div>
-        </div>
+        @Html.Partial("_MenuPartial")
 
         <div class="dashboard-wrapper">
             <div class="dashboard-finance">

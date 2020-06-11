@@ -2,7 +2,10 @@
 @{
     ViewBag.Title = "S'inscrire";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    SelectList selectListItems = new SelectList("Male","Female");
+    SelectListItem Homme = new SelectListItem();Homme.Value = "Homme";Homme.Text = "Homme";
+    SelectListItem Femme = new SelectListItem();Femme.Value = "Homme";Femme.Text = "Homme";
+    SelectList selectListItems = new SelectList("Homme","Femme");
+
 
 }
 
