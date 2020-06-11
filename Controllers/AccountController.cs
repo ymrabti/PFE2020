@@ -15,6 +15,7 @@ namespace GestionnaireUtilisateurs.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        private aurs1Entities database = new aurs1Entities();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -22,7 +23,7 @@ namespace GestionnaireUtilisateurs.Controllers
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -34,9 +35,9 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -72,30 +73,38 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 return View(model);
             }
-            bool admin = User.IsInRole(HomeController.Administrator);
-            bool derogationUser = User.IsInRole(WorkflowDerogationController._WorkflowDerogationExeptAdmin);
-            bool Other = !derogationUser;
             // Ceci ne comptabilise pas les échecs de connexion pour le verrouillage du compte
             // Pour que les échecs de mot de passe déclenchent le verrouillage du compte, utilisez shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    if (returnUrl=="/"|| returnUrl .Contains( "/Home")) {
-                        if (User.IsInRole(HomeController.Administrator)) 
+                    AspNetUsers user = database.AspNetUsers.Where(i => i.UserName == model.UserName).FirstOrDefault();
+                    bool admin = user.AspNetUserRoles
+                        .Where(u => u.AspNetRoles.Name == HomeController.Administrator)
+                        .Count() != 0;
+                    bool derogationUser = user.AspNetUserRoles
+                        .Where(u=> u.AspNetRoles.SousModule!=null)
+                        .Where(u => u.AspNetRoles.SousModule.SousModuleName.Contains("derogation"))
+                        .Count() != 0;
+                    bool Other = !derogationUser;
+                    if (returnUrl == "/" || returnUrl.Contains("/Home"))
+                    {
+                        if (admin)
                         {
-                            return RedirectToLocal(returnUrl); 
+                            return RedirectToLocal(returnUrl);
                         }
 
-                        if (User.IsInRole(WorkflowDerogationController._WorkflowDerogationExeptAdmin)) 
+                        if (derogationUser)
                         {
                             return RedirectToLocal("/WorkflowDerogation/Encours");
                         }
 
-                        else {
-                            return RedirectToLocal("/Home/AURS"); 
+                        else
+                        {
+                            return RedirectToLocal("/Home/AURS");
                         }
-                        
+
                     }
                     else { return RedirectToLocal(returnUrl); }
                 case SignInStatus.LockedOut:
@@ -179,7 +188,7 @@ namespace GestionnaireUtilisateurs.Controllers
             // Si un utilisateur entre des codes incorrects pendant un certain intervalle, le compte de cet utilisateur 
             // est alors verrouillé pendant une durée spécifiée. 
             // Vous pouvez configurer les paramètres de verrouillage du compte dans IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -218,7 +227,7 @@ namespace GestionnaireUtilisateurs.Controllers
         //        if (result.Succeeded)
         //        {
         //            await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
         //            // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
         //            // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
         //            // await UserManager.SendEmailAsync(user.Id, "Confirmez votre compte", "Confirmez votre compte en cliquant <a href=\"" + callbackUrl + "\">ici</a>");
@@ -323,7 +332,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return View();
         }
 
-        
+
         // GET: /Account/ResetPasswordConfirmation
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
