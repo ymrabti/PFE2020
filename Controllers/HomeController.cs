@@ -16,7 +16,7 @@ namespace GestionnaireUtilisateurs.Controllers
     {
         private ApplicationUserManager _userManager;
         aurs1Entities database = new aurs1Entities();
-        private const string Administrator = "Administrator";
+        public const string Administrator = "Administrator";
         public ApplicationUserManager UserManager
         {
             get

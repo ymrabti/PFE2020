@@ -193,6 +193,41 @@ namespace GestionnaireUtilisateurs.Models
         [Compare("Password", ErrorMessage = "Le mot de passe et le mot de passe de confirmation ne correspondent pas.")]
         public string ConfirmPassword { get; set; }
     }
+    public class Register1ViewModel
+    {
+        
+        
+        [Required]
+        [Display(Name = "CIN *")]
+        public string CIN { get; set; }
+        
+        
+        [Required]
+        [Display(Name = "Sexe * ")]
+        public string Sexe { get; set; }
+        
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Courrier électronique *")]
+        public string Email { get; set; }
+        
+        
+        [Required]
+        [Display(Name = "Nom d'utilisateur *")]
+        public string UserName { get; set; }
+        
+        
+        [Required]
+        [StringLength(100, ErrorMessage = "La chaîne {0} doit comporter au moins {2} caractères.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Mot de passe *")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirmer le mot de passe  *")]
+        [Compare("Password", ErrorMessage = "Le mot de passe et le mot de passe de confirmation ne correspondent pas.")]
+        public string ConfirmPassword { get; set; }
+    }
 
     public class ResetPasswordViewModel
     {

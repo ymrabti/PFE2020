@@ -1,7 +1,9 @@
-﻿@model GestionnaireUtilisateurs.Models.RegisterViewModel
+﻿@model GestionnaireUtilisateurs.Models.Register1ViewModel
 @{
     ViewBag.Title = "S'inscrire";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    SelectList selectListItems = new SelectList("Male","Female");
+
 }
 
 
@@ -10,7 +12,7 @@
 }
 <div class="row">
     <div class="col-md-6" style=" margin-left: auto; margin-right: auto;">
-        <div class="card" style="text-align:center; background-color: white; width: 100%; padding-top:15px;box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+        <div class="card unnamedClass">
             <div class="card-body">
                 <img src='~/documentation/img/aurs.png' style="width:15%;" /> <br />
                 @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -18,7 +20,7 @@
                     @Html.AntiForgeryToken()
                     <h4>Créer un nouveau compte.</h4>
                     <hr />
-                    @Html.ValidationSummary("Failure", new { @class = "text-danger" })
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
                     <div class="form-group">
                         @Html.LabelFor(m => m.UserName, new { @class = "col-md-12 control-label" })
                         <div class="col-md-12">
@@ -40,6 +42,7 @@
                     <div class="form-group">
                         @Html.LabelFor(m => m.Sexe, new { @class = "col-md-12 control-label" })
                         <div class="col-md-12">
+                            @Html.DropDownListFor(u=>u.Sexe, selectListItems,new { @class="form-control"})
                             <select name="Sexe" class="form-control">
                                 <option value="">------  Sexe  ------</option>
                                 <option value="Male">Homme</option>
