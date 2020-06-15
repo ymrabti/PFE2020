@@ -5,44 +5,68 @@
     ViewBag.Title = "Utilisateurs";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    .indexusers {
+        text-align: left;
+        background-color: white;
+        width: 100%;
+        padding-top: 15px;
+        box-shadow: 0 17px 41px -21px black;
+        border-top: 5px solid #09aacc
+    }
+</style>
 
-
-
-
-<div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+<div class="tab-content indexusers" style="margin-bottom:10px">
     <div class="card-body">
         <div class="card-body border-top">
-            <div class="row" style="width:100%">
-                <a href="@Url.Action("AddUser", "Home")" class="btn btn" style="background-color:#09aacc ; color:white;">
-                    <i class="fa fa-plus"> Ajouter  </i>
-                </a>
-                @using (Html.BeginForm("EditUser", "Home", FormMethod.Get))
-                {
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" id="IdHidden" name="id" value="-1">
-                    <button disabled id="buttonModifie" type="submit" class="btn btn" style="background-color:#09aacc ; color:white;margin-left:10px;margin-right:10px;">
-                        <i class="fa fa-edit"> Modifier  </i>
-                    </button>
+            <div class="row">
+                <div class="col-md-2">
+                    <a href="@Url.Action("AddUser", "Home")" class="btn btn" style="background-color:#09aacc ; color:white;">
+                        <i class="fa fa-plus"> Ajouter  </i>
+                    </a>
+                </div>
+                <div class="col-md-2">
+                    @using (Html.BeginForm("EditUser", "Home", FormMethod.Get))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" id="IdHidden" name="id" value="-1">
+                        <button disabled id="buttonModifie" type="submit" class="btn btn" style="background-color:#09aacc ; color:white;">
+                            <i class="fa fa-edit"> Modifier  </i>
+                        </button>
 
-                }
-                @using (Html.BeginForm("DeleteUser", "Home", FormMethod.Get))
-                {
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" id="IdHidden2" name="id" value="-1">
-                    <button disabled id="buttonDelete" type="submit" class="btn btn" style="background-color:#09aacc ; color:white;">
-                        <i class="fa fa-trash"> Supprimer  </i>
-                    </button>
-                }
+                    }
+                </div>
+                <div class="col-md-2">
+                    @using (Html.BeginForm("DeleteUser", "Home", FormMethod.Get))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" id="IdHidden2" name="id" value="-1">
+                        <button disabled id="buttonDelete" type="submit" class="btn btn" style="background-color:#09aacc ; color:white;">
+                            <i class="fa fa-trash"> Supprimer  </i>
+                        </button>
+                    }
+                </div>
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-4">
+                    @using (Html.BeginForm("UserTache", "Home", FormMethod.Get))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" id="IdHidden3" name="id" value="-1">
+                        <button disabled id="ManagementSelected" type="submit" class="btn btn" style="background-color:#09aacc ; color:white;">
+                            <i class="fa fa-sliders-h"> Gestion des roles   </i>
+                        </button>
+                    }
+                </div>
             </div>
-            @using (Html.BeginForm("UserTache", "Home", FormMethod.Get))
-            {
-                @Html.AntiForgeryToken()
-                <input type="hidden" id="IdHidden3" name="id" value="-1">
-                <button disabled id="ManagementSelected" type="submit" class="btn btn" style="background-color:#09aacc ; color:white; margin-left: 63%;">
-                    <i class="fa fa-sliders-h"> Gestion des roles   </i>
-                </button>
-            }
         </div>
+    @*</div>
+</div>
+
+
+
+<div class="tab-content indexusers">
+    <div class="card-body">*@
         <table data-tablesaw-mode="columntoggle" class="table table-bordered first" id="tableFilter">
             <thead>
                 <tr>
@@ -50,9 +74,7 @@
                     <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Prenom</th>
                     <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Email</th>
                     <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Ville</th>
-
                 </tr>
-
             </thead>
             <tbody id="tabletargetted">
                 @foreach (var item in Model.aspNetUsers)

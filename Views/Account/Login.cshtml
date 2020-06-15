@@ -18,7 +18,8 @@
                 <img src='~/documentation/img/aurs.png' style="width:15%;" /> <br />
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <center><label class="text-warning">You're Connected</label></center>
+                    //Url.Action("AURsS","WorkflowDerogation");
+                    <center><label class="text-warning">Vous n'avez pas le droit d'afficher ce contenue</label></center>
                 }
                 else
                 {
@@ -55,20 +56,18 @@
 
 
                             <div class="form-group">
-                                @*<div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Se connecter" class="btn btn-default" />
-                        </div>*@
-                                <button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;">
-                                    <i class=" fas editor">  </i>&nbsp;&nbsp;&nbsp;     Se connecter
-                                </button>
+                                <input type="submit" value="Se connecter" class="btn btn-sm" style="background-color:#09aacc ; color:white;" />
+                                @*<button type="submit" class="btn btn-sm" style="background-color:#09aacc ; color:white;">
+            <i class=" fas editor">  </i>&nbsp;&nbsp;&nbsp;     Se connecter
+        </button>*@
                             </div>
                             @*<p>
-                        @Html.ActionLink("Inscrire comme nouvel utilisateur", "Register")
-                    </p>
-                    Activez ceci une fois que vous avez activé la confirmation du compte pour la fonctionnalité de réinitialisation du mot de passe
-                        <p>
-                            @Html.ActionLink("Vous avez oublié votre mot de passe ?", "ForgotPassword")
-                        </p>*@
+                                    @Html.ActionLink("Inscrire comme nouvel utilisateur", "Register")
+                                </p>
+                                Activez ceci une fois que vous avez activé la confirmation du compte pour la fonctionnalité de réinitialisation du mot de passe
+                                    <p>
+                                        @Html.ActionLink("Vous avez oublié votre mot de passe ?", "ForgotPassword")
+                                    </p>*@
                         }
                     </section>
                 }
@@ -81,8 +80,8 @@
 </div>
 
 <style>
-    .classaa{
-        text-align:center;
-        margin-bottom:10px
+    .classaa {
+        text-align: center;
+        margin-bottom: 10px
     }
 </style>

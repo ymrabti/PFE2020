@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -100,7 +101,7 @@ namespace GestionnaireUtilisateurs.Controllers
             }
         }
         public aurs1Entities db = new aurs1Entities();
-        [Authorize(Roles =Administrator+","+_Rensegnement)]
+        [Authorize(Roles = Administrator + "," + _Rensegnement)]
         public ActionResult Rensegnements()
         {
             var demDerog = db.Demande_Derogation.ToList();
@@ -123,8 +124,8 @@ namespace GestionnaireUtilisateurs.Controllers
                 Communes = db.COMMUNES_RSK.ToList(),
                 Provs = db.PROVINCES_RSK.ToList(),
                 References_Foncieres = db.References_Foncieres.ToList(),
-                aspNetUsers = db.AspNetUsers.OrderBy(p=>p.Email).ToList(),
-                Derogs_Demandees = db.derogs_demandees.OrderBy(u=>u.last).ToList()
+                aspNetUsers = db.AspNetUsers.OrderBy(p => p.Email).ToList(),
+                Derogs_Demandees = db.derogs_demandees.OrderBy(u => u.last).ToList()
             };
             return View(multiTab);
 
@@ -292,52 +293,118 @@ namespace GestionnaireUtilisateurs.Controllers
         [Authorize(Roles = Administrator + "," + _GED)]
         public ActionResult Ged(int FK_DemDerg_DocDerg)
         {
-
             var multiTab = new MultiModeles()
             {
                 DemDerg = db.Demande_Derogation.Find(FK_DemDerg_DocDerg),
-                TYPE_DOCs = db.TYPE_DOC.ToList()
-
+                TYPE_DOCs = db.TYPE_DOC.ToList(),
+                Message2View = ""
             };
 
             return correctAction(17, FK_DemDerg_DocDerg, multiTab);
         }
 
+
         [HttpPost]
-        public JsonResult Ged(FormCollection form/*, HttpPostedFileBase[] url_Doc_Derg*/)
+        public ActionResult Ged(HttpPostedFileBase[] url_Doc_Derg, int[] Intitule_Doc_Derg
+            , int valider, int FK_DemDerg_DocDerg)
         {
-            var av = form["ged"];
-            var avv = JsonConvert.DeserializeObject<List<Document_Derogation>>(av);
-            for (int i = 0; i < avv.Count; i++)
+            var multiTab = new MultiModeles()
             {
-                var con = new Document_Derogation
+                DemDerg = db.Demande_Derogation.Find(FK_DemDerg_DocDerg),
+                TYPE_DOCs = db.TYPE_DOC.ToList(),
+                Message2View = ""
+            };
+            if (ModelState.IsValid)
+            {
+                Demande_Derogation demande = db.Demande_Derogation.Find(FK_DemDerg_DocDerg);
+                if (url_Doc_Derg != null)
                 {
-                    Code_Doc_Derg = avv[i].Code_Doc_Derg,
-                    Intitule_Doc_Derg = avv[i].Intitule_Doc_Derg,
-                    url_Doc_Derg = avv[i].url_Doc_Derg,
-                    FK_DemDerg_DocDerg = avv[i].FK_DemDerg_DocDerg
-                };
-                db.Document_Derogation.Add(con);
-
+                    String path = Server.MapPath("~/GED_DEROG/");
+                    String pathDemande = Server.MapPath("~/GED_DEROG/" + demande.Id_DemDerg + "/");
+                    var x = Directory.Exists(path);
+                    if (!x)
+                    {
+                        Directory.CreateDirectory(path);
+                        var y = Directory.Exists(pathDemande);
+                        if (!y)
+                        {
+                            Directory.CreateDirectory(pathDemande);
+                        }
+                    }
+                    for (int n=0;n<url_Doc_Derg.Length;n++)
+                    {
+                        var file = url_Doc_Derg[n];
+                        String path1 = Path.Combine(pathDemande, file.FileName /*+ Path.GetExtension(file.FileName)*/);
+                        file.SaveAs(path1);
+                        Document_Derogation d = new Document_Derogation();
+                        d.url_Doc_Derg = path1.ToString();
+                        d.Intitule_Doc_Derg = Intitule_Doc_Derg[n];
+                        d.FK_DemDerg_DocDerg = FK_DemDerg_DocDerg;
+                        db.Document_Derogation.Add(d);
+                        var res = db.SaveChanges();
+                    }
+                    if (valider == 1)
+                    {
+                        demande.FK_DemDerg_EtatAvc = 18;
+                        db.SaveChanges();
+                        return RedirectToAction("Programmation", "WorkflowDerogation", new { FK_DemDerg_Com = FK_DemDerg_DocDerg });
+                    }
+                    else
+                    {
+                        return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
+                    }
+                }
+                else
+                {
+                    if (valider == 1)
+                    {
+                        multiTab.Message2View = "Documents obligatoires!";
+                        View(multiTab);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
+                    }
+                }
             }
-            var id_derg = Int32.Parse(form["id"]);
-            var valider = form["valider"];
-            var demderg = db.Demande_Derogation.Find((id_derg));
-            if (valider == "1")
-            {
-                demderg.FK_DemDerg_EtatAvc = 18;
-                db.SaveChanges();
-                return Json(Url.Action("Programmation", "WorkflowDerogation", new { FK_DemDerg_Com = id_derg }));
-            }
-            else
-            {
-                demderg.FK_DemDerg_EtatAvc = 17;
-                db.SaveChanges();
-                return Json(Url.Action("Encours", "WorkflowDerogation", new { page = 1 }));
-            }
+            multiTab.Message2View = "une erreur s'est produite !";
+            return View(multiTab);
         }
+        
 
+        //[HttpPost]
+        //public JsonResult Ged(FormCollection form, HttpPostedFileBase[] filetype)
+        //{
+        //    var av = form["ged"];
+        //    var avv = JsonConvert.DeserializeObject<List<Document_Derogation>>(av);
+        //    for (int i = 0; i < avv.Count; i++)
+        //    {
+        //        var con = new Document_Derogation
+        //        {
+        //            Code_Doc_Derg = avv[i].Code_Doc_Derg,
+        //            Intitule_Doc_Derg = avv[i].Intitule_Doc_Derg,
+        //            url_Doc_Derg = avv[i].url_Doc_Derg,
+        //            FK_DemDerg_DocDerg = avv[i].FK_DemDerg_DocDerg
+        //        };
+        //        db.Document_Derogation.Add(con);
 
+        //    }
+        //    var id_derg = Int32.Parse(form["id"]);
+        //    var valider = form["valider"];
+        //    var demderg = db.Demande_Derogation.Find((id_derg));
+        //    if (valider == "1")
+        //    {
+        //        demderg.FK_DemDerg_EtatAvc = 18;
+        //        db.SaveChanges();
+        //        return Json(Url.Action("Programmation", "WorkflowDerogation", new { FK_DemDerg_Com = id_derg }));
+        //    }
+        //    else
+        //    {
+        //        demderg.FK_DemDerg_EtatAvc = 17;
+        //        db.SaveChanges();
+        //        return Json(Url.Action("Encours", "WorkflowDerogation", new { page = 1 }));
+        //    }
+        //}
 
         [Authorize(Roles = Administrator + "," + _Programmation)]
         public ActionResult Programmation(int? FK_DemDerg_Com)
@@ -394,7 +461,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 db.SaveChanges();
 
                 Demande_Derogation demande = db.Demande_Derogation.Find(FK_DemDerg_Com);
-                demande.Commission = commission;db.Entry(demande).State = EntityState.Modified;
+                demande.Commission = commission; db.Entry(demande).State = EntityState.Modified;
                 db.SaveChanges();
             }
 
@@ -406,7 +473,7 @@ namespace GestionnaireUtilisateurs.Controllers
         public ActionResult Programmation_Affectation(int FK_DemDerg_Com, int Id_Commission)
         {
             Demande_Derogation demande = db.Demande_Derogation.Find(FK_DemDerg_Com);
-            demande.Fk_Commission = Id_Commission; 
+            demande.Fk_Commission = Id_Commission;
             db.Entry(demande).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Programmation", "WorkflowDerogation", new { FK_DemDerg_Com });
@@ -442,7 +509,7 @@ namespace GestionnaireUtilisateurs.Controllers
                     var A = avv[i].FK_Organisme;
                     var B = avv[i].FK_TypAvis;
                     var C = avv[i].Detail_Avis;
-                    Avis_Org avis_ = db.Avis_Org.Find(AA, A);
+                    Avis_Org avis_ = db.Avis_Org.Where(ink => ink.FK_DemDerg == AA && ink.FK_Organisme == A).FirstOrDefault();
                     if (avis_ == null)
                     {
                         var con = new Avis_Org();
@@ -651,7 +718,7 @@ namespace GestionnaireUtilisateurs.Controllers
         [Authorize(Roles = _WorkflowDerogation)]
         public ActionResult Encours(Nullable<Int16> page)
         {
-            if (page==null) { page = 1; }
+            if (page == null) { page = 1; }
             int totale_resultats = db.Demande_Derogation.Count();
             int nombre_de_pages = totale_resultats / nombre_res_ppage + 1;
             ViewBag.page = page; ViewBag.nombre_de_pages = nombre_de_pages;

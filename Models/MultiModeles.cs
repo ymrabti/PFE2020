@@ -27,6 +27,7 @@ namespace GestionnaireUtilisateurs.Models
         public IEnumerable<Module> modules { get; set; }
         public IEnumerable<Application> applications { get; set; }
 
+        public string Message2View { get; set; }
 
         public IEnumerable<Commission> Comss { get; set; }
         public IEnumerable<Demande_Derogation> DemDergs { get; set; }

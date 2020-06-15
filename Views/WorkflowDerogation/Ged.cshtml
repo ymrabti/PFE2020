@@ -27,76 +27,96 @@
     <h5 class="card-header">Ajout des documents</h5>
     <div class="card-body" id="">
         <div class="form-horizontal">
-            <form>
-                <div class="row">
-                    <div class="col-lg-6" style="width:50%">
-                        @*<label for="inputText11" style="font-size:12px;">Document :</label>
-                            <input type="file" class="custom-file-input form-control " placeholder="Document" name="url_Doc_Derg" id="UrlDoc" /> <br />*@
+            <div class="row">
+                <div class="col-md-2">
+                    @*<label for="inputText11" style="font-size:12px;">Document :</label>
+                        <input dirname="D:\" type="file" class="form-control " oncancel="filecancel(this)" placeholder="Document" name="url_Doc_Derg" id="UrlDoc" /> <br />
 
                         <div class="box" style="margin:20px">
-                            <input type="file" class="inputfile inputfile-1" name="url_Doc_Derg" id="UrlDoc" accept=".pdf,.jpeg,.jpg,.png,.gif">
-                            <label for="UrlDoc">
-                                <span id="labelNomDoc">Document ...</span>
+                                <input type='file' class='inputfile inputfile-1' name='url_Doc_Derg'
+                                       id='UrlDoc' accept='.pdf,.jpeg,.jpg,.png,.gif' onchange="filechange(this)" multiple>
+                                <label for='UrlDoc'>
+                                    <span id='labelNomDoc'>Document ...</span>
 
-                            </label>
-                        </div>
-                        <br />
-                        <label for="inputText11" style="font-size:12px;">Intitulé :</label>
-                        <select class="form-control form-control-sm chzn-selec" id="IntitulDoc" name="Intitule_Doc_Derg">
-                            <option value="">--- Intitulé du document ---</option>
-                            @foreach (var item in Model.TYPE_DOCs)
-                            {
-                                <option value="@item.ID_DOCUMENT">@item.NOM_Document</option>
-                            }
-                        </select>
-
-                        <input type="hidden" name="FK_DemDerg_DocDerg" value="@Model.DemDerg.Id_DemDerg" />
-
-                        <button type="button" class="btn btn-sm" style="background-color:#09aacc;color:white;margin-top: 1%;text-align: right;"
-                                name="enregistrer" value="0" onclick="javascript: addRow('listeDoc'); this.form.reset();">
+                                </label>
+                            </div>
+                            <br />*@
+                    @*<button type="button" class="btn btn-sm" style="background-color:#09aacc;color:white;margin-top: 1%;text-align: right;"
+                                name="enregistrer" id="AddDocs" value="0" onclick="javascript: addRow('listeDoc'); this.form.reset();">
                             <i class="fa fa-check">Ajouter le document</i>
-                        </button>
-                    </div>
-                    <div class="col-lg-6" style="width:50%">
-                        <div class="listeDoc">
+                        </button>*@
+                </div>
+                <div class="col-md-8">
+                    <div class="listeDoc">
+                        @using (Html.BeginForm("Ged", "WorkflowDerogation", FormMethod.Post,new { enctype = "multipart/form-data" }))
+                        {
+                            @*@Html.Editor("tir","tir", new { htmlAttributes = new { @class = "form-control", @type = "file" } })*@
+                            <center><label class="text-danger">@Model.Message2View</label></center>
+                            <input type='hidden' name='FK_DemDerg_DocDerg' value='@Model.DemDerg.Id_DemDerg' />
                             <table class="table table-striped table-bordered first" id="listeDoc">
                                 <thead>
                                     <tr>
-                                        <th>Intitulé :</th>
                                         <th>Document :</th>
+                                        <th>Intitulé :</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbodyDoc">
                                     @foreach (var item in Model.DemDerg.Document_Derogation)
                                     {
                                         <tr>
-                                            <td>@Html.DisplayFor(modelItem => item.TYPE_DOC.NOM_Document)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.url_Doc_Derg)</td>
                                             <td>
-                                                <i class="fa fa-minus-square" style="width:6%;color:#FF6347"></i>
+                                                <a href="@item.url_Doc_Derg.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs" }, StringSplitOptions.None).Last()"
+                                                   id="file22" target="_blank">
+                                                    @item.url_Doc_Derg.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs/GED_DEROG/"+item.Demande_Derogation.Id_DemDerg+"/" }, StringSplitOptions.None).Last()
+                                                </a>
+                                            </td>
+                                            <td>@Html.DisplayFor(modelItem => item.TYPE_DOC.NOM_Document)</td>
+                                            <td>
+                                                <button id="@item.Id_Doc_Derog" class="btn btn-sm buttonsReapeateds" onclick="DeleteDoc(this, this.id)">
+                                                    <i class="fa fa-minus"></i>
+                                                    @*<img src="../Content/documentation/img/del.png" />*@
+                                                </button>
                                             </td>
                                         </tr>
                                     }
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td style="width:30px;">
+                                            <button class="btn btn-sm buttonsReapeateds" id="add2table">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tfoot>
                             </table>
-                        </div>
+                            <center class="fixed-bottom">
+                                <div class="col-sm-6">
+                                </div>
+                                <div class="col-sm-6">
+                                    <button type="submit" class="btn btn-lg buttonsReapeateds" value="0" name="valider" id="btnSave">
+                                        Enregister <i class="fa fa-level-down-alt"></i>
+                                    </button>
+                                    <button type="submit" class="btn btn-lg buttonsReapeateds" value="1" name="valider" id="btnsend">
+                                        Passer à l'etape suivante <i class="fa fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </center>
+                        }
+
                     </div>
                 </div>
-            </form>
-
-
+                <div class="col-md-2">
+                </div>
+            </div>
             <br /><br />
-            <center class="fixed-bottom">
-                <div class="col-sm-6">
-                </div>
-                <div class="col-sm-6">
-                    <button type="submit" class="btn btn-lg" value="0" name="valider" id="btnSave" style="background-color:#09aacc; color:white">Enregister   <i class="fa fa-level-down-alt"></i></button>
-                    <button class="btn btn-lg" type="submit" id="btnsend" value="1" name="valider" style="background-color:#09aacc; color:white">Passer à l'etape suivante  <i class="fa fa-paper-plane"></i></button>
-                </div>
-            </center>
         </div>
     </div>
 </div>
+
 <script src="~/Content/dwnlds/jquery.slimscroll.js"></script>
 <script src="~/Content/dwnlds/bootstrap.bundle.js"></script>
 <script src="~/Content/dwnlds/chosen.jquery.js"></script>
@@ -105,16 +125,126 @@
 <script src="~/Content/dwnlds/jquery-ui.js"></script>
 <link href="~/Content/dwnlds/chosen.css" rel="stylesheet" />
 <link href="~/Content/dwnlds/jquery-ui.css" rel="stylesheet" />
-@*<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/4.0.0/bootstrap.bundle.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.js"></script>
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
-    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
-    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">*@
-<script src="~/Content/fileInputCustom.js"></script>
+@*<script src="~/Content/fileInputCustom.js"></script>*@
+
 <script language="javascript">
+    var nombre = @Model.DemDerg.Document_Derogation.Count();
+    var i = nombre + 1;
+    $("#add2table").click(function () {
+        var table = document.getElementById('tbodyDoc');
+        var row = table.insertRow(table.length);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        cell1.innerHTML = " <input required type='file' class='inputfile inputfile-1' name='url_Doc_Derg'" +
+            "id='file" + i + "' accept='.pdf,.jpeg,.jpg,.png,.gif' onchange='filechange(this)'> "
+            + "<label for='file" + i + "'>"
+            + "<span id='label" + i + "'>Document ...</span>"
+            + " </label>";
+        cell2.innerHTML = " <select required class='form-control form-control-sm chzn-selec' name='Intitule_Doc_Derg'>" +
+            "<option value=''>------Intitulé----------</option>" +
+            "@foreach(var item in Model.TYPE_DOCs){<option value='@item.ID_DOCUMENT'>@item.NOM_Document</option>}" +
+            "</select>";
+        //"<input type='text'   name='AutreP'>";
+        var btn = document.createElement("input");
+        btn.setAttribute("id", i);
+        btn.setAttribute("src", "../Content/documentation/img/del.png");
+        btn.setAttribute("type", "image");
+        btn.setAttribute("name", "delete");
+        btn.onclick = function () {
+            $(this).closest('tr').remove();
+            i = i - 1;console.log( "nombre "+i);
+        }
+        cell3.appendChild(btn);
+        i = i + 1;
+        //console.log( $("input[id='1']"));
+        console.log( "nombre "+i);
+    })
+
+    function DeleteDoc(r, rid) {
+        var i = r.parentNode.parentNode.rowIndex;
+        alert("Êtes-vous sûr de vouloir supprimer l'enregistrement ?"+"i : "+i+", rid : "+rid);
+        //DeleteD(rid);
+        document.getElementById("tbodyDoc").deleteRow(i-1);
+    }
+
+    function DeleteD(rid) {
+
+        $.post("@Url.Action("DeleteDoc", "WorkflowAutorisation")",
+            {
+                idDoc: rid,
+            },
+            function (data) {
+
+            });
+
+    }
+
+    function filechange(input) {
+        var label = input.nextElementSibling;
+        var fileSelected = input.files.item(0);
+        var fileName = 'Choisir ...'; var endstart = 5, startend = 7;
+        if (input.files.length!=0) {
+            fileName = fileSelected.name;
+        }
+        if (fileName.length < startend + endstart + 1) {
+            label.querySelector('span').innerHTML = fileName;
+        }
+        else {
+            label.querySelector('span').innerHTML = fileName.substring(0, endstart)
+                + "..." + fileName.substring(fileName.length - startend, fileName.length);
+        }
+        // Firefox bug fix
+        input.addEventListener('focus', function () { input.classList.add('has-focus'); });
+        input.addEventListener('blur', function () { input.classList.remove('has-focus'); });
+    }
+
+    @*$("#AddDocs").click(function () {
+        if ($("input[type = file]").get(0).files.length == 0) {
+            alert('documents vides');
+        }
+        else {
+            var names = [];
+            console.log($("input[type = file]").get(0).files);
+            for (var i = 0; i < $("input[type = file]").get(0).files.length; i++)
+            {
+                names.push($("input[type = file]").get(0).files[i].name);
+                var table = document.getElementById('tbodyDoc');
+                var row = table.insertRow(table.length);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                cell1.innerHTML = $("input[type = file]").get(0).files[i].name;
+                cell2.innerHTML = " <select required class='form-control form-control-sm chzn-selec' name='filetype'>" +
+                    "<option value=''>------Intitulé----------</option>" +
+                    "@foreach(var item in Model.TYPE_DOCs){<option value='@item.ID_DOCUMENT'>@item.NOM_Document</option>}" +
+                    "</select>";
+                //"<input type='text'   name='AutreP'>";
+                var btn = document.createElement("input");
+                btn.setAttribute("id", i);
+                btn.setAttribute("src", "../Content/documentation/img/del.png");
+                btn.setAttribute("type", "image");
+                btn.setAttribute("name", "delete");
+                btn.onclick = function () {
+                    $(this).closest('tr').remove();
+                }
+                cell3.appendChild(btn);
+                nombre += 1;
+            }
+
+            document.getElementById("labelNomDoc").innerHTML = "Document...";
+
+        }
+
+    })
+    $("#btnsend").click(function () {
+        if (nombre == 0) {
+            alert("documents obligatoires!! ");
+        }
+        else {
+            $('#form1').submit();
+        }
+    });
 
     function deleteRow(r) {
         var i = r.parentNode.parentNode.rowIndex;
@@ -173,7 +303,6 @@
 
     }
 
-    var nombre = @Model.DemDerg.Document_Derogation.Count();
     $("#btnsend").click(function () {
         if (stringArray.length == 0 && nombre==0) {
             alert("documents obligatoires!! ");
@@ -241,8 +370,14 @@
         traditional: true
 
 
-    });
+    });*@
 
 </script>
-
-
+@*<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/4.0.0/bootstrap.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+    <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">*@
