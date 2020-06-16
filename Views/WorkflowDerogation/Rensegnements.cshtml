@@ -1,12 +1,11 @@
 ﻿@model GestionnaireUtilisateurs.Models.MultiModeles
-
+@using GestionnaireUtilisateurs.Controllers
 @{
     ViewBag.Title = "Renseignements";
     Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
     var datenow = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
     var numVers = ViewBag.numVers;
 }
-
 <section>
     <nav>
         <ol class="cd-multi-steps text-bottom count">
@@ -22,6 +21,29 @@
     </nav>
 </section>
 <center><h1><label class="text-danger" style="margin:10px">@ViewBag.Message</label></h1></center>
+<center>
+    <label class="text-capitalize text-info" style="background-color:gray;margin-bottom:10px">
+        Lire  @if (ViewBag.Read || User.IsInRole(WorkflowDerogationController.Administrator))
+        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
+        else
+        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
+
+        Cree  @if (ViewBag.Create || User.IsInRole(WorkflowDerogationController.Administrator))
+        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
+        else
+        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
+
+        Modifier  @if (ViewBag.Update || User.IsInRole(WorkflowDerogationController.Administrator))
+        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
+        else
+        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
+        Supprimer  @if (ViewBag.Delete || User.IsInRole(WorkflowDerogationController.Administrator))
+        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
+        else
+        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
+    </label>
+
+</center>
 
 <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
     <div class="card-body" id="">

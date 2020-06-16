@@ -186,9 +186,12 @@
           </Key>
           <Property Name="Id_Doc_Derog" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Code_Doc_Derg" Type="int" />
-          <Property Name="Intitule_Doc_Derg" Type="int" />
-          <Property Name="url_Doc_Derg" Type="varchar" MaxLength="300" />
-          <Property Name="FK_DemDerg_DocDerg" Type="int" />
+          <Property Name="Intitule_Doc_Derg" Type="int" Nullable="false" />
+          <Property Name="url_Doc_Derg" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="FK_DemDerg_DocDerg" Type="int" Nullable="false" />
+          <Property Name="FileName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ContentType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ContentLenght" Type="bigint" Nullable="false" />
         </EntityType>
         <EntityType Name="EtatAvancement">
           <Key>
@@ -528,7 +531,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_DemDerg_DocDerg">
-          <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="0..1">
+          <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <End Role="Document_Derogation" Type="Self.Document_Derogation" Multiplicity="*" />
@@ -612,7 +615,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Doc_Derg_TYPE_DOC">
-          <End Role="TYPE_DOC" Type="Self.TYPE_DOC" Multiplicity="0..1" />
+          <End Role="TYPE_DOC" Type="Self.TYPE_DOC" Multiplicity="1" />
           <End Role="Document_Derogation" Type="Self.Document_Derogation" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TYPE_DOC">
@@ -880,7 +883,6 @@
           <EntitySet Name="COMMUNES_RSK" EntityType="aurs1Model.COMMUNES_RSK" />
           <EntitySet Name="Courrier" EntityType="aurs1Model.Courrier" />
           <EntitySet Name="derogs_demandees" EntityType="aurs1Model.derogs_demandees" />
-          <EntitySet Name="Document_Derogation" EntityType="aurs1Model.Document_Derogation" />
           <EntitySet Name="EtatAvancement" EntityType="aurs1Model.EtatAvancement" />
           <EntitySet Name="Forme_MaitreOeuvrage_DemDerg" EntityType="aurs1Model.Forme_MaitreOeuvrage_DemDerg" />
           <EntitySet Name="Module" EntityType="aurs1Model.Module" />
@@ -941,10 +943,6 @@
             <End Role="Nature_Courrier" EntitySet="Nature_Courrier" />
             <End Role="Courrier" EntitySet="Courrier" />
           </AssociationSet>
-          <AssociationSet Name="FK_Doc_Derg_TYPE_DOC" Association="aurs1Model.FK_Doc_Derg_TYPE_DOC">
-            <End Role="TYPE_DOC" EntitySet="TYPE_DOC" />
-            <End Role="Document_Derogation" EntitySet="Document_Derogation" />
-          </AssociationSet>
           <AssociationSet Name="FK_SousModule_Module" Association="aurs1Model.FK_SousModule_Module">
             <End Role="Module" EntitySet="Module" />
             <End Role="SousModule" EntitySet="SousModule" />
@@ -990,10 +988,6 @@
             <End Role="References_Foncieres" EntitySet="References_Foncieres" />
             <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
           </AssociationSet>
-          <AssociationSet Name="FK_DemDerg_DocDerg" Association="aurs1Model.FK_DemDerg_DocDerg">
-            <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
-            <End Role="Document_Derogation" EntitySet="Document_Derogation" />
-          </AssociationSet>
           <AssociationSet Name="FK_DemDerg_EtatAvc" Association="aurs1Model.FK_DemDerg_EtatAvc">
             <End Role="EtatAvancement" EntitySet="EtatAvancement" />
             <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
@@ -1017,6 +1011,15 @@
           <AssociationSet Name="FK_parcell_Demande_Derogation" Association="aurs1Model.FK_parcell_Demande_Derogation">
             <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
             <End Role="parcell" EntitySet="parcell" />
+          </AssociationSet>
+          <EntitySet Name="Document_Derogation" EntityType="aurs1Model.Document_Derogation" />
+          <AssociationSet Name="FK_DemDerg_DocDerg" Association="aurs1Model.FK_DemDerg_DocDerg">
+            <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+            <End Role="Document_Derogation" EntitySet="Document_Derogation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Doc_Derg_TYPE_DOC" Association="aurs1Model.FK_Doc_Derg_TYPE_DOC">
+            <End Role="TYPE_DOC" EntitySet="TYPE_DOC" />
+            <End Role="Document_Derogation" EntitySet="Document_Derogation" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Application">
@@ -1179,18 +1182,6 @@
           <Property Name="NOM" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="last" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_Demande_Derogation_derogs_demandees" FromRole="derogs_demandees" ToRole="Demande_Derogation" />
-        </EntityType>
-        <EntityType Name="Document_Derogation">
-          <Key>
-            <PropertyRef Name="Id_Doc_Derog" />
-          </Key>
-          <Property Name="Id_Doc_Derog" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code_Doc_Derg" Type="Int32" />
-          <Property Name="Intitule_Doc_Derg" Type="Int32" />
-          <Property Name="url_Doc_Derg" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-          <Property Name="FK_DemDerg_DocDerg" Type="Int32" />
-          <NavigationProperty Name="TYPE_DOC" Relationship="aurs1Model.FK_Doc_Derg_TYPE_DOC" FromRole="Document_Derogation" ToRole="TYPE_DOC" />
-          <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_DemDerg_DocDerg" FromRole="Document_Derogation" ToRole="Demande_Derogation" />
         </EntityType>
         <EntityType Name="EtatAvancement">
           <Key>
@@ -1491,18 +1482,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Doc_Derg_TYPE_DOC">
-          <End Type="aurs1Model.TYPE_DOC" Role="TYPE_DOC" Multiplicity="0..1" />
-          <End Type="aurs1Model.Document_Derogation" Role="Document_Derogation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TYPE_DOC">
-              <PropertyRef Name="ID_DOCUMENT" />
-            </Principal>
-            <Dependent Role="Document_Derogation">
-              <PropertyRef Name="Intitule_Doc_Derg" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SousModule_Module">
           <End Type="aurs1Model.Module" Role="Module" Multiplicity="1" />
           <End Type="aurs1Model.SousModule" Role="SousModule" Multiplicity="*" />
@@ -1571,13 +1550,13 @@
           <NavigationProperty Name="Courrier" Relationship="aurs1Model.FK_DemDerg_Cour" FromRole="Demande_Derogation" ToRole="Courrier" />
           <NavigationProperty Name="derogs_demandees" Relationship="aurs1Model.FK_Demande_Derogation_derogs_demandees" FromRole="Demande_Derogation" ToRole="derogs_demandees" />
           <NavigationProperty Name="References_Foncieres" Relationship="aurs1Model.FK_Demande_Derogation_References_Foncieres" FromRole="Demande_Derogation" ToRole="References_Foncieres" />
-          <NavigationProperty Name="Document_Derogation" Relationship="aurs1Model.FK_DemDerg_DocDerg" FromRole="Demande_Derogation" ToRole="Document_Derogation" />
           <NavigationProperty Name="EtatAvancement" Relationship="aurs1Model.FK_DemDerg_EtatAvc" FromRole="Demande_Derogation" ToRole="EtatAvancement" />
           <NavigationProperty Name="Forme_MaitreOeuvrage_DemDerg" Relationship="aurs1Model.FK_DemDerg_FormeMaitreOeuvrage_DemDerg" FromRole="Demande_Derogation" ToRole="Forme_MaitreOeuvrage_DemDerg" />
           <NavigationProperty Name="Nature_Demande_Derg" Relationship="aurs1Model.FK_DemDerg_Nature_Dem" FromRole="Demande_Derogation" ToRole="Nature_Demande_Derg" />
           <NavigationProperty Name="Nature_Projet_DemDerg" Relationship="aurs1Model.FK_DemDerg_Nature_Projet_DemDerg" FromRole="Demande_Derogation" ToRole="Nature_Projet_DemDerg" />
           <NavigationProperty Name="Statut_Juridique_DemDerg" Relationship="aurs1Model.FK_DemDerg_StatutJuridique_DemDerg" FromRole="Demande_Derogation" ToRole="Statut_Juridique_DemDerg" />
           <NavigationProperty Name="parcell" Relationship="aurs1Model.FK_parcell_Demande_Derogation" FromRole="Demande_Derogation" ToRole="parcell" />
+          <NavigationProperty Name="Document_Derogation" Relationship="aurs1Model.FK_DemDerg_DocDerg" FromRole="Demande_Derogation" ToRole="Document_Derogation" />
         </EntityType>
         <Association Name="FK_Dem_Derog_Users_ouvrage">
           <End Type="aurs1Model.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
@@ -1691,20 +1670,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_DemDerg_DocDerg">
-          <End Type="aurs1Model.Demande_Derogation" Role="Demande_Derogation" Multiplicity="0..1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Type="aurs1Model.Document_Derogation" Role="Document_Derogation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Demande_Derogation">
-              <PropertyRef Name="Id_DemDerg" />
-            </Principal>
-            <Dependent Role="Document_Derogation">
-              <PropertyRef Name="FK_DemDerg_DocDerg" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_DemDerg_EtatAvc">
           <End Type="aurs1Model.EtatAvancement" Role="EtatAvancement" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1784,6 +1749,47 @@
             </Principal>
             <Dependent Role="parcell">
               <PropertyRef Name="Fk_DemDerog" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Document_Derogation">
+          <Key>
+            <PropertyRef Name="Id_Doc_Derog" />
+          </Key>
+          <Property Name="Id_Doc_Derog" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code_Doc_Derg" Type="Int32" />
+          <Property Name="Intitule_Doc_Derg" Type="Int32" Nullable="false" />
+          <Property Name="url_Doc_Derg" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="FK_DemDerg_DocDerg" Type="Int32" Nullable="false" />
+          <Property Name="FileName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ContentType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ContentLenght" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_DemDerg_DocDerg" FromRole="Document_Derogation" ToRole="Demande_Derogation" />
+          <NavigationProperty Name="TYPE_DOC" Relationship="aurs1Model.FK_Doc_Derg_TYPE_DOC" FromRole="Document_Derogation" ToRole="TYPE_DOC" />
+        </EntityType>
+        <Association Name="FK_DemDerg_DocDerg">
+          <End Type="aurs1Model.Demande_Derogation" Role="Demande_Derogation" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="aurs1Model.Document_Derogation" Role="Document_Derogation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Demande_Derogation">
+              <PropertyRef Name="Id_DemDerg" />
+            </Principal>
+            <Dependent Role="Document_Derogation">
+              <PropertyRef Name="FK_DemDerg_DocDerg" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Doc_Derg_TYPE_DOC">
+          <End Type="aurs1Model.TYPE_DOC" Role="TYPE_DOC" Multiplicity="1" />
+          <End Type="aurs1Model.Document_Derogation" Role="Document_Derogation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TYPE_DOC">
+              <PropertyRef Name="ID_DOCUMENT" />
+            </Principal>
+            <Dependent Role="Document_Derogation">
+              <PropertyRef Name="Intitule_Doc_Derg" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1938,17 +1944,6 @@
                 <ScalarProperty Name="last" ColumnName="last" />
                 <ScalarProperty Name="NOM" ColumnName="NOM" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Document_Derogation">
-            <EntityTypeMapping TypeName="aurs1Model.Document_Derogation">
-              <MappingFragment StoreEntitySet="Document_Derogation">
-                <ScalarProperty Name="FK_DemDerg_DocDerg" ColumnName="FK_DemDerg_DocDerg" />
-                <ScalarProperty Name="url_Doc_Derg" ColumnName="url_Doc_Derg" />
-                <ScalarProperty Name="Intitule_Doc_Derg" ColumnName="Intitule_Doc_Derg" />
-                <ScalarProperty Name="Code_Doc_Derg" ColumnName="Code_Doc_Derg" />
-                <ScalarProperty Name="Id_Doc_Derog" ColumnName="Id_Doc_Derog" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2138,6 +2133,20 @@
                 <ScalarProperty Name="NumVersion_DemDerog" ColumnName="NumVersion_DemDerog" />
                 <ScalarProperty Name="Code_DemDerg" ColumnName="Code_DemDerg" />
                 <ScalarProperty Name="Id_DemDerg" ColumnName="Id_DemDerg" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Document_Derogation">
+            <EntityTypeMapping TypeName="aurs1Model.Document_Derogation">
+              <MappingFragment StoreEntitySet="Document_Derogation">
+                <ScalarProperty Name="ContentLenght" ColumnName="ContentLenght" />
+                <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="FK_DemDerg_DocDerg" ColumnName="FK_DemDerg_DocDerg" />
+                <ScalarProperty Name="url_Doc_Derg" ColumnName="url_Doc_Derg" />
+                <ScalarProperty Name="Intitule_Doc_Derg" ColumnName="Intitule_Doc_Derg" />
+                <ScalarProperty Name="Code_Doc_Derg" ColumnName="Code_Doc_Derg" />
+                <ScalarProperty Name="Id_Doc_Derog" ColumnName="Id_Doc_Derog" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

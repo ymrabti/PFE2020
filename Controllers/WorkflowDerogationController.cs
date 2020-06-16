@@ -1,4 +1,5 @@
 ﻿using GestionnaireUtilisateurs.Models;
+using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -25,18 +26,18 @@ namespace GestionnaireUtilisateurs.Controllers
     public class WorkflowDerogationController : Controller
     {
         static int nombre_res_ppage = 5;
-        private const string Administrator = "Administrator";
+        public const string Administrator = "Administrator";
 
-        private const string _Rensegnement = "Rensegnement";
-        private const string _Programmation = "Programmation";
-        private const string _Autorisation = "Autorisation";
+        public const string _Rensegnement = "Rensegnement";
+        public const string _Programmation = "Programmation";
+        public const string _Autorisation = "Autorisation";
 
-        private const string _GED = "GED";
-        private const string _Avis = "Avis";
-        private const string _SitGeo = "Situation Géographique";
+        public const string _GED = "GED";
+        public const string _Avis = "Avis";
+        public const string _SitGeo = "Situation Géographique";
 
-        private const string _Cloture = "Cloture";
-        private const string _Echanges = "Echanges";
+        public const string _Cloture = "Cloture";
+        public const string _Echanges = "Echanges";
 
         public const string _WorkflowDerogationExeptAdmin = _Rensegnement
             + "," + _SitGeo + "," + _GED + "," + _Echanges + ","
@@ -100,10 +101,40 @@ namespace GestionnaireUtilisateurs.Controllers
                 }
             }
         }
+
+        public bool[] Actions(string RoleName)
+        {
+            bool[] _actions = new bool[4];
+            var UserId = User.Identity.GetUserId();
+            var RoleId = db.AspNetRoles.Where(role => role.Name == RoleName).FirstOrDefault().Id;
+            var AdminRoleId = db.AspNetRoles.Where(role => role.Name == Administrator).FirstOrDefault().Id;
+            AspNetUserRoles Actions;
+            if (User.IsInRole(Administrator))
+            {
+                Actions = db.AspNetUserRoles.Find(UserId, AdminRoleId);
+            }
+            else
+            {
+                Actions = db.AspNetUserRoles.Find(UserId, RoleId);
+            }
+            _actions[0] = Actions.Read;
+            _actions[1] = Actions.Create;
+            _actions[2] = Actions.Update;
+            _actions[3] = Actions.Delete;
+            return _actions;
+        }
+
         public aurs1Entities db = new aurs1Entities();
+
+
         [Authorize(Roles = Administrator + "," + _Rensegnement)]
         public ActionResult Rensegnements()
         {
+            var _Actions = Actions(_Rensegnement);
+            ViewBag.Read = _Actions[0];
+            ViewBag.Create = _Actions[1];
+            ViewBag.Update = _Actions[2];
+            ViewBag.Delete = _Actions[3];
             var demDerog = db.Demande_Derogation.ToList();
             if (demDerog.Count() != 0)
             {
@@ -133,7 +164,8 @@ namespace GestionnaireUtilisateurs.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Rensegnements(Demande_Derogation DemDerg, int enregistrer)
+        public ActionResult Rensegnements(Demande_Derogation DemDerg, int enregistrer
+            ,string StJrAut,string NatPrjAut,string derogationDemAut)
         {
             ViewBag.Message = "";
             if (DemDerg.Type_Terrain == null)
@@ -146,6 +178,33 @@ namespace GestionnaireUtilisateurs.Controllers
                 DemDerg.Type_Terrain = DemDerg.Type_Terrain.Trim();
                 DemDerg.Cloture_DemDerg = false;
                 DemDerg.Couverture_DemDerg = false;
+                if (StJrAut!="" && DemDerg.FK_DemDerg_StatutJuridique_DemDerg==4)
+                {
+                    Statut_Juridique_DemDerg statut_Juridique = new Statut_Juridique_DemDerg
+                    {
+                        StatutJuridique_DemDerg = StJrAut, last = false
+                    };
+                    db.Statut_Juridique_DemDerg.Add(statut_Juridique);db.SaveChanges();
+                    DemDerg.Statut_Juridique_DemDerg = statut_Juridique;
+                }
+                if (NatPrjAut!="" && DemDerg.FK_DemDerg_Nature_Projet_DemDerg==13)
+                {
+                    Nature_Projet_DemDerg nature_Projet = new Nature_Projet_DemDerg
+                    {
+                        Nature_Projet_DemDerg1 = NatPrjAut, last = false
+                    };
+                    db.Nature_Projet_DemDerg.Add(nature_Projet);db.SaveChanges();
+                    DemDerg.Nature_Projet_DemDerg = nature_Projet;
+                }
+                if (derogationDemAut!="" && DemDerg.Dero_demande_DemDerg==5)
+                {
+                    derogs_demandees derogs_Demandees = new derogs_demandees
+                    {
+                        NOM = derogationDemAut, last = false
+                    };
+                    db.derogs_demandees.Add(derogs_Demandees);db.SaveChanges();
+                    DemDerg.derogs_demandees = derogs_Demandees;
+                }
                 if (enregistrer == 0)
                 {
                     DemDerg.FK_DemDerg_EtatAvc = 15;
@@ -340,6 +399,9 @@ namespace GestionnaireUtilisateurs.Controllers
                         d.url_Doc_Derg = path1.ToString();
                         d.Intitule_Doc_Derg = Intitule_Doc_Derg[n];
                         d.FK_DemDerg_DocDerg = FK_DemDerg_DocDerg;
+                        d.FileName =file.FileName;
+                        d.ContentType =file.ContentType;
+                        d.ContentLenght =file.ContentLength;
                         db.Document_Derogation.Add(d);
                         var res = db.SaveChanges();
                     }
@@ -716,7 +778,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
         [Authorize(Roles = _WorkflowDerogation)]
-        public ActionResult Encours(Nullable<Int16> page)
+        public ActionResult Encours(Nullable<Int16> page,Nullable<int> Message)
         {
             if (page == null) { page = 1; }
             int totale_resultats = db.Demande_Derogation.Count();
@@ -740,6 +802,8 @@ namespace GestionnaireUtilisateurs.Controllers
                     .Take(nombre_res_ppage)
                     .ToList()
                 };
+                if (Message==1) { model.Message2View = "Vous n'avez pas le droit d'afficher ce contenue"; }
+                else { model.Message2View = ""; }
                 return View(model);
             }
         }

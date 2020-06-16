@@ -58,7 +58,20 @@ namespace GestionnaireUtilisateurs.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
+            ViewBag.ReturnUrl = returnUrl; bool derogationUser;
+            if (User.Identity.IsAuthenticated)
+            {
+                AspNetUsers user = database.AspNetUsers.Find(User.Identity.GetUserId());
+                derogationUser = user.AspNetUserRoles
+                    .Where(u => u.AspNetRoles.SousModule != null)
+                    .Where(u => u.AspNetRoles.SousModule.SousModuleName.Contains("derogation"))
+                    .Count() != 0;
+            }
+            else
+            {
+                derogationUser = false;
+            }
+            ViewBag.derogationUser = derogationUser;
             return View();
         }
 
@@ -84,7 +97,7 @@ namespace GestionnaireUtilisateurs.Controllers
                         .Where(u => u.AspNetRoles.Name == HomeController.Administrator)
                         .Count() != 0;
                     bool derogationUser = user.AspNetUserRoles
-                        .Where(u=> u.AspNetRoles.SousModule!=null)
+                        .Where(u => u.AspNetRoles.SousModule != null)
                         .Where(u => u.AspNetRoles.SousModule.SousModuleName.Contains("derogation"))
                         .Count() != 0;
                     bool Other = !derogationUser;

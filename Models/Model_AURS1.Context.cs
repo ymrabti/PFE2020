@@ -36,7 +36,6 @@ namespace GestionnaireUtilisateurs.Models
         public virtual DbSet<COMMUNES_RSK> COMMUNES_RSK { get; set; }
         public virtual DbSet<Courrier> Courrier { get; set; }
         public virtual DbSet<derogs_demandees> derogs_demandees { get; set; }
-        public virtual DbSet<Document_Derogation> Document_Derogation { get; set; }
         public virtual DbSet<EtatAvancement> EtatAvancement { get; set; }
         public virtual DbSet<Forme_MaitreOeuvrage_DemDerg> Forme_MaitreOeuvrage_DemDerg { get; set; }
         public virtual DbSet<Module> Module { get; set; }
@@ -54,5 +53,6 @@ namespace GestionnaireUtilisateurs.Models
         public virtual DbSet<Type_Avis> Type_Avis { get; set; }
         public virtual DbSet<TYPE_DOC> TYPE_DOC { get; set; }
         public virtual DbSet<Demande_Derogation> Demande_Derogation { get; set; }
+        public virtual DbSet<Document_Derogation> Document_Derogation { get; set; }
     }
 }

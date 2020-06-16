@@ -37,7 +37,7 @@
 <body>
     <a href="https://getbootstrap.com/" class="d-block px-3 py-2 text-center text-bold text-black-50 old-bv">There's a newer version of Bootstrap 4!</a>
 
-    <header class="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
+    <header class="navbar navbar-expand navbar-dark flex-column flex-md-row" style="background-color:burlywood">
 
         <div class="col-md-4">
             <a href="#" class="btn btn" style="background-color:#09aacc ; color:white;">
@@ -55,12 +55,8 @@
             </a>
         </div>
     </header>
-    <div class="container-fluid">
-        <div class="row flex-xl-nowrap">
-            @RenderBody()
-        </div>
-    </div>
-    
+    @RenderBody()
+
     <script src="~/Content/tablesaw/dist/tablesaw.js"></script>
     <script src="~/Content/tablesaw/dist/tablesaw-init.js"></script>
     <!-- jquery js -->

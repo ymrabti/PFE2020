@@ -19,8 +19,8 @@ namespace GestionnaireUtilisateurs.Models
         {
             this.Avis_Org = new HashSet<Avis_Org>();
             this.Courrier = new HashSet<Courrier>();
-            this.Document_Derogation = new HashSet<Document_Derogation>();
             this.parcell = new HashSet<parcell>();
+            this.Document_Derogation = new HashSet<Document_Derogation>();
         }
     
         public int Id_DemDerg { get; set; }
@@ -66,8 +66,6 @@ namespace GestionnaireUtilisateurs.Models
         public virtual ICollection<Courrier> Courrier { get; set; }
         public virtual derogs_demandees derogs_demandees { get; set; }
         public virtual References_Foncieres References_Foncieres { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Document_Derogation> Document_Derogation { get; set; }
         public virtual EtatAvancement EtatAvancement { get; set; }
         public virtual Forme_MaitreOeuvrage_DemDerg Forme_MaitreOeuvrage_DemDerg { get; set; }
         public virtual Nature_Demande_Derg Nature_Demande_Derg { get; set; }
@@ -75,5 +73,7 @@ namespace GestionnaireUtilisateurs.Models
         public virtual Statut_Juridique_DemDerg Statut_Juridique_DemDerg { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<parcell> parcell { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Document_Derogation> Document_Derogation { get; set; }
     }
 }

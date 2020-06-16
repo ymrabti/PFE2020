@@ -181,9 +181,12 @@
     </Key>
     <Property Name="Id_Doc_Derog" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Code_Doc_Derg" Type="int" />
-    <Property Name="Intitule_Doc_Derg" Type="int" />
-    <Property Name="url_Doc_Derg" Type="varchar" MaxLength="300" />
-    <Property Name="FK_DemDerg_DocDerg" Type="int" />
+    <Property Name="Intitule_Doc_Derg" Type="int" Nullable="false" />
+    <Property Name="url_Doc_Derg" Type="varchar" MaxLength="300" Nullable="false" />
+    <Property Name="FK_DemDerg_DocDerg" Type="int" Nullable="false" />
+    <Property Name="FileName" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="ContentType" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="ContentLenght" Type="bigint" Nullable="false" />
   </EntityType>
   <EntityType Name="EtatAvancement">
     <Key>
@@ -523,7 +526,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_DemDerg_DocDerg">
-    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="0..1">
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="1">
       <OnDelete Action="Cascade" />
     </End>
     <End Role="Document_Derogation" Type="Self.Document_Derogation" Multiplicity="*" />
@@ -607,7 +610,7 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Doc_Derg_TYPE_DOC">
-    <End Role="TYPE_DOC" Type="Self.TYPE_DOC" Multiplicity="0..1" />
+    <End Role="TYPE_DOC" Type="Self.TYPE_DOC" Multiplicity="1" />
     <End Role="Document_Derogation" Type="Self.Document_Derogation" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="TYPE_DOC">

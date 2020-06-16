@@ -48,7 +48,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="listeDoc">
-                        @using (Html.BeginForm("Ged", "WorkflowDerogation", FormMethod.Post,new { enctype = "multipart/form-data" }))
+                        @using (Html.BeginForm("Ged", "WorkflowDerogation", FormMethod.Post, new { enctype = "multipart/form-data" }))
                         {
                             @*@Html.Editor("tir","tir", new { htmlAttributes = new { @class = "form-control", @type = "file" } })*@
                             <center><label class="text-danger">@Model.Message2View</label></center>
@@ -68,7 +68,16 @@
                                             <td>
                                                 <a href="@item.url_Doc_Derg.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs" }, StringSplitOptions.None).Last()"
                                                    id="file22" target="_blank">
-                                                    @item.url_Doc_Derg.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs/GED_DEROG/"+item.Demande_Derogation.Id_DemDerg+"/" }, StringSplitOptions.None).Last()
+                                                    @if (item.FileName == "AUCUN")
+                                                    {
+                                                        @item.url_Doc_Derg.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs/GED_DEROG/" + item.Demande_Derogation.Id_DemDerg + "/" }, StringSplitOptions.None).Last()
+                                                    }
+                                                    else
+                                                    {
+                                                        <span style="text-decoration-color:blue">@item.FileName </span>
+                                                        <span>(@item.ContentType)</span>
+                                                    }
+
                                                 </a>
                                             </td>
                                             <td>@Html.DisplayFor(modelItem => item.TYPE_DOC.NOM_Document)</td>
@@ -198,7 +207,8 @@
         input.addEventListener('focus', function () { input.classList.add('has-focus'); });
         input.addEventListener('blur', function () { input.classList.remove('has-focus'); });
     }
-
+    </script>
+<script language="javascript">
     @*$("#AddDocs").click(function () {
         if ($("input[type = file]").get(0).files.length == 0) {
             alert('documents vides');

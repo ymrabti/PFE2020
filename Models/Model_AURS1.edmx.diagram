@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="858040c852fe42089c4de916a1ff0ab6" Name="Diagram1" ZoomLevel="59">
+      <Diagram DiagramId="858040c852fe42089c4de916a1ff0ab6" Name="Diagram1" ZoomLevel="77">
         <EntityTypeShape EntityType="aurs1Model.Application" Width="1.5" PointX="7.5" PointY="8.5" />
         <EntityTypeShape EntityType="aurs1Model.ApplicationModule" Width="1.5" PointX="10.625" PointY="5.75" />
         <EntityTypeShape EntityType="aurs1Model.AspNetRoles" Width="1.5" PointX="1.5" PointY="6.625" />
@@ -16,7 +16,6 @@
         <EntityTypeShape EntityType="aurs1Model.COMMUNES_RSK" Width="1.5" PointX="19.875" PointY="12.75" />
         <EntityTypeShape EntityType="aurs1Model.Courrier" Width="1.5" PointX="18" PointY="11.25" />
         <EntityTypeShape EntityType="aurs1Model.derogs_demandees" Width="1.5" PointX="16.125" PointY="6" />
-        <EntityTypeShape EntityType="aurs1Model.Document_Derogation" Width="1.5" PointX="18" PointY="8.625" />
         <EntityTypeShape EntityType="aurs1Model.EtatAvancement" Width="1.5" PointX="5.875" PointY="16.75" />
         <EntityTypeShape EntityType="aurs1Model.Forme_MaitreOeuvrage_DemDerg" Width="1.5" PointX="13.375" PointY="15.125" />
         <EntityTypeShape EntityType="aurs1Model.Module" Width="1.5" PointX="7.5" PointY="5.625" />
@@ -44,7 +43,6 @@
         <AssociationConnector Association="aurs1Model.FK_TypAvis" />
         <AssociationConnector Association="aurs1Model.FK_COMMUNES_RSK_PROVINCES_RSK" />
         <AssociationConnector Association="aurs1Model.FK_Nature_Courrier" />
-        <AssociationConnector Association="aurs1Model.FK_Doc_Derg_TYPE_DOC" />
         <AssociationConnector Association="aurs1Model.FK_SousModule_Module" />
         <AssociationConnector Association="aurs1Model.FK_StatutRole_Statuts" />
         <EntityTypeShape EntityType="aurs1Model.Demande_Derogation" Width="1.5" PointX="15.375" PointY="8.75" />
@@ -57,13 +55,15 @@
         <AssociationConnector Association="aurs1Model.FK_DemDerg_Cour" />
         <AssociationConnector Association="aurs1Model.FK_Demande_Derogation_derogs_demandees" />
         <AssociationConnector Association="aurs1Model.FK_Demande_Derogation_References_Foncieres" />
-        <AssociationConnector Association="aurs1Model.FK_DemDerg_DocDerg" />
         <AssociationConnector Association="aurs1Model.FK_DemDerg_EtatAvc" />
         <AssociationConnector Association="aurs1Model.FK_DemDerg_FormeMaitreOeuvrage_DemDerg" />
         <AssociationConnector Association="aurs1Model.FK_DemDerg_Nature_Dem" />
         <AssociationConnector Association="aurs1Model.FK_DemDerg_Nature_Projet_DemDerg" />
         <AssociationConnector Association="aurs1Model.FK_DemDerg_StatutJuridique_DemDerg" />
         <AssociationConnector Association="aurs1Model.FK_parcell_Demande_Derogation" />
+        <EntityTypeShape EntityType="aurs1Model.Document_Derogation" Width="1.5" PointX="18.375" PointY="7.875" />
+        <AssociationConnector Association="aurs1Model.FK_DemDerg_DocDerg" />
+        <AssociationConnector Association="aurs1Model.FK_Doc_Derg_TYPE_DOC" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

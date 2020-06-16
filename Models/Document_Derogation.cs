@@ -16,11 +16,14 @@ namespace GestionnaireUtilisateurs.Models
     {
         public int Id_Doc_Derog { get; set; }
         public Nullable<int> Code_Doc_Derg { get; set; }
-        public Nullable<int> Intitule_Doc_Derg { get; set; }
+        public int Intitule_Doc_Derg { get; set; }
         public string url_Doc_Derg { get; set; }
-        public Nullable<int> FK_DemDerg_DocDerg { get; set; }
+        public int FK_DemDerg_DocDerg { get; set; }
+        public string FileName { get; set; }
+        public string ContentType { get; set; }
+        public long ContentLenght { get; set; }
     
-        public virtual TYPE_DOC TYPE_DOC { get; set; }
         public virtual Demande_Derogation Demande_Derogation { get; set; }
+        public virtual TYPE_DOC TYPE_DOC { get; set; }
     }
 }

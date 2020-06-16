@@ -20,6 +20,11 @@
                 {
                     //Url.Action("AURsS","WorkflowDerogation");
                     <center><label class="text-warning">Vous n'avez pas le droit d'afficher ce contenue</label></center>
+                    if (ViewBag.derogationUser)
+                    {
+                        { Response.Redirect("~/WorkflowDerogation/Encours", false); }
+                    }
+                    else { { Response.Redirect("~/Home/AURS", false); }}
                 }
                 else
                 {

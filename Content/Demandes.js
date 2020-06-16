@@ -31,7 +31,7 @@ for (var i = 0; i < rows.length; i++) {
         for (var i = 0; i < tab.rows.length; i++) {
 
 
-            if (tab.rows[i].cells[4].innerHTML.includes(" Dépassement de délai")) {
+            if (tab.rows[i]/*.cells[4]*/.innerHTML.includes(" Dépassement de délai")) {
 
                 tab.rows[i].style.color = '#FF3364';
             }
@@ -57,7 +57,7 @@ for (var i = 0; i < rows.length; i++) {
             for (var i = 0; i < tab.rows.length; i++) {
 
 
-                if (tab.rows[i].cells[4].innerHTML.includes(" Dépassement de délai")) {
+                if (tab.rows[i].innerHTML.includes(" Dépassement de délai")) {
 
                     tab.rows[i].style.color = '#FF3364';
                 }
@@ -75,7 +75,7 @@ for (var i = 0; i < rows.length; i++) {
             for (var i = 0; i < tab.rows.length; i++) {
 
 
-                if (tab.rows[i].cells[4].innerHTML.includes(" Dépassement de délai")) {
+                if (tab.rows[i].innerHTML.includes(" Dépassement de délai")) {
 
                     tab.rows[i].style.color = '#FF3364';
                 }

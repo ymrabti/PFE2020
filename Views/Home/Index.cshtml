@@ -1,6 +1,4 @@
 ﻿@model GestionnaireUtilisateurs.Models.MultiModeles
-
-
 @{
     ViewBag.Title = "Utilisateurs";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -22,7 +20,7 @@
             <div class="row">
                 <div class="col-md-2">
                     <a href="@Url.Action("AddUser", "Home")" class="btn btn" style="background-color:#09aacc ; color:white;">
-                        <i class="fa fa-plus"> Ajouter  </i>
+                        <i class="fa fa-user-plus"> Ajouter  </i>
                     </a>
                 </div>
                 <div class="col-md-2">
@@ -42,7 +40,7 @@
                         @Html.AntiForgeryToken()
                         <input type="hidden" id="IdHidden2" name="id" value="-1">
                         <button disabled id="buttonDelete" type="submit" class="btn btn" style="background-color:#09aacc ; color:white;">
-                            <i class="fa fa-trash"> Supprimer  </i>
+                            <i class="fa fa-user-times"> Supprimer  </i>
                         </button>
                     }
                 </div>
@@ -54,26 +52,26 @@
                         @Html.AntiForgeryToken()
                         <input type="hidden" id="IdHidden3" name="id" value="-1">
                         <button disabled id="ManagementSelected" type="submit" class="btn btn" style="background-color:#09aacc ; color:white;">
-                            <i class="fa fa-sliders-h"> Gestion des roles   </i>
+                            <i class="fa fa-user-secret"> Gestion des roles   </i>
                         </button>
                     }
                 </div>
             </div>
         </div>
-    @*</div>
-</div>
+        @*</div>
+            </div>
 
 
 
-<div class="tab-content indexusers">
-    <div class="card-body">*@
+            <div class="tab-content indexusers">
+                <div class="card-body">*@
         <table data-tablesaw-mode="columntoggle" class="table table-bordered first" id="tableFilter">
             <thead>
                 <tr>
-                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Nom</th>
-                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Prenom</th>
-                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Email</th>
-                    <th scope="col" data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Ville</th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Nom</th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Prenom</th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Email</th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Ville</th>
                 </tr>
             </thead>
             <tbody id="tabletargetted">
@@ -106,5 +104,25 @@
 
 @section Scripts{
     <script src="~/Content/TableFilter/ReapetedFilter.js"></script>
+    @*<script src="~/Content/Demandes.js"></script>
+    <script data-config="">
+
+        var filtersConfig = {
+            base_path: 'tablefilter/',
+            auto_filter: {
+                delay: 120 //milliseconds
+            },
+            filters_row_index: 1,
+            state: false,
+            alternate_rows: false,
+            rows_counter: false,
+            btn_reset: false,
+            status_bar: false,
+            highlight_keywords: true,
+            msg_filter: 'Filtering...'
+        };
+        var tf = new TableFilter('tableFilter', filtersConfig);
+        tf.init();
+    </script>*@
 }
 
