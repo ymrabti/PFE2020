@@ -62,7 +62,7 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="inputText11" style="font-size:12px;">Réference fonciere : <label style="color:red">*</label></label>
-                                <select required class="form-control form-control-sm chzn-selec" id="selRef" name="Type_Terrain"
+                                <select disabled="@NCree" required class="form-control form-control-sm chzn-selec" id="selRef" name="Type_Terrain"
                                         oninvalid="this.setCustomValidity('Réference fonciere obligatoire !')" oninput="this.setCustomValidity('')">
                                     <option value="">--- Sélectionner une réference fonciere ---</option>
                                     @foreach (var item in Model.References_Foncieres)
@@ -75,7 +75,7 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="inputText11" style="font-size:12px;">Préfecture :</label>
-                                <select class="form-control form-control-sm" id="Prefectures" name="Prefecture">
+                                <select disabled="@NCree" class="form-control form-control-sm" id="Prefectures" name="Prefecture">
                                     <option value="">-------- Sélectionner la préfecture : --------</option>
                                     @foreach (var item in Model.Provs)
                                     {
@@ -87,7 +87,7 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="inputText11" style="font-size:12px;">Commune/Arrondissement :</label>
-                                <select required class="form-control form-control-sm chzn-selec" id="Arrondissements" name="Id_Commune"
+                                <select disabled="@NCree" required class="form-control form-control-sm chzn-selec" id="Arrondissements" name="Id_Commune"
                                         oninvalid="this.setCustomValidity('Commune/Arrondissement obligatoire !')" oninput="this.setCustomValidity('')">
                                     <option value="">-------- Sélectionner la Commune/Arrondissement : --------</option>
                                     @foreach (var item in Model.Communes)
@@ -101,17 +101,17 @@
                     <div class="row" style="margin-bottom:25px">
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">N° de Dossier :</label>
-                            <input required type="number" class="form-control" id="NumDossier" name="Code_DemDerg"
+                            <input disabled="@NCree" required type="number" class="form-control" id="NumDossier" name="Code_DemDerg"
                                    oninvalid="this.setCustomValidity('N° de Dossier obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">N° de la version :</label>
-                            <input type="text" class="form-control" value="@numVers" id="NumVers" name="NumVersion_DemDerog" readonly="readonly"
+                            <input disabled="@NCree" type="text" class="form-control" value="@numVers" id="NumVers" name="NumVersion_DemDerog" readonly="readonly"
                                    oninvalid="this.setCustomValidity('N° de la version obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Date et heure de demande :</label>
-                            <input type="text" id="dateNow" value="@datenow" name="Date_Arrivee_DemDerg" class="form-control" readonly="readonly"
+                            <input disabled="@NCree" type="text" id="dateNow" value="@datenow" name="Date_Arrivee_DemDerg" class="form-control" readonly="readonly"
                                    oninvalid="this.setCustomValidity('Date et heure de demande obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
 
@@ -119,12 +119,12 @@
                     <div class="row" style="margin-bottom:25px">
                         <div class="col-lg-6">
                             <label for="inputText11" style="font-size:12px;">Intitulé :</label>
-                            <input required type="text" class="form-control" id="intitule" value="" name="Intitule_DemDerg"
+                            <input disabled="@NCree" required type="text" class="form-control" id="intitule" value="" name="Intitule_DemDerg"
                                    oninvalid="this.setCustomValidity('Intitulé obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
                         <div class="col-lg-6">
                             <label for="inputText11" style="font-size:12px;">Prévisions Urbanistiques :</label>
-                            <input required type="text" class="form-control" id="PrevUrb" value="" name="PrevisionUrbanistique_DemDerg"
+                            <input disabled="@NCree" required type="text" class="form-control" id="PrevUrb" value="" name="PrevisionUrbanistique_DemDerg"
                                    oninvalid="this.setCustomValidity('Previsions Urbanistiques obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
                     </div>
@@ -134,7 +134,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <label for="inputText11" style="font-size:12px;">Nature demande :</label>
-                                <select required class="form-control form-control-sm chzn-selec" id="natDem" name="FK_DemDerg_Nature_Dem"
+                                <select disabled="@NCree" required class="form-control form-control-sm chzn-selec" id="natDem" name="FK_DemDerg_Nature_Dem"
                                         oninvalid="this.setCustomValidity('Nature demande obligatoire !')" oninput="this.setCustomValidity('')">
                                     <option value="">-------- Sélectionner la nature de la demande --------</option>
                                     @foreach (var item in Model.NatDemDerogs)
@@ -146,7 +146,7 @@
                         </div>
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Statut juridique :</label>
-                            <select required class="form-control form-control-sm chzn-selec" id="StatJurd" name="FK_DemDerg_StatutJuridique_DemDerg"
+                            <select disabled="@NCree" required class="form-control form-control-sm chzn-selec" id="StatJurd" name="FK_DemDerg_StatutJuridique_DemDerg"
                                     oninvalid="this.setCustomValidity('Statut juridique obligatoire !')" oninput="this.setCustomValidity('')">
                                 <option value="">-------- Sélectionner le Statut juridique --------</option>
                                 @foreach (var item in Model.StatutJurds)
@@ -154,12 +154,12 @@
                                     <option value="@item.Id_StatutJuridique_DemDerg">@item.StatutJuridique_DemDerg</option>
                                 }
                             </select>
-                            <input type="hidden" class="form-control" id="StJrAut" value="" name="StJrAut" />
+                            <input disabled="@NCree" type="hidden" class="form-control" id="StJrAut" value="" name="StJrAut" />
                         </div>
                         <div class="col-sm-4">
 
                             <label for="inputText11" style="font-size:12px;">Superficie (m²) :</label>
-                            <input required type="number" class="form-control" id="superficie" value="" name="Superficie_Terrain_DemDerg"
+                            <input disabled="@NCree" required type="number" class="form-control" id="superficie" value="" name="Superficie_Terrain_DemDerg"
                                    oninvalid="this.setCustomValidity('Superficie obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
 
@@ -169,7 +169,7 @@
                     <div class="row" style="margin-bottom:25px">
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Maître d'ouvrage :</label>
-                            <select required class="form-control form-control-sm chzn-selec" id="maitreOuvrage" name="Maitre_Oeuvrage_DemDerg"
+                            <select disabled="@NCree" required class="form-control form-control-sm chzn-selec" id="maitreOuvrage" name="Maitre_Oeuvrage_DemDerg"
                                     oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
                                 <option value="">-------- Sélectionner le maître d'ouvrage --------</option>
                                 @foreach (var item in Model.aspNetUsers)
@@ -180,7 +180,7 @@
                         </div>
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Maître d'oeuvre :</label>
-                            <select required class="form-control form-control-sm chzn-selec" id="maitreOeuvre" name="Maitre_Oeuvre_DemDerg"
+                            <select disabled="@NCree" required class="form-control form-control-sm chzn-selec" id="maitreOeuvre" name="Maitre_Oeuvre_DemDerg"
                                     oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
                                 <option value="">-------- Sélectionner le maître d'ouvre --------</option>
                                 @foreach (var item in Model.aspNetUsers)
@@ -191,7 +191,7 @@
                         </div>
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Forme maître d'ouvrage :</label>
-                            <select required class="form-control form-control-sm chzn-selec" id="ForMOuvrg" name="FK_DemDerg_FormeMaitreOeuvrage_DemDerg"
+                            <select disabled="@NCree" required class="form-control form-control-sm chzn-selec" id="ForMOuvrg" name="FK_DemDerg_FormeMaitreOeuvrage_DemDerg"
                                     oninvalid="this.setCustomValidity('Forme maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
                                 <option value="">-------- Sélectionner la forme maître d'ouvrage --------</option>
                                 @foreach (var item in Model.ForMaitreOeuvrages)
@@ -206,7 +206,7 @@
                     <div class="row" style="margin-bottom:25px">
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Nature de projet :</label>
-                            <select required class="form-control form-control-sm chzn-selec" id="NatPrj" name="FK_DemDerg_Nature_Projet_DemDerg"
+                            <select disabled="@NCree" required class="form-control form-control-sm chzn-selec" id="NatPrj" name="FK_DemDerg_Nature_Projet_DemDerg"
                                     oninvalid="this.setCustomValidity('Nature de projet obligatoire !')" oninput="this.setCustomValidity('')">
                                 <option value="">-------- Sélectionner la nature de projet --------</option>
                                 @foreach (var item in Model.NatPrjDerogs)
@@ -214,16 +214,16 @@
                                     <option value="@item.Id_Nature_Projet_DemDerg">@item.Nature_Projet_DemDerg1</option>
                                 }
                             </select>
-                            <input type="hidden" class="form-control" id="NatPrjAut" value="" name="NatPrjAut" />
+                            <input disabled="@NCree" type="hidden" class="form-control" id="NatPrjAut" value="" name="NatPrjAut" />
                         </div>
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Montant d'investissement (en DH):</label>
-                            <input required type="number" class="form-control" id="montantInvest" value="" name="Montant_Investissement_DemDerg"
+                            <input disabled="@NCree" required type="number" class="form-control" id="montantInvest" value="" name="Montant_Investissement_DemDerg"
                                    oninvalid="this.setCustomValidity('Montant d\'investissement obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Dérogation demandée :</label>
-                            <select required class="form-control form-control-sm chzn-selec" id="derogationDem" name="Dero_demande_DemDerg"
+                            <select disabled="@NCree" required class="form-control form-control-sm chzn-selec" id="derogationDem" name="Dero_demande_DemDerg"
                                     oninvalid="this.setCustomValidity('Dérogation demandée obligatoire !')" oninput="this.setCustomValidity('')">
                                 <option value="">-------- Sélectionner la Dérogation demandée --------</option>
                                 @foreach (var item in Model.Derogs_Demandees)
@@ -231,30 +231,30 @@
                                     <option value="@item.ID">@item.NOM</option>
                                 }
                             </select>
-                            <input type="hidden" class="form-control" id="derogationDemAut" value="" name="derogationDemAut" />
+                            <input disabled="@NCree" type="hidden" class="form-control" id="derogationDemAut" value="" name="derogationDemAut" />
                         </div>
                     </div>
                     <div class="row" style="margin-bottom:25px">
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Localisation du projet :</label>
-                            <input required type="text" class="form-control" id="localisationPrj" value="" name="Adresse_DemDerg"
+                            <input disabled="@NCree" required type="text" class="form-control" id="localisationPrj" value="" name="Adresse_DemDerg"
                                    oninvalid="this.setCustomValidity('Localisation du projet obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Emplois induits :</label>
-                            <input required type="number" class="form-control" id="emploisInd" value="" name="Emploi_generer_DemDerg"
+                            <input disabled="@NCree" required type="number" class="form-control" id="emploisInd" value="" name="Emploi_generer_DemDerg"
                                    oninvalid="this.setCustomValidity('Emplois induits obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Durée de réalisation (Jours) :</label>
-                            <input required type="number" class="form-control" id="dureeReal" value="" name="Duree_realisation_DemDerg"
+                            <input disabled="@NCree" required type="number" class="form-control" id="dureeReal" value="" name="Duree_realisation_DemDerg"
                                    oninvalid="this.setCustomValidity('Durée de réalisation obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
                     </div>
                     <div class="row" style="margin-bottom:25px">
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Consistance :</label>
-                            <input required type="text" class="form-control" id="contribution" value="" name="Contribution_Projet_DemDerg"
+                            <input disabled="@NCree" required type="text" class="form-control" id="contribution" value="" name="Contribution_Projet_DemDerg"
                                    oninvalid="this.setCustomValidity('Consistance obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
                     </div>
@@ -264,25 +264,25 @@
 
                         <div class="col-sm-3">
                             <label for="inputText11" style="font-size:12px;">Ratio Résidentiel :</label>
-                            <input required type="number" class="form-control" id="ratioResid" value="" name="Ratio_resid_DemDerg"
+                            <input disabled="@NCree" required type="number" class="form-control" id="ratioResid" value="" name="Ratio_resid_DemDerg"
                                    oninvalid="this.setCustomValidity('Ratio Résidentiel obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
 
                         <div class="col-sm-3">
                             <label for="inputText11" style="font-size:12px;">Ratio Social :</label>
-                            <input required type="number" class="form-control" id="ratioSoc" value="" name="Ratio_Social_DemDerg"
+                            <input disabled="@NCree" required type="number" class="form-control" id="ratioSoc" value="" name="Ratio_Social_DemDerg"
                                    oninvalid="this.setCustomValidity('Ratio Social obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
 
                         <div class="col-sm-3">
                             <label for="inputText11" style="font-size:12px;">Ratio Touristique :</label>
-                            <input required type="number" class="form-control" id="ratioTour" value="" name="Ratio_touris_DemDerg"
+                            <input disabled="@NCree" required type="number" class="form-control" id="ratioTour" value="" name="Ratio_touris_DemDerg"
                                    oninvalid="this.setCustomValidity('Ratio Touristique obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
 
                         <div class="col-sm-3">
                             <label for="inputText11" style="font-size:12px;">Ratio Industriel :</label>
-                            <input required type="number" class="form-control" id="rationInd" value="" name="Ratio_indus_DemDerg"
+                            <input disabled="@NCree" required type="number" class="form-control" id="rationInd" value="" name="Ratio_indus_DemDerg"
                                    oninvalid="this.setCustomValidity('Ratio Industriel obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
 

@@ -148,15 +148,15 @@ namespace GestionnaireUtilisateurs.Controllers
 
             var multiTab = new MultiModeles
             {
-                NatDemDerogs = database.Nature_Demande_Derg.ToList(),
-                ForMaitreOeuvrages = database.Forme_MaitreOeuvrage_DemDerg.ToList(),
-                NatPrjDerogs = database.Nature_Projet_DemDerg.ToList(),
-                StatutJurds = database.Statut_Juridique_DemDerg.ToList(),
-                Communes = database.COMMUNES_RSK.ToList(),
-                Provs = database.PROVINCES_RSK.ToList(),
-                References_Foncieres = database.References_Foncieres.ToList(),
+                NatDemDerogs = database.Nature_Demande_Derg.OrderBy(d => d.nature_Demande_Derogation).ToList(),
+                ForMaitreOeuvrages = database.Forme_MaitreOeuvrage_DemDerg.OrderBy(Z => Z.FormeMaitreOeuvrage_DemDerg).ToList(),
+                NatPrjDerogs = database.Nature_Projet_DemDerg.OrderBy(u => u.last).ThenBy(u => u.Nature_Projet_DemDerg1).ToList(),
+                StatutJurds = database.Statut_Juridique_DemDerg.OrderBy(u => u.last).ThenBy(i => i.StatutJuridique_DemDerg).ToList(),
+                Communes = database.COMMUNES_RSK.OrderBy(U => U.COMMUNE).ToList(),
+                Provs = database.PROVINCES_RSK.OrderBy(x => x.Provicne).ToList(),
+                References_Foncieres = database.References_Foncieres.OrderBy(x => x.NomRF).ToList(),
                 aspNetUsers = database.AspNetUsers.OrderBy(p => p.Email).ToList(),
-                Derogs_Demandees = database.derogs_demandees.OrderBy(u => u.last).ToList()
+                Derogs_Demandees = database.derogs_demandees.OrderBy(u => u.last).ThenBy(u => u.NOM).ToList()
             };
             return View(multiTab);
 
@@ -177,13 +177,13 @@ namespace GestionnaireUtilisateurs.Controllers
             bool Update = _Actions[2];
             bool Delete = _Actions[3];
 
-            DemDerg.Type_Terrain = DemDerg.Type_Terrain.Trim();
-            DemDerg.Cloture_DemDerg = false;
-            DemDerg.Couverture_DemDerg = false;
-            DemDerg.FK_DemDerg_EtatAvc = 15;
 
             if (Create)
             {
+                DemDerg.Type_Terrain = DemDerg.Type_Terrain.Trim();
+                DemDerg.Cloture_DemDerg = false;
+                DemDerg.Couverture_DemDerg = false;
+                DemDerg.FK_DemDerg_EtatAvc = 15;
                 if (StJrAut != "" && DemDerg.FK_DemDerg_StatutJuridique_DemDerg == 4)
                 {
                     var statutJ = database.Statut_Juridique_DemDerg.Where(u => u.StatutJuridique_DemDerg == StJrAut);
