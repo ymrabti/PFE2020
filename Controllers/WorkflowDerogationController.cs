@@ -51,7 +51,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 return RedirectToAction("BadGateAway");
             }
 
-            Demande_Derogation demande = db.Demande_Derogation.Find(IdDemDerog);
+            Demande_Derogation demande = database.Demande_Derogation.Find(IdDemDerog);
             if (demande == null)
             {
                 return RedirectToAction("NotFound");
@@ -106,25 +106,26 @@ namespace GestionnaireUtilisateurs.Controllers
         {
             bool[] _actions = new bool[4];
             var UserId = User.Identity.GetUserId();
-            var RoleId = db.AspNetRoles.Where(role => role.Name == RoleName).FirstOrDefault().Id;
-            var AdminRoleId = db.AspNetRoles.Where(role => role.Name == Administrator).FirstOrDefault().Id;
-            AspNetUserRoles Actions;
+            var RoleId = database.AspNetRoles.Where(role => role.Name == RoleName).FirstOrDefault().Id;
             if (User.IsInRole(Administrator))
             {
-                Actions = db.AspNetUserRoles.Find(UserId, AdminRoleId);
+                _actions[0] = true;
+                _actions[1] = true;
+                _actions[2] = true;
+                _actions[3] = true;
             }
             else
             {
-                Actions = db.AspNetUserRoles.Find(UserId, RoleId);
+                AspNetUserRoles Actions = database.AspNetUserRoles.Find(UserId, RoleId);
+                _actions[0] = Actions.Read;
+                _actions[1] = Actions.Create;
+                _actions[2] = Actions.Update;
+                _actions[3] = Actions.Delete;
             }
-            _actions[0] = Actions.Read;
-            _actions[1] = Actions.Create;
-            _actions[2] = Actions.Update;
-            _actions[3] = Actions.Delete;
             return _actions;
         }
 
-        public aurs1Entities db = new aurs1Entities();
+        public aurs1Entities database = new aurs1Entities();
 
 
         [Authorize(Roles = Administrator + "," + _Rensegnement)]
@@ -135,7 +136,7 @@ namespace GestionnaireUtilisateurs.Controllers
             ViewBag.Create = _Actions[1];
             ViewBag.Update = _Actions[2];
             ViewBag.Delete = _Actions[3];
-            var demDerog = db.Demande_Derogation.ToList();
+            var demDerog = database.Demande_Derogation.ToList();
             if (demDerog.Count() != 0)
             {
                 ViewBag.numVers = demDerog[demDerog.Count() - 1].NumVersion_DemDerog + 1;
@@ -146,17 +147,16 @@ namespace GestionnaireUtilisateurs.Controllers
             }
 
             var multiTab = new MultiModeles
-
             {
-                NatDemDerogs = db.Nature_Demande_Derg.ToList(),
-                ForMaitreOeuvrages = db.Forme_MaitreOeuvrage_DemDerg.ToList(),
-                NatPrjDerogs = db.Nature_Projet_DemDerg.ToList(),
-                StatutJurds = db.Statut_Juridique_DemDerg.ToList(),
-                Communes = db.COMMUNES_RSK.ToList(),
-                Provs = db.PROVINCES_RSK.ToList(),
-                References_Foncieres = db.References_Foncieres.ToList(),
-                aspNetUsers = db.AspNetUsers.OrderBy(p => p.Email).ToList(),
-                Derogs_Demandees = db.derogs_demandees.OrderBy(u => u.last).ToList()
+                NatDemDerogs = database.Nature_Demande_Derg.ToList(),
+                ForMaitreOeuvrages = database.Forme_MaitreOeuvrage_DemDerg.ToList(),
+                NatPrjDerogs = database.Nature_Projet_DemDerg.ToList(),
+                StatutJurds = database.Statut_Juridique_DemDerg.ToList(),
+                Communes = database.COMMUNES_RSK.ToList(),
+                Provs = database.PROVINCES_RSK.ToList(),
+                References_Foncieres = database.References_Foncieres.ToList(),
+                aspNetUsers = database.AspNetUsers.OrderBy(p => p.Email).ToList(),
+                Derogs_Demandees = database.derogs_demandees.OrderBy(u => u.last).ToList()
             };
             return View(multiTab);
 
@@ -165,64 +165,99 @@ namespace GestionnaireUtilisateurs.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Rensegnements(Demande_Derogation DemDerg, int enregistrer
-            ,string StJrAut,string NatPrjAut,string derogationDemAut)
+            , string StJrAut, string NatPrjAut, string derogationDemAut)
         {
             ViewBag.Message = "";
-            if (DemDerg.Type_Terrain == null)
+            Statut_Juridique_DemDerg _statut = new Statut_Juridique_DemDerg();
+            derogs_demandees _derogs = new derogs_demandees();
+            Nature_Projet_DemDerg _nature = new Nature_Projet_DemDerg();
+            var _Actions = Actions(_Rensegnement);
+            bool Read = _Actions[0];
+            bool Create = _Actions[1];
+            bool Update = _Actions[2];
+            bool Delete = _Actions[3];
+
+            DemDerg.Type_Terrain = DemDerg.Type_Terrain.Trim();
+            DemDerg.Cloture_DemDerg = false;
+            DemDerg.Couverture_DemDerg = false;
+            DemDerg.FK_DemDerg_EtatAvc = 15;
+
+            if (Create)
             {
-                ViewBag.Message = "Reference Fonciere est Obligatoire!!";
-                return RedirectToAction("Rensegnements", "WorkflowDerogation");
-            }
-            else
-            {
-                DemDerg.Type_Terrain = DemDerg.Type_Terrain.Trim();
-                DemDerg.Cloture_DemDerg = false;
-                DemDerg.Couverture_DemDerg = false;
-                if (StJrAut!="" && DemDerg.FK_DemDerg_StatutJuridique_DemDerg==4)
+                if (StJrAut != "" && DemDerg.FK_DemDerg_StatutJuridique_DemDerg == 4)
                 {
-                    Statut_Juridique_DemDerg statut_Juridique = new Statut_Juridique_DemDerg
+                    var statutJ = database.Statut_Juridique_DemDerg.Where(u => u.StatutJuridique_DemDerg == StJrAut);
+                    if (statutJ.Count() == 0)
                     {
-                        StatutJuridique_DemDerg = StJrAut, last = false
-                    };
-                    db.Statut_Juridique_DemDerg.Add(statut_Juridique);db.SaveChanges();
-                    DemDerg.Statut_Juridique_DemDerg = statut_Juridique;
+                        Statut_Juridique_DemDerg statut_Juridique = new Statut_Juridique_DemDerg
+                        {
+                            StatutJuridique_DemDerg = StJrAut,
+                            last = false
+                        };
+                        database.Statut_Juridique_DemDerg.Add(statut_Juridique);
+                        database.SaveChanges();
+                        _statut = database.Statut_Juridique_DemDerg.Where(i => i.StatutJuridique_DemDerg == StJrAut).FirstOrDefault();
+                    }
+                    else
+                    { _statut = statutJ.FirstOrDefault(); }
                 }
-                if (NatPrjAut!="" && DemDerg.FK_DemDerg_Nature_Projet_DemDerg==13)
+                else { _statut = database.Statut_Juridique_DemDerg.Find(DemDerg.FK_DemDerg_StatutJuridique_DemDerg); }
+                if (NatPrjAut != "" && DemDerg.FK_DemDerg_Nature_Projet_DemDerg == 13)
                 {
-                    Nature_Projet_DemDerg nature_Projet = new Nature_Projet_DemDerg
+                    var NatureProjet = database.Nature_Projet_DemDerg.Where(u => u.Nature_Projet_DemDerg1 == NatPrjAut);
+                    if (NatureProjet.Count() == 0)
                     {
-                        Nature_Projet_DemDerg1 = NatPrjAut, last = false
-                    };
-                    db.Nature_Projet_DemDerg.Add(nature_Projet);db.SaveChanges();
-                    DemDerg.Nature_Projet_DemDerg = nature_Projet;
+                        Nature_Projet_DemDerg nature_Projet = new Nature_Projet_DemDerg
+                        {
+                            Nature_Projet_DemDerg1 = NatPrjAut,
+                            last = false
+                        };
+                        database.Nature_Projet_DemDerg.Add(nature_Projet);
+                        database.SaveChanges();
+                        _nature = database.Nature_Projet_DemDerg.Where(i => i.Nature_Projet_DemDerg1 == NatPrjAut).FirstOrDefault();
+                    }
+                    else { _nature = NatureProjet.FirstOrDefault(); }
                 }
-                if (derogationDemAut!="" && DemDerg.Dero_demande_DemDerg==5)
+                else { _nature = database.Nature_Projet_DemDerg.Find(DemDerg.FK_DemDerg_Nature_Projet_DemDerg); }
+                if (derogationDemAut != "" && DemDerg.Dero_demande_DemDerg == 5)
                 {
-                    derogs_demandees derogs_Demandees = new derogs_demandees
+                    var DerogationDemandee = database.derogs_demandees.Where(u => u.NOM == derogationDemAut);
+                    if (DerogationDemandee.Count() == 0)
                     {
-                        NOM = derogationDemAut, last = false
-                    };
-                    db.derogs_demandees.Add(derogs_Demandees);db.SaveChanges();
-                    DemDerg.derogs_demandees = derogs_Demandees;
+                        derogs_demandees derogs_Demandees = new derogs_demandees
+                        {
+                            NOM = derogationDemAut,
+                            last = false
+                        };
+                        database.derogs_demandees.Add(derogs_Demandees);
+                        database.SaveChanges();
+                        _derogs = database.derogs_demandees.Where(w => w.NOM == derogationDemAut).FirstOrDefault();
+                    }
+                    else { _derogs = DerogationDemandee.FirstOrDefault(); }
                 }
+                else { _derogs = database.derogs_demandees.Find(DemDerg.Dero_demande_DemDerg); }
+                DemDerg.Statut_Juridique_DemDerg = _statut;
+                DemDerg.Nature_Projet_DemDerg = _nature;
+                DemDerg.derogs_demandees = _derogs;
+                database.Demande_Derogation.Add(DemDerg);
+                database.SaveChanges();
                 if (enregistrer == 0)
                 {
-                    DemDerg.FK_DemDerg_EtatAvc = 15;
-                    db.Demande_Derogation.Add(DemDerg);
-                    db.SaveChanges();
                     return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
                     //return RedirectToAction("Rensegnements_Fait", "WorkflowDerogation", new { Id_DemDerg = DemDerg.Id_DemDerg });
                 }
                 else
                 {
                     DemDerg.FK_DemDerg_EtatAvc = 16;
-                    db.Demande_Derogation.Add(DemDerg);
-                    db.SaveChanges();
+                    database.SaveChanges();
                     return RedirectToAction("SituationGeo", "WorkflowDerogation", new { DemDerg.Id_DemDerg });
                     //return RedirectToAction("SituationGeo", "WorkflowDerogation", new { Id_DemDerg = DemDerg.Id_DemDerg });
                 }
             }
-
+            else
+            {
+                return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
+            }
 
             //}
             //ViewBag.FK_DemDerg_FormeMaitreOeuvrage_DemDerg = new SelectList(db.Forme_MaitreOeuvrage_DemDerg, "Id_FormeMaitreOeuvrage_DemDerg", "FormeMaitreOeuvrage_DemDerg", DemDerg.FK_DemDerg_FormeMaitreOeuvrage_DemDerg);
@@ -232,16 +267,15 @@ namespace GestionnaireUtilisateurs.Controllers
             //return View(DemDerg);
         }
 
-
-
         [Authorize(Roles = Administrator + "," + _Rensegnement)]
         public ActionResult Rensegnements_Fait(int Id_DemDerg)
         {
-            ViewBag.Message = Workflow.Renseignements + " . " + Workflow.Situation_Géographique
-                + " . " + Workflow.GED + " . " + Workflow.Programmation + " . " + Workflow.Avis
-                + " . " + Workflow.Echanges + " . " + Workflow.Autorisation + " . " + Workflow.Cloture;
-
-            var demDerog = db.Demande_Derogation.ToList();
+            var _Actions = Actions(_Rensegnement);
+            ViewBag.Read = _Actions[0];
+            ViewBag.Create = _Actions[1];
+            ViewBag.Update = _Actions[2];
+            ViewBag.Delete = _Actions[3];
+            var demDerog = database.Demande_Derogation.ToList();
             if (demDerog.Count() != 0)
             {
                 ViewBag.numVers = demDerog[demDerog.Count() - 1].NumVersion_DemDerog + 1;
@@ -253,62 +287,149 @@ namespace GestionnaireUtilisateurs.Controllers
 
             var multiTab = new MultiModeles
             {
-                Provs = db.PROVINCES_RSK.ToList(),
-                Communes = db.COMMUNES_RSK.ToList(),
-                Parcells = db.parcell.ToList(),
-                DemDerg = db.Demande_Derogation.Find(Id_DemDerg),
-                NatDemDerogs = db.Nature_Demande_Derg.ToList(),
-                ForMaitreOeuvrages = db.Forme_MaitreOeuvrage_DemDerg.ToList(),
-                NatPrjDerogs = db.Nature_Projet_DemDerg.ToList(),
-                StatutJurds = db.Statut_Juridique_DemDerg.ToList(),
-                References_Foncieres = db.References_Foncieres.ToList(),
-                Derogs_Demandees = db.derogs_demandees.OrderBy(u => u.last).ToList()
+                DemDerg = database.Demande_Derogation.Find(Id_DemDerg),
+                NatDemDerogs = database.Nature_Demande_Derg.OrderBy(d => d.nature_Demande_Derogation).ToList(),
+                ForMaitreOeuvrages = database.Forme_MaitreOeuvrage_DemDerg.OrderBy(Z => Z.FormeMaitreOeuvrage_DemDerg).ToList(),
+                NatPrjDerogs = database.Nature_Projet_DemDerg.OrderBy(u => u.last).ThenBy(u => u.Nature_Projet_DemDerg1).ToList(),
+                StatutJurds = database.Statut_Juridique_DemDerg.OrderBy(u => u.last).ThenBy(i => i.StatutJuridique_DemDerg).ToList(),
+                Communes = database.COMMUNES_RSK.OrderBy(U => U.COMMUNE).ToList(),
+                Provs = database.PROVINCES_RSK.OrderBy(x => x.Provicne).ToList(),
+                References_Foncieres = database.References_Foncieres.OrderBy(x => x.NomRF).ToList(),
+                aspNetUsers = database.AspNetUsers.OrderBy(p => p.Email).ToList(),
+                Derogs_Demandees = database.derogs_demandees.OrderBy(u => u.last).ThenBy(u => u.NOM).ToList()
             };
             //return View(multiTab);
             return correctAction(15, Id_DemDerg, multiTab);
         }
 
         [HttpPost]
-        public ActionResult Rensegnements_Fait(Demande_Derogation DemDerg, int enregistrer/*, int Id_DemDerg*/)
+        [ValidateAntiForgeryToken]
+        public ActionResult Rensegnements_Fait(Demande_Derogation DemDerg, int enregistrer
+            , string StJrAut, string NatPrjAut, string derogationDemAut)
         {
-            var demExist = db.Demande_Derogation.Find(DemDerg.Id_DemDerg);
+            var demExist = database.Demande_Derogation.Find(DemDerg.Id_DemDerg);
+            Statut_Juridique_DemDerg _statut = new Statut_Juridique_DemDerg();
+            derogs_demandees _derogs = new derogs_demandees();
+            Nature_Projet_DemDerg _nature = new Nature_Projet_DemDerg();
+            var _Actions = Actions(_Rensegnement);
+            bool Read = _Actions[0];
+            bool Create = _Actions[1];
+            bool Update = _Actions[2];
+            bool Delete = _Actions[3];
+            if (Create)
+            {
+                if (StJrAut != "" && DemDerg.FK_DemDerg_StatutJuridique_DemDerg == 4)
+                {
+                    var statutJ = database.Statut_Juridique_DemDerg.Where(u => u.StatutJuridique_DemDerg == StJrAut);
+                    if (statutJ.Count() == 0)
+                    {
+                        Statut_Juridique_DemDerg statut_Juridique = new Statut_Juridique_DemDerg
+                        {
+                            StatutJuridique_DemDerg = StJrAut,
+                            last = false
+                        };
+                        database.Statut_Juridique_DemDerg.Add(statut_Juridique);
+                        database.SaveChanges();
+                        _statut = database.Statut_Juridique_DemDerg.Where(i => i.StatutJuridique_DemDerg == StJrAut).FirstOrDefault();
+                    }
+                    else
+                    { _statut = statutJ.FirstOrDefault(); }
+                }
+                else { _statut = database.Statut_Juridique_DemDerg.Find(DemDerg.FK_DemDerg_StatutJuridique_DemDerg); }
+                if (NatPrjAut != "" && DemDerg.FK_DemDerg_Nature_Projet_DemDerg == 13)
+                {
+                    var NatureProjet = database.Nature_Projet_DemDerg.Where(u => u.Nature_Projet_DemDerg1 == NatPrjAut);
+                    if (NatureProjet.Count() == 0)
+                    {
+                        Nature_Projet_DemDerg nature_Projet = new Nature_Projet_DemDerg
+                        {
+                            Nature_Projet_DemDerg1 = NatPrjAut,
+                            last = false
+                        };
+                        database.Nature_Projet_DemDerg.Add(nature_Projet);
+                        database.SaveChanges();
+                        _nature = database.Nature_Projet_DemDerg.Where(i => i.Nature_Projet_DemDerg1 == NatPrjAut).FirstOrDefault();
+                    }
+                    else { _nature = NatureProjet.FirstOrDefault(); }
+                }
+                else { _nature = database.Nature_Projet_DemDerg.Find(DemDerg.FK_DemDerg_Nature_Projet_DemDerg); }
+                if (derogationDemAut != "" && DemDerg.Dero_demande_DemDerg == 5)
+                {
+                    var DerogationDemandee = database.derogs_demandees.Where(u => u.NOM == derogationDemAut);
+                    if (DerogationDemandee.Count() == 0)
+                    {
+                        derogs_demandees derogs_Demandees = new derogs_demandees
+                        {
+                            NOM = derogationDemAut,
+                            last = false
+                        };
+                        database.derogs_demandees.Add(derogs_Demandees);
+                        database.SaveChanges();
+                        _derogs = database.derogs_demandees.Where(w => w.NOM == derogationDemAut).FirstOrDefault();
+                    }
+                    else { _derogs = DerogationDemandee.FirstOrDefault(); }
+                }
+                else { _derogs = database.derogs_demandees.Find(DemDerg.Dero_demande_DemDerg); }
+            }
+            else
+            {
+                _derogs = database.derogs_demandees.Find(DemDerg.Dero_demande_DemDerg);
+                _nature = database.Nature_Projet_DemDerg.Find(DemDerg.FK_DemDerg_Nature_Projet_DemDerg);
+                _statut = database.Statut_Juridique_DemDerg.Find(DemDerg.FK_DemDerg_StatutJuridique_DemDerg);
+            }
+            if (Read && Update)
+            {
+                var Trim = DemDerg.Type_Terrain.Trim();
+                demExist.Type_Terrain = Trim;
+                demExist.Id_Commune = DemDerg.Id_Commune;
+                demExist.Intitule_DemDerg = DemDerg.Intitule_DemDerg;
+                demExist.PrevisionUrbanistique_DemDerg = DemDerg.PrevisionUrbanistique_DemDerg;
 
-            //demExist.Code_DemDerg = DemDerg.Code_DemDerg;
-            demExist.Intitule_DemDerg = DemDerg.Intitule_DemDerg;
-            demExist.Superficie_Terrain_DemDerg = DemDerg.Superficie_Terrain_DemDerg;
-            demExist.Maitre_Oeuvrage_DemDerg = DemDerg.Maitre_Oeuvrage_DemDerg;
-            demExist.Maitre_Oeuvre_DemDerg = DemDerg.Maitre_Oeuvre_DemDerg;
-            demExist.Couverture_DemDerg = DemDerg.Couverture_DemDerg;
-            demExist.PrevisionUrbanistique_DemDerg = DemDerg.PrevisionUrbanistique_DemDerg;
-            demExist.Ratio_indus_DemDerg = DemDerg.Ratio_indus_DemDerg;
-            demExist.Ratio_resid_DemDerg = DemDerg.Ratio_resid_DemDerg;
-            demExist.Ratio_Social_DemDerg = DemDerg.Ratio_Social_DemDerg;
-            demExist.Ratio_touris_DemDerg = DemDerg.Ratio_touris_DemDerg;
-            demExist.Montant_Investissement_DemDerg = DemDerg.Montant_Investissement_DemDerg;
-            demExist.Emploi_generer_DemDerg = DemDerg.Emploi_generer_DemDerg;
-            demExist.Dero_demande_DemDerg = DemDerg.Dero_demande_DemDerg;
-            demExist.Duree_realisation_DemDerg = DemDerg.Duree_realisation_DemDerg;
-            demExist.Contribution_Projet_DemDerg = DemDerg.Contribution_Projet_DemDerg;
-            demExist.Adresse_DemDerg = DemDerg.Adresse_DemDerg;
-            demExist.Avis_Remarque_DemDerg = DemDerg.Avis_Remarque_DemDerg;
-            demExist.Cloture_DemDerg = DemDerg.Cloture_DemDerg;
-            demExist.FK_DemDerg_Nature_Dem = DemDerg.FK_DemDerg_Nature_Dem;
-            demExist.FK_DemDerg_StatutJuridique_DemDerg = DemDerg.FK_DemDerg_StatutJuridique_DemDerg;
-            demExist.FK_DemDerg_FormeMaitreOeuvrage_DemDerg = DemDerg.FK_DemDerg_FormeMaitreOeuvrage_DemDerg;
-            demExist.FK_DemDerg_Nature_Projet_DemDerg = DemDerg.FK_DemDerg_Nature_Projet_DemDerg;
+                demExist.FK_DemDerg_Nature_Dem = DemDerg.FK_DemDerg_Nature_Dem;
+                demExist.Superficie_Terrain_DemDerg = DemDerg.Superficie_Terrain_DemDerg;
+                demExist.Maitre_Oeuvrage_DemDerg = DemDerg.Maitre_Oeuvrage_DemDerg;
+                demExist.Maitre_Oeuvre_DemDerg = DemDerg.Maitre_Oeuvre_DemDerg;
+                demExist.FK_DemDerg_FormeMaitreOeuvrage_DemDerg = DemDerg.FK_DemDerg_FormeMaitreOeuvrage_DemDerg;
+                demExist.Montant_Investissement_DemDerg = DemDerg.Montant_Investissement_DemDerg;
+                demExist.Adresse_DemDerg = DemDerg.Adresse_DemDerg;
+                demExist.Emploi_generer_DemDerg = DemDerg.Emploi_generer_DemDerg;
+                demExist.Duree_realisation_DemDerg = DemDerg.Duree_realisation_DemDerg;
+
+                demExist.Contribution_Projet_DemDerg = DemDerg.Contribution_Projet_DemDerg;
+
+                demExist.Ratio_indus_DemDerg = DemDerg.Ratio_indus_DemDerg;
+                demExist.Ratio_resid_DemDerg = DemDerg.Ratio_resid_DemDerg;
+                demExist.Ratio_Social_DemDerg = DemDerg.Ratio_Social_DemDerg;
+                demExist.Ratio_touris_DemDerg = DemDerg.Ratio_touris_DemDerg;
+
+                demExist.Statut_Juridique_DemDerg = _statut;
+                demExist.Nature_Projet_DemDerg = _nature;
+                demExist.derogs_demandees = _derogs;
+                //if (_statut.StatutJuridique_DemDerg!=null)
+                //{
+                //}
+                //if (_nature.Nature_Projet_DemDerg1!=null)
+                //{
+                //}
+                //if (_derogs.NOM!=null)
+                //{
+                //}
+                database.SaveChanges();
+            }
+
 
             if (enregistrer == 0)
             {
                 demExist.FK_DemDerg_EtatAvc = 15;
-                db.SaveChanges();
+                database.SaveChanges();
                 return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
                 //return RedirectToAction("Rensegnements_Fait", "WorkflowDerogation", new { Id_DemDerg = DemDerg.Id_DemDerg });
             }
             else
             {
                 demExist.FK_DemDerg_EtatAvc = 16;
-                db.SaveChanges();
-                return RedirectToAction("SituationGeo", "WorkflowDerogation", new { Id_DemDerg = DemDerg.Id_DemDerg });
+                database.SaveChanges();
+                return RedirectToAction("SituationGeo", "WorkflowDerogation", new { DemDerg.Id_DemDerg });
                 //return RedirectToAction("SituationGeo", "WorkflowDerogation", new { Id_DemDerg = DemDerg.Id_DemDerg });
             }
         }
@@ -321,7 +442,7 @@ namespace GestionnaireUtilisateurs.Controllers
         {
             var multiTab = new MultiModeles
             {
-                DemDerg = db.Demande_Derogation.Find(Id_DemDerg)
+                DemDerg = database.Demande_Derogation.Find(Id_DemDerg)
             };
             return correctAction(16, Id_DemDerg, multiTab);
         }
@@ -329,19 +450,19 @@ namespace GestionnaireUtilisateurs.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SituationGeo(int? Id_DemDerg, int enregistrer)
         {
-            var demandeDerg = db.Demande_Derogation.Find(Id_DemDerg);
+            var demandeDerg = database.Demande_Derogation.Find(Id_DemDerg);
             if (enregistrer == 0)
             {
 
                 demandeDerg.FK_DemDerg_EtatAvc = 16;
-                db.SaveChanges();
+                database.SaveChanges();
                 //return RedirectToAction("Encours", "WorkflowDerogation");
                 return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
             }
             else
             {
                 demandeDerg.FK_DemDerg_EtatAvc = 17;
-                db.SaveChanges();
+                database.SaveChanges();
                 //return RedirectToAction("GED", "WorkflowDerogation", new { Id_DemDerg = Id_DemDerg });
                 return RedirectToAction("Ged", "WorkflowDerogation", new { FK_DemDerg_DocDerg = Id_DemDerg });
             }
@@ -354,8 +475,8 @@ namespace GestionnaireUtilisateurs.Controllers
         {
             var multiTab = new MultiModeles()
             {
-                DemDerg = db.Demande_Derogation.Find(FK_DemDerg_DocDerg),
-                TYPE_DOCs = db.TYPE_DOC.ToList(),
+                DemDerg = database.Demande_Derogation.Find(FK_DemDerg_DocDerg),
+                TYPE_DOCs = database.TYPE_DOC.ToList(),
                 Message2View = ""
             };
 
@@ -369,13 +490,13 @@ namespace GestionnaireUtilisateurs.Controllers
         {
             var multiTab = new MultiModeles()
             {
-                DemDerg = db.Demande_Derogation.Find(FK_DemDerg_DocDerg),
-                TYPE_DOCs = db.TYPE_DOC.ToList(),
+                DemDerg = database.Demande_Derogation.Find(FK_DemDerg_DocDerg),
+                TYPE_DOCs = database.TYPE_DOC.ToList(),
                 Message2View = ""
             };
             if (ModelState.IsValid)
             {
-                Demande_Derogation demande = db.Demande_Derogation.Find(FK_DemDerg_DocDerg);
+                Demande_Derogation demande = database.Demande_Derogation.Find(FK_DemDerg_DocDerg);
                 if (url_Doc_Derg != null)
                 {
                     String path = Server.MapPath("~/GED_DEROG/");
@@ -390,7 +511,7 @@ namespace GestionnaireUtilisateurs.Controllers
                             Directory.CreateDirectory(pathDemande);
                         }
                     }
-                    for (int n=0;n<url_Doc_Derg.Length;n++)
+                    for (int n = 0; n < url_Doc_Derg.Length; n++)
                     {
                         var file = url_Doc_Derg[n];
                         String path1 = Path.Combine(pathDemande, file.FileName /*+ Path.GetExtension(file.FileName)*/);
@@ -399,16 +520,16 @@ namespace GestionnaireUtilisateurs.Controllers
                         d.url_Doc_Derg = path1.ToString();
                         d.Intitule_Doc_Derg = Intitule_Doc_Derg[n];
                         d.FK_DemDerg_DocDerg = FK_DemDerg_DocDerg;
-                        d.FileName =file.FileName;
-                        d.ContentType =file.ContentType;
-                        d.ContentLenght =file.ContentLength;
-                        db.Document_Derogation.Add(d);
-                        var res = db.SaveChanges();
+                        d.FileName = file.FileName;
+                        d.ContentType = file.ContentType;
+                        d.ContentLenght = file.ContentLength;
+                        database.Document_Derogation.Add(d);
+                        var res = database.SaveChanges();
                     }
                     if (valider == 1)
                     {
                         demande.FK_DemDerg_EtatAvc = 18;
-                        db.SaveChanges();
+                        database.SaveChanges();
                         return RedirectToAction("Programmation", "WorkflowDerogation", new { FK_DemDerg_Com = FK_DemDerg_DocDerg });
                     }
                     else
@@ -432,7 +553,7 @@ namespace GestionnaireUtilisateurs.Controllers
             multiTab.Message2View = "une erreur s'est produite !";
             return View(multiTab);
         }
-        
+
 
         //[HttpPost]
         //public JsonResult Ged(FormCollection form, HttpPostedFileBase[] filetype)
@@ -472,7 +593,7 @@ namespace GestionnaireUtilisateurs.Controllers
         public ActionResult Programmation(int? FK_DemDerg_Com)
         {
             ViewBag.idDerog = FK_DemDerg_Com;
-            List<Commission> ComssList = db.Commission.ToList();
+            List<Commission> ComssList = database.Commission.ToList();
             if (ComssList.Count() != 0)
             {
                 ViewBag.codeCom = ComssList[ComssList.Count() - 1].Code_Commission + 1;
@@ -483,8 +604,8 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             var multiTab = new MultiModeles
             {
-                Comss = db.Commission.Where(v => v.Date_Commission > DateTime.Today).OrderBy(var => var.Date_Commission).ToList(),
-                DemDerg = db.Demande_Derogation.Find(FK_DemDerg_Com)
+                Comss = database.Commission.Where(v => v.Date_Commission > DateTime.Today).OrderBy(var => var.Date_Commission).ToList(),
+                DemDerg = database.Demande_Derogation.Find(FK_DemDerg_Com)
             };
             return correctAction(18, FK_DemDerg_Com.Value, multiTab);
         }
@@ -493,18 +614,18 @@ namespace GestionnaireUtilisateurs.Controllers
         [HttpPost]
         public ActionResult Programmation(int FK_DemDerg_Com, int enregistrer)
         {
-            var demandeDerg = db.Demande_Derogation.Find(FK_DemDerg_Com);
+            var demandeDerg = database.Demande_Derogation.Find(FK_DemDerg_Com);
 
             if (enregistrer == 0)
             {
                 demandeDerg.FK_DemDerg_EtatAvc = 18;
-                db.SaveChanges();
+                database.SaveChanges();
                 return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
             }
             else
             {
                 demandeDerg.FK_DemDerg_EtatAvc = 19;
-                db.SaveChanges();
+                database.SaveChanges();
                 return RedirectToAction("AvisOrg", "WorkflowDerogation", new { FK_DemDerg = FK_DemDerg_Com });
             }
         }
@@ -519,12 +640,12 @@ namespace GestionnaireUtilisateurs.Controllers
                 {
                     commission.Date_Commission = DateTime.Now;
                 }
-                db.Commission.Add(commission);
-                db.SaveChanges();
+                database.Commission.Add(commission);
+                database.SaveChanges();
 
-                Demande_Derogation demande = db.Demande_Derogation.Find(FK_DemDerg_Com);
-                demande.Commission = commission; db.Entry(demande).State = EntityState.Modified;
-                db.SaveChanges();
+                Demande_Derogation demande = database.Demande_Derogation.Find(FK_DemDerg_Com);
+                demande.Commission = commission; database.Entry(demande).State = EntityState.Modified;
+                database.SaveChanges();
             }
 
             //return Json(data);
@@ -534,10 +655,10 @@ namespace GestionnaireUtilisateurs.Controllers
         [Authorize(Roles = Administrator + "," + _Programmation)]
         public ActionResult Programmation_Affectation(int FK_DemDerg_Com, int Id_Commission)
         {
-            Demande_Derogation demande = db.Demande_Derogation.Find(FK_DemDerg_Com);
+            Demande_Derogation demande = database.Demande_Derogation.Find(FK_DemDerg_Com);
             demande.Fk_Commission = Id_Commission;
-            db.Entry(demande).State = EntityState.Modified;
-            db.SaveChanges();
+            database.Entry(demande).State = EntityState.Modified;
+            database.SaveChanges();
             return RedirectToAction("Programmation", "WorkflowDerogation", new { FK_DemDerg_Com });
         }
 
@@ -550,11 +671,11 @@ namespace GestionnaireUtilisateurs.Controllers
             var multiTab = new MultiModeles
             {
                 //DocDerg = db.Document_Derogation.Where(p => p.FK_DemDerg_DocDerg == FK_DemDerg).Where(s => s.Intitule_Doc_Derg.Equals("PV de la commission")).Single(),
-                TypAviss = db.Type_Avis.ToList(),
-                Orgs = db.Organisme.Where(p => p.Id_Organisme > 6).ToList(),
-                AvisOrgs = db.Avis_Org.Where(p => p.FK_DemDerg == FK_DemDerg)
+                TypAviss = database.Type_Avis.ToList(),
+                Orgs = database.Organisme.Where(p => p.Id_Organisme > 6).ToList(),
+                AvisOrgs = database.Avis_Org.Where(p => p.FK_DemDerg == FK_DemDerg)
                 .ToList(),
-                DemDerg = db.Demande_Derogation.Find(FK_DemDerg)
+                DemDerg = database.Demande_Derogation.Find(FK_DemDerg)
             };
             return correctAction(19, FK_DemDerg, multiTab);
         }
@@ -571,7 +692,7 @@ namespace GestionnaireUtilisateurs.Controllers
                     var A = avv[i].FK_Organisme;
                     var B = avv[i].FK_TypAvis;
                     var C = avv[i].Detail_Avis;
-                    Avis_Org avis_ = db.Avis_Org.Where(ink => ink.FK_DemDerg == AA && ink.FK_Organisme == A).FirstOrDefault();
+                    Avis_Org avis_ = database.Avis_Org.Where(ink => ink.FK_DemDerg == AA && ink.FK_Organisme == A).FirstOrDefault();
                     if (avis_ == null)
                     {
                         var con = new Avis_Org();
@@ -580,13 +701,13 @@ namespace GestionnaireUtilisateurs.Controllers
                         con.FK_TypAvis = B;
                         con.Detail_Avis = C;
 
-                        db.Avis_Org.Add(con);
+                        database.Avis_Org.Add(con);
                     }
                     else
                     {//avv[i].FK_DemDerg, avv[i].FK_Organisme
-                        Avis_Org avis = db.Avis_Org.Where(s => s.FK_DemDerg == AA && s.FK_Organisme == A).FirstOrDefault();
+                        Avis_Org avis = database.Avis_Org.Where(s => s.FK_DemDerg == AA && s.FK_Organisme == A).FirstOrDefault();
                         avis.FK_TypAvis = B; avis.Detail_Avis = C;
-                        var res = db.Entry(avis).State = EntityState.Modified;
+                        var res = database.Entry(avis).State = EntityState.Modified;
                     }
 
                 }
@@ -595,7 +716,7 @@ namespace GestionnaireUtilisateurs.Controllers
             var valider = form["valider"];
             var remq = form["req"];
             var id = System.Convert.ToInt32(form["Id"]);
-            var demdeg = db.Demande_Derogation.Find(id);
+            var demdeg = database.Demande_Derogation.Find(id);
             demdeg.Avis_Remarque_DemDerg = remq;
             var file = form["file"];
             var doc = new Document_Derogation
@@ -604,19 +725,19 @@ namespace GestionnaireUtilisateurs.Controllers
                 url_Doc_Derg = file,
                 FK_DemDerg_DocDerg = id
             };
-            db.Document_Derogation.Add(doc);
+            database.Document_Derogation.Add(doc);
 
             if (valider == "1")
             {
                 demdeg.FK_DemDerg_EtatAvc = 20;
-                db.SaveChanges();
+                database.SaveChanges();
                 //return Json(Url.Action("Echanges", "WorkflowDerogation"));
                 return Json(Url.Action("Echanges", "WorkflowDerogation", new { FK_DemDerg = id }));
             }
             else
             {
                 demdeg.FK_DemDerg_EtatAvc = 19;
-                db.SaveChanges();
+                database.SaveChanges();
                 return Json(Url.Action("Encours", "WorkflowDerogation", new { page = 1 }));
                 //return Json(Url.Action("AvisOrg", "WorkflowDerogation", new { FK_DemDerg = id }));
             }
@@ -630,8 +751,8 @@ namespace GestionnaireUtilisateurs.Controllers
         {
             var multiTab = new MultiModeles
             {
-                NatCours = db.Nature_Courrier.ToList(),
-                DemDerg = db.Demande_Derogation.Find(FK_DemDerg),
+                NatCours = database.Nature_Courrier.ToList(),
+                DemDerg = database.Demande_Derogation.Find(FK_DemDerg),
 
             };
             return correctAction(20, FK_DemDerg, multiTab);
@@ -657,25 +778,25 @@ namespace GestionnaireUtilisateurs.Controllers
                     };
                     if (avv[i].Date_Courier > DateTime.Now) { con.Date_Courier = avv[i].Date_Courier; }
                     else { con.Date_Courier = DateTime.Today; }
-                    db.Courrier.Add(con);
-                    db.SaveChanges();
+                    database.Courrier.Add(con);
+                    database.SaveChanges();
                 }
             }
 
             var id = System.Convert.ToInt32(form["Id"]);
-            var demdeg = db.Demande_Derogation.Find(id);
+            var demdeg = database.Demande_Derogation.Find(id);
             var valider = form["valider"];
             if (valider == "1")
             {
                 demdeg.FK_DemDerg_EtatAvc = 21;
-                db.SaveChanges();
+                database.SaveChanges();
                 //return Json(Url.Action("Encours", "WorkflowDerogation"));
                 return Json(Url.Action("Autorisation", "WorkflowDerogation", new { FK_DemDerg = id }));
             }
             else
             {
                 demdeg.FK_DemDerg_EtatAvc = 20;
-                db.SaveChanges();
+                database.SaveChanges();
                 return Json(Url.Action("Encours", "WorkflowDerogation", new { page = 1 }));
                 //return Json(Url.Action("Echanges", "WorkflowDerogation", new { FK_DemDerg = id }));
             }
@@ -690,7 +811,7 @@ namespace GestionnaireUtilisateurs.Controllers
         {
             var multiTab = new MultiModeles
             {
-                DemDerg = db.Demande_Derogation.Find(FK_DemDerg),
+                DemDerg = database.Demande_Derogation.Find(FK_DemDerg),
             };
             return correctAction(21, FK_DemDerg, multiTab);
         }
@@ -698,7 +819,7 @@ namespace GestionnaireUtilisateurs.Controllers
         public ActionResult Autorisation(int Id_Aut, Autorisation_Derogation AutDerog, int valider, int Fk_DEMDEROG)
         {
             ViewBag.Message = "";
-            var demdeg = db.Demande_Derogation.Find(Fk_DEMDEROG);
+            var demdeg = database.Demande_Derogation.Find(Fk_DEMDEROG);
 
             if (AutDerog.Nature_Autorisation == "" || AutDerog.Nature_Autorisation == null || AutDerog.Nature_Autorisation == "null")
             {
@@ -709,19 +830,19 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 if (demdeg.Autorisation_Derogation == null)
                 {
-                    db.Autorisation_Derogation.Add(AutDerog);
+                    database.Autorisation_Derogation.Add(AutDerog);
                     demdeg.Autorisation_Derogation = AutDerog;
                 }
                 else
                 {
-                    Autorisation_Derogation autorisation_Derogation = db.Autorisation_Derogation.Find(Id_Aut);
+                    Autorisation_Derogation autorisation_Derogation = database.Autorisation_Derogation.Find(Id_Aut);
                     autorisation_Derogation.Dae_Avis_Autorisation = AutDerog.Dae_Avis_Autorisation;
                     autorisation_Derogation.Date_Aut_Autorisation = AutDerog.Date_Aut_Autorisation;
                     autorisation_Derogation.Date_Comt_Autorisation = AutDerog.Date_Comt_Autorisation;
                     autorisation_Derogation.Date_Demande_Autorisation = AutDerog.Date_Demande_Autorisation;
                     autorisation_Derogation.EtatAvancemt_Autorisation = AutDerog.EtatAvancemt_Autorisation;
                     autorisation_Derogation.Nature_Autorisation = AutDerog.Nature_Autorisation;
-                    db.Entry(autorisation_Derogation).State = EntityState.Modified;
+                    database.Entry(autorisation_Derogation).State = EntityState.Modified;
                     //db.Autorisation_Derogation.Remove(autorisation_Derogation);
                     //db.Autorisation_Derogation.Add(AutDerog);
                 }
@@ -729,14 +850,14 @@ namespace GestionnaireUtilisateurs.Controllers
                 if (valider == 0)
                 {
                     demdeg.FK_DemDerg_EtatAvc = 21;
-                    db.SaveChanges();
+                    database.SaveChanges();
                     return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
                     //return RedirectToAction("Autorisation", "WorkflowDerogation", new { FK_DemDerg = AutDerog.FK_DemDerg_AutDerg });
                 }
                 else
                 {
                     demdeg.FK_DemDerg_EtatAvc = 22;
-                    db.SaveChanges();
+                    database.SaveChanges();
                     //return RedirectToAction("Encours", "WorkflowDerogation");
                     return RedirectToAction("Cloture", "WorkflowDerogation", new { FK_DemDerg = Fk_DEMDEROG });
                 }
@@ -751,16 +872,16 @@ namespace GestionnaireUtilisateurs.Controllers
             var multiTab = new MultiModeles
             {
                 //AutDerog = db.Autorisation_Derogation.Where(p => p.FK_DemDerg_AutDerg == FK_DemDerg).Single(),
-                DemDerg = db.Demande_Derogation.Find(FK_DemDerg)
+                DemDerg = database.Demande_Derogation.Find(FK_DemDerg)
             };
             return correctAction(22, FK_DemDerg, multiTab);
         }
         [HttpPost]
         public ActionResult Cloture(int? FK_DemDerg_AutDerg)
         {
-            var demdeg = db.Demande_Derogation.Find(FK_DemDerg_AutDerg);
+            var demdeg = database.Demande_Derogation.Find(FK_DemDerg_AutDerg);
             demdeg.Cloture_DemDerg = true;
-            db.SaveChanges();
+            database.SaveChanges();
             return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
         }
 
@@ -778,10 +899,10 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
         [Authorize(Roles = _WorkflowDerogation)]
-        public ActionResult Encours(Nullable<Int16> page,Nullable<int> Message)
+        public ActionResult Encours(Nullable<Int16> page, Nullable<int> Message)
         {
             if (page == null) { page = 1; }
-            int totale_resultats = db.Demande_Derogation.Count();
+            int totale_resultats = database.Demande_Derogation.Count();
             int nombre_de_pages = totale_resultats / nombre_res_ppage + 1;
             ViewBag.page = page; ViewBag.nombre_de_pages = nombre_de_pages;
             if (page < 1)
@@ -796,13 +917,13 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 var model = new MultiModeles
                 {
-                    DemDergs = db.Demande_Derogation
+                    DemDergs = database.Demande_Derogation
                     .OrderByDescending(p => p.Id_DemDerg)
                     .Skip((page.Value - 1) * nombre_res_ppage)
                     .Take(nombre_res_ppage)
                     .ToList()
                 };
-                if (Message==1) { model.Message2View = "Vous n'avez pas le droit d'afficher ce contenue"; }
+                if (Message == 1) { model.Message2View = "Vous n'avez pas le droit d'afficher ce contenue"; }
                 else { model.Message2View = ""; }
                 return View(model);
             }
@@ -812,7 +933,7 @@ namespace GestionnaireUtilisateurs.Controllers
         [HttpPost]
         public ActionResult Encours(int Id_DemDerg)
         {
-            Demande_Derogation demande = db.Demande_Derogation.Find(Id_DemDerg);
+            Demande_Derogation demande = database.Demande_Derogation.Find(Id_DemDerg);
             if (demande == null)
             {
                 return RedirectToAction("NotFound");
@@ -898,8 +1019,8 @@ namespace GestionnaireUtilisateurs.Controllers
                 //    model.DemDergs = db.Demande_Derogation.Where(p => p.FK_DemDerg_EtatAvc == 22);
                 //}
 
-                NatDemDerogs = db.Nature_Demande_Derg.ToList(),
-                EtatAvancements = db.EtatAvancement.ToList()
+                NatDemDerogs = database.Nature_Demande_Derg.ToList(),
+                EtatAvancements = database.EtatAvancement.ToList()
             };
 
             return View(model);
@@ -915,7 +1036,7 @@ namespace GestionnaireUtilisateurs.Controllers
         {
             MultiModeles multiModeles = new MultiModeles
             {
-                DemDerg = db.Demande_Derogation.Find(idDemDerog)
+                DemDerg = database.Demande_Derogation.Find(idDemDerog)
             };
             return View(multiModeles);
         }

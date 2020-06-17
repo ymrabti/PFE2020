@@ -1,13 +1,15 @@
 ﻿@model GestionnaireUtilisateurs.Models.MultiModeles
-
 @{
     ViewBag.Title = "Rensegnements_Fait";
     Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
     //var datenow = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
     var numVers = ViewBag.numVers;
+    bool Lire      = ViewBag.Read  ; bool NLire      = !Lire     ;
+    bool Cree      = ViewBag.Create; bool NCree      = !Cree     ;
+    bool Modifier  = ViewBag.Update; bool NModifier  = !Modifier ;
+    bool Supprimer = ViewBag.Delete; bool NSupprimer = !Supprimer;
 }
 
-@*<center><h1><label class="text-danger" style="margin:10px">@ViewBag.Message</label></h1></center>*@
 <section>
     <nav>
         <ol class="cd-multi-steps text-bottom count">
@@ -23,272 +25,430 @@
     </nav>
 </section>
 
-@Html.Partial("WorkflowG", Model)
 
+<center>
+    <label class="text-capitalize text-info" style="background-color:gray;margin-bottom:10px">
+        Lire  @if (Lire)
+        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
+        else
+        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
 
-<div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
-    <div class="card-body" id="">
-        <div class="form-horizontal">
-            @using (Html.BeginForm("Rensegnements", "WorkflowDerogation", FormMethod.Post, new { id = "formsubmit" }))
-            {
-                @Html.AntiForgeryToken()
-                <div class="row" style="margin-bottom:25px">
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label for="inputText11" style="font-size:12px;">Réference fonciere : <label style="color:red">*</label></label>
-                            <select required class="form-control form-control-sm chzn-selec" id="selRef" name="Type_Terrain"
-                                    oninvalid="this.setCustomValidity('Réference fonciere obligatoire !')" oninput="this.setCustomValidity('')">
-                                <option value="">--- Sélectionner une réference fonciere ---</option>
-                                @foreach (var item in Model.References_Foncieres)
+        Cree  @if (Cree)
+        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
+        else
+        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
+
+        Modifier  @if (Modifier)
+        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
+        else
+        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
+        Supprimer  @if (Supprimer)
+        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
+        else
+        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
+    </label>
+
+</center>
+@if (Lire)
+{
+
+    Html.Partial("WorkflowG", Model);
+    <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+        <div class="card-body">
+            <div class="form-horizontal">
+                @using (Html.BeginForm("Rensegnements_Fait", "WorkflowDerogation", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="row" style="margin-bottom:25px">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="inputText11" style="font-size:12px;">Réference fonciere : <label style="color:red">*</label></label>
+                                <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="selRef" name="Type_Terrain"
+                                        oninvalid="this.setCustomValidity('Réference fonciere obligatoire !')" oninput="this.setCustomValidity('')">
+                                    <option value="">--- Sélectionner une réference fonciere ---</option>
+                                    @foreach (var item in Model.References_Foncieres)
+                                    {
+                                        if (item.Id_RF == Model.DemDerg.Type_Terrain)
+                                        {
+                                            <option value="@item.Id_RF" selected>@item.NomRF</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Id_RF">@item.NomRF</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="inputText11" style="font-size:12px;">Préfecture :</label>
+                                <select disabled="@NModifier" class="form-control form-control-sm chzn-selec" id="Prefectures" name="Prefecture">
+                                    <option value="">-------- Sélectionner la préfecture : --------</option>
+                                    @foreach (var item in Model.Provs)
+                                    {
+                                        if (item.IdProv == Model.DemDerg.COMMUNES_RSK.PROVINCES_RSK.IdProv)
+                                        {
+                                            <option value="@item.IdProv" selected>@item.Provicne</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.IdProv">@item.Provicne</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label for="inputText11" style="font-size:12px;">Commune/Arrondissement :</label>
+                                <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="Arrondissements" name="Id_Commune"
+                                        oninvalid="this.setCustomValidity('Commune/Arrondissement obligatoire !')" oninput="this.setCustomValidity('')">
+                                    <option value="">-------- Sélectionner la Commune/Arrondissement : --------</option>
+                                    @foreach (var item in Model.Communes)
+                                    {
+                                        if (item.PROVINCES_RSK.IdProv == Model.DemDerg.COMMUNES_RSK.PROVINCES_RSK.IdProv)
+                                        {
+                                            if (item.IDCOM == Model.DemDerg.COMMUNES_RSK.IDCOM)
+                                            {
+                                                <option name="@item.PROVINCES_RSK.IdProv" value="@item.IDCOM" style="display:block" selected>@item.COMMUNE</option>
+                                            }
+                                            else
+                                            {
+                                                <option name="@item.PROVINCES_RSK.IdProv" value="@item.IDCOM" style="display:block">@item.COMMUNE</option>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <option name="@item.PROVINCES_RSK.IdProv" value="@item.IDCOM" style="display:none">@item.COMMUNE</option>
+                                        }
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom:25px">
+                        <div class="col-lg-6" style="position:center">
+                            <label for="inputText11" style="font-size:12px;">Intitulé :</label>
+                            <input disabled="@NModifier" required type="text" class="form-control" id="intitule" value="@Model.DemDerg.Intitule_DemDerg" name="Intitule_DemDerg"
+                                   oninvalid="this.setCustomValidity('Intitulé obligatoire !')" oninput="this.setCustomValidity('')">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="inputText11" style="font-size:12px;">Prévisions Urbanistiques :</label>
+                            <input disabled="@NModifier" required type="text" class="form-control" id="PrevUrb" value="@Model.DemDerg.PrevisionUrbanistique_DemDerg"
+                                   name="PrevisionUrbanistique_DemDerg"
+                                   oninvalid="this.setCustomValidity('Previsions Urbanistiques obligatoire !')" oninput="this.setCustomValidity('')">
+                        </div>
+                    </div>
+                    <br />
+                    <center><label style="font-weight: bold"><u>Informations sur le terrain à mobiliser</u></label></center><br />
+                    <div class="row" style="margin-bottom:25px">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="inputText11" style="font-size:12px;">Nature demande :</label>
+                                <select disabled="@NModifier" required class="form-control form-control-sm" id="natDem" name="FK_DemDerg_Nature_Dem"
+                                        oninvalid="this.setCustomValidity('Nature demande obligatoire !')" oninput="this.setCustomValidity('')">
+                                    <option value="">-------- Sélectionner la nature de la demande --------</option>
+                                    @foreach (var item in Model.NatDemDerogs)
+                                    {
+                                        if (item.Id_NatureDemDerog == Model.DemDerg.FK_DemDerg_Nature_Dem)
+                                        {
+                                            <option value="@item.Id_NatureDemDerog" selected>@item.nature_Demande_Derogation</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Id_NatureDemDerog">@item.nature_Demande_Derogation</option>
+                                        }
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="inputText11" style="font-size:12px;">Statut juridique :</label>
+                            <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="StatJurd" name="FK_DemDerg_StatutJuridique_DemDerg"
+                                    oninvalid="this.setCustomValidity('Statut juridique obligatoire !')" oninput="this.setCustomValidity('')">
+                                <option value="">-------- Sélectionner le Statut juridique --------</option>
+                                @foreach (var item in Model.StatutJurds)
                                 {
-                                    <option value="@item.Id_RF">@item.NomRF</option>
+                                    if (item.Id_StatutJuridique_DemDerg == Model.DemDerg.FK_DemDerg_StatutJuridique_DemDerg)
+                                    {
+                                        <option value="@item.Id_StatutJuridique_DemDerg" selected>@item.StatutJuridique_DemDerg</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Id_StatutJuridique_DemDerg">@item.StatutJuridique_DemDerg</option>
+                                    }
+                                }
+                            </select>
+                            @if (Cree)
+                            { <input type="hidden" class="form-control" id="StJrAut" value="" name="StJrAut" />}
+                            
+                        </div>
+                        <div class="col-sm-4">
+
+                            <label for="inputText11" style="font-size:12px;">Superficie (m2) :</label>
+                            <input disabled="@NModifier" required type="number" class="form-control" id="superficie" value="@Model.DemDerg.Superficie_Terrain_DemDerg" name="Superficie_Terrain_DemDerg"
+                                   oninvalid="this.setCustomValidity('Superficie obligatoire !')" oninput="this.setCustomValidity('')">
+                        </div>
+
+                    </div>
+                    <br />
+                    <center><label style="font-weight: bold"><u>Parties prenantes du projet</u></label></center><br />
+                    <div class="row" style="margin-bottom:25px">
+                        <div class="col-sm-4">
+                            <label for="inputText11" style="font-size:12px;">Maître d'ouvrage :</label>
+                            <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="maitreOuvrage" name="Maitre_Oeuvrage_DemDerg"
+                                    oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
+                                <option value="">-------- Sélectionner le maître d'ouvrage --------</option>
+                                @foreach (var item in Model.aspNetUsers)
+                                {
+                                    if (item.Id == Model.DemDerg.Maitre_Oeuvrage_DemDerg)
+                                    {
+                                        <option value="@item.Id" selected>@item.Email</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Id">@item.Email</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="inputText11" style="font-size:12px;">Maître d'oeuvre :</label>
+                            <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="maitreOeuvre" name="Maitre_Oeuvre_DemDerg"
+                                    oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
+                                <option value="">-------- Sélectionner le maître d'ouvre --------</option>
+                                @foreach (var item in Model.aspNetUsers)
+                                {
+                                    if (item.Id == Model.DemDerg.Maitre_Oeuvre_DemDerg)
+                                    {
+                                        <option value="@item.Id" selected>@item.Email</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Id">@item.Email</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="inputText11" style="font-size:12px;">Forme maître d'ouvrage :</label>
+                            <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="ForMOuvrg" name="FK_DemDerg_FormeMaitreOeuvrage_DemDerg"
+                                    oninvalid="this.setCustomValidity('Forme maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
+                                <option value="">-------- Sélectionner la forme maître d'ouvrage --------</option>
+                                @foreach (var item in Model.ForMaitreOeuvrages)
+                                {
+                                    if (item.Id_FormeMaitreOeuvrage_DemDerg == Model.DemDerg.FK_DemDerg_FormeMaitreOeuvrage_DemDerg)
+                                    {
+                                        <option value="@item.Id_FormeMaitreOeuvrage_DemDerg" selected>@item.FormeMaitreOeuvrage_DemDerg</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Id_FormeMaitreOeuvrage_DemDerg">@item.FormeMaitreOeuvrage_DemDerg</option>
+                                    }
                                 }
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label for="inputText11" style="font-size:12px;">Préfecture :</label>
-                            <select class="form-control form-control-sm chzn-selec" id="Prefectures" name="Prefecture">
-                                <option value="">-------- Sélectionner la préfecture : --------</option>
-                                @foreach (var item in Model.Provs)
+                    <br />
+                    <center><label style="font-weight: bold"><u>Informations sur le projet demandé</u></label></center><br />
+                    <div class="row" style="margin-bottom:25px">
+                        <div class="col-sm-4">
+                            <label for="inputText11" style="font-size:12px;">Nature de projet :</label>
+                            <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="NatPrj" name="FK_DemDerg_Nature_Projet_DemDerg"
+                                    oninvalid="this.setCustomValidity('Nature de projet obligatoire !')" oninput="this.setCustomValidity('')">
+                                <option value="">-------- Sélectionner la nature de projet --------</option>
+                                @foreach (var item in Model.NatPrjDerogs)
                                 {
-                                    <option value="@item.IdProv">@item.Provicne</option>
+                                    if (item.Id_Nature_Projet_DemDerg == Model.DemDerg.FK_DemDerg_Nature_Projet_DemDerg)
+                                    {
+                                        <option value="@item.Id_Nature_Projet_DemDerg" selected>@item.Nature_Projet_DemDerg1</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Id_Nature_Projet_DemDerg">@item.Nature_Projet_DemDerg1</option>
+                                    }
                                 }
                             </select>
+                            @if (Cree)
+                            {
+                                <input type="hidden" class="form-control" id="NatPrjAut" value="" name="NatPrjAut" />}
                         </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="form-group">
-                            <label for="inputText11" style="font-size:12px;">Commune/Arrondissement :</label>
-                            <select required class="form-control form-control-sm chzn-selec" id="Arrondissements" name="Id_Commune"
-                                    oninvalid="this.setCustomValidity('Commune/Arrondissement obligatoire !')" oninput="this.setCustomValidity('')">
-                                <option value="">-------- Sélectionner la Commune/Arrondissement : --------</option>
-                                @foreach (var item in Model.Communes)
+                        <div class="col-sm-4">
+                            <label for="inputText11" style="font-size:12px;">Montant d'investissement (en DH):</label>
+                            <input disabled="@NModifier" required type="number" class="form-control" id="montantInvest" value="@Model.DemDerg.Montant_Investissement_DemDerg" name="Montant_Investissement_DemDerg"
+                                   oninvalid="this.setCustomValidity('Montant d\'investissement obligatoire !')" oninput="this.setCustomValidity('')">
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="inputText11" style="font-size:12px;">Dérogation demandée :</label>
+                            <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="derogationDem" name="Dero_demande_DemDerg"
+                                    oninvalid="this.setCustomValidity('Dérogation demandée obligatoire !')" oninput="this.setCustomValidity('')">
+                                <option value="">-------- Sélectionner la Dérogation demandée --------</option>
+                                @foreach (var item in Model.Derogs_Demandees)
                                 {
-                                    <option name="@item.PROVINCES_RSK.IdProv" value="@item.IDCOM" style="display:none">@item.COMMUNE</option>
+                                    if (item.ID == Model.DemDerg.derogs_demandees.ID)
+                                    {
+                                        <option value="@item.ID" selected>@item.NOM</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.ID">@item.NOM</option>
+                                    }
                                 }
                             </select>
+                            @if (Cree)
+                            {<input type="hidden" class="form-control" id="derogationDemAut" value="" name="derogationDemAut" />}
+
                         </div>
                     </div>
-                </div>
-                <div class="row" style="margin-bottom:25px">
-                    <div class="col-sm-4">
-                        <label for="inputText11" style="font-size:12px;">N° de Dossier :</label>
-                        <input required type="number" class="form-control" id="NumDossier" name="Code_DemDerg"
-                               oninvalid="this.setCustomValidity('N° de Dossier obligatoire !')" oninput="this.setCustomValidity('')">
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="inputText11" style="font-size:12px;">N° de la version :</label>
-                        <input type="text" class="form-control" value="@numVers" id="NumVers" name="NumVersion_DemDerog" readonly="readonly"
-                               oninvalid="this.setCustomValidity('N° de la version obligatoire !')" oninput="this.setCustomValidity('')">
-                    </div>
-                    @*<div class="col-sm-4">
-                        <label for="inputText11" style="font-size:12px;">Date et heure de demande :</label>
-                        <input type="text" id="dateNow" value="@datenow" name="Date_Arrivee_DemDerg" class="form-control" readonly="readonly"
-                               oninvalid="this.setCustomValidity('Date et heure de demande obligatoire !')" oninput="this.setCustomValidity('')">
-                    </div>*@
-
-                </div>
-                <div class="row" style="margin-bottom:25px">
-                    <div class="col-lg-12" style="position:center">
-                        <label for="inputText11" style="font-size:12px;">Intitulé :</label>
-                        <input required type="text" class="form-control" id="intitule" value="" name="Intitule_DemDerg"
-                               oninvalid="this.setCustomValidity('Intitulé obligatoire !')" oninput="this.setCustomValidity('')">
-                    </div>
-                </div>
-                <br />
-                <center><label style="font-weight: bold"><u>Informations sur le terrain à mobiliser</u></label></center><br />
-                <div class="row" style="margin-bottom:25px">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="inputText11" style="font-size:12px;">Nature demande :</label>
-                            <select required class="form-control form-control-sm" id="natDem" name="FK_DemDerg_Nature_Dem"
-                                    oninvalid="this.setCustomValidity('Nature demande obligatoire !')" oninput="this.setCustomValidity('')">
-                                <option value="">-------- Sélectionner la nature de la demande --------</option>
-                                @foreach (var item in Model.NatDemDerogs)
-                                {
-                                    <option value="@item.Id_NatureDemDerog">@item.nature_Demande_Derogation</option>
-                                }
-                            </select>
+                    <div class="row" style="margin-bottom:25px">
+                        <div class="col-sm-4">
+                            <label for="inputText11" style="font-size:12px;">Localisation du projet :</label>
+                            <input disabled="@NModifier" required type="text" class="form-control" id="localisationPrj" value="@Model.DemDerg.Adresse_DemDerg" name="Adresse_DemDerg"
+                                   oninvalid="this.setCustomValidity('Localisation du projet obligatoire !')" oninput="this.setCustomValidity('')">
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="inputText11" style="font-size:12px;">Emplois induits :</label>
+                            <input disabled="@NModifier" required type="text" class="form-control" id="emploisInd" value="@Model.DemDerg.Emploi_generer_DemDerg" name="Emploi_generer_DemDerg"
+                                   oninvalid="this.setCustomValidity('Emplois induits obligatoire !')" oninput="this.setCustomValidity('')">
+                        </div>
+                        <div class="col-sm-4">
+                            <label for="inputText11" style="font-size:12px;">Durée de réalisation (Jours) :</label>
+                            <input disabled="@NModifier" required type="number" class="form-control" id="dureeReal" value="@Model.DemDerg.Duree_realisation_DemDerg" name="Duree_realisation_DemDerg"
+                                   oninvalid="this.setCustomValidity('Durée de réalisation obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
                     </div>
-                    <div class="col-sm-4">
-                        <label for="inputText11" style="font-size:12px;">Statut juridique :</label>
-                        <select required class="form-control form-control-sm chzn-selec" id="StatJurd" name="FK_DemDerg_StatutJuridique_DemDerg"
-                                oninvalid="this.setCustomValidity('Statut juridique obligatoire !')" oninput="this.setCustomValidity('')">
-                            <option value="">-------- Sélectionner le Statut juridique --------</option>
-                            @foreach (var item in Model.StatutJurds)
-                            {
-                                <option value="@item.Id_StatutJuridique_DemDerg">@item.StatutJuridique_DemDerg</option>
-                            }
-                        </select>
+                    <div class="row" style="margin-bottom:25px">
+                        <div class="col-sm-4">
+                            <label for="inputText11" style="font-size:12px;">Consistance :</label>
+                            <input disabled="@NModifier" required type="text" class="form-control" id="contribution" value="@Model.DemDerg.Contribution_Projet_DemDerg" name="Contribution_Projet_DemDerg"
+                                   oninvalid="this.setCustomValidity('Consistance obligatoire !')" oninput="this.setCustomValidity('')">
+                        </div>
                     </div>
-                    <div class="col-sm-4">
+                    <br />
+                    <center><label style="font-weight: bold"><u>Informations sur les ratios</u></label></center><br />
+                    <div class="row" style="margin-bottom:25px">
 
-                        <label for="inputText11" style="font-size:12px;">Superficie (m2) :</label>
-                        <input required type="number" class="form-control" id="superficie" value="" name="Superficie_Terrain_DemDerg"
-                               oninvalid="this.setCustomValidity('Superficie obligatoire !')" oninput="this.setCustomValidity('')">
-                    </div>
+                        <div class="col-sm-3">
+                            <label for="inputText11" style="font-size:12px;">Ratio Résidentiel :</label>
+                            <input disabled="@NModifier" required type="text" class="form-control" id="ratioResid" value="@Model.DemDerg.Ratio_resid_DemDerg" name="Ratio_resid_DemDerg"
+                                   oninvalid="this.setCustomValidity('Ratio Résidentiel obligatoire !')" oninput="this.setCustomValidity('')">
+                        </div>
 
-                </div>
-                <br />
-                <center><label style="font-weight: bold"><u>Parties prenantes du projet</u></label></center><br />
-                <div class="row" style="margin-bottom:25px">
-                    <div class="col-sm-4">
-                        <label for="inputText11" style="font-size:12px;">Maître d'ouvrage :</label>
-                        <select required class="form-control form-control-sm chzn-selec" id="maitreOuvrage" name="Maitre_Oeuvrage_DemDerg"
-                                oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
-                            <option value="">-------- Sélectionner le maître d'ouvrage --------</option>
-                            @foreach (var item in Model.aspNetUsers)
-                            {
-                                <option value="@item.Id">@item.Email</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="inputText11" style="font-size:12px;">Maître d'oeuvre :</label>
-                        <select required class="form-control form-control-sm chzn-selec" id="maitreOeuvre" name="Maitre_Oeuvre_DemDerg"
-                                oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
-                            <option value="">-------- Sélectionner le maître d'ouvre --------</option>
-                            @foreach (var item in Model.aspNetUsers)
-                            {
-                                <option value="@item.Id">@item.Email</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="inputText11" style="font-size:12px;">Forme maître d'ouvrage :</label>
-                        <select required class="form-control form-control-sm chzn-selec" id="ForMOuvrg" name="FK_DemDerg_FormeMaitreOeuvrage_DemDerg"
-                                oninvalid="this.setCustomValidity('Forme maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
-                            <option value="">-------- Sélectionner la forme maître d'ouvrage --------</option>
-                            @foreach (var item in Model.ForMaitreOeuvrages)
-                            {
-                                <option value="@item.Id_FormeMaitreOeuvrage_DemDerg">@item.FormeMaitreOeuvrage_DemDerg</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-                <br />
-                <center><label style="font-weight: bold"><u>Informations sur le projet demandé</u></label></center><br />
-                <div class="row" style="margin-bottom:25px">
-                    <div class="col-sm-4">
-                        <label for="inputText11" style="font-size:12px;">Nature de projet :</label>
-                        <select required class="form-control form-control-sm chzn-selec" id="NatPrj" name="FK_DemDerg_Nature_Projet_DemDerg"
-                                oninvalid="this.setCustomValidity('Nature de projet obligatoire !')" oninput="this.setCustomValidity('')">
-                            <option value="">-------- Sélectionner la nature de projet --------</option>
-                            @foreach (var item in Model.NatPrjDerogs)
-                            {
-                                <option value="@item.Id_Nature_Projet_DemDerg">@item.Nature_Projet_DemDerg1</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="inputText11" style="font-size:12px;">Montant d'investissement (en DH):</label>
-                        <input required type="number" class="form-control" id="montantInvest" value="" name="Montant_Investissement_DemDerg"
-                               oninvalid="this.setCustomValidity('Montant d\'investissement obligatoire !')" oninput="this.setCustomValidity('')">
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="inputText11" style="font-size:12px;">Dérogation demandée :</label>
-                        <input required type="text" class="form-control" id="derogationDem" value="" name="Dero_demande_DemDerg"
-                               oninvalid="this.setCustomValidity('Dérogation demandée obligatoire !')" oninput="this.setCustomValidity('')">
-                    </div>
-                </div>
-                <div class="row" style="margin-bottom:25px">
-                    <div class="col-sm-4">
-                        <label for="inputText11" style="font-size:12px;">Localisation du projet :</label>
-                        <input required type="text" class="form-control" id="localisationPrj" value="" name="Adresse_DemDerg"
-                               oninvalid="this.setCustomValidity('Localisation du projet obligatoire !')" oninput="this.setCustomValidity('')">
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="inputText11" style="font-size:12px;">Emplois induits :</label>
-                        <input required type="text" class="form-control" id="emploisInd" value="" name="Emploi_generer_DemDerg"
-                               oninvalid="this.setCustomValidity('Emplois induits obligatoire !')" oninput="this.setCustomValidity('')">
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="inputText11" style="font-size:12px;">Durée de réalisation (Jours) :</label>
-                        <input required type="number" class="form-control" id="dureeReal" value="" name="Duree_realisation_DemDerg"
-                               oninvalid="this.setCustomValidity('Durée de réalisation obligatoire !')" oninput="this.setCustomValidity('')">
-                    </div>
-                </div>
-                <div class="row" style="margin-bottom:25px">
-                    <div class="col-sm-4">
-                        <label for="inputText11" style="font-size:12px;">Consistance :</label>
-                        <input required type="text" class="form-control" id="contribution" value="" name="Contribution_Projet_DemDerg"
-                               oninvalid="this.setCustomValidity('Consistance obligatoire !')" oninput="this.setCustomValidity('')">
-                    </div>
-                </div>
-                <br />
-                <center><label style="font-weight: bold"><u>Informations sur les ratios</u></label></center><br />
-                <div class="row" style="margin-bottom:25px">
+                        <div class="col-sm-3">
+                            <label for="inputText11" style="font-size:12px;">Ratio Social :</label>
+                            <input disabled="@NModifier" required type="text" class="form-control" id="ratioSoc" value="@Model.DemDerg.Ratio_Social_DemDerg" name="Ratio_Social_DemDerg"
+                                   oninvalid="this.setCustomValidity('Ratio Social obligatoire !')" oninput="this.setCustomValidity('')">
+                        </div>
 
-                    <div class="col-sm-3">
-                        <label for="inputText11" style="font-size:12px;">Ratio Résidentiel :</label>
-                        <input required type="text" class="form-control" id="ratioResid" value="" name="Ratio_resid_DemDerg"
-                               oninvalid="this.setCustomValidity('Ratio Résidentiel obligatoire !')" oninput="this.setCustomValidity('')">
+                        <div class="col-sm-3">
+                            <label for="inputText11" style="font-size:12px;">Ratio Touristique :</label>
+                            <input disabled="@NModifier" required type="text" class="form-control" id="ratioTour" value="@Model.DemDerg.Ratio_touris_DemDerg" name="Ratio_touris_DemDerg"
+                                   oninvalid="this.setCustomValidity('Ratio Touristique obligatoire !')" oninput="this.setCustomValidity('')">
+                        </div>
+
+                        <div class="col-sm-3">
+                            <label for="inputText11" style="font-size:12px;">Ratio Industriel :</label>
+                            <input disabled="@NModifier" required type="text" class="form-control" id="rationInd" value="@Model.DemDerg.Ratio_indus_DemDerg" name="Ratio_indus_DemDerg"
+                                   oninvalid="this.setCustomValidity('Ratio Industriel obligatoire !')" oninput="this.setCustomValidity('')">
+                        </div>
+
                     </div>
+                    <br /><br />
+                    <center class="fixed-bottom">
+                        @*@Html.HiddenFor(p => p.DemDerg.Id_DemDerg)*@
+                        <input type="hidden" name="Id_DemDerg" value="@Model.DemDerg.Id_DemDerg"/>
+                        <button type="submit" class="btn btn-lg" value="0" name="enregistrer" id="btnSave" style="background-color:#09aacc; color:white">
+                            Enregister   <i class="fa fa-level-down-alt"></i>
+                        </button>
+                        <button type="submit" class="btn btn-lg" value="1" name="enregistrer" id="btnsend" style="background-color:#09aacc; color:white">
+                            Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
+                        </button>
+                    </center>
 
-                    <div class="col-sm-3">
-                        <label for="inputText11" style="font-size:12px;">Ratio Social :</label>
-                        <input required type="text" class="form-control" id="ratioSoc" value="" name="Ratio_Social_DemDerg"
-                               oninvalid="this.setCustomValidity('Ratio Social obligatoire !')" oninput="this.setCustomValidity('')">
-                    </div>
-
-                    <div class="col-sm-3">
-                        <label for="inputText11" style="font-size:12px;">Ratio Touristique :</label>
-                        <input required type="text" class="form-control" id="ratioTour" value="" name="Ratio_touris_DemDerg"
-                               oninvalid="this.setCustomValidity('Ratio Touristique obligatoire !')" oninput="this.setCustomValidity('')">
-                    </div>
-
-                    <div class="col-sm-3">
-                        <label for="inputText11" style="font-size:12px;">Ratio Industriel :</label>
-                        <input required type="text" class="form-control" id="rationInd" value="" name="Ratio_indus_DemDerg"
-                               oninvalid="this.setCustomValidity('Ratio Industriel obligatoire !')" oninput="this.setCustomValidity('')">
-                    </div>
-
-                </div>
-                <br /><br />
-                <center class="fixed-bottom">
-                    @Html.HiddenFor(p => p.DemDerg.Id_DemDerg)
-                    <button type="submit" class="btn btn-lg" value="0" name="enregistrer" id="btnSave" style="background-color:#09aacc; color:white">
-                        Enregister   <i class="fa fa-level-down-alt"></i>
-                    </button>
-                    <button type="submit" class="btn btn-lg" value="1" name="enregistrer" id="btnsend" style="background-color:#09aacc; color:white">
-                        Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
-                    </button>
-                </center>
-
-            }
+                }
+            </div>
         </div>
     </div>
-</div>
-<script language="javascript">
-    $("#selRef").change(function () {
-        if ($("#selRef").val() == "") {
-            $("#selRef").css("border-color", "red");
-        }
-        else {
-            $("#selRef").css("border-color", "green");
-        }
-    });
+    if (Cree)
+    {
+        <script language="javascript">
+            $("#StatJurd").change(function () {
+                var element = document.getElementById("StJrAut");
+                element.setAttribute("value", "");
+                element.removeAttribute("type");
+                if ($("#StatJurd").val() == 4) {
+                    element.setAttribute("type", "text");
+                    element.setAttribute("required", "");
+                }
+                else {
+                    element.setAttribute("type", "hidden");
+                    element.removeAttribute("required");
+                }
+            });
+            $("#NatPrj").change(function () {
+                var element = document.getElementById("NatPrjAut");
+                element.setAttribute("value", "");
+                element.removeAttribute("type");
+                if ($("#NatPrj").val() == 13) {
+                    element.setAttribute("type", "text");
+                    element.setAttribute("required", "");
+                }
+                else {
+                    element.setAttribute("type", "hidden");
+                    element.removeAttribute("required");
+                }
+            });
+            $("#derogationDem").change(function () {
+                var element = document.getElementById("derogationDemAut");
+                element.setAttribute("value", "");
+                element.removeAttribute("type");
+                if ($("#derogationDem").val() == 5) {
+                    element.setAttribute("type", "text");
+                    element.setAttribute("required", "");
+                }
+                else {
+                    element.setAttribute("type", "hidden");
+                    element.removeAttribute("required");
+                }
+            });
+        </script>
+    }
+    <script language="javascript">
+        $('#Prefectures').change(function () {
 
-</script>
-<script language="javascript">
-    $('#Prefectures').change(function () {
-
-        var Pref = $(this).val();
-        var com = $("#Arrondissements > option");
-        $("#Arrondissements")[0].selectedIndex = 0;
-        for (var i = 0; i < com.length; i++) {
-            if (com[i].getAttribute("name") == Pref || com[i].getAttribute("value") == "") {
-                com[i].style.display = "block";
+            var Pref = $(this).val();
+            var com = $("#Arrondissements > option");
+            $("#Arrondissements")[0].selectedIndex = 0;
+            for (var i = 0; i < com.length; i++) {
+                if (com[i].getAttribute("name") == Pref || com[i].getAttribute("value") == "") {
+                    com[i].style.display = "block";
+                }
+                else {
+                    com[i].style.display = "none";
+                }
             }
-            else {
-                com[i].style.display = "none";
-            }
-        }
-        $('#Arrondissements').trigger("liszt:updated");
+            $('#Arrondissements').trigger("liszt:updated");
 
-    });
-
-</script>
+        });
+    </script>
+}
+else
+{
+    <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+        <div class="card-body">
+            <center>
+                <label class="text-danger">
+                    <span>
+                        <i class="fa fa-accessible-icon"></i>
+                        <strong>
+                            Vous n'avez pas le droit d'afficher cette information
+                        </strong>
+                    </span>
+                </label>
+            </center>
+        </div>
+    </div>
+}

@@ -69,7 +69,8 @@
             <thead>
                 <tr>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Nom</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Prenom</th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="0" style="background-color:#d9edf7;">Prenom</th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Username</th>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Email</th>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Ville</th>
                 </tr>
@@ -83,6 +84,9 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Prenom)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserName)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Email)
