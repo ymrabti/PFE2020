@@ -72,7 +72,8 @@
                     <th data-tablesaw-sortable-col data-tablesaw-priority="0" style="background-color:#d9edf7;">Prenom</th>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Username</th>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Email</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Ville</th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Count Aut</th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="0" style="background-color:#d9edf7;">Ville</th>
                 </tr>
             </thead>
             <tbody id="tabletargetted">
@@ -90,6 +91,9 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @item.AspNetUserRoles.Count()
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Ville)

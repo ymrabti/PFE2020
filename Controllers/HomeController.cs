@@ -337,7 +337,7 @@ namespace GestionnaireUtilisateurs.Controllers
         public ActionResult UserTache(string[] Create, string[] Read, string[] Update, string[] Delete
             , string[] UserId, string[] RoleId)
         {
-            if (ModelState.IsValid && Read.Length != 0)
+            if (ModelState.IsValid)
             {
                 var currentUser = UserId[0];
                 var user = database.AspNetUsers.Find(currentUser);
