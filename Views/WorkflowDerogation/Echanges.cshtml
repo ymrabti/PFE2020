@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Echanges";
     Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
+    int indexstart = 5, indexend = 8;
 }
 
 <section>
@@ -39,7 +40,7 @@
                             </tr>
                         </thead>
                         <tbody id="tbodyCourrier">
-                            @foreach (var item in Model.DemDerg.Courrier)
+                            @foreach (var item in Model.DemDerg.Courrier.OrderBy(i=>i.Date_Courier))
                             {
                                 <tr>
                                     <td>
@@ -62,11 +63,23 @@
                                     <td><input required class="form-control" type="email" @*name="Source_Courrier"*@ value="@item.Source_Courrier" /></td>
                                     <td><input required class="form-control" type="email" @*name="Destination_Courrier"*@ value="@item.Destination_Courrier" /></td>
                                     <td>
-                                        <a href="@item.url_Courrier.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs" }, StringSplitOptions.None).Last()"
-                                           target="_blank">
-                                            @item.url_Courrier.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs/GED_DEROG/" + Model.DemDerg.Id_DemDerg + "/COURRIER/" }, StringSplitOptions.None).Last()
-                                            
-                                        </a>
+                                        @if (item.url_Courrier.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs/GED_DEROG/" + Model.DemDerg.Id_DemDerg + "/COURRIER/" }, StringSplitOptions.None).Last().Length < indexstart + indexend + 1)
+                                        {
+                                            string filename =item.url_Courrier.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs/GED_DEROG/" + Model.DemDerg.Id_DemDerg + "/COURRIER/" }, StringSplitOptions.None).Last();
+                                            <a href="@item.url_Courrier.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs" }, StringSplitOptions.None).Last()"
+                                               target="_blank">
+                                                @filename
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            string filename =item.url_Courrier.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs/GED_DEROG/" + Model.DemDerg.Id_DemDerg + "/COURRIER/" }, StringSplitOptions.None).Last();
+                                            filename = filename.Substring(0, indexstart)+"..." + filename.Substring(filename.Length-indexend, indexend);
+                                            <a href="@item.url_Courrier.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs" }, StringSplitOptions.None).Last()"
+                                               target="_blank">
+                                                @filename
+                                            </a>
+                                        }
                                     </td>
                                     <td>
                                         <a class="btn btn-sm buttonsReapeateds"

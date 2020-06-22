@@ -127,7 +127,7 @@
     <Property Name="Date_Courier" Type="datetime" />
     <Property Name="Source_Courrier" Type="varchar" MaxLength="100" />
     <Property Name="Destination_Courrier" Type="varchar" MaxLength="100" />
-    <Property Name="url_Courrier" Type="varchar" MaxLength="100" />
+    <Property Name="url_Courrier" Type="varchar(max)" />
     <Property Name="FK_Nature_Courrier" Type="int" />
     <Property Name="FK_DemDerg_Cour" Type="int" />
   </EntityType>

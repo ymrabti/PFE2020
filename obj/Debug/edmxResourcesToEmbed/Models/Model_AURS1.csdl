@@ -888,7 +888,7 @@
     <Property Name="Date_Courier" Type="DateTime" Precision="3" />
     <Property Name="Source_Courrier" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="Destination_Courrier" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="url_Courrier" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="url_Courrier" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="FK_Nature_Courrier" Type="Int32" />
     <Property Name="FK_DemDerg_Cour" Type="Int32" />
     <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_DemDerg_Cour" FromRole="Courrier" ToRole="Demande_Derogation" />
