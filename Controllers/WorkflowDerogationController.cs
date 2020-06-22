@@ -1010,11 +1010,19 @@ namespace GestionnaireUtilisateurs.Controllers
         [Authorize(Roles = Administrator + "," + _Echanges)]
         public ActionResult Echanges(int FK_DemDerg)
         {
+            var _Actions = Actions(_Echanges);
+            bool Read = _Actions[0];
+            bool Create = _Actions[1];
+            bool Update = _Actions[2];
+            bool Delete = _Actions[3];
+            ViewBag.Read = _Actions[0];
+            ViewBag.Create = _Actions[1];
+            ViewBag.Update = _Actions[2];
+            ViewBag.Delete = _Actions[3];
             var multiTab = new MultiModeles
             {
                 NatCours = database.Nature_Courrier.ToList(),
                 DemDerg = database.Demande_Derogation.Find(FK_DemDerg),
-
             };
             return correctAction(20, FK_DemDerg, multiTab);
         }
@@ -1026,40 +1034,46 @@ namespace GestionnaireUtilisateurs.Controllers
         public ActionResult Echanges(int [] FK_Nature_Courrier,DateTime [] Date_Courier,int FK_DemDerg
             , string [] Source_Courrier, string [] Destination_Courrier,HttpPostedFileBase [] file,int valider)
         {
-            if (file!=null)
-            {
-                List<Courrier> courriers = new List<Courrier>();
-                string pathDemande = CheckFolder(FK_DemDerg,2);
-                var longeur = FK_Nature_Courrier.Length;
-                var count = FK_Nature_Courrier.Count();
-                for (int n=0;n< longeur; n++)
-                {
-                    HttpPostedFileBase filen = file[n];
-                    String path1 = Path.Combine(pathDemande, filen.FileName /*+ Path.GetExtension(file.FileName)*/);
-                    filen.SaveAs(path1);
-                    Courrier courrier = new Courrier();
-                    DateTime dateChecked = new DateTime();
-                    if (Date_Courier[n]<DateTime.Now) 
-                    { dateChecked = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day + 1, 08, 00, 00); }
-                    else { dateChecked = Date_Courier[n]; }
-                    courrier.FK_Nature_Courrier = FK_Nature_Courrier[n];
-                    courrier.Date_Courier = dateChecked;
-                    courrier.FK_DemDerg_Cour = FK_DemDerg;
-                    courrier.Source_Courrier = Source_Courrier[n];
-                    courrier.Destination_Courrier = Destination_Courrier[n];
-                    courrier.url_Courrier = path1.ToString();var urlLength = path1.Length;
-                    //courriers.Add(courrier);
-                    database.Courrier.Add(courrier);
-                    database.SaveChanges();
-                }
-                //database.Courrier.AddRange(courriers);
-            }
-            
-
+            var _Actions = Actions(_Echanges);
+            bool Read = _Actions[0];
+            bool Create = _Actions[1];
+            bool Update = _Actions[2];
+            bool Delete = _Actions[3];
             var demdeg = database.Demande_Derogation.Find(FK_DemDerg);
+            if (Read && Update)
+            {
+                if (file != null)
+                {
+                    List<Courrier> courriers = new List<Courrier>();
+                    string pathDemande = CheckFolder(FK_DemDerg, 2);
+                    var longeur = FK_Nature_Courrier.Length;
+                    var count = FK_Nature_Courrier.Count();
+                    for (int n = 0; n < longeur; n++)
+                    {
+                        HttpPostedFileBase filen = file[n];
+                        String path1 = Path.Combine(pathDemande, filen.FileName /*+ Path.GetExtension(file.FileName)*/);
+                        filen.SaveAs(path1);
+                        Courrier courrier = new Courrier();
+                        DateTime dateChecked = new DateTime();
+                        if (Date_Courier[n] < DateTime.Now)
+                        { dateChecked = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day + 1, 08, 00, 00); }
+                        else { dateChecked = Date_Courier[n]; }
+                        courrier.FK_Nature_Courrier = FK_Nature_Courrier[n];
+                        courrier.Date_Courier = dateChecked;
+                        courrier.FK_DemDerg_Cour = FK_DemDerg;
+                        courrier.Source_Courrier = Source_Courrier[n];
+                        courrier.Destination_Courrier = Destination_Courrier[n];
+                        courrier.url_Courrier = path1.ToString(); 
+                        //courriers.Add(courrier);
+                        database.Courrier.Add(courrier);
+                        database.SaveChanges();
+                    }
+                    //database.Courrier.AddRange(courriers);
+                }
+            }
             if (valider == 1)
             {
-                if (demdeg.Courrier.Count()==0)
+                if (demdeg.Courrier.Count() == 0)
                 {
                     return RedirectToAction("Echanges", "WorkflowDerogation", new { FK_DemDerg });
                 }
@@ -1076,22 +1090,42 @@ namespace GestionnaireUtilisateurs.Controllers
                 database.SaveChanges();
                 return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
             }
-
         }
 
         [Authorize,Authorize(Roles = Administrator + "," + _Echanges)]
         public ActionResult DeleteCourrier(int id_Courrier,int FK_DemDerg)
         {
-            var courrier = database.Courrier.Find(id_Courrier);
-            database.Courrier.Remove(courrier);
-            database.SaveChanges();
+            var _Actions = Actions(_Echanges);
+            bool Read = _Actions[0];
+            bool Create = _Actions[1];
+            bool Update = _Actions[2];
+            bool Delete = _Actions[3];
+            if (Read && Delete)
+            {
+                var courrier = database.Courrier.Find(id_Courrier);
+                database.Courrier.Remove(courrier);
+                database.SaveChanges();
+            }
+            
             return RedirectToAction("Echanges", "WorkflowDerogation", new { FK_DemDerg });
         }
+
+
+
 
 
         [Authorize(Roles = Administrator + "," + _Autorisation)]
         public ActionResult Autorisation(int FK_DemDerg)
         {
+            var _Actions = Actions(_Autorisation);
+            bool Read = _Actions[0];
+            bool Create = _Actions[1];
+            bool Update = _Actions[2];
+            bool Delete = _Actions[3];
+            ViewBag.Read = _Actions[0];
+            ViewBag.Create = _Actions[1];
+            ViewBag.Update = _Actions[2];
+            ViewBag.Delete = _Actions[3];
             var multiTab = new MultiModeles
             {
                 DemDerg = database.Demande_Derogation.Find(FK_DemDerg),
@@ -1101,22 +1135,25 @@ namespace GestionnaireUtilisateurs.Controllers
         [HttpPost]
         public ActionResult Autorisation(int Id_Aut, Autorisation_Derogation AutDerog, int valider, int Fk_DEMDEROG)
         {
-            ViewBag.Message = "";
+            var _Actions = Actions(_Autorisation);
+            bool Read = _Actions[0];
+            bool Create = _Actions[1];
+            bool Update = _Actions[2];
+            bool Delete = _Actions[3];
+            
             var demdeg = database.Demande_Derogation.Find(Fk_DEMDEROG);
 
-            if (AutDerog.Nature_Autorisation == "" || AutDerog.Nature_Autorisation == null || AutDerog.Nature_Autorisation == "null")
+            if (demdeg.Autorisation_Derogation == null)
             {
-                MultiModeles multi = new MultiModeles { DemDerg = demdeg };
-                return View(multi);
-            }
-            else
-            {
-                if (demdeg.Autorisation_Derogation == null)
+                if (Read && Create)
                 {
                     database.Autorisation_Derogation.Add(AutDerog);
                     demdeg.Autorisation_Derogation = AutDerog;
                 }
-                else
+            }
+            else
+            {
+                if (Read && Update)
                 {
                     Autorisation_Derogation autorisation_Derogation = database.Autorisation_Derogation.Find(Id_Aut);
                     autorisation_Derogation.Dae_Avis_Autorisation = AutDerog.Dae_Avis_Autorisation;
@@ -1126,23 +1163,27 @@ namespace GestionnaireUtilisateurs.Controllers
                     autorisation_Derogation.EtatAvancemt_Autorisation = AutDerog.EtatAvancemt_Autorisation;
                     autorisation_Derogation.Nature_Autorisation = AutDerog.Nature_Autorisation;
                     database.Entry(autorisation_Derogation).State = EntityState.Modified;
-                    //db.Autorisation_Derogation.Remove(autorisation_Derogation);
-                    //db.Autorisation_Derogation.Add(AutDerog);
                 }
-
-                if (valider == 0)
-                {
-                    demdeg.FK_DemDerg_EtatAvc = 21;
-                    database.SaveChanges();
-                    return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
-                    //return RedirectToAction("Autorisation", "WorkflowDerogation", new { FK_DemDerg = AutDerog.FK_DemDerg_AutDerg });
-                }
-                else
+                
+            }
+            
+            if (valider == 0)
+            {
+                demdeg.FK_DemDerg_EtatAvc = 21;
+                database.SaveChanges();
+                return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
+            }
+            else
+            {
+                if (demdeg.Autorisation_Derogation != null)
                 {
                     demdeg.FK_DemDerg_EtatAvc = 22;
                     database.SaveChanges();
-                    //return RedirectToAction("Encours", "WorkflowDerogation");
                     return RedirectToAction("Cloture", "WorkflowDerogation", new { FK_DemDerg = Fk_DEMDEROG });
+                }
+                else
+                {
+                    return RedirectToAction("Autorisation", "WorkflowDerogation", new { FK_DemDerg = Fk_DEMDEROG });
                 }
             }
         }

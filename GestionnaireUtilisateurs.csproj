@@ -1485,6 +1485,7 @@
     <Content Include="Views\Shared\_NavBar.cshtml" />
     <Content Include="Views\Shared\_MenuPartialDerg.cshtml" />
     <Content Include="Views\Shared\_Xlayout.cshtml" />
+    <Content Include="Views\Shared\NVOIR.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

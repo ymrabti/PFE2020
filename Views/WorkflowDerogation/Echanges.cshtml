@@ -3,6 +3,10 @@
     ViewBag.Title = "Echanges";
     Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
     int indexstart = 5, indexend = 8;
+    bool Lire = ViewBag.Read; bool NLire = !Lire;
+    bool Cree = ViewBag.Create; bool NCree = !Cree;
+    bool Modifier = ViewBag.Update; bool NModifier = !Modifier;
+    bool Supprimer = ViewBag.Delete; bool NSupprimer = !Supprimer;
 }
 
 <section>
@@ -20,223 +24,261 @@
     </nav>
 </section>
 
-@Html.Partial("WorkflowG", Model)
+<center>
+    <label class="text-capitalize text-info" style="background-color:gray;margin-bottom:10px">
+        Lire  @if (Lire)
+        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
+        else
+        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
 
-<link href="~/Content/custumfileinput.css" rel="stylesheet" />
+        Cree  @if (Cree)
+        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
+        else
+        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
+
+        Modifier  @if (Modifier)
+        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
+        else
+        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
+        Supprimer  @if (Supprimer)
+        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
+        else
+        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
+    </label>
+
+</center>
+
+@if (Lire)
+{
+    @Html.Partial("WorkflowG", Model)
+
+    <link href="~/Content/custumfileinput.css" rel="stylesheet" />
+    <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+        <div class="card-body">
+            @using (Html.BeginForm("Echanges", "WorkflowDerogation", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div class="form-horizontal">
+                    <div class="listeCourrier">
+                        <table @*data-tablesaw-mode="columntoggle"*@ class="table table-bordered first" id="tableFilter">
+                            <thead>
+                                <tr>
+                                    <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Nature de courrier :</th>
+                                    <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Date  :</th>
+                                    <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Source :</th>
+                                    <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Destination  :</th>
+                                    <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Document :</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyCourrier">
+                                @foreach (var item in Model.DemDerg.Courrier.OrderBy(i => i.Date_Courier))
+                                {
+                                    <tr>
+                                        <td>
+                                            <select required class="form-control form-control-sm chzn-selec" disabled>
+                                                <option value="">--- Nature de courrier ---</option>
+                                                @foreach (var item_ in Model.NatCours)
+                                                {
+                                                    if (item_.Id_Nature_Courrier == item.Nature_Courrier.Id_Nature_Courrier)
+                                                    {
+                                                        <option value="@item_.Id_Nature_Courrier" selected>@item_.Nature_Courrier1</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item_.Id_Nature_Courrier">@item_.Nature_Courrier1</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </td>
+                                        <td><input required class="form-control" type="datetime" readonly value="@item.Date_Courier" /></td>
+                                        <td><input required class="form-control" type="email" readonly value="@item.Source_Courrier" /></td>
+                                        <td><input required class="form-control" type="email" readonly value="@item.Destination_Courrier" /></td>
+                                        <td>
+                                            @if (item.url_Courrier.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs/GED_DEROG/" + Model.DemDerg.Id_DemDerg + "/COURRIER/" }, StringSplitOptions.None).Last().Length < indexstart + indexend + 1)
+                                            {
+                                                string filename = item.url_Courrier.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs/GED_DEROG/" + Model.DemDerg.Id_DemDerg + "/COURRIER/" }, StringSplitOptions.None).Last();
+                                                <a href="@item.url_Courrier.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs" }, StringSplitOptions.None).Last()"
+                                                   target="_blank">
+                                                    @filename
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                string filename = item.url_Courrier.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs/GED_DEROG/" + Model.DemDerg.Id_DemDerg + "/COURRIER/" }, StringSplitOptions.None).Last();
+                                                filename = filename.Substring(0, indexstart) + "..." + filename.Substring(filename.Length - indexend, indexend);
+                                                <a href="@item.url_Courrier.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs" }, StringSplitOptions.None).Last()"
+                                                   target="_blank">
+                                                    @filename
+                                                </a>
+                                            }
+                                        </td>
+                                        @if (Supprimer)
+                                        {
+                                            <td>
+                                                <a class="btn btn-sm buttonsReapeateds"
+                                                   href="@Url.Action("DeleteCourrier","WorkflowDerogation",new { id_Courrier=item.id_Courrier,FK_DemDerg=Model.DemDerg.Id_DemDerg})">
+                                                    <i class="fa fa-minus"></i>
+                                                </a>
+                                            </td>
+                                        }
+
+                                    </tr>
+                                }
+                            </tbody>
+                            @if (Cree)
+                            {
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td style="width:30px;">
+
+
+                                            <a class="btn btn-sm buttonsReapeateds" onclick="javascript: addRow('tbodyCourrier');">
+                                                <i class="fa fa-plus"></i>
+                                            </a>
+
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            }
+                        </table>
+                    </div>
+
+                    <br />
+
+                    <center class="fixed-bottom">
+                        <input type="hidden" name="FK_DemDerg" value="@Model.DemDerg.Id_DemDerg" />
+                        <button type="submit" class="btn btn-lg buttonsReapeateds" value="0" name="valider" id="btnSave">
+                            Enregister   <i class="fa fa-level-down-alt"></i>
+                        </button>
+                        <button type="submit" class="btn btn-lg buttonsReapeateds" value="1" name="valider" id="btnsend">
+                            Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
+                        </button>
+                    </center>
+                </div>
+            }
+
+
+        </div>
+    </div>
+
+    if (Cree)
+    {
+        <script language="javascript">
+        function deleteRow(r) {
+            var i = r.parentNode.parentNode.rowIndex;
+            document.getElementById("tbodyCourrier").deleteRow(i - 1);
+        }
+        var i=@Model.DemDerg.Courrier.Count()+1;
+        function addRow(tableau) {
+            tableau = document.getElementById(tableau);
+
+            var tr = document.createElement('tr');
+
+            ////////////////////////////////////////////// TD ////////////////////////////////////////////////////////
+
+            var td = document.createElement('td');
+
+            td.innerHTML = "<select required class='form-control form-control-sm chzn-selec' name='FK_Nature_Courrier'>"+
+                                            "<option value=''>--- Nature de courrier ---</option>"+
+                                            "@foreach (var item_ in Model.NatCours){<option value='@item_.Id_Nature_Courrier'>@item_.Nature_Courrier1</option>}"+
+                                        "</select>" ;
+            tr.appendChild(td);
+            ////////////////////////////////////////////// TD ////////////////////////////////////////////////////////
+
+            var td = document.createElement('td');
+
+            td.innerHTML = "<input required class='form-control' type='datetime-local' name='Date_Courier' value='' />";
+            tr.appendChild(td);
+            ////////////////////////////////////////////// TD ////////////////////////////////////////////////////////
+
+            var td = document.createElement('td');
+
+            td.innerHTML = "<input required class='form-control' type='email' name='Source_Courrier' value='' />";
+            tr.appendChild(td);
+            ////////////////////////////////////////////// TD ////////////////////////////////////////////////////////
+
+            var td = document.createElement('td');
+
+            td.innerHTML = "<input required class='form-control' type='email' name='Destination_Courrier' value='' />";
+            tr.appendChild(td);
+            ////////////////////////////////////////////// TD ////////////////////////////////////////////////////////
+
+            var td = document.createElement('td');
+
+            td.innerHTML = " <input required type='file' class='inputfile inputfile-2' name='file'" +
+                        "id='file" + i + "' accept='.pdf,.jpeg,.jpg,.png,.gif' onchange='filechange(this)'> "
+                        + "<label for='file" + i + "'>"
+                        + "<span id='label" + i + "'>Document ...</span>"
+                        + " </label>";
+            tr.appendChild(td);
+            ////////////////////////////////////////////// TD ////////////////////////////////////////////////////////
+
+            var element = document.createElement("i");
+            element.setAttribute("class", "fa fa-minus-circle");
+            element.setAttribute("width", "1%")
+            element.style.color = "#FF6347";
+
+            element.onclick = function () {
+                deleteRow(this);
+                i = i - 1;
+
+            };
+            var td1 = document.createElement('td');
+            td1.appendChild(element);
+            td1.setAttribute("width", "3%");
+            tr.appendChild(td1);
+
+            i = i + 1;
+            tableau.appendChild(tr);
+
+        }
+        function filechange(input) {
+            var label = input.nextElementSibling;
+            var fileSelected = input.files.item(0);
+            var fileName = 'Choisir ...';
+            var endstart = 5, startend = 7;
+            if (input.files.length!=0) {
+                fileName = fileSelected.name;
+            }
+            if (fileName.length < startend + endstart + 1) {
+                label.querySelector('span').innerHTML = fileName;
+            }
+            else {
+                label.querySelector('span').innerHTML = fileName.substring(0, endstart)
+                    + "..." + fileName.substring(fileName.length - startend, fileName.length);
+            }
+            // Firefox bug fix
+            input.addEventListener('focus', function () { input.classList.add('has-focus'); });
+            input.addEventListener('blur', function () { input.classList.remove('has-focus'); });
+        }
+
+
+
+        </script>
+    }
+
+}
+else
+{
 <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
     <div class="card-body">
-        @using (Html.BeginForm("Echanges", "WorkflowDerogation", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            <div class="form-horizontal">
-                <div class="listeCourrier">
-                    <table @*data-tablesaw-mode="columntoggle"*@ class="table table-bordered first" id="tableFilter">
-                        <thead>
-                            <tr>
-                                <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Nature de courrier :</th>
-                                <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Date  :</th>
-                                <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Source :</th>
-                                <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Destination  :</th>
-                                <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Document :</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbodyCourrier">
-                            @foreach (var item in Model.DemDerg.Courrier.OrderBy(i=>i.Date_Courier))
-                            {
-                                <tr>
-                                    <td>
-                                        <select required class="form-control form-control-sm chzn-selec" @*name="FK_Nature_Courrier"*@>
-                                            <option value="">--- Nature de courrier ---</option>
-                                            @foreach (var item_ in Model.NatCours)
-                                            {
-                                                if (item_.Id_Nature_Courrier == item.Nature_Courrier.Id_Nature_Courrier)
-                                                {
-                                                    <option value="@item_.Id_Nature_Courrier" selected>@item_.Nature_Courrier1</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="@item_.Id_Nature_Courrier">@item_.Nature_Courrier1</option>
-                                                }
-                                            }
-                                        </select>
-                                    </td>
-                                    <td><input required class="form-control" type="datetime" @*name="Date_Courier"*@ value="@item.Date_Courier" /></td>
-                                    <td><input required class="form-control" type="email" @*name="Source_Courrier"*@ value="@item.Source_Courrier" /></td>
-                                    <td><input required class="form-control" type="email" @*name="Destination_Courrier"*@ value="@item.Destination_Courrier" /></td>
-                                    <td>
-                                        @if (item.url_Courrier.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs/GED_DEROG/" + Model.DemDerg.Id_DemDerg + "/COURRIER/" }, StringSplitOptions.None).Last().Length < indexstart + indexend + 1)
-                                        {
-                                            string filename =item.url_Courrier.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs/GED_DEROG/" + Model.DemDerg.Id_DemDerg + "/COURRIER/" }, StringSplitOptions.None).Last();
-                                            <a href="@item.url_Courrier.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs" }, StringSplitOptions.None).Last()"
-                                               target="_blank">
-                                                @filename
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            string filename =item.url_Courrier.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs/GED_DEROG/" + Model.DemDerg.Id_DemDerg + "/COURRIER/" }, StringSplitOptions.None).Last();
-                                            filename = filename.Substring(0, indexstart)+"..." + filename.Substring(filename.Length-indexend, indexend);
-                                            <a href="@item.url_Courrier.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs" }, StringSplitOptions.None).Last()"
-                                               target="_blank">
-                                                @filename
-                                            </a>
-                                        }
-                                    </td>
-                                    <td>
-                                        <a class="btn btn-sm buttonsReapeateds"
-                                           href="@Url.Action("DeleteCourrier","WorkflowDerogation",new { id_Courrier=item.id_Courrier,FK_DemDerg=Model.DemDerg.Id_DemDerg})">
-                                            <i class="fa fa-minus"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td style="width:30px;">
-                                    <a class="btn btn-sm buttonsReapeateds" onclick="javascript: addRow('tbodyCourrier');">
-                                        <i class="fa fa-plus"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-
-                <br />
-
-                <center class="fixed-bottom">
-                    <input type="hidden" name="FK_DemDerg" value="@Model.DemDerg.Id_DemDerg"/>
-                    <button type="submit" class="btn btn-lg buttonsReapeateds" value="0" name="valider" id="btnSave">
-                        Enregister   <i class="fa fa-level-down-alt"></i>
-                    </button>
-                    <button type="submit" class="btn btn-lg buttonsReapeateds" value="1" name="valider" id="btnsend">
-                        Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
-                    </button>
-                </center>
-            </div>
-        }
-
-
+        <center>
+            <label class="text-danger">
+                <span>
+                    <i class="fa fa-accessible-icon"></i>
+                    <strong>
+                        Vous n'avez pas le droit d'afficher cette information
+                    </strong>
+                </span>
+            </label>
+            <br />
+            <a href="@Url.Action("Encours","WorkflowDerogation")">Reteur</a>
+        </center>
     </div>
 </div>
-
-@*<script src="~/Content/fileInputCustom.js"></script>*@
-
-<script language="javascript">
-    function deleteRow(r) {
-        var i = r.parentNode.parentNode.rowIndex;
-        document.getElementById("tbodyCourrier").deleteRow(i - 1);
-    }
-</script>
-
-
-<script language="javascript">
-    var stringArray = [];
-    var i=@Model.DemDerg.Courrier.Count()+1;
-    function addRow(tableau) {
-        tableau = document.getElementById(tableau);
-
-        var tr = document.createElement('tr');
-
-        ////////////////////////////////////////////// TD ////////////////////////////////////////////////////////
-
-        var td = document.createElement('td');
-
-        td.innerHTML = "<select required class='form-control form-control-sm chzn-selec' name='FK_Nature_Courrier'>"+
-                                        "<option value=''>--- Nature de courrier ---</option>"+
-                                        "@foreach (var item_ in Model.NatCours){<option value='@item_.Id_Nature_Courrier'>@item_.Nature_Courrier1</option>}"+
-                                    "</select>" ;
-        tr.appendChild(td);
-        ////////////////////////////////////////////// TD ////////////////////////////////////////////////////////
-
-        var td = document.createElement('td');
-
-        td.innerHTML = "<input required class='form-control' type='datetime-local' name='Date_Courier' value='' />";
-        tr.appendChild(td);
-        ////////////////////////////////////////////// TD ////////////////////////////////////////////////////////
-
-        var td = document.createElement('td');
-
-        td.innerHTML = "<input required class='form-control' type='email' name='Source_Courrier' value='' />";
-        tr.appendChild(td);
-        ////////////////////////////////////////////// TD ////////////////////////////////////////////////////////
-
-        var td = document.createElement('td');
-
-        td.innerHTML = "<input required class='form-control' type='email' name='Destination_Courrier' value='' />";
-        tr.appendChild(td);
-        ////////////////////////////////////////////// TD ////////////////////////////////////////////////////////
-
-        var td = document.createElement('td');
-
-        td.innerHTML = " <input required type='file' class='inputfile inputfile-2' name='file'" +
-                    "id='file" + i + "' accept='.pdf,.jpeg,.jpg,.png,.gif' onchange='filechange(this)'> "
-                    + "<label for='file" + i + "'>"
-                    + "<span id='label" + i + "'>Document ...</span>"
-                    + " </label>";
-        tr.appendChild(td);
-        ////////////////////////////////////////////// TD ////////////////////////////////////////////////////////
-
-        var element = document.createElement("i");
-        element.setAttribute("class", "fa fa-minus-circle");
-        element.setAttribute("width", "1%")
-        element.style.color = "#FF6347";
-
-        element.onclick = function () {
-            deleteRow(this);
-            i = i - 1;
-
-        };
-        var td1 = document.createElement('td');
-        td1.appendChild(element);
-        td1.setAttribute("width", "3%");
-        tr.appendChild(td1);
-
-        i = i + 1;
-        tableau.appendChild(tr);
-
-    }
-    function filechange(input) {
-        var label = input.nextElementSibling;
-        var fileSelected = input.files.item(0);
-        var fileName = 'Choisir ...';
-        var endstart = 5, startend = 7;
-        if (input.files.length!=0) {
-            fileName = fileSelected.name;
-        }
-        if (fileName.length < startend + endstart + 1) {
-            label.querySelector('span').innerHTML = fileName;
-        }
-        else {
-            label.querySelector('span').innerHTML = fileName.substring(0, endstart)
-                + "..." + fileName.substring(fileName.length - startend, fileName.length);
-        }
-        // Firefox bug fix
-        input.addEventListener('focus', function () { input.classList.add('has-focus'); });
-        input.addEventListener('blur', function () { input.classList.remove('has-focus'); });
-    }
-
-    //var filtersConfig = {
-    //    base_path: 'tablefilter/',
-    //    auto_filter: {
-    //        delay: 120 //milliseconds
-    //    },
-    //    filters_row_index: 1,
-    //    state: false,
-    //    alternate_rows: false,
-    //    rows_counter: false,
-    //    btn_reset: false,
-    //    status_bar: false,
-    //    highlight_keywords: true,
-    //    msg_filter: 'Filtering...'
-    //};
-    //var tf = new TableFilter('tableFilter', filtersConfig);
-    //tf.init();
-
-</script>
+}
 
