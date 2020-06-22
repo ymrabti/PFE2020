@@ -144,14 +144,14 @@
         </div>
     </div>
 
-    <script src="~/Content/dwnlds/jquery.slimscroll.js"></script>
+    @*<script src="~/Content/dwnlds/jquery.slimscroll.js"></script>
     <script src="~/Content/dwnlds/bootstrap.bundle.js"></script>
     <script src="~/Content/dwnlds/chosen.jquery.js"></script>
     <script src="~/Content/dwnlds/jquery-1.8.3.js"></script>
     <script src="~/Content/dwnlds/jquery-3.3.1.min.js"></script>
     <script src="~/Content/dwnlds/jquery-ui.js"></script>
     <link href="~/Content/dwnlds/chosen.css" rel="stylesheet" />
-    <link href="~/Content/dwnlds/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/dwnlds/jquery-ui.css" rel="stylesheet" />*@
     @*<script src="~/Content/fileInputCustom.js"></script>*@
     if (Cree)
     {
@@ -220,198 +220,6 @@
             }
         </script>
     }
-    <script language="javascript">
-    @*$("#AddDocs").click(function () {
-        if ($("input[type = file]").get(0).files.length == 0) {
-            alert('documents vides');
-        }
-        else {
-            var names = [];
-            console.log($("input[type = file]").get(0).files);
-            for (var i = 0; i < $("input[type = file]").get(0).files.length; i++)
-            {
-                names.push($("input[type = file]").get(0).files[i].name);
-                var table = document.getElementById('tbodyDoc');
-                var row = table.insertRow(table.length);
-                var cell1 = row.insertCell(0);
-                var cell2 = row.insertCell(1);
-                var cell3 = row.insertCell(2);
-                cell1.innerHTML = $("input[type = file]").get(0).files[i].name;
-                cell2.innerHTML = " <select required class='form-control form-control-sm chzn-selec' name='filetype'>" +
-                    "<option value=''>------Intitulé----------</option>" +
-                    "@foreach(var item in Model.TYPE_DOCs){<option value='@item.ID_DOCUMENT'>@item.NOM_Document</option>}" +
-                    "</select>";
-                //"<input type='text'   name='AutreP'>";
-                var btn = document.createElement("input");
-                btn.setAttribute("id", i);
-                btn.setAttribute("src", "../Content/documentation/img/del.png");
-                btn.setAttribute("type", "image");
-                btn.setAttribute("name", "delete");
-                btn.onclick = function () {
-                    $(this).closest('tr').remove();
-                }
-                cell3.appendChild(btn);
-                nombre += 1;
-            }
-
-            document.getElementById("labelNomDoc").innerHTML = "Document...";
-
-        }
-
-    })
-    $("#btnsend").click(function () {
-        if (nombre == 0) {
-            alert("documents obligatoires!! ");
-        }
-        else {
-            $('#form1').submit();
-        }
-    });
-
-    function deleteRow(r) {
-        var i = r.parentNode.parentNode.rowIndex;
-        document.getElementById("listeDoc").deleteRow(i);
-
-    }
-
-    var stringArray = [];
-    function addRow(tableau) {
-        if (document.getElementById("UrlDoc").value != "") {
-            tableau = document.getElementById(tableau);
-
-            var tr = document.createElement('tr');
-
-            var td = document.createElement('td');
-            tableau.appendChild(tr);
-            td.innerHTML = document.getElementById("IntitulDoc").value;
-            tr.appendChild(td);
-
-            var td = document.createElement('td');
-            tableau.appendChild(tr);
-            td.innerHTML = document.getElementById("UrlDoc").value;
-            tr.appendChild(td);
-
-            var element = document.createElement("i");
-            element.setAttribute("class", "fa fa-minus-circle");
-            element.setAttribute("width", "6%")
-            element.style.color = "#FF6347";
-
-            element.onclick = function () {
-                con = (this.parentNode.parentNode.rowIndex) - 1;
-                stringArray.splice(con, 1);
-                deleteRow(this)
-
-            };
-            var td1 = document.createElement('td');
-            td1.appendChild(element);
-            tr.appendChild(td1);
-
-
-            tableau.appendChild(tr);
-            document.getElementById("labelNomDoc").innerHTML = "Document...";
-
-            var A = document.getElementById('IntitulDoc');
-            var B = document.getElementById('UrlDoc');
-            var II = @Model.DemDerg.Id_DemDerg;
-            var AA = A.value;
-            var BB = B.value;
-            stringArray.push({
-                "FK_DemDerg_DocDerg": II,
-                "Intitule_Doc_Derg": AA,
-                "url_Doc_Derg": BB,
-            });
-        }
-        else { alert("document vide!")}
-
-    }
-
-    $("#btnsend").click(function () {
-        if (stringArray.length == 0 && nombre==0) {
-            alert("documents obligatoires!! ");
-        }
-        else {
-            var formData = new FormData();
-            var json = JSON.stringify(stringArray);
-            formData.append("ged", json);
-            formData.append("id", @Model.DemDerg.Id_DemDerg);
-            formData.append("valider", document.getElementById('btnsend').value);
-            $.ajax({
-                type: "Post",
-                url: '@Url.Action("Ged", "WorkflowDerogation")',
-                contentType: false,
-                cache: false,
-                dataType: "json",
-                data: formData,
-                processData: false,
-                timeout: 30000,
-                //success: function (json) {
-                //    if (json.isRedirect) {
-                //        window.location.href = json.redirectUrl;
-                //    }
-                //},
-                success: function (data) {
-                    window.location.href = data;
-                },
-                //success: function () {
-                //    window.location.href = data;
-                //},
-                error: function (resultat, statut, erreur) {
-                    alert(erreur);
-                }
-            });
-
-            traditional: true
-        }
-
-
-    });
-
-
-    $("#btnSave").click(function () {
-        var formData = new FormData();
-        var json = JSON.stringify(stringArray);
-        formData.append("Ged", json);
-        formData.append("id", @Model.DemDerg.Id_DemDerg);
-        formData.append("valider", document.getElementById('btnSave').value);
-        $.ajax({
-            type: "Post",
-            url: '@Url.Action("Ged", "WorkflowDerogation")',
-            contentType: false,
-            cache: false,
-            dataType: "json",
-            data: formData,
-            processData: false,
-            success: function (data) {
-                window.location.href = data;
-            },
-            error: function (resultat, statut, erreur) {
-                alert(erreur);
-            }
-        });
-
-        traditional: true
-
-
-    });*@
-
-    </script>
-    @*<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/4.0.0/bootstrap.bundle.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-slimScroll/1.3.8/jquery.slimscroll.js"></script>
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
-        <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
-        <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.jquery.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.4.2/chosen.css">*@
-
-    @*$.post("@Url.Action("DeleteDocument", "WorkflowDerogation")",
-        {
-            Id_Doc_Derog: rid, FK_DemDerg_DocDerg:@Model.DemDerg.Id_DemDerg
-        },
-        function (data) {
-
-        });*@
-
 
 }
 else

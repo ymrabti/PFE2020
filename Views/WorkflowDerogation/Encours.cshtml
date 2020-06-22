@@ -4,15 +4,7 @@
     Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
 }
 
-@*<div class="tab-regular">
-    <ul class="nav nav-tabs " id="myTab" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Mes demandes en cours</a>
-        </li>
 
-
-    </ul>
-    <div class="tab-content" id="myTabContent">*@
 <style>
     .hoverdisables {
         cursor: not-allowed
@@ -165,7 +157,6 @@
 @section Scripts{
     <script src="~/Content/Demandes.js"></script>
     <script data-config="">
-
         var filtersConfig = {
             base_path: 'tablefilter/',
             auto_filter: {
@@ -182,8 +173,6 @@
         };
         var tf = new TableFilter('tableFilter', filtersConfig);
         tf.init();
-
-
     </script>
 
 }

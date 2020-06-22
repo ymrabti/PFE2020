@@ -20,8 +20,8 @@ namespace GestionnaireUtilisateurs.Models
         public int FK_TypAvis { get; set; }
         public string Detail_Avis { get; set; }
     
+        public virtual Demande_Derogation Demande_Derogation { get; set; }
         public virtual Organisme Organisme { get; set; }
         public virtual Type_Avis Type_Avis { get; set; }
-        public virtual Demande_Derogation Demande_Derogation { get; set; }
     }
 }

@@ -23,7 +23,7 @@ namespace GestionnaireUtilisateurs.Models
         public Nullable<int> FK_Nature_Courrier { get; set; }
         public Nullable<int> FK_DemDerg_Cour { get; set; }
     
-        public virtual Nature_Courrier Nature_Courrier { get; set; }
         public virtual Demande_Derogation Demande_Derogation { get; set; }
+        public virtual Nature_Courrier Nature_Courrier { get; set; }
     }
 }

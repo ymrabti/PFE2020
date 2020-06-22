@@ -88,17 +88,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Avis_Org">
-      <EntityTypeMapping TypeName="aurs1Model.Avis_Org">
-        <MappingFragment StoreEntitySet="Avis_Org">
-          <ScalarProperty Name="Detail_Avis" ColumnName="Detail_Avis" />
-          <ScalarProperty Name="FK_TypAvis" ColumnName="FK_TypAvis" />
-          <ScalarProperty Name="FK_Organisme" ColumnName="FK_Organisme" />
-          <ScalarProperty Name="FK_DemDerg" ColumnName="FK_DemDerg" />
-          <ScalarProperty Name="Id_Avis" ColumnName="Id_Avis" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Commission">
       <EntityTypeMapping TypeName="aurs1Model.Commission">
         <MappingFragment StoreEntitySet="Commission">
@@ -123,20 +112,6 @@
           <ScalarProperty Name="POPU" ColumnName="POPU" />
           <ScalarProperty Name="COMMUNE" ColumnName="COMMUNE" />
           <ScalarProperty Name="IDCOM" ColumnName="IDCOM" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Courrier">
-      <EntityTypeMapping TypeName="aurs1Model.Courrier">
-        <MappingFragment StoreEntitySet="Courrier">
-          <ScalarProperty Name="FK_DemDerg_Cour" ColumnName="FK_DemDerg_Cour" />
-          <ScalarProperty Name="FK_Nature_Courrier" ColumnName="FK_Nature_Courrier" />
-          <ScalarProperty Name="url_Courrier" ColumnName="url_Courrier" />
-          <ScalarProperty Name="Destination_Courrier" ColumnName="Destination_Courrier" />
-          <ScalarProperty Name="Source_Courrier" ColumnName="Source_Courrier" />
-          <ScalarProperty Name="Date_Courier" ColumnName="Date_Courier" />
-          <ScalarProperty Name="Code_Courrier" ColumnName="Code_Courrier" />
-          <ScalarProperty Name="id_Courrier" ColumnName="id_Courrier" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -349,6 +324,31 @@
           <ScalarProperty Name="Intitule_Doc_Derg" ColumnName="Intitule_Doc_Derg" />
           <ScalarProperty Name="Code_Doc_Derg" ColumnName="Code_Doc_Derg" />
           <ScalarProperty Name="Id_Doc_Derog" ColumnName="Id_Doc_Derog" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Avis_Org">
+      <EntityTypeMapping TypeName="aurs1Model.Avis_Org">
+        <MappingFragment StoreEntitySet="Avis_Org">
+          <ScalarProperty Name="Detail_Avis" ColumnName="Detail_Avis" />
+          <ScalarProperty Name="FK_TypAvis" ColumnName="FK_TypAvis" />
+          <ScalarProperty Name="FK_Organisme" ColumnName="FK_Organisme" />
+          <ScalarProperty Name="FK_DemDerg" ColumnName="FK_DemDerg" />
+          <ScalarProperty Name="Id_Avis" ColumnName="Id_Avis" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Courrier">
+      <EntityTypeMapping TypeName="aurs1Model.Courrier">
+        <MappingFragment StoreEntitySet="Courrier">
+          <ScalarProperty Name="FK_DemDerg_Cour" ColumnName="FK_DemDerg_Cour" />
+          <ScalarProperty Name="FK_Nature_Courrier" ColumnName="FK_Nature_Courrier" />
+          <ScalarProperty Name="url_Courrier" ColumnName="url_Courrier" />
+          <ScalarProperty Name="Destination_Courrier" ColumnName="Destination_Courrier" />
+          <ScalarProperty Name="Source_Courrier" ColumnName="Source_Courrier" />
+          <ScalarProperty Name="Date_Courier" ColumnName="Date_Courier" />
+          <ScalarProperty Name="Code_Courrier" ColumnName="Code_Courrier" />
+          <ScalarProperty Name="id_Courrier" ColumnName="id_Courrier" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

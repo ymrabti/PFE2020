@@ -124,7 +124,7 @@
     </Key>
     <Property Name="id_Courrier" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Code_Courrier" Type="int" />
-    <Property Name="Date_Courier" Type="date" />
+    <Property Name="Date_Courier" Type="datetime" />
     <Property Name="Source_Courrier" Type="varchar" MaxLength="100" />
     <Property Name="Destination_Courrier" Type="varchar" MaxLength="100" />
     <Property Name="url_Courrier" Type="varchar" MaxLength="100" />

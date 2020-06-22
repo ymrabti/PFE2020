@@ -11,10 +11,8 @@
         <EntityTypeShape EntityType="aurs1Model.AspNetUserRoles" Width="1.5" PointX="4.25" PointY="9.625" />
         <EntityTypeShape EntityType="aurs1Model.AspNetUsers" Width="1.5" PointX="3.375" PointY="12.875" />
         <EntityTypeShape EntityType="aurs1Model.Autorisation_Derogation" Width="1.5" PointX="8.875" PointY="15.625" />
-        <EntityTypeShape EntityType="aurs1Model.Avis_Org" Width="1.5" PointX="18" PointY="15.75" />
         <EntityTypeShape EntityType="aurs1Model.Commission" Width="1.5" PointX="14.25" PointY="6" />
         <EntityTypeShape EntityType="aurs1Model.COMMUNES_RSK" Width="1.5" PointX="19.875" PointY="12.75" />
-        <EntityTypeShape EntityType="aurs1Model.Courrier" Width="1.5" PointX="18" PointY="11.25" />
         <EntityTypeShape EntityType="aurs1Model.derogs_demandees" Width="1.5" PointX="16.125" PointY="6" />
         <EntityTypeShape EntityType="aurs1Model.EtatAvancement" Width="1.5" PointX="5.875" PointY="16.75" />
         <EntityTypeShape EntityType="aurs1Model.Forme_MaitreOeuvrage_DemDerg" Width="1.5" PointX="13.375" PointY="15.125" />
@@ -39,20 +37,15 @@
         <AssociationConnector Association="aurs1Model.FK_StatutRole_AspNetRoles" />
         <AssociationConnector Association="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="aurs1Model.FK_AspNetUsers_Statuts" />
-        <AssociationConnector Association="aurs1Model.FK_Organisme" />
-        <AssociationConnector Association="aurs1Model.FK_TypAvis" />
         <AssociationConnector Association="aurs1Model.FK_COMMUNES_RSK_PROVINCES_RSK" />
-        <AssociationConnector Association="aurs1Model.FK_Nature_Courrier" />
         <AssociationConnector Association="aurs1Model.FK_SousModule_Module" />
         <AssociationConnector Association="aurs1Model.FK_StatutRole_Statuts" />
         <EntityTypeShape EntityType="aurs1Model.Demande_Derogation" Width="1.5" PointX="15.375" PointY="8.75" />
         <AssociationConnector Association="aurs1Model.FK_Dem_Derog_Users_ouvrage" />
         <AssociationConnector Association="aurs1Model.FK_Dem_Derog_Users_ouvre" />
         <AssociationConnector Association="aurs1Model.FK_Demande_Derogation_Autorisation_Derogation" />
-        <AssociationConnector Association="aurs1Model.FK_DemDerg" />
         <AssociationConnector Association="aurs1Model.FK_Demande_Derogation_Commission" />
         <AssociationConnector Association="aurs1Model.FK_Demande_Derogation_COMMUNES_RSK" />
-        <AssociationConnector Association="aurs1Model.FK_DemDerg_Cour" />
         <AssociationConnector Association="aurs1Model.FK_Demande_Derogation_derogs_demandees" />
         <AssociationConnector Association="aurs1Model.FK_Demande_Derogation_References_Foncieres" />
         <AssociationConnector Association="aurs1Model.FK_DemDerg_EtatAvc" />
@@ -64,7 +57,14 @@
         <EntityTypeShape EntityType="aurs1Model.Document_Derogation" Width="1.5" PointX="18.375" PointY="7.875" />
         <AssociationConnector Association="aurs1Model.FK_DemDerg_DocDerg" />
         <AssociationConnector Association="aurs1Model.FK_Doc_Derg_TYPE_DOC" />
-      </Diagram>
+        <EntityTypeShape EntityType="aurs1Model.Avis_Org" Width="1.5" PointX="17.75" PointY="15.625" />
+        <AssociationConnector Association="aurs1Model.FK_DemDerg" />
+        <AssociationConnector Association="aurs1Model.FK_Organisme" />
+        <AssociationConnector Association="aurs1Model.FK_TypAvis" />
+        <EntityTypeShape EntityType="aurs1Model.Courrier" Width="1.5" PointX="17.875" PointY="11" />
+        <AssociationConnector Association="aurs1Model.FK_DemDerg_Cour" />
+        <AssociationConnector Association="aurs1Model.FK_Nature_Courrier" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

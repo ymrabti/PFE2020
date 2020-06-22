@@ -44,6 +44,9 @@
         avisConcerneeDef = Model.AvisOrgs.Where(p => p.FK_Organisme == idConcernee).First().FK_TypAvis;
         avisConcerneeDetail = Model.AvisOrgs.Where(p => p.FK_Organisme == idConcernee).First().Detail_Avis;
     }
+
+    var docCommission = Model.DemDerg.Document_Derogation .Where(o => o.Intitule_Doc_Derg == 201);
+    var pvExist = docCommission.Count() != 0;var pvDoesNotExist = !pvExist;
     bool Lire = ViewBag.Read; bool NLire = !Lire;
     bool Cree = ViewBag.Create; bool NCree = !Cree;
     bool Modifier = ViewBag.Update; bool NModifier = !Modifier;
@@ -99,17 +102,17 @@
 
     <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
         <div class="card-body" id="">
-            
             <div class="form-horizontal">
-                <form enctype="multipart/form-data">
+                @using (Html.BeginForm("AvisOrg", "WorkflowDerogation", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
                     <div class="row">
 
                         <div class="col-lg-3">
                             <div class="form-group">
-
+                                <input type="hidden" name="FK_Organisme" value="@idAURS"/>
                                 <label for="inputText11" style="font-size:12px;">Avis AURS : <label style="color:red">*</label></label>
 
-                                <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="avisAurs" name="avisAURS">
+                                <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="avisAURS" name="FK_TypAvis">
                                     <option value="">--- Avis AURS ---</option>
                                     @foreach (var item in Model.TypAviss)
                                     {
@@ -128,15 +131,16 @@
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <label for="inputText11" style="font-size:12px;">Détail Avis :</label>
-                                <input disabled="@NModifier" required class="form-control" type="text" id="detailAvisAurs" name="Detail_AvisAurs" value="@avisAURSDetail" />
+                                <input disabled="@NModifier" required class="form-control" type="text" id="Detail_AvisAurs" name="Detail_Avis" value="@avisAURSDetail" />
                             </div>
                         </div>
 
                         <div class="col-lg-3">
                             <div class="form-group">
+                                <input type="hidden" name="FK_Organisme" value="@idCOMMUNE" />
 
                                 <label for="inputText11" style="font-size:12px;">Avis Commune : <label style="color:red">*</label></label>
-                                <select disabled="@NModifier" class="form-control form-control-sm chzn-selec" id="avisCom" name="avisCom">
+                                <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="avisCom" name="FK_TypAvis">
                                     <option value="">--- Avis Commune ---</option>
                                     @foreach (var item in Model.TypAviss)
                                     {
@@ -155,7 +159,7 @@
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <label for="inputText11" style="font-size:12px;">Détail Avis :</label>
-                                <input disabled="@NModifier" class="form-control" type="text" id="detailAvisCom" name="detailAvisCom" value="@avisCOMMUNEDetail" />
+                                <input disabled="@NModifier" required class="form-control" type="text" id="detailAvisCom" name="Detail_Avis" value="@avisCOMMUNEDetail" />
                             </div>
                         </div>
                     </div>
@@ -164,8 +168,9 @@
 
                         <div class="col-lg-3">
                             <div class="form-group">
+                                <input type="hidden" name="FK_Organisme" value="@idPrefecture" />
                                 <label for="inputText11" style="font-size:12px;">Avis Préfécture : <label style="color:red">*</label></label>
-                                <select disabled="@NModifier" class="form-control form-control-sm chzn-selec" id="avisPref" name="avisPref">
+                                <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="avisPref" name="FK_TypAvis">
                                     <option value="">--- Avis Préfécture  ---</option>
                                     @foreach (var item in Model.TypAviss)
                                     {
@@ -184,14 +189,15 @@
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <label for="inputText11" style="font-size:12px;">Détail Avis :</label>
-                                <input disabled="@NModifier" class="form-control" type="text" id="detailAvisPref" name="detailAvisPref" value="@avisPrefectureDetail" />
+                                <input disabled="@NModifier" required class="form-control" type="text" id="detailAvisPref" name="Detail_Avis" value="@avisPrefectureDetail" />
                             </div>
                         </div>
 
                         <div class="col-lg-3">
                             <div class="form-group">
+                                <input type="hidden" name="FK_Organisme" value="@idConcernee" />
                                 <label for="inputText11" style="font-size:12px;">Avis Département régional concerné : <label style="color:red">*</label></label>
-                                <select disabled="@NModifier" class="form-control form-control-sm chzn-selec" id="avisDepReg2" name="avisDepReg">
+                                <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="avisDepReg" name="FK_TypAvis">
                                     <option value="">--- Avis Département régional concerné ---</option>
                                     @foreach (var item in Model.TypAviss)
                                     {
@@ -210,7 +216,7 @@
                         <div class="col-lg-3">
                             <div class="form-group">
                                 <label for="inputText11" style="font-size:12px;">Détail Avis :</label>
-                                <input disabled="@NModifier" class="form-control" type="text" id="detailAvisDepReg2" name="detailAvisDepReg2" value="@avisConcerneeDetail" />
+                                <input disabled="@NModifier" required class="form-control" type="text" id="detailAvisDepReg2" name="Detail_Avis" value="@avisConcerneeDetail" />
                             </div>
                         </div>
                     </div>
@@ -219,8 +225,9 @@
 
                         <div class="col-lg-6">
                             <div class="form-group">
+                                <input type="hidden" name="FK_Organisme" value="@idDomaine" />
                                 <label for="inputText11" style="font-size:12px;">Avis Domaine : <label style="color:red">*</label></label>
-                                <select disabled="@NModifier" class="form-control form-control-sm chzn-selec" id="avisDom" name="avisDom">
+                                <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="avisDom" name="FK_TypAvis">
                                     <option value="">--- Avis Domaine  ---</option>
                                     @foreach (var item in Model.TypAviss)
                                     {
@@ -239,7 +246,7 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="inputText11" style="font-size:12px;">Détail Avis :</label>
-                                <input disabled="@NModifier" class="form-control" type="text" id="detailAvis_dom" name="detailAvis_dom" value="@avisDomaineDetail" />
+                                <input disabled="@NModifier" required class="form-control" type="text" id="detailAvis_dom" name="Detail_Avis" value="@avisDomaineDetail" />
                             </div>
                         </div>
                     </div>
@@ -249,47 +256,9 @@
                     <center><label style="font-weight: bold"><u>Avis des parties prenantes</u></label></center><br />
 
                     <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="inputText11" style="font-size:12px;">Parties Prenantes : </label>
-                                <select disabled="@NModifier" class="form-control form-control-sm chzn-selec" id="typorg" name="typOrg">
-                                    <option value="">--- Parties Prenantes  ---</option>
-                                    @foreach (var item in Model.Orgs)
-                                    {
-                                        <option name="@item.Nom_Organisme" value="@Html.DisplayFor(modelItem => item.Id_Organisme)">@Html.DisplayFor(modelItem => item.Nom_Organisme)</option>
-                                    }
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="inputText11" style="font-size:12px;">Avis  : </label>
-                                <select disabled="@NModifier" class="form-control form-control-sm chzn-selec" id="avisOrg" name="avisOrg">
-                                    <option value="">--- Avis  ---</option>
-                                    @foreach (var item in Model.TypAviss)
-                                    {
-                                        <option name="@item.Type_Avis1" value="@Html.DisplayFor(modelItem => item.Id_TypAvis)">@Html.DisplayFor(modelItem => item.Type_Avis1)</option>
-                                    }
-                                </select>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label for="inputText11" style="font-size:12px;">Détail Avis :</label>
-                                        <input disabled="@NModifier" class="form-control" type="text" id="detailAvis_Org" name="detailAvis_Org" value="" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-9">
-                                </div>
-                                <div class="col-lg-3">
-                                    <button disabled="@NModifier" type="button" class="btn btn-sm" style="background-color:#09aacc;color:white;margin-top: 0%;text-align: right;" name="enregistrer" value="0" onclick="javascript: addRow('tbodyDoc');">
-                                        <i class="fa fa-check">Ajouter un avis</i>
-                                    </button>
-                                </div>
-                            </div>
-
+                        <div class="col-lg-2">
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-8">
                             <div class="listeAvis">
                                 <table class="table table-striped table-bordered first" id="listeAvis">
                                     <thead>
@@ -299,19 +268,75 @@
                                             <th>Détail Avis :</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tbodyDoc">
+                                    <tbody id="tbodyAvis">
                                         @foreach (var item in Model.AvisOrgs.Where(a => a.FK_Organisme > 6))
                                         {
                                             <tr id="@item.FK_Organisme">
-                                                <td>@Html.DisplayFor(modelItem => item.Organisme.Nom_Organisme)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.Type_Avis.Type_Avis1)</td>
-                                                <td>@Html.DisplayFor(modelItem => item.Detail_Avis)</td>
-                                                <td><i class="fa fa-minus-square" style="width:1%;color:#4cff00"></i></td>
+                                                <td>
+                                                    <select disabled='@NModifier' class='form-control form-control-sm chzn-selec' name='FK_Organisme'>
+                                                        <option value=''>--- Parties Prenantes  ---</option>
+                                                        @foreach (var element in Model.Orgs)
+                                                        {
+                                                            if (item.FK_Organisme == element.Id_Organisme)
+                                                            {
+                                                                <option name='@element.Nom_Organisme' selected value='@element.Id_Organisme'>@element.Nom_Organisme</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option name='@element.Nom_Organisme' value='@element.Id_Organisme'>@element.Nom_Organisme</option>
+                                                            }
+
+                                                        }
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select disabled='@NModifier' class='form-control form-control-sm chzn-selec' name='FK_TypAvis'>
+                                                        <option value=''>--- Avis  ---</option>
+                                                        @foreach (var element in Model.TypAviss)
+                                                        {
+                                                            if (item.FK_TypAvis == element.Id_TypAvis)
+                                                            {
+                                                                <option name='@element.Type_Avis1' selected value='@element.Id_TypAvis'>@element.Type_Avis1</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option name='@element.Type_Avis1' value='@element.Id_TypAvis'>@element.Type_Avis1</option>
+                                                            }
+
+                                                        }
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="Detail_Avis" value="@item.Detail_Avis" />
+                                                </td>
+                                                <td>
+                                                    @if (Supprimer)
+                                                    {
+                                                        <a class="btn btn-sm buttonsReapeateds"
+                                                           href="@Url.Action("DeleteAvis","WorkflowDerogation",new { Id_Avis=item.Id_Avis,FK_DemDerg=Model.DemDerg.Id_DemDerg})">
+                                                            <i class="fa fa-minus"></i>
+                                                        </a>
+                                                    }
+                                                </td>
                                             </tr>
                                         }
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td style="width:30px;">
+                                                <a class="btn btn-sm buttonsReapeateds" onclick="javascript: addRow('tbodyAvis');">
+                                                    <i class="fa fa-plus"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
+                        </div>
+                        <div class="col-lg-2">
                         </div>
                     </div>
 
@@ -319,8 +344,16 @@
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="inputText11" style="font-size:12px;">PV de la commission :</label><br />
-                                <input disabled="@NModifier" @*onchange="filechange(this)"*@ size="30000" required type="file" 
-                                       class="inputfile inputfile-1" name="url_Doc_Derg" id="url_Doc_Derg" />
+                                @if (pvDoesNotExist)
+                                {
+                                    <input disabled="@NModifier" @*onchange="filechange(this)"*@ size="30000" type="file" accept='.pdf,.jpeg,.jpg,.png,.gif'
+                                           class="inputfile inputfile-1" name="url_Doc_Derg" id="url_Doc_Derg" required />
+                                }
+                                else
+                                {
+                                    <input disabled="@NModifier" @*onchange="filechange(this)"*@ size="30000" type="file" accept='.pdf,.jpeg,.jpg,.png,.gif'
+                                           class="inputfile inputfile-1" name="url_Doc_Derg" id="url_Doc_Derg" />
+                                }
                                 <label for="url_Doc_Derg">
                                     <span id="labelNomDoc">
                                         Document ...
@@ -330,20 +363,20 @@
                             </div>
                         </div>
                         <div class="col-lg-6" style="margin-top:15px">
-                            @if (Model.DemDerg.Document_Derogation.Where(o => o.Code_Doc_Derg == 1).Count() != 0)
+                            @if (pvExist)
                             {
-                                <a href="@Model.DemDerg.Document_Derogation.Where(o => o.Code_Doc_Derg == 1).FirstOrDefault().url_Doc_Derg.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs" }, StringSplitOptions.None).Last()"
+                                <a href="@docCommission.Last().url_Doc_Derg.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs" }, StringSplitOptions.None).Last()"
                                    id="file22" target="_blank">
-                                    @if (Model.DemDerg.Document_Derogation.Where(o => o.Code_Doc_Derg == 1).FirstOrDefault().FileName == "AUCUN")
+                                    @if (docCommission.Last().FileName == "AUCUN")
                                     {
                                         <label>
-                                            @Model.DemDerg.Document_Derogation.Where(o => o.Code_Doc_Derg == 1).FirstOrDefault().url_Doc_Derg.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs/GED_DEROG/" + Model.DemDerg.Document_Derogation.Where(o => o.Code_Doc_Derg == 1).FirstOrDefault().Demande_Derogation.Id_DemDerg + "/" }, StringSplitOptions.None).Last()
+                                            @docCommission.Last().url_Doc_Derg.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs/GED_DEROG/" + docCommission.Last().Demande_Derogation.Id_DemDerg + "/" }, StringSplitOptions.None).Last()
                                         </label>
                                     }
                                     else
                                     {
-                                        <span style="text-decoration-color:blue">@Model.DemDerg.Document_Derogation.Where(o => o.Code_Doc_Derg == 1).FirstOrDefault().FileName </span>
-                                        <span>(@Model.DemDerg.Document_Derogation.Where(o => o.Code_Doc_Derg == 1).FirstOrDefault().ContentType)</span>
+                                        <span style="text-decoration-color:blue">@docCommission.Last().FileName </span>
+                                        <span>(@docCommission.Last().ContentType)</span>
                                     }
                                 </a>
                             }
@@ -355,25 +388,28 @@
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label for="inputText11" style="font-size:12px;">Remarque :</label>
-                                <input disabled="@NModifier" required type="text" class="form-control" name="remarque" id="remarque" value="@Model.DemDerg.Avis_Remarque_DemDerg" /> <br />
+                                <input disabled="@NModifier" required type="text" class="form-control" name="Avis_Remarque_DemDerg" id="Avis_Remarque_DemDerg"
+                                       value="@Model.DemDerg.Avis_Remarque_DemDerg" /> <br />
                             </div>
                         </div>
                     </div>
-                </form>
-                
 
-                <div class="row">
-                    <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                        </div>
+                        <div class="col-sm-6">
+                            <center class="fixed-bottom">
+                                <input type="hidden" id="FK_DemDerg" name="FK_DemDerg" value="@Model.DemDerg.Id_DemDerg" />
+                                <button type="submit" class="btn btn-lg buttonsReapeateds" value="0" name="valider" id="btnSave">
+                                    Enregister   <i class="fa fa-level-down-alt"></i>
+                                </button>
+                                <button type="submit" class="btn btn-lg buttonsReapeateds" value="1" name="valider" id="btnsend">
+                                    Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
+                                </button>
+                            </center>
+                        </div>
                     </div>
-                    <div class="col-sm-6">
-                        <center class="fixed-bottom">
-                            <input type="hidden" name="FK_DemDerg" value="@Model.DemDerg.Id_DemDerg" />
-                            <button type="submit" class="btn btn-lg" value="0" name="valider" id="btnSave" style="background-color:#09aacc; color:white">Enregister   <i class="fa fa-level-down-alt"></i></button>
-                            <button type="submit" class="btn btn-lg" value="1" name="valider" id="btnsend" style="background-color:#09aacc; color:white">Passer à l'etape suivante  <i class="fa fa-paper-plane"></i></button>
-                        </center>
-                    </div>
-                </div>
-
+                }
             </div>
         </div>
     </div>
@@ -381,20 +417,9 @@
     if (Modifier)
     {
         <script language="javascript">
-            function deleteRow(r) {
-                var i = r.parentNode.parentNode.rowIndex;
-                document.getElementById("listeAvis").deleteRow(i);
-            }
-            var fichiergetted;
-            function handleFileSelect(evt) {
+            $('#url_Doc_Derg').change(function (evt) {
                 var input = document.getElementById('url_Doc_Derg'); filechange(input);
-                var files = evt.target.files;
-                fichiergetted = files[0];
-                console.log(files + '\n' + fichiergetted);
-            }
-            document.getElementById('url_Doc_Derg').addEventListener('change', handleFileSelect, false);
-
-
+            });
             function filechange(input) {
                 var label = input.nextElementSibling;
                 var fileSelected = input.files.item(0);
@@ -415,259 +440,93 @@
                 input.addEventListener('blur', function () { input.classList.remove('has-focus'); });
             }
 
-
             var stringArray = [];
+            tableau = document.getElementById('tbodyAvis');
+            var rows =@Model.DemDerg.Avis_Org.Where(k=>k.FK_Organisme>6).Count();
+            var numeroligne = 0;
+            var rownmbr = rows;
+
+            function delete_Row(r) {
+                var i = r.parentNode.parentNode.rowIndex;
+                document.getElementById("tbodyAvis").deleteRow(i-1);
+            }
+
+            function organismeChange(Organisme) {
+                var valeur = Organisme.value;
+                var tr = Organisme.parentNode.parentNode; var i = tr.rowIndex;
+                if (valeur!='') {
+                    if ($("#" + valeur).length) {
+                        alert('deja Exist !');
+                        document.getElementById("tbodyAvis").deleteRow(i-1);
+                        rownmbr -= 1; numeroligne -= 1;
+                        //stringArray.splice(numeroligne-1,1);
+                        //console.log(stringArray);
+                    }
+
+                    else {
+                        tr.setAttribute('id', valeur);
+                        //stringArray.push({
+                        //    "Org": valeur, "Avis": tr.children[1].children[0].value,
+                        //    "Detail": tr.children[2].children[0].value
+                        //});
+                        //tr.children[2].children[0].value = valeur;
+                    }
+                }
+            }
+
             function addRow(tableau) {
-                if ($("#typorg option:selected").text().includes("---") == true || $("#avisOrg option:selected").text().includes("---") == true) {
-                    alert("erreur !");
-                }
-                else {
-                    if ($("#"+document.getElementById("typorg").value).length) {
-                        alert("deja exists sur le tableau");
-                    } else {
-                        tableau = document.getElementById(tableau);
 
-                        var tr = document.createElement('tr');
-                        tr.setAttribute("id",document.getElementById("typorg").value);
+                tableau = document.getElementById(tableau);
+                rownmbr += 1; numeroligne += 1;
+                var tr = document.createElement('tr');
 
-                        var td = document.createElement('td');
-                        tableau.appendChild(tr);
-                        td.innerHTML = $("#typorg option:selected").text();
-                        tr.appendChild(td);
+                var td = document.createElement('td');
 
-                        var td = document.createElement('td');
-                        tableau.appendChild(tr);
-                        td.innerHTML = $("#avisOrg option:selected").text();
-                        tr.appendChild(td);
+                td.innerHTML = "<select required class='form-control form-control-sm chzn-selec' name='FK_Organisme' onchange='organismeChange(this)' id='org"+rownmbr+"'><option value=''>--- Parties Prenantes  ---</option>"+
+                                    "@foreach (var element in Model.Orgs){<option value='@element.Id_Organisme'>@element.Nom_Organisme </option>}"+
+                                "</select>";
+                tr.appendChild(td);
 
-                        var td = document.createElement('td');
-                        tableau.appendChild(tr);
-                        td.innerHTML = document.getElementById("detailAvis_Org").value;
-                        tr.appendChild(td);
+                var td = document.createElement('td');
+                td.innerHTML = "<select required class='form-control form-control-sm chzn-selec' name='FK_TypAvis'><option value=''>--- Avis  ---</option>"+
+                                    "@foreach (var element in Model.TypAviss){<option value='@element.Id_TypAvis'>@element.Type_Avis1 </option>}"+
+                                "</select>";
+                tr.appendChild(td);
 
-                        var element = document.createElement("i");
-                        element.setAttribute("class", "fa fa-minus-circle");
-                        element.setAttribute("width", "1%")
-                        element.style.color = "#FF6347";
+                var td = document.createElement('td');
+                td.innerHTML = "<input required type='text' name='Detail_Avis' />";
+                tr.appendChild(td);
 
-                        element.onclick = function () {
-                            con = (this.parentNode.parentNode.rowIndex) - 1;
-                            stringArray.splice(con, 1);
-                            deleteRow(this)
+                var element = document.createElement("i");
+                element.setAttribute("class", "fa fa-minus-circle");
+                element.setAttribute("width", "1%")
+                element.style.color = "#FF6347";
 
-                        };
-                        var td1 = document.createElement('td');
-                        td1.appendChild(element);
-                        td1.setAttribute("width", "3%");
-                        tr.appendChild(td1);
+                element.onclick = function () {
+                    delete_Row(this);
+                    rownmbr -= 1; numeroligne -= 1;
+                    //stringArray.splice(numeroligne, 1);
+                    //console.log(stringArray);
+                };
+                var td1 = document.createElement('td');
+                td1.appendChild(element);
+                td1.setAttribute("width", "3%");
+                tr.appendChild(td1);
 
 
-                        tableau.appendChild(tr);
-
-
-                        var A = document.getElementById('typorg');
-                        var B = document.getElementById('avisOrg');
-                        var C = document.getElementById('detailAvis_Org');
-                        var II = @Model.DemDerg.Id_DemDerg;
-                        var AA = A.value;
-                        var BB = B.value;
-                        var CC = C.value;
-                        stringArray.push({
-                            "FK_DemDerg": II,
-                            "FK_Organisme": AA,
-                            "FK_TypAvis": BB,
-                            "Detail_Avis": CC
-                        });
-
-                    }
-
-                }
-
+                tableau.appendChild(tr);
             }
-
-            
-
-            $("#avisAurs").change(function () {
-                if ($("#avisAurs").val() == "") {
-                    $("#avisAurs").css("border-color", "red");
-                }
-                else {
-                    $("#avisAurs").css("border-color", "green");
-                }
-
-            });
-            $("#avisCom").change(function () {
-                if ($("#avisCom").val() == "") {
-                    $("#avisCom").css("border-color", "red");
-                }
-                else {
-                    $("#avisCom").css("border-color", "green");
-                }
-
-            });
-            $("#avisPref").change(function () {
-                if ($("#avisPref").val() == "") {
-                    $("#avisPref").css("border-color", "red");
-                }
-                else {
-                    $("#avisPref").css("border-color", "green");
-                }
-            });
-            $("#avisDepReg2").change(function () {
-                if ($("#avisDepReg2").val() == "") {
-                    $("#avisDepReg2").css("border-color", "red");
-                }
-                else {
-                    $("#avisDepReg2").css("border-color", "green");
-                }
-            });
-            $("#avisDom").change(function () {
-                if ($("#avisDom").val() == "") {
-                    $("#avisDom").css("border-color", "red");
-                }
-                else {
-                    $("#avisDom").css("border-color", "green");
-                }
-            });
-
-            $("#btnsend").click(function () {
-                if ($("#avisAurs").val() == "") {
-                    $("#avisAurs").css("border-color", "#dc3545");
-                }
-                else if ($("#avisCom").val() == "") {
-                    $("#avisCom").css("border-color", "#dc3545");
-                }
-                else if ($("#avisPref").val() == "") {
-                    $("#avisPref").css("border-color", "#dc3545");
-                }
-                else if ($("#avisDepReg2").val() == "") {
-                    $("#avisDepReg2").css("border-color", "#dc3545");
-                }
-                else if ($("#avisDom").val() == "") {
-                    $("#avisDom").css("border-color", "#dc3545");
-                }
-
-                else {
-                    buttonSubmit("btnsend");
-                }
-            });
-
-
-            $("#btnSave").click(function () {
-                buttonSubmit("btnSave");
-            });
-
-            function buttonSubmit(buttonSV) {
-                var avis = {};
-                var II =@Model.DemDerg.Id_DemDerg;
-                var A = 1;
-                var B = document.getElementById('avisAurs').value;
-                var C = document.getElementById('detailAvisAurs').value;
-                if (B == "") {
-                } else {
-                    stringArray.push({
-                        "FK_DemDerg": II,
-                        "FK_Organisme": A,
-                        "FK_TypAvis": B,
-                        "Detail_Avis": C
-                    });
-                }
-
-
-                var A = 3;
-                var B = document.getElementById('avisCom').value;
-                var C = document.getElementById('detailAvisCom').value;
-                if (B == "") {
-                } else {
-                    stringArray.push({
-                        "FK_DemDerg": II,
-                        "FK_Organisme": A,
-                        "FK_TypAvis": B,
-                        "Detail_Avis": C
-                    });
-                }
-
-                var A = 4;
-                var B = document.getElementById('avisDom').value;
-                var C = document.getElementById('detailAvis_dom').value;
-                if (B == "") {
-                } else {
-                    stringArray.push({
-                        "FK_DemDerg": II,
-                        "FK_Organisme": A,
-                        "FK_TypAvis": B,
-                        "Detail_Avis": C
-                    });
-                }
-
-                var A = 5;
-                var B = document.getElementById('avisDepReg2').value;
-                var C = document.getElementById('detailAvisDepReg2').value;
-                if (B == "") {
-                } else {
-                    stringArray.push({
-                        "FK_DemDerg": II,
-                        "FK_Organisme": A,
-                        "FK_TypAvis": B,
-                        "Detail_Avis": C
-                    });
-                }
-
-                var A = 2;
-                var B = document.getElementById('avisPref').value;
-                var C = document.getElementById('detailAvisPref').value;
-                if (B == "") {
-                } else {
-                    stringArray.push({
-                        "FK_DemDerg": II,
-                        "FK_Organisme": A,
-                        "FK_TypAvis": B,
-                        "Detail_Avis": C
-                    });
-                }
-
-                //avis.array = stringArray;
-                var formData = new FormData();
-                var json = JSON.stringify(stringArray);
-                formData.append("avis", json);
-                //var fichier = $("#url_Doc_Derg").target.files; console(fichier);
-                formData.append("file", fichiergetted); 
-                formData.append("req", document.getElementById('remarque').value);
-                formData.append("valider", document.getElementById(buttonSV).value);
-                formData.append("Id",    @Model.DemDerg.Id_DemDerg);
-
-                $.ajax({
-                    enctype: "multipart/form-data",
-                    type: "Post",
-                    url: '@Url.Action("AvisOrg", "WorkflowDerogation")',
-                    contentType: false,
-                    cache: false,
-                    dataType: "json",
-                    data: formData,
-                    processData: false,
-                    success: function (data) {
-                        window.location.href = data;
-                    },
-                    error: function () {
-                        alert("errur !");
-                    }
-                });
-
-                traditional: true
-
-            }
-
         </script>
     }
 
-    <script src="~/Content/dwnlds/jquery.slimscroll.js"></script>
+    @*<script src="~/Content/dwnlds/jquery.slimscroll.js"></script>
     <script src="~/Content/dwnlds/bootstrap.bundle.js"></script>
     <script src="~/Content/dwnlds/chosen.jquery.js"></script>
     <script src="~/Content/dwnlds/jquery-1.8.3.js"></script>
     <script src="~/Content/dwnlds/jquery-3.3.1.min.js"></script>
     <script src="~/Content/dwnlds/jquery-ui.js"></script>
     <link href="~/Content/dwnlds/chosen.css" rel="stylesheet" />
-    <link href="~/Content/dwnlds/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/dwnlds/jquery-ui.css" rel="stylesheet" />*@
 }
 else
 {

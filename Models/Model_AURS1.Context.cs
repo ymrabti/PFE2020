@@ -31,10 +31,8 @@ namespace GestionnaireUtilisateurs.Models
         public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Autorisation_Derogation> Autorisation_Derogation { get; set; }
-        public virtual DbSet<Avis_Org> Avis_Org { get; set; }
         public virtual DbSet<Commission> Commission { get; set; }
         public virtual DbSet<COMMUNES_RSK> COMMUNES_RSK { get; set; }
-        public virtual DbSet<Courrier> Courrier { get; set; }
         public virtual DbSet<derogs_demandees> derogs_demandees { get; set; }
         public virtual DbSet<EtatAvancement> EtatAvancement { get; set; }
         public virtual DbSet<Forme_MaitreOeuvrage_DemDerg> Forme_MaitreOeuvrage_DemDerg { get; set; }
@@ -54,5 +52,7 @@ namespace GestionnaireUtilisateurs.Models
         public virtual DbSet<TYPE_DOC> TYPE_DOC { get; set; }
         public virtual DbSet<Demande_Derogation> Demande_Derogation { get; set; }
         public virtual DbSet<Document_Derogation> Document_Derogation { get; set; }
+        public virtual DbSet<Avis_Org> Avis_Org { get; set; }
+        public virtual DbSet<Courrier> Courrier { get; set; }
     }
 }

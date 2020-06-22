@@ -570,26 +570,7 @@ namespace GestionnaireUtilisateurs.Controllers
                     {
                         if (url_Doc_Derg.Length != 0)
                         {
-                            String path = Server.MapPath("~/GED_DEROG/");
-                            String pathDemande = Server.MapPath("~/GED_DEROG/" + demande.Id_DemDerg + "/");
-                            var x = Directory.Exists(path);
-                            if (!x)
-                            {
-                                Directory.CreateDirectory(path);
-                                var y = Directory.Exists(pathDemande);
-                                if (!y)
-                                {
-                                    Directory.CreateDirectory(pathDemande);
-                                }
-                            }
-                            else
-                            {
-                                var y = Directory.Exists(pathDemande);
-                                if (!y)
-                                {
-                                    Directory.CreateDirectory(pathDemande);
-                                }
-                            }
+                            string pathDemande = CheckFolder(FK_DemDerg_DocDerg,0);
                             for (int n = 0; n < url_Doc_Derg.Length; n++)
                             {
                                 var file = url_Doc_Derg[n];
@@ -835,7 +816,46 @@ namespace GestionnaireUtilisateurs.Controllers
             return RedirectToAction("Programmation", "WorkflowDerogation", new { FK_DemDerg_Com });
         }
 
-
+        private string CheckFolder(int Id_DemDerg,int typeDoc)//0 ged,1 pv,2 courrier
+        {
+            String path = Server.MapPath("~/GED_DEROG/"); 
+            String pathDemande = "";
+            switch (typeDoc)
+            {
+                case 0:
+                    pathDemande = Server.MapPath("~/GED_DEROG/" + Id_DemDerg + "/");
+                    break;
+                case 1:
+                    pathDemande = Server.MapPath("~/GED_DEROG/" + Id_DemDerg + "/PV_COMMISSION/");
+                    break;
+                case 2:
+                    pathDemande = Server.MapPath("~/GED_DEROG/" + Id_DemDerg + "/COURRIER/");
+                    break;
+                default:
+                    pathDemande = Server.MapPath("~/GED_DEROG/" + Id_DemDerg + "/COURRIER/");
+                    break;
+            }
+            
+            var x = Directory.Exists(path);
+            if (!x)
+            {
+                Directory.CreateDirectory(path);
+                var y = Directory.Exists(pathDemande);
+                if (!y)
+                {
+                    Directory.CreateDirectory(pathDemande);
+                }
+            }
+            else
+            {
+                var y = Directory.Exists(pathDemande);
+                if (!y)
+                {
+                    Directory.CreateDirectory(pathDemande);
+                }
+            }
+            return pathDemande;
+        }
 
 
         [Authorize(Roles = Administrator + "," + _Avis)]
@@ -861,8 +881,10 @@ namespace GestionnaireUtilisateurs.Controllers
             };
             return correctAction(19, FK_DemDerg, multiTab);
         }
-        [HttpPost]
-        public JsonResult AvisOrg(FormCollection form,object url_Doc_Derg)
+        [Authorize(Roles = Administrator + "," + _Avis), HttpPost]
+        public ActionResult AvisOrg(int[] FK_Organisme, int[] FK_TypAvis,
+                    string[] Detail_Avis, int FK_DemDerg, string Avis_Remarque_DemDerg,
+                    HttpPostedFileBase url_Doc_Derg, int valider, Avis_Org[] avis_Orgs)
         {
             var _Actions = Actions(_Avis);
             bool Read = _Actions[0];
@@ -873,96 +895,116 @@ namespace GestionnaireUtilisateurs.Controllers
             ViewBag.Create = _Actions[1];
             ViewBag.Update = _Actions[2];
             ViewBag.Delete = _Actions[3];
-            var id = Convert.ToInt32(form["Id"]);
-            var demdeg = database.Demande_Derogation.Find(id);
-            var valider = form["valider"];
+            var demdeg = database.Demande_Derogation.Find(FK_DemDerg);
             if (Read && Update)
             {
-                if (form["avis"].Count() != 0)
+                for (int i = 0; i < FK_Organisme.Count(); i++)
                 {
-                    var av = form["avis"];
-                    var avv = JsonConvert.DeserializeObject<List<Avis_Org>>(av);
-                    for (int i = 0; i < avv.Count; i++)
+                    var fk_org = FK_Organisme[i];
+                    Avis_Org avis_ = database.Avis_Org
+                        .Where(ink => ink.FK_DemDerg == FK_DemDerg && ink.FK_Organisme == fk_org)
+                        .FirstOrDefault();
+                    if (avis_ == null)
                     {
-                        var AA = avv[i].FK_DemDerg;
-                        var A = avv[i].FK_Organisme;
-                        var B = avv[i].FK_TypAvis;
-                        var C = avv[i].Detail_Avis;
-                        Avis_Org avis_ = database.Avis_Org.Where(ink => ink.FK_DemDerg == AA && ink.FK_Organisme == A).FirstOrDefault();
-                        if (avis_ == null)
-                        {
-                            var con = new Avis_Org();
-                            con.FK_DemDerg = AA;
-                            con.FK_Organisme = A;
-                            con.FK_TypAvis = B;
-                            con.Detail_Avis = C;
+                        var con = new Avis_Org();
+                        con.FK_DemDerg = FK_DemDerg;
+                        con.FK_Organisme = FK_Organisme[i];
+                        con.FK_TypAvis = FK_TypAvis[i];
+                        con.Detail_Avis = Detail_Avis[i];
 
-                            database.Avis_Org.Add(con);
-                        }
-                        else
-                        {//avv[i].FK_DemDerg, avv[i].FK_Organisme
-                            Avis_Org avis = database.Avis_Org.Where(s => s.FK_DemDerg == AA && s.FK_Organisme == A).FirstOrDefault();
-                            avis.FK_TypAvis = B; avis.Detail_Avis = C;
-                            var res = database.Entry(avis).State = EntityState.Modified;
-                        }
-
+                        database.Avis_Org.Add(con);
                     }
+                    else
+                    {//avv[i].FK_DemDerg, avv[i].FK_Organisme
+                        Avis_Org avis = database.Avis_Org
+                            .Where(s => s.FK_DemDerg == FK_DemDerg && s.FK_Organisme == fk_org).FirstOrDefault();
+                        avis.FK_TypAvis = FK_TypAvis[i]; avis.Detail_Avis = Detail_Avis[i];
+                        var res = database.Entry(avis).State = EntityState.Modified;
+                    }
+
+                }
+                demdeg.Avis_Remarque_DemDerg = Avis_Remarque_DemDerg;
+                var docCommission = demdeg.Document_Derogation.Where(o => o.Intitule_Doc_Derg == 201);
+                var pvExist = docCommission.Count() != 0; var pvDoesNotExist = !pvExist;
+                string pathDemande= CheckFolder(FK_DemDerg,1);
+                //bool notexistFile = !FileExist(url_Doc_Derg.FileName, FK_DemDerg);
+                if (url_Doc_Derg!=null)
+                {
+                    string path1 = Path.Combine(pathDemande, url_Doc_Derg.FileName);
+                    url_Doc_Derg.SaveAs(path1);
+                    Document_Derogation d = new Document_Derogation();
+                    d.url_Doc_Derg = path1.ToString();
+                    d.Intitule_Doc_Derg = 201;
+                    d.FK_DemDerg_DocDerg = FK_DemDerg;
+                    d.FileName = url_Doc_Derg.FileName;
+                    d.ContentType = url_Doc_Derg.ContentType;
+                    d.ContentLenght = url_Doc_Derg.ContentLength;
+                    database.Document_Derogation.Add(d);
+                    database.SaveChanges();
                 }
 
-                var remq = form["req"];
-                demdeg.Avis_Remarque_DemDerg = remq;
-                var file = form["file"];
-                var doc = new Document_Derogation
-                {
-                    Intitule_Doc_Derg = 1,//"PV de la commission",
-                    url_Doc_Derg = file,
-                    FK_DemDerg_DocDerg = id,
-                    Code_Doc_Derg=1
-                };
-                database.Document_Derogation.Add(doc);
 
-                if (valider == "1")
+
+                if (valider == 1)
                 {
                     demdeg.FK_DemDerg_EtatAvc = 20;
                     database.SaveChanges();
                     //return Json(Url.Action("Echanges", "WorkflowDerogation"));
-                    return Json(Url.Action("Echanges", "WorkflowDerogation", new { FK_DemDerg = id }));
+                    return RedirectToAction("Echanges", "WorkflowDerogation", new { FK_DemDerg });
                 }
                 else
                 {
                     demdeg.FK_DemDerg_EtatAvc = 19;
                     database.SaveChanges();
-                    return Json(Url.Action("Encours", "WorkflowDerogation", new { page = 1 }));
+                    return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
                     //return Json(Url.Action("AvisOrg", "WorkflowDerogation", new { FK_DemDerg = id }));
                 }
             }
             else
             {
-                if (demdeg.Avis_Org.Where(i=>i.FK_Organisme<6).Count()==0)
+                if (demdeg.Avis_Org.Where(i => i.FK_Organisme < 6).Count() == 0)
                 {
-                    return Json(Url.Action("Encours", "WorkflowDerogation", new { page = 1 }));
+                    return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
                 }
                 else
                 {
-                    if (valider == "1")
+                    if (valider == 1)
                     {
                         demdeg.FK_DemDerg_EtatAvc = 20;
                         database.SaveChanges();
                         //return Json(Url.Action("Echanges", "WorkflowDerogation"));
-                        return Json(Url.Action("Echanges", "WorkflowDerogation", new { FK_DemDerg = id }));
+                        return RedirectToAction("Echanges", "WorkflowDerogation", new { FK_DemDerg });
                     }
                     else
                     {
                         demdeg.FK_DemDerg_EtatAvc = 19;
                         database.SaveChanges();
-                        return Json(Url.Action("Encours", "WorkflowDerogation", new { page = 1 }));
+                        return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
                         //return Json(Url.Action("AvisOrg", "WorkflowDerogation", new { FK_DemDerg = id }));
                     }
                 }
             }
         }
-
-
+        [Authorize(Roles = Administrator + "," + _Avis)]
+        public ActionResult DeleteAvis(int Id_Avis, int FK_DemDerg)
+        {
+            var _Actions = Actions(_Avis);
+            bool Read = _Actions[0];
+            bool Create = _Actions[1];
+            bool Update = _Actions[2];
+            bool Delete = _Actions[3];
+            ViewBag.Read = _Actions[0];
+            ViewBag.Create = _Actions[1];
+            ViewBag.Update = _Actions[2];
+            ViewBag.Delete = _Actions[3];
+            if (Read && Delete)
+            {
+                Avis_Org avis = database.Avis_Org.Find(Id_Avis);
+                database.Avis_Org.Remove(avis);
+                database.SaveChanges();
+            }
+            return RedirectToAction("AvisOrg", "WorkflowDerogation",new { FK_DemDerg});
+        }
 
 
         [Authorize(Roles = Administrator + "," + _Echanges)]
@@ -976,53 +1018,75 @@ namespace GestionnaireUtilisateurs.Controllers
             };
             return correctAction(20, FK_DemDerg, multiTab);
         }
-        [HttpPost]
-        public JsonResult Echanges(FormCollection form)
+
+
+
+
+        [HttpPost,Authorize(Roles = Administrator + "," + _Echanges)]
+        public ActionResult Echanges(int [] FK_Nature_Courrier,DateTime [] Date_Courier,int FK_DemDerg
+            , string [] Source_Courrier, string [] Destination_Courrier,HttpPostedFileBase [] file,int valider)
         {
-
-            if (form["courrier"].Count() != 0)
+            if (file!=null)
             {
-                var av = form["courrier"];
-                var avv = JsonConvert.DeserializeObject<List<Courrier>>(av);
-                for (int i = 0; i < avv.Count; i++)
+                List<Courrier> courriers = new List<Courrier>();
+                string pathDemande = CheckFolder(FK_DemDerg,2);
+                var longeur = FK_Nature_Courrier.Length;
+                var count = FK_Nature_Courrier.Count();
+                for (int n=0;n< longeur; n++)
                 {
-                    var con = new Courrier
-                    {
-                        FK_DemDerg_Cour = avv[i].FK_DemDerg_Cour,
-                        FK_Nature_Courrier = avv[i].FK_Nature_Courrier,
-
-                        Source_Courrier = avv[i].Source_Courrier,
-                        Destination_Courrier = avv[i].Destination_Courrier,
-                        url_Courrier = avv[i].url_Courrier
-                    };
-                    if (avv[i].Date_Courier > DateTime.Now) { con.Date_Courier = avv[i].Date_Courier; }
-                    else { con.Date_Courier = DateTime.Today; }
-                    database.Courrier.Add(con);
+                    HttpPostedFileBase filen = file[n];
+                    String path1 = Path.Combine(pathDemande, filen.FileName /*+ Path.GetExtension(file.FileName)*/);
+                    filen.SaveAs(path1);
+                    Courrier courrier = new Courrier();
+                    DateTime dateChecked = new DateTime();
+                    if (Date_Courier[n]<DateTime.Now) 
+                    { dateChecked = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day + 1, 08, 00, 00); }
+                    else { dateChecked = Date_Courier[n]; }
+                    courrier.FK_Nature_Courrier = FK_Nature_Courrier[n];
+                    courrier.Date_Courier = dateChecked;
+                    courrier.FK_DemDerg_Cour = FK_DemDerg;
+                    courrier.Source_Courrier = Source_Courrier[n];
+                    courrier.Destination_Courrier = Destination_Courrier[n];
+                    courrier.url_Courrier = path1.ToString();var urlLength = path1.Length;
+                    //courriers.Add(courrier);
+                    database.Courrier.Add(courrier);
                     database.SaveChanges();
                 }
+                //database.Courrier.AddRange(courriers);
             }
+            
 
-            var id = System.Convert.ToInt32(form["Id"]);
-            var demdeg = database.Demande_Derogation.Find(id);
-            var valider = form["valider"];
-            if (valider == "1")
+            var demdeg = database.Demande_Derogation.Find(FK_DemDerg);
+            if (valider == 1)
             {
-                demdeg.FK_DemDerg_EtatAvc = 21;
-                database.SaveChanges();
-                //return Json(Url.Action("Encours", "WorkflowDerogation"));
-                return Json(Url.Action("Autorisation", "WorkflowDerogation", new { FK_DemDerg = id }));
+                if (demdeg.Courrier.Count()==0)
+                {
+                    return RedirectToAction("Echanges", "WorkflowDerogation", new { FK_DemDerg });
+                }
+                else
+                {
+                    demdeg.FK_DemDerg_EtatAvc = 21;
+                    database.SaveChanges();
+                    return RedirectToAction("Autorisation", "WorkflowDerogation", new { FK_DemDerg });
+                }
             }
             else
             {
                 demdeg.FK_DemDerg_EtatAvc = 20;
                 database.SaveChanges();
-                return Json(Url.Action("Encours", "WorkflowDerogation", new { page = 1 }));
-                //return Json(Url.Action("Echanges", "WorkflowDerogation", new { FK_DemDerg = id }));
+                return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
             }
 
         }
 
-
+        [Authorize,Authorize(Roles = Administrator + "," + _Echanges)]
+        public ActionResult DeleteCourrier(int id_Courrier,int FK_DemDerg)
+        {
+            var courrier = database.Courrier.Find(id_Courrier);
+            database.Courrier.Remove(courrier);
+            database.SaveChanges();
+            return RedirectToAction("Echanges", "WorkflowDerogation", new { FK_DemDerg });
+        }
 
 
         [Authorize(Roles = Administrator + "," + _Autorisation)]
@@ -1118,7 +1182,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
         [Authorize(Roles = _WorkflowDerogation)]
-        public ActionResult Encours(Nullable<Int16> page, Nullable<int> Message)
+        public ActionResult Encours(short? page, int? Message)
         {
             if (page == null) { page = 1; }
             int totale_resultats = database.Demande_Derogation.Count();
