@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Encours";
     Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
+    bool finalisees = ViewBag.finalisees;
 }
 
 
@@ -23,9 +24,19 @@
     <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:5px;box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
 
         <div class="card-body">
-            <h1 style=" text-align: center; color: grey;font-weight: bolder;font-size: x-large; text-decoration: underline;font-family: verdana, sans-serif; ">
-                <b>Les demandes en cours</b>
-            </h1>
+            @if (finalisees)
+            {
+                <h1 style=" text-align: center; color: grey;font-weight: bolder;font-size: x-large; text-decoration: underline;font-family: verdana, sans-serif; ">
+                    <b>Les demandes finalisés</b>
+                </h1>
+            }
+            else
+            {
+                <h1 style=" text-align: center; color: grey;font-weight: bolder;font-size: x-large; text-decoration: underline;font-family: verdana, sans-serif; ">
+                    <b>Les demandes en cours</b>
+                </h1>
+            }
+
             <div>
                 <table data-tablesaw-mode="columntoggle" class="table table-bordered first" id="tableFilter">
                     <thead>
@@ -79,7 +90,14 @@
                                 }
                                 else
                                 {
-                                    <td>@item.EtatAvancement.Etat</td>
+                                    if(item.Cloture_DemDerg){
+                                        <td><label class="text-danger">finalisé</label></td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.EtatAvancement.Etat</td>
+                                    }
+
                                 }
 
                             </tr>

@@ -570,7 +570,7 @@ namespace GestionnaireUtilisateurs.Controllers
                     {
                         if (url_Doc_Derg.Length != 0)
                         {
-                            string pathDemande = CheckFolder(FK_DemDerg_DocDerg,0);
+                            string pathDemande = CheckFolder(FK_DemDerg_DocDerg, 0);
                             for (int n = 0; n < url_Doc_Derg.Length; n++)
                             {
                                 var file = url_Doc_Derg[n];
@@ -816,9 +816,9 @@ namespace GestionnaireUtilisateurs.Controllers
             return RedirectToAction("Programmation", "WorkflowDerogation", new { FK_DemDerg_Com });
         }
 
-        private string CheckFolder(int Id_DemDerg,int typeDoc)//0 ged,1 pv,2 courrier
+        private string CheckFolder(int Id_DemDerg, int typeDoc)//0 ged,1 pv,2 courrier
         {
-            String path = Server.MapPath("~/GED_DEROG/"); 
+            String path = Server.MapPath("~/GED_DEROG/");
             String pathDemande = "";
             switch (typeDoc)
             {
@@ -835,7 +835,7 @@ namespace GestionnaireUtilisateurs.Controllers
                     pathDemande = Server.MapPath("~/GED_DEROG/" + Id_DemDerg + "/COURRIER/");
                     break;
             }
-            
+
             var x = Directory.Exists(path);
             if (!x)
             {
@@ -926,9 +926,9 @@ namespace GestionnaireUtilisateurs.Controllers
                 demdeg.Avis_Remarque_DemDerg = Avis_Remarque_DemDerg;
                 var docCommission = demdeg.Document_Derogation.Where(o => o.Intitule_Doc_Derg == 201);
                 var pvExist = docCommission.Count() != 0; var pvDoesNotExist = !pvExist;
-                string pathDemande= CheckFolder(FK_DemDerg,1);
+                string pathDemande = CheckFolder(FK_DemDerg, 1);
                 //bool notexistFile = !FileExist(url_Doc_Derg.FileName, FK_DemDerg);
-                if (url_Doc_Derg!=null)
+                if (url_Doc_Derg != null)
                 {
                     string path1 = Path.Combine(pathDemande, url_Doc_Derg.FileName);
                     url_Doc_Derg.SaveAs(path1);
@@ -1003,7 +1003,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 database.Avis_Org.Remove(avis);
                 database.SaveChanges();
             }
-            return RedirectToAction("AvisOrg", "WorkflowDerogation",new { FK_DemDerg});
+            return RedirectToAction("AvisOrg", "WorkflowDerogation", new { FK_DemDerg });
         }
 
 
@@ -1030,9 +1030,9 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
 
-        [HttpPost,Authorize(Roles = Administrator + "," + _Echanges)]
-        public ActionResult Echanges(int [] FK_Nature_Courrier,DateTime [] Date_Courier,int FK_DemDerg
-            , string [] Source_Courrier, string [] Destination_Courrier,HttpPostedFileBase [] file,int valider)
+        [HttpPost, Authorize(Roles = Administrator + "," + _Echanges)]
+        public ActionResult Echanges(int[] FK_Nature_Courrier, DateTime[] Date_Courier, int FK_DemDerg
+            , string[] Source_Courrier, string[] Destination_Courrier, HttpPostedFileBase[] file, int valider)
         {
             var _Actions = Actions(_Echanges);
             bool Read = _Actions[0];
@@ -1063,7 +1063,7 @@ namespace GestionnaireUtilisateurs.Controllers
                         courrier.FK_DemDerg_Cour = FK_DemDerg;
                         courrier.Source_Courrier = Source_Courrier[n];
                         courrier.Destination_Courrier = Destination_Courrier[n];
-                        courrier.url_Courrier = path1.ToString(); 
+                        courrier.url_Courrier = path1.ToString();
                         //courriers.Add(courrier);
                         database.Courrier.Add(courrier);
                         database.SaveChanges();
@@ -1092,8 +1092,8 @@ namespace GestionnaireUtilisateurs.Controllers
             }
         }
 
-        [Authorize,Authorize(Roles = Administrator + "," + _Echanges)]
-        public ActionResult DeleteCourrier(int id_Courrier,int FK_DemDerg)
+        [Authorize, Authorize(Roles = Administrator + "," + _Echanges)]
+        public ActionResult DeleteCourrier(int id_Courrier, int FK_DemDerg)
         {
             var _Actions = Actions(_Echanges);
             bool Read = _Actions[0];
@@ -1106,7 +1106,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 database.Courrier.Remove(courrier);
                 database.SaveChanges();
             }
-            
+
             return RedirectToAction("Echanges", "WorkflowDerogation", new { FK_DemDerg });
         }
 
@@ -1140,7 +1140,7 @@ namespace GestionnaireUtilisateurs.Controllers
             bool Create = _Actions[1];
             bool Update = _Actions[2];
             bool Delete = _Actions[3];
-            
+
             var demdeg = database.Demande_Derogation.Find(Fk_DEMDEROG);
 
             if (demdeg.Autorisation_Derogation == null)
@@ -1164,9 +1164,9 @@ namespace GestionnaireUtilisateurs.Controllers
                     autorisation_Derogation.Nature_Autorisation = AutDerog.Nature_Autorisation;
                     database.Entry(autorisation_Derogation).State = EntityState.Modified;
                 }
-                
+
             }
-            
+
             if (valider == 0)
             {
                 demdeg.FK_DemDerg_EtatAvc = 21;
@@ -1193,6 +1193,15 @@ namespace GestionnaireUtilisateurs.Controllers
         [Authorize(Roles = Administrator + "," + _Cloture)]
         public ActionResult Cloture(int FK_DemDerg)
         {
+            var _Actions = Actions(_Cloture);
+            bool Read = _Actions[0];
+            bool Create = _Actions[1];
+            bool Update = _Actions[2];
+            bool Delete = _Actions[3];
+            ViewBag.Read = _Actions[0];
+            ViewBag.Create = _Actions[1];
+            ViewBag.Update = _Actions[2];
+            ViewBag.Delete = _Actions[3];
             var multiTab = new MultiModeles
             {
                 //AutDerog = db.Autorisation_Derogation.Where(p => p.FK_DemDerg_AutDerg == FK_DemDerg).Single(),
@@ -1203,10 +1212,19 @@ namespace GestionnaireUtilisateurs.Controllers
         [HttpPost]
         public ActionResult Cloture(int? FK_DemDerg_AutDerg)
         {
-            var demdeg = database.Demande_Derogation.Find(FK_DemDerg_AutDerg);
-            demdeg.Cloture_DemDerg = true;
-            database.SaveChanges();
+            var _Actions = Actions(_Cloture);
+            bool Read = _Actions[0];
+            bool Create = _Actions[1];
+            bool Update = _Actions[2];
+            bool Delete = _Actions[3];
+            if (Read && Update)
+            {
+                var demdeg = database.Demande_Derogation.Find(FK_DemDerg_AutDerg);
+                demdeg.Cloture_DemDerg = true;
+                database.SaveChanges();
+            }
             return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
+
         }
 
         public ActionResult NotFound()
@@ -1223,12 +1241,22 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
         [Authorize(Roles = _WorkflowDerogation)]
-        public ActionResult Encours(short? page, int? Message)
+        public ActionResult Encours(short? page, bool? finalisees)
         {
             if (page == null) { page = 1; }
-            int totale_resultats = database.Demande_Derogation.Count();
+            if (!finalisees.HasValue)
+            {
+                finalisees = false;
+            }
+            var demandes = database.Demande_Derogation.Where(f => f.Cloture_DemDerg == finalisees);
+
+            int totale_resultats = demandes.Count();
+
             int nombre_de_pages = totale_resultats / nombre_res_ppage + 1;
+
             ViewBag.page = page; ViewBag.nombre_de_pages = nombre_de_pages;
+            ViewBag.finalisees = finalisees;
+
             if (page < 1)
             {
                 return RedirectToAction("Encours", new { page = 1 });
@@ -1241,14 +1269,12 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 var model = new MultiModeles
                 {
-                    DemDergs = database.Demande_Derogation
+                    DemDergs = demandes
                     .OrderByDescending(p => p.Id_DemDerg)
                     .Skip((page.Value - 1) * nombre_res_ppage)
                     .Take(nombre_res_ppage)
                     .ToList()
                 };
-                if (Message == 1) { model.Message2View = "Vous n'avez pas le droit d'afficher ce contenue"; }
-                else { model.Message2View = ""; }
                 return View(model);
             }
         }
@@ -1368,6 +1394,6 @@ namespace GestionnaireUtilisateurs.Controllers
     }
 
 
-
+   
 
 }

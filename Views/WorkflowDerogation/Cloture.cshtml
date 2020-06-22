@@ -2,6 +2,10 @@
 @{
     ViewBag.Title = "Cloture";
     Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
+    bool Lire = ViewBag.Read; bool NLire = !Lire;
+    bool Cree = ViewBag.Create; bool NCree = !Cree;
+    bool Modifier = ViewBag.Update; bool NModifier = !Modifier;
+    bool Supprimer = ViewBag.Delete; bool NSupprimer = !Supprimer;
 }
 
 <section>
@@ -18,32 +22,88 @@
         </ol>
     </nav>
 </section>
-
-@Html.Partial("WorkflowG", Model)
-
-<div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
-    <div class="card-body" id="">
-        @if ( !Model.DemDerg.Cloture_DemDerg)
-        {
-            <form action="Cloture" method="post">
-                <div class="row">
-                    <div class="col-sm-6">
-                    </div>
-                    <div class="col-sm-6">
-                        <p class="text-right">
-                            <input type="hidden" value="@Model.DemDerg.Id_DemDerg" name="FK_DemDerg_AutDerg" />
-                            <button class="btn btn-lg" type="submit" id="btnsend" value="1" name="valider" style="background-color:#09aacc; color:white">
-                                Dossier finalisé  <i class="fa fa-paper-plane"></i>
-                            </button>
-                        </p>
-                    </div>
-                </div>
-            </form>
-        }
+<center>
+    <label class="text-capitalize text-info" style="background-color:gray;margin-bottom:10px">
+        Lire  @if (Lire)
+        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
         else
-        {
-            <center><h1><label class="text-danger" style="margin:10px"> Dossier finalisé</label></h1></center>
-        }
+        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
 
+        Cree  @if (Cree)
+        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
+        else
+        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
+
+        Modifier  @if (Modifier)
+        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
+        else
+        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
+        Supprimer  @if (Supprimer)
+        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
+        else
+        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
+    </label>
+
+</center>
+@if (Lire)
+{
+    Html.Partial("WorkflowG", Model);
+
+    <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+        <div class="card-body" id="">
+            @if (!Model.DemDerg.Cloture_DemDerg)
+            {
+                if (Modifier)
+                {
+                    <form action="Cloture" method="post">
+                        <div class="row">
+                            <div class="col-sm-6">
+                            </div>
+                            <div class="col-sm-6">
+                                <p class="text-right">
+                                    <input type="hidden" value="@Model.DemDerg.Id_DemDerg" name="FK_DemDerg_AutDerg" />
+                                    <button class="btn btn-lg" type="submit" id="btnsend" value="1" name="valider" style="background-color:#09aacc; color:white">
+                                        finaliser Dossier   <i class="fa fa-paper-plane"></i>
+                                    </button>
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    <center>
+                        <a href="@Url.Action("Encours","WorkflowDerogation")" class="form-control" style="position:center">
+                            Retour
+                        </a>
+                    </center>
+                }
+
+            }
+            else
+            {
+                <center><h1><label class="text-danger" style="margin:10px"> Dossier finalisé</label></h1></center>
+            }
+
+        </div>
     </div>
-</div>
+}
+else
+{
+    <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+        <div class="card-body">
+            <center class="form-control">
+                <label class="text-danger">
+                    <span>
+                        <i class="fa fa-accessible-icon"></i>
+                        <strong>
+                            Vous n'avez pas le droit d'afficher cette information
+                        </strong>
+                    </span>
+                </label>
+                <br />
+                <a href="@Url.Action("Encours","WorkflowDerogation")" class="form-control">Reteur</a>
+            </center>
+        </div>
+    </div>
+}
