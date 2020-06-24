@@ -33,11 +33,11 @@ namespace GestionnaireUtilisateurs.Controllers
             var rolesAdmin = database.AspNetUserRoles.Where(ol => ol.AspNetRoles.Name == Administrator);
             var mModels = new MultiModeles
             {
-                aspNetUsers = database.AspNetUsers.Where(i => i.AspNetUserRoles.Where(ii => ii.AspNetRoles.Name == Administrator).Count() == 0).ToList(),
+                aspNetUsers = database.AspNetUsers.Where(k => !k.Supp).Where(i => i.AspNetUserRoles.Where(ii => ii.AspNetRoles.Name == Administrator).Count() == 0).ToList(),
                 modules = database.Module.ToList(),
                 sousModules = database.SousModule.ToList(),
                 aspNetRoles = database.AspNetRoles.Where(p => p.Name != Administrator).ToList(),
-                statuts = database.Statuts.ToList(),
+                statuts = database.Statuts.Where(k => !k.supp).ToList(),
                 statutRoles = database.StatutRole.ToList()
             };
             return mModels;
@@ -109,6 +109,24 @@ namespace GestionnaireUtilisateurs.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirmez votre compte", "Confirmez votre compte en cliquant <a href=\"" + callbackUrl + "\">ici</a>");
 
+                    HistoriqueUserDeletion historiqueUser = new HistoriqueUserDeletion
+                    {
+                        AdminSupp = User.Identity.GetUserId(),
+                        date_heure = DateTime.Now,
+                        Suppression = false,
+                        UserConcernee = uid
+                    };
+                    database.HistoriqueUserDeletion.Add(historiqueUser);
+                    database.SaveChanges();
+                    Notification notification = new Notification
+                    {
+                        IdUser = uid,
+                        Type = 5,
+                        heure_date = DateTime.Now,
+                        danger = 3
+                    };
+                    database.Notification.Add(notification);
+                    database.SaveChanges();
                     return RedirectToAction("Index", "Home");
                 }
                 ViewBag.errors = result.Errors;
@@ -119,7 +137,7 @@ namespace GestionnaireUtilisateurs.Controllers
         [Authorize(Roles = Administrator)]
         public ActionResult EditUser(string id)
         {
-            ViewBag.Statuts = database.Statuts.ToList();
+            ViewBag.Statuts = database.Statuts.Where(k => !k.supp).ToList();
             var User = database.AspNetUsers.Find(id);
             RegisterParentViewModel viewModel = new RegisterParentViewModel();
             viewModel.Id = User.Id;
@@ -146,7 +164,7 @@ namespace GestionnaireUtilisateurs.Controllers
         public async Task<ActionResult> EditUser(RegisterParentViewModel parentViewModel)
         {
             ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
-            ViewBag.Statuts = database.Statuts.ToList();
+            ViewBag.Statuts = database.Statuts.Where(k => !k.supp).ToList();
             if (ModelState.IsValid)
             {
                 var user = database.AspNetUsers.Find(parentViewModel.Id);
@@ -167,7 +185,18 @@ namespace GestionnaireUtilisateurs.Controllers
                 user.StatutId = parentViewModel.StatutId;
                 database.Entry(user).State = EntityState.Modified;
                 var res = await database.SaveChangesAsync();
-
+                if (user.Email != parentViewModel.Email)
+                {
+                    Notification notification = new Notification
+                    {
+                        IdUser = uid,
+                        Type = 3,
+                        heure_date = DateTime.Now,
+                        danger = 1
+                    };
+                    database.Notification.Add(notification);
+                    database.SaveChanges();
+                }
                 if (res == 0)
                 {
                     return View(parentViewModel);
@@ -184,8 +213,17 @@ namespace GestionnaireUtilisateurs.Controllers
                     if (!result.Succeeded)
                     {
                         //password does not meet standards
-                        ViewBag.Statuts = database.Statuts.ToList();
+                        ViewBag.Statuts = database.Statuts.Where(k => !k.supp).ToList();
                         ViewBag.errors = result.Errors;
+                        Notification notification = new Notification
+                        {
+                            IdUser = uid,
+                            Type = 2,
+                            heure_date = DateTime.Now,
+                            danger = 6
+                        };
+                        database.Notification.Add(notification);
+                        database.SaveChanges();
                         return View(parentViewModel);
                     }
                 }
@@ -193,8 +231,9 @@ namespace GestionnaireUtilisateurs.Controllers
                 {
 
                     var aspNetUserRoles = user.AspNetUserRoles.Where(u => u.AspNetRoles.Name != Administrator);
-                    database.AspNetUserRoles.RemoveRange(aspNetUserRoles);
                     var tachesfromstatut = database.StatutRole.Where(statut => statut.StatutId == new_statut).ToList();
+
+                    database.AspNetUserRoles.RemoveRange(aspNetUserRoles);
                     var userRoles = new List<AspNetUserRoles>();
                     foreach (var element in tachesfromstatut)
                     {
@@ -209,7 +248,25 @@ namespace GestionnaireUtilisateurs.Controllers
                     }
                     database.AspNetUserRoles.AddRange(userRoles);
                     database.SaveChanges();
+                    Notification notification = new Notification
+                    {
+                        IdUser = uid,
+                        Type = 5,
+                        heure_date = DateTime.Now,
+                        danger = 3
+                    };
+                    database.Notification.Add(notification);
+                    database.SaveChanges();
                 }
+                HistoriqueUserDeletion historiqueUser = new HistoriqueUserDeletion
+                {
+                    AdminSupp = User.Identity.GetUserId(),
+                    date_heure = DateTime.Now,
+                    Suppression = false,
+                    UserConcernee = uid
+                };
+                database.HistoriqueUserDeletion.Add(historiqueUser);
+                database.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(parentViewModel);
@@ -269,28 +326,58 @@ namespace GestionnaireUtilisateurs.Controllers
                 var movre = user.Demande_Derogation;
                 foreach (var mo in movre)
                 {
-                    var avis = mo.Avis_Org; var courriers = mo.Courrier;
-                    var documents = mo.Document_Derogation; var parcells = mo.parcell;
-                    database.Avis_Org.RemoveRange(avis);
-                    database.Courrier.RemoveRange(courriers);
-                    database.Document_Derogation.RemoveRange(documents);
-                    database.parcell.RemoveRange(parcells);
+                    mo.Maitre_Oeuvre_DemDerg = null; database.SaveChanges();
+                    //var avis = mo.Avis_Org; var courriers = mo.Courrier;
+                    //var documents = mo.Document_Derogation; var parcells = mo.parcell;
+                    //database.Avis_Org.RemoveRange(avis);
+                    //database.Courrier.RemoveRange(courriers);
+                    //database.Document_Derogation.RemoveRange(documents);
+                    //database.parcell.RemoveRange(parcells);
                 }
-                database.Demande_Derogation.RemoveRange(movre);
+                //database.Demande_Derogation.RemoveRange(movre);
 
                 var movrage = user.Demande_Derogation1;
                 foreach (var mo in movrage)
                 {
-                    var avis = mo.Avis_Org; var courriers = mo.Courrier;
-                    var documents = mo.Document_Derogation; var parcells = mo.parcell;
-                    database.Avis_Org.RemoveRange(avis);
-                    database.Courrier.RemoveRange(courriers);
-                    database.Document_Derogation.RemoveRange(documents);
-                    database.parcell.RemoveRange(parcells);
+                    mo.Maitre_Oeuvrage_DemDerg = null; database.SaveChanges();
+                    //var avis = mo.Avis_Org; var courriers = mo.Courrier;
+                    //var documents = mo.Document_Derogation; var parcells = mo.parcell;
+                    //database.Avis_Org.RemoveRange(avis);
+                    //database.Courrier.RemoveRange(courriers);
+                    //database.Document_Derogation.RemoveRange(documents);
+                    //database.parcell.RemoveRange(parcells);
                 }
-                database.Demande_Derogation.RemoveRange(movrage);
+                //database.Demande_Derogation.RemoveRange(movrage);
 
-                database.AspNetUsers.Remove(user);
+                //database.AspNetUsers.Remove(user);
+                user.Supp = true;
+
+                Notification notificationx = new Notification
+                {
+                    IdUser = user.Id,
+                    Type = 5,
+                    heure_date = DateTime.Now,
+                    danger = 9
+                };
+                database.Notification.Add(notificationx);
+                database.SaveChanges();
+                Notification notification = new Notification
+                {
+                    IdUser = user.Id,
+                    Type = 4,
+                    heure_date = DateTime.Now,
+                    danger = 9
+                };
+                database.Notification.Add(notification);
+                database.SaveChanges();
+                HistoriqueUserDeletion historiqueUser = new HistoriqueUserDeletion
+                {
+                    AdminSupp = User.Identity.GetUserId(),
+                    date_heure = DateTime.Now,
+                    Suppression = true,
+                    UserConcernee = id
+                };
+                database.HistoriqueUserDeletion.Add(historiqueUser);
                 database.SaveChanges();
             }
 
@@ -342,6 +429,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 var currentUser = UserId[0];
                 var user = database.AspNetUsers.Find(currentUser);
                 var aspNetUserRoles = user.AspNetUserRoles.Where(u => u.AspNetRoles.Name != Administrator);
+
                 database.AspNetUserRoles.RemoveRange(aspNetUserRoles);
                 for (int i = 0; i < Read.Length; i++)
                 {
@@ -361,8 +449,18 @@ namespace GestionnaireUtilisateurs.Controllers
 
                 }
                 database.SaveChanges();
+                Notification notification = new Notification
+                {
+                    IdUser = currentUser,
+                    Type = 5,
+                    heure_date = DateTime.Now,
+                    danger = 3
+                };
+                database.Notification.Add(notification);
+                database.SaveChanges();
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("UserTache",new { id=UserId[0]});
         }
 
         /// ///////////////////////             STATUT                    //////////////////////
@@ -385,8 +483,19 @@ namespace GestionnaireUtilisateurs.Controllers
 
             if (ModelState.IsValid)
             {
-                var Sid = Guid.NewGuid(); statut.StatutId = Sid.ToString();
+                var Sid = Guid.NewGuid();
+                var sid_ = Sid.ToString();
+                statut.StatutId = sid_;
                 database.Statuts.Add(statut);
+                database.SaveChanges();
+                HistoireStatutDeletion historiqueStatut = new HistoireStatutDeletion
+                {
+                    AdminSupp = User.Identity.GetUserId(),
+                    date_heure = DateTime.Now,
+                    Suppression = false,
+                    FK_Statut = sid_
+                };
+                database.HistoireStatutDeletion.Add(historiqueStatut);
                 database.SaveChanges();
                 return RedirectToAction("IndexStatut");
             }
@@ -422,6 +531,15 @@ namespace GestionnaireUtilisateurs.Controllers
                     return View();
                 }
                 database.Entry(statut).State = EntityState.Modified;
+                database.SaveChanges();
+                HistoireStatutDeletion historiqueStatut = new HistoireStatutDeletion
+                {
+                    AdminSupp = User.Identity.GetUserId(),
+                    date_heure = DateTime.Now,
+                    Suppression = false,
+                    FK_Statut = statut.StatutId
+                };
+                database.HistoireStatutDeletion.Add(historiqueStatut);
                 database.SaveChanges();
                 return RedirectToAction("IndexStatut");
             }
@@ -462,10 +580,10 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 Admins += user.AspNetUserRoles.Where(a => a.AspNetRoles.Name == Administrator).Count();
             }
-            if (Admins==0)
+            if (Admins == 0)
             {
-                var statutRoles = statut.StatutRole;
-                database.StatutRole.RemoveRange(statutRoles);
+                //var statutRoles = statut.StatutRole;
+                //database.StatutRole.RemoveRange(statutRoles);
 
 
                 foreach (var user in users)
@@ -476,32 +594,73 @@ namespace GestionnaireUtilisateurs.Controllers
                     var movre = user.Demande_Derogation;
                     foreach (var mo in movre)
                     {
-                        var avis = mo.Avis_Org; var courriers = mo.Courrier;
-                        var documents = mo.Document_Derogation; var parcells = mo.parcell;
-                        database.Avis_Org.RemoveRange(avis);
-                        database.Courrier.RemoveRange(courriers);
-                        database.Document_Derogation.RemoveRange(documents);
-                        database.parcell.RemoveRange(parcells);
+                        mo.Maitre_Oeuvre_DemDerg = null; database.SaveChanges();
+                        //var avis = mo.Avis_Org; var courriers = mo.Courrier;
+                        //var documents = mo.Document_Derogation; var parcells = mo.parcell;
+                        //database.Avis_Org.RemoveRange(avis);
+                        //database.Courrier.RemoveRange(courriers);
+                        //database.Document_Derogation.RemoveRange(documents);
+                        //database.parcell.RemoveRange(parcells);
                     }
-                    database.Demande_Derogation.RemoveRange(movre);
+                    //database.Demande_Derogation.RemoveRange(movre);
 
                     var movrage = user.Demande_Derogation1;
                     foreach (var mo in movrage)
                     {
-                        var avis = mo.Avis_Org; var courriers = mo.Courrier;
-                        var documents = mo.Document_Derogation; var parcells = mo.parcell;
-                        database.Avis_Org.RemoveRange(avis);
-                        database.Courrier.RemoveRange(courriers);
-                        database.Document_Derogation.RemoveRange(documents);
-                        database.parcell.RemoveRange(parcells);
+                        mo.Maitre_Oeuvrage_DemDerg = null; database.SaveChanges();
+                        //var avis = mo.Avis_Org; var courriers = mo.Courrier;
+                        //var documents = mo.Document_Derogation; var parcells = mo.parcell;
+                        //database.Avis_Org.RemoveRange(avis);
+                        //database.Courrier.RemoveRange(courriers);
+                        //database.Document_Derogation.RemoveRange(documents);
+                        //database.parcell.RemoveRange(parcells);
                     }
-                    database.Demande_Derogation.RemoveRange(movrage);
-                    database.AspNetUsers.Remove(user);
+                    //database.Demande_Derogation.RemoveRange(movrage);
+                    user.Supp = true;
+                    database.SaveChanges();
+                    Notification notificationx = new Notification
+                    {
+                        IdUser = user.Id,
+                        Type = 5,
+                        heure_date = DateTime.Now,
+                        danger = 9
+                    };
+                    database.Notification.Add(notificationx);
+                    database.SaveChanges();
+                    Notification notification = new Notification
+                    {
+                        IdUser = user.Id,
+                        Type = 4,
+                        heure_date = DateTime.Now,
+                        danger = 9
+                    };
+                    database.Notification.Add(notification);
+                    database.SaveChanges();
+                    HistoriqueUserDeletion historiqueUser = new HistoriqueUserDeletion
+                    {
+                        AdminSupp = User.Identity.GetUserId(),
+                        date_heure = DateTime.Now,
+                        Suppression = true,
+                        UserConcernee = user.Id
+                    };
+                    database.HistoriqueUserDeletion.Add(historiqueUser);
+                    database.SaveChanges();
+                    //database.AspNetUsers.Remove(user);
                 }
-                database.Statuts.Remove(statut);
+                statut.supp = true;
+                HistoireStatutDeletion historiqueStatut = new HistoireStatutDeletion
+                {
+                    AdminSupp = User.Identity.GetUserId(),
+                    date_heure = DateTime.Now,
+                    Suppression = true,
+                    FK_Statut = statut.StatutId
+                };
+                database.HistoireStatutDeletion.Add(historiqueStatut);
+                database.SaveChanges();
+                //database.Statuts.Remove(statut);
                 database.SaveChanges();
             }
-            
+
             return RedirectToAction("IndexStatut");
         }
 
@@ -523,7 +682,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 Statut.StatutId = Guid.NewGuid().ToString();
                 database.Statuts.Add(Statut);
                 var result = await database.SaveChangesAsync();
-                var statutss = from p in database.Statuts.ToList()
+                var statutss = from p in database.Statuts.Where(k => !k.supp).ToList()
                                select new Statuts
                                {
                                    StatutId = p.StatutId,
@@ -531,6 +690,16 @@ namespace GestionnaireUtilisateurs.Controllers
                                };
 
                 data = new { dd = "error", statutss };
+
+                HistoireStatutDeletion historiqueStatut = new HistoireStatutDeletion
+                {
+                    AdminSupp = User.Identity.GetUserId(),
+                    date_heure = DateTime.Now,
+                    Suppression = false,
+                    FK_Statut = Statut.StatutId
+                };
+                database.HistoireStatutDeletion.Add(historiqueStatut);
+                database.SaveChanges();
                 return Json(data, JsonRequestBehavior.AllowGet);
             }
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
@@ -1008,13 +1177,13 @@ namespace GestionnaireUtilisateurs.Controllers
                     return View(role);
                 }
                 string rn = role.Name;
-                var nexist = database.AspNetRoles.Where(u => u.Name == rn).Count()==0;
+                var nexist = database.AspNetRoles.Where(u => u.Name == rn).Count() == 0;
                 if (nexist)
                 {
                     database.Entry(role).State = EntityState.Modified;
                     database.SaveChanges();
                 }
-                
+
                 return RedirectToAction("taches");
             }
             return View(multiModeles());
@@ -1102,78 +1271,5 @@ namespace GestionnaireUtilisateurs.Controllers
         {
             return View();
         }
-
-        
-        //public ActionResult About()
-        //{
-        //    return View();
-        //}
-
-        //[HttpPost]
-        ////[ValidateAntiForgeryToken]
-        //public JsonResult Aboutir()
-        //{
-        //    var mdles = from p in database.Module.ToList()
-        //                select new Module
-        //                {
-        //                    ModuleId = p.ModuleId,
-        //                    ModuleName = p.ModuleName
-        //                };
-        //    //    return Json(mdles, JsonRequestBehavior.AllowGet);
-        //    //if (ModelState.IsValid)
-        //    //{
-        //    //}
-        //    var data = new { dd = "error",mdles};
-        //    return Json(data, JsonRequestBehavior.AllowGet);
-        //}
-        //public ActionResult Contact()
-        //{
-        //    ViewBag.Message = "Your contact page.";
-
-        //    return View();
-        //}
-
-        //[HttpPost]
-        //public ActionResult Test(RegisterViewModel model)
-        //{
-        //    ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
-        //    return View(model);
-        //}
-        //var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-        //var tacheUse = new UserManager<IdentityUser>(new UserStore<IdentityUser>(new ApplicationDbContext()));
-        //var result = tacheUse.Create(user, model.Password);
-        //ViewBag.success = result.Succeeded;
-        //AspNetUsers users = new AspNetUsers();
-        //users.Nom = Nom;users.Prenom = Prenom; users.NomAr = NomAr; users.PrenomAr = PrenomAr;
-        //users.CIN = CIN; users.Ville = Ville; users.Email = Email; users.PhoneNumber = PhoneNumber;
-        //users.PasswordHash = Password; users.StatutId = StatutId;users.typeUtilisateur = typeUtilisateur;
-        //users.Sexe = Sexe;
-
-
-        //var tache = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext())) ;
-        //var tachee = tache.Create(new IdentityRole(sousModules.Name));
-        //var identifiant = tachee.Succeeded;
-        //sousModules.SouModuleId = SousModuleId;
-        //database.AspNetRoles.Add(sousModules);database.SaveChanges();
-        //return Json(new { dd = "error", data = insertedRecords }, JsonRequestBehavior.AllowGet);
-        //public ActionResult Inde(string id, int? courseID)
-        //{
-        //    var multiModels = new MultiModeles();
-        //    multiModels.aspNetUsers = database.AspNetUsers;
-        //    if (id != null)
-        //    {
-        //        ViewBag.InstructorID = id;
-        //        multiModels.aspNetUsers = multiModels.aspNetUsers.Where(i => i.Id == id).Single().Adresse;
-        //    }
-
-        //    if (courseID != null)
-        //    {
-        //        ViewBag.CourseID = courseID.Value;
-        //        viewModel.Enrollments = viewModel.Courses.Where(x => x.CourseID == courseID).Single().Enrollments;
-        //    }
-
-
-        //    return View(viewModel);
-        //}
     }
 }

@@ -70,6 +70,7 @@
     <Property Name="typeUtilisateur" Type="varchar" MaxLength="50" />
     <Property Name="Organisme" Type="int" />
     <Property Name="Entreprise" Type="nvarchar(max)" />
+    <Property Name="Supp" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Autorisation_Derogation">
     <Key>
@@ -166,6 +167,7 @@
     <Property Name="Id_Autorisation" Type="int" />
     <Property Name="Contribution_Projet_DemDerg" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="Fk_Commission" Type="int" />
+    <Property Name="Supp" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="derogs_demandees">
     <Key>
@@ -233,6 +235,17 @@
     <Property Name="Id_Nature_Projet_DemDerg" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Nature_Projet_DemDerg" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="last" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Notification">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Type" Type="int" Nullable="false" />
+    <Property Name="heure_date" Type="datetime" Nullable="false" />
+    <Property Name="Clicked" Type="bit" Nullable="false" />
+    <Property Name="danger" Type="int" Nullable="false" />
+    <Property Name="IdUser" Type="nvarchar" MaxLength="128" Nullable="false" />
   </EntityType>
   <EntityType Name="Organisme">
     <Key>
@@ -308,6 +321,7 @@
     <Property Name="StatutId" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="StatutName" Type="text" Nullable="false" />
     <Property Name="StatutDescription" Type="text" />
+    <Property Name="supp" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Type_Avis">
     <Key>
@@ -324,6 +338,13 @@
     <Property Name="OBJECTID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="NOM_Document" Type="nvarchar" MaxLength="50" />
     <Property Name="Obligation" Type="int" />
+  </EntityType>
+  <EntityType Name="TypeNotif">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Text" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
   <Association Name="FK_ApplicationModule_Application">
     <End Role="Application" Type="Self.Application" Multiplicity="1" />
@@ -635,6 +656,30 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Notification_AspNetUsers">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Notification">
+        <PropertyRef Name="IdUser" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Notification_TypeNotif">
+    <End Role="TypeNotif" Type="Self.TypeNotif" Multiplicity="1" />
+    <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TypeNotif">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Notification">
+        <PropertyRef Name="Type" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Organisme">
     <End Role="Organisme" Type="Self.Organisme" Multiplicity="1">
       <OnDelete Action="Cascade" />
@@ -731,6 +776,7 @@
     <EntitySet Name="Nature_Courrier" EntityType="Self.Nature_Courrier" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Nature_Demande_Derg" EntityType="Self.Nature_Demande_Derg" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Nature_Projet_DemDerg" EntityType="Self.Nature_Projet_DemDerg" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Notification" EntityType="Self.Notification" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Organisme" EntityType="Self.Organisme" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="parcell" EntityType="Self.parcell" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PROVINCES_RSK" EntityType="Self.PROVINCES_RSK" Schema="dbo" store:Type="Tables" />
@@ -741,6 +787,7 @@
     <EntitySet Name="Statuts" EntityType="Self.Statuts" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Type_Avis" EntityType="Self.Type_Avis" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TYPE_DOC" EntityType="Self.TYPE_DOC" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TypeNotif" EntityType="Self.TypeNotif" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_ApplicationModule_Application" Association="Self.FK_ApplicationModule_Application">
       <End Role="Application" EntitySet="Application" />
       <End Role="ApplicationModule" EntitySet="ApplicationModule" />
@@ -836,6 +883,14 @@
     <AssociationSet Name="FK_Nature_Courrier" Association="Self.FK_Nature_Courrier">
       <End Role="Nature_Courrier" EntitySet="Nature_Courrier" />
       <End Role="Courrier" EntitySet="Courrier" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Notification_AspNetUsers" Association="Self.FK_Notification_AspNetUsers">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="Notification" EntitySet="Notification" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Notification_TypeNotif" Association="Self.FK_Notification_TypeNotif">
+      <End Role="TypeNotif" EntitySet="TypeNotif" />
+      <End Role="Notification" EntitySet="Notification" />
     </AssociationSet>
     <AssociationSet Name="FK_Organisme" Association="Self.FK_Organisme">
       <End Role="Organisme" EntitySet="Organisme" />

@@ -1,0 +1,115 @@
+﻿@model GestionnaireUtilisateurs.Models.MultiModeles
+@{
+    ViewBag.Title = "DemadesDerogations";
+    Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
+}
+
+<div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+    <div class="card-body">
+        <div class="card-body border-top">
+            <div class="row">
+                <div class="col-sm-3">
+                </div>
+                <div class="col-sm-2">
+                    @using (Html.BeginForm("RestoreDemande", "Corbeille", FormMethod.Get))
+                    {
+                        <input type="hidden" id="IdHidden" name="id" value="-1">
+                        <button disabled id="buttonModifie" type="submit" class="btn btn" style="background-color:#09aacc ; color:white;">
+                            <i class="fa fa-edit"> Restaurer  </i>
+                        </button>
+                    }
+                </div>
+                <div class="col-sm-2">
+                </div>
+                <div class="col-sm-2">
+                    @using (Html.BeginForm("DeleteDemande", "Corbeille", FormMethod.Get))
+                    {
+                        <input type="hidden" id="IdHidden2" name="id" value="-1">
+                        <button disabled id="buttonDelete" type="submit" class="btn btn" style="background-color:#09aacc ; color:white;">
+                            <i class="fa fa-trash"> Supprimer définitivement </i>
+                        </button>
+                    }
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+        </div>
+        <table data-tablesaw-mode="columntoggle" class="table table-bordered first" id="tableFilter">
+            <thead>
+                <tr>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">N° du dossier </th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Commune/Arrondissement</th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Référence Foncière</th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="0" style="background-color:#d9edf7;">Nature demande</th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="0" style="background-color:#d9edf7;">Superficie</th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="0" style="background-color:#d9edf7;">Montant d'investissement</th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Etat d'avancement</th>
+                </tr>
+            </thead>
+            <tbody id="tabletargetted">
+
+                @foreach (var item in Model.DemDergs)
+                {
+                    <tr id="@item.Id_DemDerg">
+
+                        <td>@item.Code_DemDerg</td>
+                        @if (item.COMMUNES_RSK == null)
+                        {
+                            <td>non definis</td>
+                        }
+                        else
+                        {
+                            <td>@item.COMMUNES_RSK.COMMUNE</td>
+                        }
+                        @if (item.References_Foncieres == null)
+                        {
+                            <td></td>
+                        }
+                        else
+                        {
+                            <td>@item.References_Foncieres.NomRF</td>
+                        }
+                        @if (item.Nature_Demande_Derg == null)
+                        {
+                            <td></td>
+                        }
+                        else
+                        {
+                            <td>@item.Nature_Demande_Derg.nature_Demande_Derogation</td>
+                        }
+
+                        <td>@item.Superficie_Terrain_DemDerg</td>
+                        <td>@item.Montant_Investissement_DemDerg</td>
+                        @if (item.EtatAvancement == null)
+                        {
+                            <td></td>
+                        }
+                        else
+                        {
+                            if (item.Cloture_DemDerg)
+                            {
+                                <td><label class="text-danger">finalisé</label></td>
+                            }
+                            else
+                            {
+                                <td>@item.EtatAvancement.Etat</td>
+                            }
+
+                        }
+
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script src="~/Content/TableFilter/ReapetedFilter.js"></script>
+}
+

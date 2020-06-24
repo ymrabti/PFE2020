@@ -1,4 +1,7 @@
 ﻿@using GestionnaireUtilisateurs.Controllers
+@{ 
+    bool userDeleted = WorkflowDerogationController.Deleted;
+}
 <div class="nav-left-sidebar sidebar-dark">
     <div class="menu-list">
         <nav class="navbar navbar-expand-lg navbar-light">
@@ -8,11 +11,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav flex-column">
-                    @if (User.IsInRole(WorkflowDerogationController._Rensegnement) || User.IsInRole(WorkflowDerogationController._SitGeo)
+                    @if ((User.IsInRole(WorkflowDerogationController._Rensegnement) || User.IsInRole(WorkflowDerogationController._SitGeo)
                         || User.IsInRole(WorkflowDerogationController._GED) || User.IsInRole(WorkflowDerogationController._Avis)
                         || User.IsInRole(WorkflowDerogationController._Programmation) || User.IsInRole(WorkflowDerogationController._Autorisation)
                         || User.IsInRole(WorkflowDerogationController._Cloture) || User.IsInRole(WorkflowDerogationController.Administrator)
-                        || User.IsInRole(WorkflowDerogationController._Echanges))
+                        || User.IsInRole(WorkflowDerogationController._Echanges)) && !userDeleted)
                     {
                         <li class="nav-divider">
                             Menu dérogations
@@ -28,7 +31,8 @@
                         </li>
                     }
 
-                    @if (User.IsInRole(WorkflowDerogationController.Administrator) || User.IsInRole(WorkflowDerogationController._Rensegnement))
+                    @if ((User.IsInRole(WorkflowDerogationController.Administrator) || User.IsInRole(WorkflowDerogationController._Rensegnement)
+                        && !userDeleted))
                     {
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-2" aria-controls="submenu-2"><i class="fa fa-fw fa-plus"></i>Bureau de suivi</a>
@@ -43,21 +47,28 @@
                             </div>
                         </li>
                     }
-                    @if (User.IsInRole(WorkflowDerogationController._Rensegnement) || User.IsInRole(WorkflowDerogationController._SitGeo)
+                    @if ((User.IsInRole(WorkflowDerogationController._Rensegnement) || User.IsInRole(WorkflowDerogationController._SitGeo)
                         || User.IsInRole(WorkflowDerogationController._GED) || User.IsInRole(WorkflowDerogationController._Avis)
                         || User.IsInRole(WorkflowDerogationController._Programmation) || User.IsInRole(WorkflowDerogationController._Autorisation)
                         || User.IsInRole(WorkflowDerogationController._Cloture) || User.IsInRole(WorkflowDerogationController.Administrator)
-                        || User.IsInRole(WorkflowDerogationController._Echanges))
+                        || User.IsInRole(WorkflowDerogationController._Echanges)) && !userDeleted)
                     {
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-27" aria-controls="submenu-27"><i class="fa fa-fw fa-list"></i>Traitement</a>
                             <div id="submenu-27" class="collapse submenu" style="">
                                 <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="@Url.Action("EncoursParProfils","WorkflowDerogation")">Mes Demandes en cours</a>
-                                    </li>
+                                    @if (!User.IsInRole(WorkflowDerogationController.Administrator))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="@Url.Action("EncoursParProfils","WorkflowDerogation")">Mes Demandes en cours</a>
+                                        </li>
+                                    }
+
                                     <li class="nav-item">
                                         <a class="nav-link" href="@Url.Action("Encours","WorkflowDerogation")">Demandes de dérogations</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="@Url.Action("Encours","WorkflowDerogation",new { finalisees=true})">Demandes de finalisés</a>
                                     </li>
                                 </ul>
                             </div>
@@ -134,6 +145,22 @@
                                         </a>
                                     </li>
 
+                                </ul>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-99" aria-controls="submenu-99"><i class="fa fa-fw fa-list"></i>Corbeille</a>
+                            <div id="submenu-99" class="collapse submenu" style="">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="@Url.Action("Users","Corbeille")">Utilisateurs supprimés</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="@Url.Action("Statuts","Corbeille")">Statuts supprimés</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="@Url.Action("DemadesDerogations","Corbeille")">Demandes de dérogations supprimés</a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>

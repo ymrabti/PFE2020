@@ -171,6 +171,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CorbeilleController.cs" />
     <Compile Include="Controllers\EtatsSortieController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -227,6 +228,15 @@
     <Compile Include="Models\Forme_MaitreOeuvrage_DemDerg.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\HistoireDemDergDeletion.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\HistoireStatutDeletion.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\HistoriqueUserDeletion.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\HomeViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -258,6 +268,9 @@
     <Compile Include="Models\Nature_Projet_DemDerg.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Notification.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Organisme.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
@@ -280,6 +293,9 @@
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Statut_Juridique_DemDerg.cs">
+      <DependentUpon>Model_AURS1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TypeNotif.cs">
       <DependentUpon>Model_AURS1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Type_Avis.cs">
@@ -1486,6 +1502,9 @@
     <Content Include="Views\Shared\_MenuPartialDerg.cshtml" />
     <Content Include="Views\Shared\_Xlayout.cshtml" />
     <Content Include="Views\Shared\NVOIR.cshtml" />
+    <Content Include="Views\Corbeille\Users.cshtml" />
+    <Content Include="Views\Corbeille\Statuts.cshtml" />
+    <Content Include="Views\Corbeille\DemadesDerogations.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

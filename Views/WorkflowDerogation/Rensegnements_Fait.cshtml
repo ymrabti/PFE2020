@@ -4,9 +4,9 @@
     Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
     //var datenow = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
     var numVers = ViewBag.numVers;
-    bool Lire      = ViewBag.Read  ; bool NLire      = !Lire     ;
-    bool Cree      = ViewBag.Create; bool NCree      = !Cree     ;
-    bool Modifier  = ViewBag.Update; bool NModifier  = !Modifier ;
+    bool Lire = ViewBag.Read; bool NLire = !Lire;
+    bool Cree = ViewBag.Create; bool NCree = !Cree;
+    bool Modifier = ViewBag.Update; bool NModifier = !Modifier;
     bool Supprimer = ViewBag.Delete; bool NSupprimer = !Supprimer;
 }
 
@@ -51,8 +51,9 @@
 </center>
 @if (Lire)
 {
+    <div>@Html.Partial("WorkflowG", Model)</div>
 
-    Html.Partial("WorkflowG", Model);
+
     <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
         <div class="card-body">
             <div class="form-horizontal">
@@ -183,8 +184,8 @@
                                 }
                             </select>
                             @if (Cree)
-                            { <input type="hidden" class="form-control" id="StJrAut" value="" name="StJrAut" />}
-                            
+                            {<input type="hidden" class="form-control" id="StJrAut" value="" name="StJrAut" />}
+
                         </div>
                         <div class="col-sm-4">
 
@@ -199,7 +200,7 @@
                     <div class="row" style="margin-bottom:25px">
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Maître d'ouvrage :</label>
-                            <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="maitreOuvrage" name="Maitre_Oeuvrage_DemDerg"
+                            <select disabled="@NModifier" class="form-control form-control-sm chzn-selec" id="maitreOuvrage" name="Maitre_Oeuvrage_DemDerg"
                                     oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
                                 <option value="">-------- Sélectionner le maître d'ouvrage --------</option>
                                 @foreach (var item in Model.aspNetUsers)
@@ -217,7 +218,7 @@
                         </div>
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Maître d'oeuvre :</label>
-                            <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="maitreOeuvre" name="Maitre_Oeuvre_DemDerg"
+                            <select disabled="@NModifier" class="form-control form-control-sm chzn-selec" id="maitreOeuvre" name="Maitre_Oeuvre_DemDerg"
                                     oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
                                 <option value="">-------- Sélectionner le maître d'ouvre --------</option>
                                 @foreach (var item in Model.aspNetUsers)
@@ -359,7 +360,7 @@
                     <br /><br />
                     <center class="fixed-bottom">
                         @*@Html.HiddenFor(p => p.DemDerg.Id_DemDerg)*@
-                        <input type="hidden" name="Id_DemDerg" value="@Model.DemDerg.Id_DemDerg"/>
+                        <input type="hidden" name="Id_DemDerg" value="@Model.DemDerg.Id_DemDerg" />
                         <button type="submit" class="btn btn-lg" value="0" name="enregistrer" id="btnSave" style="background-color:#09aacc; color:white">
                             Enregister   <i class="fa fa-level-down-alt"></i>
                         </button>

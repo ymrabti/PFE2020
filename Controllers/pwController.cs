@@ -5,12 +5,13 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using GestionnaireUtilisateurs.Models;
-
+using System;
 
 namespace GestionnaireUtilisateurs.Controllers
 {
     public class pwController : Controller
     {
+        public aurs1Entities database = new aurs1Entities();
 
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -97,6 +98,24 @@ namespace GestionnaireUtilisateurs.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
+                HistoriqueUserDeletion historiqueUser = new HistoriqueUserDeletion
+                {
+                    AdminSupp = user.Id,
+                    date_heure = DateTime.Now,
+                    Suppression = false,
+                    UserConcernee = user.Id
+                };
+                database.HistoriqueUserDeletion.Add(historiqueUser);
+                database.SaveChanges();
+                Notification notification = new Notification
+                {
+                    IdUser = user.Id,
+                    Type = 1,
+                    heure_date = DateTime.Now,
+                    danger = 9
+                };
+                database.Notification.Add(notification);
+                database.SaveChanges();
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
             AddErrors(result);

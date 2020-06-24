@@ -29,17 +29,23 @@ namespace GestionnaireUtilisateurs.Models
         public virtual DbSet<ApplicationModule> ApplicationModule { get; set; }
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserRoles> AspNetUserRoles { get; set; }
-        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Autorisation_Derogation> Autorisation_Derogation { get; set; }
+        public virtual DbSet<Avis_Org> Avis_Org { get; set; }
         public virtual DbSet<Commission> Commission { get; set; }
         public virtual DbSet<COMMUNES_RSK> COMMUNES_RSK { get; set; }
+        public virtual DbSet<Courrier> Courrier { get; set; }
         public virtual DbSet<derogs_demandees> derogs_demandees { get; set; }
+        public virtual DbSet<Document_Derogation> Document_Derogation { get; set; }
         public virtual DbSet<EtatAvancement> EtatAvancement { get; set; }
         public virtual DbSet<Forme_MaitreOeuvrage_DemDerg> Forme_MaitreOeuvrage_DemDerg { get; set; }
+        public virtual DbSet<HistoireDemDergDeletion> HistoireDemDergDeletion { get; set; }
+        public virtual DbSet<HistoireStatutDeletion> HistoireStatutDeletion { get; set; }
+        public virtual DbSet<HistoriqueUserDeletion> HistoriqueUserDeletion { get; set; }
         public virtual DbSet<Module> Module { get; set; }
         public virtual DbSet<Nature_Courrier> Nature_Courrier { get; set; }
         public virtual DbSet<Nature_Demande_Derg> Nature_Demande_Derg { get; set; }
         public virtual DbSet<Nature_Projet_DemDerg> Nature_Projet_DemDerg { get; set; }
+        public virtual DbSet<Notification> Notification { get; set; }
         public virtual DbSet<Organisme> Organisme { get; set; }
         public virtual DbSet<parcell> parcell { get; set; }
         public virtual DbSet<PROVINCES_RSK> PROVINCES_RSK { get; set; }
@@ -50,9 +56,8 @@ namespace GestionnaireUtilisateurs.Models
         public virtual DbSet<Statuts> Statuts { get; set; }
         public virtual DbSet<Type_Avis> Type_Avis { get; set; }
         public virtual DbSet<TYPE_DOC> TYPE_DOC { get; set; }
+        public virtual DbSet<TypeNotif> TypeNotif { get; set; }
+        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
         public virtual DbSet<Demande_Derogation> Demande_Derogation { get; set; }
-        public virtual DbSet<Document_Derogation> Document_Derogation { get; set; }
-        public virtual DbSet<Avis_Org> Avis_Org { get; set; }
-        public virtual DbSet<Courrier> Courrier { get; set; }
     }
 }

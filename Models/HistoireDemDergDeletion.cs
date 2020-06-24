@@ -12,18 +12,15 @@ namespace GestionnaireUtilisateurs.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Courrier
+    public partial class HistoireDemDergDeletion
     {
-        public int id_Courrier { get; set; }
-        public Nullable<int> Code_Courrier { get; set; }
-        public Nullable<System.DateTime> Date_Courier { get; set; }
-        public string Source_Courrier { get; set; }
-        public string Destination_Courrier { get; set; }
-        public string url_Courrier { get; set; }
-        public Nullable<int> FK_Nature_Courrier { get; set; }
-        public Nullable<int> FK_DemDerg_Cour { get; set; }
+        public string IdHistoire { get; set; }
+        public int FK_DemDerg { get; set; }
+        public string AdminSupp { get; set; }
+        public bool Suppression { get; set; }
+        public System.DateTime date_heure { get; set; }
     
-        public virtual Nature_Courrier Nature_Courrier { get; set; }
+        public virtual AspNetUsers AspNetUsers { get; set; }
         public virtual Demande_Derogation Demande_Derogation { get; set; }
     }
 }

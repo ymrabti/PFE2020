@@ -42,39 +42,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="AspNetUsers">
-      <EntityTypeMapping TypeName="aurs1Model.AspNetUsers">
-        <MappingFragment StoreEntitySet="AspNetUsers">
-          <ScalarProperty Name="Entreprise" ColumnName="Entreprise" />
-          <ScalarProperty Name="Organisme" ColumnName="Organisme" />
-          <ScalarProperty Name="typeUtilisateur" ColumnName="typeUtilisateur" />
-          <ScalarProperty Name="StatutId" ColumnName="StatutId" />
-          <ScalarProperty Name="UserName" ColumnName="UserName" />
-          <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
-          <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
-          <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
-          <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
-          <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
-          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
-          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
-          <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="demandeur" ColumnName="demandeur" />
-          <ScalarProperty Name="Adresse" ColumnName="Adresse" />
-          <ScalarProperty Name="Intiulé" ColumnName="Intiulé" />
-          <ScalarProperty Name="PrenomAr" ColumnName="PrenomAr" />
-          <ScalarProperty Name="NomAr" ColumnName="NomAr" />
-          <ScalarProperty Name="Sexe" ColumnName="Sexe" />
-          <ScalarProperty Name="CIN" ColumnName="CIN" />
-          <ScalarProperty Name="Ville" ColumnName="Ville" />
-          <ScalarProperty Name="Prenom" ColumnName="Prenom" />
-          <ScalarProperty Name="Nom" ColumnName="Nom" />
-          <ScalarProperty Name="UserNameAr" ColumnName="UserNameAr" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Autorisation_Derogation">
       <EntityTypeMapping TypeName="aurs1Model.Autorisation_Derogation">
         <MappingFragment StoreEntitySet="Autorisation_Derogation">
@@ -252,6 +219,7 @@
     <EntitySetMapping Name="Statuts">
       <EntityTypeMapping TypeName="aurs1Model.Statuts">
         <MappingFragment StoreEntitySet="Statuts">
+          <ScalarProperty Name="supp" ColumnName="supp" />
           <ScalarProperty Name="StatutDescription" ColumnName="StatutDescription" />
           <ScalarProperty Name="StatutName" ColumnName="StatutName" />
           <ScalarProperty Name="StatutId" ColumnName="StatutId" />
@@ -279,6 +247,7 @@
     <EntitySetMapping Name="Demande_Derogation">
       <EntityTypeMapping TypeName="aurs1Model.Demande_Derogation">
         <MappingFragment StoreEntitySet="Demande_Derogation">
+          <ScalarProperty Name="Supp" ColumnName="Supp" />
           <ScalarProperty Name="Fk_Commission" ColumnName="Fk_Commission" />
           <ScalarProperty Name="Contribution_Projet_DemDerg" ColumnName="Contribution_Projet_DemDerg" />
           <ScalarProperty Name="Id_Autorisation" ColumnName="Id_Autorisation" />
@@ -349,6 +318,60 @@
           <ScalarProperty Name="Date_Courier" ColumnName="Date_Courier" />
           <ScalarProperty Name="Code_Courrier" ColumnName="Code_Courrier" />
           <ScalarProperty Name="id_Courrier" ColumnName="id_Courrier" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUsers">
+      <EntityTypeMapping TypeName="aurs1Model.AspNetUsers">
+        <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="Supp" ColumnName="Supp" />
+          <ScalarProperty Name="Entreprise" ColumnName="Entreprise" />
+          <ScalarProperty Name="Organisme" ColumnName="Organisme" />
+          <ScalarProperty Name="typeUtilisateur" ColumnName="typeUtilisateur" />
+          <ScalarProperty Name="StatutId" ColumnName="StatutId" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+          <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+          <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+          <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+          <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="demandeur" ColumnName="demandeur" />
+          <ScalarProperty Name="Adresse" ColumnName="Adresse" />
+          <ScalarProperty Name="Intiulé" ColumnName="Intiulé" />
+          <ScalarProperty Name="PrenomAr" ColumnName="PrenomAr" />
+          <ScalarProperty Name="NomAr" ColumnName="NomAr" />
+          <ScalarProperty Name="Sexe" ColumnName="Sexe" />
+          <ScalarProperty Name="CIN" ColumnName="CIN" />
+          <ScalarProperty Name="Ville" ColumnName="Ville" />
+          <ScalarProperty Name="Prenom" ColumnName="Prenom" />
+          <ScalarProperty Name="Nom" ColumnName="Nom" />
+          <ScalarProperty Name="UserNameAr" ColumnName="UserNameAr" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Notification">
+      <EntityTypeMapping TypeName="aurs1Model.Notification">
+        <MappingFragment StoreEntitySet="Notification">
+          <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+          <ScalarProperty Name="danger" ColumnName="danger" />
+          <ScalarProperty Name="Clicked" ColumnName="Clicked" />
+          <ScalarProperty Name="heure_date" ColumnName="heure_date" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TypeNotif">
+      <EntityTypeMapping TypeName="aurs1Model.TypeNotif">
+        <MappingFragment StoreEntitySet="TypeNotif">
+          <ScalarProperty Name="Text" ColumnName="Text" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

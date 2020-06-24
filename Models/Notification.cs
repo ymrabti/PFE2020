@@ -12,16 +12,16 @@ namespace GestionnaireUtilisateurs.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Avis_Org
+    public partial class Notification
     {
-        public int Id_Avis { get; set; }
-        public Nullable<int> FK_DemDerg { get; set; }
-        public int FK_Organisme { get; set; }
-        public int FK_TypAvis { get; set; }
-        public string Detail_Avis { get; set; }
+        public int Id { get; set; }
+        public int Type { get; set; }
+        public System.DateTime heure_date { get; set; }
+        public bool Clicked { get; set; }
+        public int danger { get; set; }
+        public string IdUser { get; set; }
     
-        public virtual Organisme Organisme { get; set; }
-        public virtual Type_Avis Type_Avis { get; set; }
-        public virtual Demande_Derogation Demande_Derogation { get; set; }
+        public virtual TypeNotif TypeNotif { get; set; }
+        public virtual AspNetUsers AspNetUsers { get; set; }
     }
 }

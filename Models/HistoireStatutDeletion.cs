@@ -12,16 +12,15 @@ namespace GestionnaireUtilisateurs.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Avis_Org
+    public partial class HistoireStatutDeletion
     {
-        public int Id_Avis { get; set; }
-        public Nullable<int> FK_DemDerg { get; set; }
-        public int FK_Organisme { get; set; }
-        public int FK_TypAvis { get; set; }
-        public string Detail_Avis { get; set; }
+        public string IdHistoire { get; set; }
+        public string FK_Statut { get; set; }
+        public string AdminSupp { get; set; }
+        public bool Suppression { get; set; }
+        public System.DateTime date_heure { get; set; }
     
-        public virtual Organisme Organisme { get; set; }
-        public virtual Type_Avis Type_Avis { get; set; }
-        public virtual Demande_Derogation Demande_Derogation { get; set; }
+        public virtual Statuts Statuts { get; set; }
+        public virtual AspNetUsers AspNetUsers { get; set; }
     }
 }

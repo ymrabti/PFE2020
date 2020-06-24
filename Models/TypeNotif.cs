@@ -12,16 +12,18 @@ namespace GestionnaireUtilisateurs.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Avis_Org
+    public partial class TypeNotif
     {
-        public int Id_Avis { get; set; }
-        public Nullable<int> FK_DemDerg { get; set; }
-        public int FK_Organisme { get; set; }
-        public int FK_TypAvis { get; set; }
-        public string Detail_Avis { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public TypeNotif()
+        {
+            this.Notification = new HashSet<Notification>();
+        }
     
-        public virtual Organisme Organisme { get; set; }
-        public virtual Type_Avis Type_Avis { get; set; }
-        public virtual Demande_Derogation Demande_Derogation { get; set; }
+        public int Id { get; set; }
+        public string Text { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Notification> Notification { get; set; }
     }
 }

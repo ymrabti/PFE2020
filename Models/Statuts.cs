@@ -17,17 +17,21 @@ namespace GestionnaireUtilisateurs.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Statuts()
         {
-            this.AspNetUsers = new HashSet<AspNetUsers>();
+            this.HistoireStatutDeletion = new HashSet<HistoireStatutDeletion>();
             this.StatutRole = new HashSet<StatutRole>();
+            this.AspNetUsers = new HashSet<AspNetUsers>();
         }
     
         public string StatutId { get; set; }
         public string StatutName { get; set; }
         public string StatutDescription { get; set; }
+        public bool supp { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AspNetUsers> AspNetUsers { get; set; }
+        public virtual ICollection<HistoireStatutDeletion> HistoireStatutDeletion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StatutRole> StatutRole { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AspNetUsers> AspNetUsers { get; set; }
     }
 }

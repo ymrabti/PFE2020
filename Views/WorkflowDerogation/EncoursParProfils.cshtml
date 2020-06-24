@@ -1,8 +1,138 @@
-﻿
+﻿@model GestionnaireUtilisateurs.Models.MultiModeles
 @{
     ViewBag.Title = "EncoursParProfils";
     Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
 }
 
-<h2>EncoursParProfils</h2>
 
+<style>
+    .hoverdisables {
+        cursor: not-allowed
+    }
+
+        .hoverdisables:hover {
+            cursor: cell
+        }
+</style>
+
+
+<center><label class="text-warning">@Model.Message2View</label></center>
+
+<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+    <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:5px;box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+
+        <div class="card-body">
+            <h1 style=" text-align: center; color: grey;font-weight: bolder;font-size: x-large; text-decoration: underline;font-family: verdana, sans-serif; ">
+                <b>Les demandes en cours compatible avec votre profil</b>
+            </h1>
+
+            <div>
+                <table data-tablesaw-mode="columntoggle" class="table table-bordered first" id="tableFilter">
+                    <thead>
+                        <tr>
+                            <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">N° du dossier </th>
+                            <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Commune/Arrondissement</th>
+                            <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Référence Foncière</th>
+                            <th data-tablesaw-sortable-col data-tablesaw-priority="0" style="background-color:#d9edf7;">Nature demande</th>
+                            <th data-tablesaw-sortable-col data-tablesaw-priority="0" style="background-color:#d9edf7;">Superficie</th>
+                            <th data-tablesaw-sortable-col data-tablesaw-priority="0" style="background-color:#d9edf7;">Montant d'investissement</th>
+                            <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Etat d'avancement</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableau">
+
+                        @foreach (var item in Model.DemDergs)
+                        {
+                            <tr id="@item.Id_DemDerg">
+
+                                <td>@item.Code_DemDerg</td>
+                                @if (item.COMMUNES_RSK == null)
+                                {
+                                    <td>non definis</td>
+                                }
+                                else
+                                {
+                                    <td>@item.COMMUNES_RSK.COMMUNE</td>
+                                }
+                                @if (item.References_Foncieres == null)
+                                {
+                                    <td></td>
+                                }
+                                else
+                                {
+                                    <td>@item.References_Foncieres.NomRF</td>
+                                }
+                                @if (item.Nature_Demande_Derg == null)
+                                {
+                                    <td></td>
+                                }
+                                else
+                                {
+                                    <td>@item.Nature_Demande_Derg.nature_Demande_Derogation</td>
+                                }
+
+                                <td>@item.Superficie_Terrain_DemDerg</td>
+                                <td>@item.Montant_Investissement_DemDerg</td>
+                                @if (item.EtatAvancement == null)
+                                {
+                                    <td></td>
+                                }
+                                else
+                                {
+                                    if (item.Cloture_DemDerg)
+                                    {
+                                        <td><label class="text-danger">finalisé</label></td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.EtatAvancement.Etat</td>
+                                    }
+
+                                }
+
+                            </tr>
+                        }
+
+
+                    </tbody>
+                </table>
+
+                <br /> <br />
+                <form action="@Url.Action("Encours","WorkflowDerogation")" method="post">
+                    <center>
+                        <input type="hidden" id='hiddenDemande' name="Id_DemDerg">
+                        <button class="btn btn-lg buttonsReapeateds" type="submit" id="btnsend" disabled>
+                            Aller au Workflow
+                            <i class="fa fa-external-link-alt"></i>
+                        </button>
+
+                    </center><br />
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src="~/Content/Demandes.js"></script>
+    <script data-config="">
+        var filtersConfig = {
+            base_path: 'tablefilter/',
+            auto_filter: {
+                delay: 120 //milliseconds
+            },
+            filters_row_index: 1,
+            state: false,
+            alternate_rows: false,
+            rows_counter: false,
+            btn_reset: false,
+            status_bar: false,
+            highlight_keywords: true,
+            msg_filter: 'Filtering...'
+        };
+        var tf = new TableFilter('tableFilter', filtersConfig);
+        tf.init();
+    </script>
+
+}

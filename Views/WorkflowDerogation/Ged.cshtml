@@ -6,6 +6,7 @@
     bool Cree = ViewBag.Create; bool NCree = !Cree;
     bool Modifier = ViewBag.Update; bool NModifier = !Modifier;
     bool Supprimer = ViewBag.Delete; bool NSupprimer = !Supprimer;
+    int indexstart = 5, indexend = 7;
 }
 <section>
     <nav>
@@ -81,16 +82,34 @@
                                                        id="file22" target="_blank">
                                                         @if (item.FileName == "AUCUN")
                                                         {
-                                                            @item.url_Doc_Derg.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs/GED_DEROG/" + item.Demande_Derogation.Id_DemDerg + "/" }, StringSplitOptions.None).Last()
+                                                            string fileName = item.url_Doc_Derg.Replace("\\", "/").Split(new string[] { "/GestionnaireUtilisateurs/GED_DEROG/" + item.Demande_Derogation.Id_DemDerg + "/" }, StringSplitOptions.None).Last();
+                                                            if (fileName.Length < indexstart + indexend + 1)
+                                                            {
+                                                                @fileName
+                                                            }
+                                                            else
+                                                            {
+                                                                fileName = fileName.Substring(0, indexstart) + "..." + fileName.Substring(fileName.Length - indexend, indexend);
+                                                                @fileName;
+                                                            }
                                                         }
                                                         else
                                                         {
-                                                            <span style="text-decoration-color:blue">@item.FileName </span>
-                                                            <span>(@item.ContentType)</span>
+                                                            string fileName = item.FileName ;
+                                                            if (fileName.Length < indexstart + indexend + 1)
+                                                            {
+                                                                @fileName
+                                                            }
+                                                            else
+                                                            {
+                                                                fileName = fileName.Substring(0, indexstart) + "..." + fileName.Substring(fileName.Length - indexend, indexend)+ " (" + item.ContentType + ")";
+                                                                @fileName;
+                                                            }
                                                         }
+
                                                     </a>
                                                 </td>
-                                                <td>@Html.DisplayFor(modelItem => item.TYPE_DOC.NOM_Document)</td>
+                                                <td>@item.TYPE_DOC.NOM_Document</td>
                                                 <td>
                                                     @if (Supprimer)
                                                     {
@@ -145,13 +164,13 @@
     </div>
 
     @*<script src="~/Content/dwnlds/jquery.slimscroll.js"></script>
-    <script src="~/Content/dwnlds/bootstrap.bundle.js"></script>
-    <script src="~/Content/dwnlds/chosen.jquery.js"></script>
-    <script src="~/Content/dwnlds/jquery-1.8.3.js"></script>
-    <script src="~/Content/dwnlds/jquery-3.3.1.min.js"></script>
-    <script src="~/Content/dwnlds/jquery-ui.js"></script>
-    <link href="~/Content/dwnlds/chosen.css" rel="stylesheet" />
-    <link href="~/Content/dwnlds/jquery-ui.css" rel="stylesheet" />*@
+        <script src="~/Content/dwnlds/bootstrap.bundle.js"></script>
+        <script src="~/Content/dwnlds/chosen.jquery.js"></script>
+        <script src="~/Content/dwnlds/jquery-1.8.3.js"></script>
+        <script src="~/Content/dwnlds/jquery-3.3.1.min.js"></script>
+        <script src="~/Content/dwnlds/jquery-ui.js"></script>
+        <link href="~/Content/dwnlds/chosen.css" rel="stylesheet" />
+        <link href="~/Content/dwnlds/jquery-ui.css" rel="stylesheet" />*@
     @*<script src="~/Content/fileInputCustom.js"></script>*@
     if (Cree)
     {

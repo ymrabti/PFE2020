@@ -23,7 +23,7 @@ namespace GestionnaireUtilisateurs.Models
         public string ContentType { get; set; }
         public long ContentLenght { get; set; }
     
-        public virtual Demande_Derogation Demande_Derogation { get; set; }
         public virtual TYPE_DOC TYPE_DOC { get; set; }
+        public virtual Demande_Derogation Demande_Derogation { get; set; }
     }
 }

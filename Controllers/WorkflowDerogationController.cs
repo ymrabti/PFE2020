@@ -1,13 +1,10 @@
 ﻿using GestionnaireUtilisateurs.Models;
 using Microsoft.AspNet.Identity;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -43,6 +40,8 @@ namespace GestionnaireUtilisateurs.Controllers
         public const string _WorkflowDerogationExeptAdmin = _Rensegnement
             + "," + _SitGeo + "," + _GED + "," + _Echanges + ","
             + _Autorisation + "," + _Cloture + "," + _Avis + "," + _Programmation;
+
+
 
         public const string _WorkflowDerogation = Administrator + "," + _WorkflowDerogationExeptAdmin;
         public ActionResult correctAction(int idTache, int IdDemDerog, MultiModeles multiTab)
@@ -127,7 +126,12 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
         public aurs1Entities database = new aurs1Entities();
+        public static bool Deleted = false;
 
+        public void checkUserDeleted()
+        {
+            Deleted= database.AspNetUsers.Find(User.Identity.GetUserId()).Supp;
+        }
 
         [Authorize(Roles = Administrator + "," + _Rensegnement)]
         public ActionResult Rensegnements()
@@ -156,7 +160,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 Communes = database.COMMUNES_RSK.OrderBy(U => U.COMMUNE).ToList(),
                 Provs = database.PROVINCES_RSK.OrderBy(x => x.Provicne).ToList(),
                 References_Foncieres = database.References_Foncieres.OrderBy(x => x.NomRF).ToList(),
-                aspNetUsers = database.AspNetUsers.OrderBy(p => p.Email).ToList(),
+                aspNetUsers = database.AspNetUsers.Where(a => !a.Supp).OrderBy(p => p.Email).ToList(),
                 Derogs_Demandees = database.derogs_demandees.OrderBy(u => u.last).ThenBy(u => u.NOM).ToList()
             };
             return View(multiTab);
@@ -296,7 +300,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 Communes = database.COMMUNES_RSK.OrderBy(U => U.COMMUNE).ToList(),
                 Provs = database.PROVINCES_RSK.OrderBy(x => x.Provicne).ToList(),
                 References_Foncieres = database.References_Foncieres.OrderBy(x => x.NomRF).ToList(),
-                aspNetUsers = database.AspNetUsers.OrderBy(p => p.Email).ToList(),
+                aspNetUsers = database.AspNetUsers.Where(a=>!a.Supp).OrderBy(p => p.Email).ToList(),
                 Derogs_Demandees = database.derogs_demandees.OrderBy(u => u.last).ThenBy(u => u.NOM).ToList()
             };
             //return View(multiTab);
@@ -498,12 +502,6 @@ namespace GestionnaireUtilisateurs.Controllers
 
         public ActionResult DeleteDocument(int Id_Doc_Derog, int FK_DemDerg_DocDerg)
         {
-            var multiTab = new MultiModeles()
-            {
-                DemDerg = database.Demande_Derogation.Find(FK_DemDerg_DocDerg),
-                TYPE_DOCs = database.TYPE_DOC.ToList(),
-                Message2View = ""
-            };
             var _Actions = Actions(_GED);
             ViewBag.Read = _Actions[0];
             ViewBag.Create = _Actions[1];
@@ -518,138 +516,76 @@ namespace GestionnaireUtilisateurs.Controllers
                     var document = database.Document_Derogation.Find(Id_Doc_Derog);
                     database.Document_Derogation.Remove(document);
                     database.SaveChanges();
-                    //var path = Server.MapPath("~/GED_DEROG/" + FK_DemDerg_DocDerg + "/");
-                    //var files = Directory.GetFiles(path);bool exist = false;
-                    //foreach (string filename in files)
-                    //{
-                    //    if (filename.Split(new string[] { "\\GED_DEROG\\" + FK_DemDerg_DocDerg + "\\" }, StringSplitOptions.None).Last() == document.FileName)
-                    //    {
-                    //        exist = true;
-                    //    }
-                    //}
-                    //if (exist)
-                    //{
-                    //    multiTab.Message2View = "file found";
-                    //}
-                    //else
-                    //{
-                    //    multiTab.Message2View = "file not found !";
-                    //}
-                    return View("Ged", multiTab);
+                    return RedirectToAction("Ged", new { FK_DemDerg_DocDerg });
                 }
                 else
                 {
-                    multiTab.Message2View = "Vous ne disposer pas le droit de supprimer de document !";
-                    return View("Ged", multiTab);
+                    return RedirectToAction("Ged", new { FK_DemDerg_DocDerg });
                 }
             }
-            multiTab.Message2View = "une erreur s'est produite !";
-            return View("Ged", multiTab);
+            return RedirectToAction("Ged", new { FK_DemDerg_DocDerg });
         }
+
+
+
         [HttpPost]
         public ActionResult Ged(HttpPostedFileBase[] url_Doc_Derg, int[] Intitule_Doc_Derg
             , int valider, int FK_DemDerg_DocDerg)
         {
             var _Actions = Actions(_GED);
+            bool Read = _Actions[0];
+            bool Create = _Actions[1];
+            bool Update = _Actions[2];
+            bool Delete = _Actions[3];
             ViewBag.Read = _Actions[0];
             ViewBag.Create = _Actions[1];
             ViewBag.Update = _Actions[2];
             ViewBag.Delete = _Actions[3];
-            var multiTab = new MultiModeles()
-            {
-                DemDerg = database.Demande_Derogation.Find(FK_DemDerg_DocDerg),
-                TYPE_DOCs = database.TYPE_DOC.ToList(),
-                Message2View = ""
-            };
             if (ModelState.IsValid)
             {
                 Demande_Derogation demande = database.Demande_Derogation.Find(FK_DemDerg_DocDerg);
-                if (ViewBag.Read && ViewBag.Create)
+                if (Read && Create)
                 {
                     if (url_Doc_Derg != null)
                     {
-                        if (url_Doc_Derg.Length != 0)
+                        string pathDemande = CheckFolder(FK_DemDerg_DocDerg, 0);
+                        for (int n = 0; n < url_Doc_Derg.Length; n++)
                         {
-                            string pathDemande = CheckFolder(FK_DemDerg_DocDerg, 0);
-                            for (int n = 0; n < url_Doc_Derg.Length; n++)
-                            {
-                                var file = url_Doc_Derg[n];
-                                if (!FileExist(file.FileName, FK_DemDerg_DocDerg))
-                                {
-                                    String path1 = Path.Combine(pathDemande, file.FileName /*+ Path.GetExtension(file.FileName)*/);
-                                    file.SaveAs(path1);
-                                    Document_Derogation d = new Document_Derogation();
-                                    d.url_Doc_Derg = path1.ToString();
-                                    d.Intitule_Doc_Derg = Intitule_Doc_Derg[n];
-                                    d.FK_DemDerg_DocDerg = FK_DemDerg_DocDerg;
-                                    d.FileName = file.FileName;
-                                    d.ContentType = file.ContentType;
-                                    d.ContentLenght = file.ContentLength;
-                                    database.Document_Derogation.Add(d);
-                                    database.SaveChanges();
-                                }
-                            }
-                            if (valider == 1)
-                            {
-                                demande.FK_DemDerg_EtatAvc = 18;
-                                database.SaveChanges();
-                                return RedirectToAction("Programmation", "WorkflowDerogation", new { FK_DemDerg_Com = FK_DemDerg_DocDerg });
-                            }
-                            else
-                            {
-                                return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
-                            }
+                            var file = url_Doc_Derg[n];
+                            String path1 = Path.Combine(pathDemande, file.FileName /*+ Path.GetExtension(file.FileName)*/);
+                            file.SaveAs(path1);
+                            Document_Derogation d = new Document_Derogation();
+                            d.url_Doc_Derg = path1.ToString();
+                            d.Intitule_Doc_Derg = Intitule_Doc_Derg[n];
+                            d.FK_DemDerg_DocDerg = FK_DemDerg_DocDerg;
+                            d.FileName = file.FileName;
+                            d.ContentType = file.ContentType;
+                            d.ContentLenght = file.ContentLength;
+                            database.Document_Derogation.Add(d);
+                            database.SaveChanges();
                         }
-                        else
-                        {
-                            if (valider == 1)
-                            {
-                                multiTab.Message2View = "Documents obligatoires!";
-                                View(multiTab);
-                            }
-                            else
-                            {
-                                return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
-                            }
-                        }
+                    }
+                }
+                if (valider == 1)
+                {
+                    if (demande.Document_Derogation.Count() == 0)
+                    {
+                        return RedirectToAction("Ged", new { FK_DemDerg_DocDerg });
                     }
                     else
                     {
-                        if (valider == 1)
-                        {
-                            multiTab.Message2View = "Documents obligatoires!";
-                            View(multiTab);
-                        }
-                        else
-                        {
-                            return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
-                        }
+                        demande.FK_DemDerg_EtatAvc = 18;
+                        database.SaveChanges();
+                        return RedirectToAction("Programmation", new { FK_DemDerg_DocDerg });
                     }
                 }
                 else
                 {
-                    if (demande.Document_Derogation.Count() == 0)
-                    {
-                        return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
-                    }
-                    else
-                    {
-                        if (valider == 1)
-                        {
-                            demande.FK_DemDerg_EtatAvc = 18;
-                            database.SaveChanges();
-                            return RedirectToAction("Programmation", "WorkflowDerogation", new { FK_DemDerg_Com = FK_DemDerg_DocDerg });
-                        }
-                        else
-                        {
-                            return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
-                        }
-                    }
+                    return RedirectToAction("Encours");
                 }
 
             }
-            multiTab.Message2View = "une erreur s'est produite !";
-            return View(multiTab);
+            return RedirectToAction("Ged", new { FK_DemDerg_DocDerg });
         }
 
         bool FileExist(string filename, int FK_DemDerg_DocDerg)
@@ -755,7 +691,7 @@ namespace GestionnaireUtilisateurs.Controllers
                     database.SaveChanges();
                     return RedirectToAction("AvisOrg", "WorkflowDerogation", new { FK_DemDerg = FK_DemDerg_Com });
                 }
-                else { return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 }); }
+                else { return RedirectToAction("Programmation", "WorkflowDerogation", new { page = 1 }); }
             }
         }
 
@@ -1248,7 +1184,7 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 finalisees = false;
             }
-            var demandes = database.Demande_Derogation.Where(f => f.Cloture_DemDerg == finalisees);
+            var demandes = database.Demande_Derogation.Where(k => !k.Supp).Where(f => f.Cloture_DemDerg == finalisees);
 
             int totale_resultats = demandes.Count();
 
@@ -1330,47 +1266,31 @@ namespace GestionnaireUtilisateurs.Controllers
             }
         }
 
-
+        [Authorize(Roles = _WorkflowDerogationExeptAdmin)]
         public ActionResult EncoursParProfils()
         {
+            List<int> etas_user = new List<int>();
+            var demandes = database.Demande_Derogation.Where(k => !k.Supp).Where(i => !i.Cloture_DemDerg);
+            IEnumerable<Demande_Derogation> d15 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 1);
+            IEnumerable<Demande_Derogation> d16 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 1);
+            IEnumerable<Demande_Derogation> d17 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 1);
+            IEnumerable<Demande_Derogation> d18 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 1);
+            IEnumerable<Demande_Derogation> d19 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 1);
+            IEnumerable<Demande_Derogation> d20 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 1);
+            IEnumerable<Demande_Derogation> d21 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 1);
+            IEnumerable<Demande_Derogation> d22 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 1);
+            if (User.IsInRole(_Rensegnement)) { d15 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 15); }
+            if (User.IsInRole(_SitGeo)) { d16 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 16); ; }
+            if (User.IsInRole(_GED)) { d17 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 17); }
+            if (User.IsInRole(_Programmation)) { d18 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 18); ; }
+            if (User.IsInRole(_Avis)) { d19 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 19); ; }
+            if (User.IsInRole(_Echanges)) { d20 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 20); ; }
+            if (User.IsInRole(_Autorisation)) { d21 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 21); ; }
+            if (User.IsInRole(_Cloture)) { d22 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 22); ; }
+            var d = d15.Union(d16).Union(d17).Union(d18).Union(d19).Union(d20).Union(d21).Union(d22);
             var model = new MultiModeles
             {
-                //var profil = "Rens";
-                //if (profil == "Rens")
-                //{
-                //    model.DemDergs = db.Demande_Derogation.Where(p => p.FK_DemDerg_EtatAvc == 15);
-                //}
-                //else if (profil == "")
-                //{
-                //    model.DemDergs = db.Demande_Derogation.Where(p => p.FK_DemDerg_EtatAvc == 16);
-                //}
-                //else if (profil == "")
-                //{
-                //    model.DemDergs = db.Demande_Derogation.Where(p => p.FK_DemDerg_EtatAvc == 17);
-                //}
-                //else if (profil == "")
-                //{
-                //    model.DemDergs = db.Demande_Derogation.Where(p => p.FK_DemDerg_EtatAvc == 18);
-                //}
-                //else if (profil == "")
-                //{
-                //    model.DemDergs = db.Demande_Derogation.Where(p => p.FK_DemDerg_EtatAvc == 19);
-                //}
-                //else if (profil == "")
-                //{
-                //    model.DemDergs = db.Demande_Derogation.Where(p => p.FK_DemDerg_EtatAvc == 20);
-                //}
-                //else if (profil == "")
-                //{
-                //    model.DemDergs = db.Demande_Derogation.Where(p => p.FK_DemDerg_EtatAvc == 21);
-                //}
-                //else
-                //{
-                //    model.DemDergs = db.Demande_Derogation.Where(p => p.FK_DemDerg_EtatAvc == 22);
-                //}
-
-                NatDemDerogs = database.Nature_Demande_Derg.ToList(),
-                EtatAvancements = database.EtatAvancement.ToList()
+                DemDergs = d.ToList()
             };
 
             return View(model);
@@ -1394,6 +1314,6 @@ namespace GestionnaireUtilisateurs.Controllers
     }
 
 
-   
+
 
 }
