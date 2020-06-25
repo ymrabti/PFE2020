@@ -1505,6 +1505,10 @@
     <Content Include="Views\Corbeille\Users.cshtml" />
     <Content Include="Views\Corbeille\Statuts.cshtml" />
     <Content Include="Views\Corbeille\DemadesDerogations.cshtml" />
+    <Content Include="Views\Corbeille\RestoreUser.cshtml" />
+    <Content Include="Views\Corbeille\DeleteUser.cshtml" />
+    <Content Include="Views\Corbeille\RestoreStatut.cshtml" />
+    <Content Include="Views\Corbeille\DeleteStatut.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

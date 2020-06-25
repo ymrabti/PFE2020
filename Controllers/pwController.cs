@@ -75,7 +75,35 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(model);
         }
 
-        
+        public void EnvoyerLaNotification(int type, int danger, string uid)
+        {
+            Notification notification = new Notification
+            {
+                IdUser = uid,
+                Type = type,
+                heure_date = DateTime.Now,
+                danger = danger
+            };
+            database.Notification.Add(notification);
+            database.SaveChanges();
+        }
+        private void LogUserHistoryDel(string uid)
+        {
+            var user = database.AspNetUsers.Find(uid);
+            user.lastModif = DateTime.Now;
+            database.SaveChanges();
+            HistoriqueUserDeletion historiqueUser = new HistoriqueUserDeletion
+            {
+                AdminSupp = uid,
+                date_heure = DateTime.Now,
+                IdHistoire = Guid.NewGuid().ToString(),
+                Suppression = false,
+                UserConcernee = uid
+            };
+            database.HistoriqueUserDeletion.Add(historiqueUser);
+            database.SaveChanges();
+        }
+
         [Authorize]
         public ActionResult ChangePassword()
         {
@@ -98,24 +126,8 @@ namespace GestionnaireUtilisateurs.Controllers
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                HistoriqueUserDeletion historiqueUser = new HistoriqueUserDeletion
-                {
-                    AdminSupp = user.Id,
-                    date_heure = DateTime.Now,
-                    Suppression = false,
-                    UserConcernee = user.Id
-                };
-                database.HistoriqueUserDeletion.Add(historiqueUser);
-                database.SaveChanges();
-                Notification notification = new Notification
-                {
-                    IdUser = user.Id,
-                    Type = 1,
-                    heure_date = DateTime.Now,
-                    danger = 9
-                };
-                database.Notification.Add(notification);
-                database.SaveChanges();
+                LogUserHistoryDel(user.Id);
+                EnvoyerLaNotification(1,2,user.Id);
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
             }
             AddErrors(result);

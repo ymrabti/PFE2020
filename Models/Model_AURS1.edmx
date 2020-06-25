@@ -76,6 +76,7 @@
           <Property Name="Organisme" Type="int" />
           <Property Name="Entreprise" Type="nvarchar(max)" />
           <Property Name="Supp" Type="bit" Nullable="false" />
+          <Property Name="lastModif" Type="datetime" />
         </EntityType>
         <EntityType Name="Autorisation_Derogation">
           <Key>
@@ -357,6 +358,7 @@
           <Property Name="StatutName" Type="text" Nullable="false" />
           <Property Name="StatutDescription" Type="text" />
           <Property Name="supp" Type="bit" Nullable="false" />
+          <Property Name="lastModif" Type="datetime" />
         </EntityType>
         <EntityType Name="Type_Avis">
           <Key>
@@ -466,30 +468,6 @@
             </Principal>
             <Dependent Role="AspNetUserRoles">
               <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Dem_Derog_Users_ouvrage">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
-          <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Demande_Derogation">
-              <PropertyRef Name="Maitre_Oeuvrage_DemDerg" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Dem_Derog_Users_ouvre">
-          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
-          <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Demande_Derogation">
-              <PropertyRef Name="Maitre_Oeuvre_DemDerg" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -926,14 +904,6 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
-          <AssociationSet Name="FK_Dem_Derog_Users_ouvrage" Association="Self.FK_Dem_Derog_Users_ouvrage">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Dem_Derog_Users_ouvre" Association="Self.FK_Dem_Derog_Users_ouvre">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
-          </AssociationSet>
           <AssociationSet Name="FK_Demande_Derogation_Autorisation_Derogation" Association="Self.FK_Demande_Derogation_Autorisation_Derogation">
             <End Role="Autorisation_Derogation" EntitySet="Autorisation_Derogation" />
             <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
@@ -1153,14 +1123,6 @@
           <AssociationSet Name="FK_AspNetUsers_Statuts" Association="aurs1Model.FK_AspNetUsers_Statuts">
             <End Role="Statuts" EntitySet="Statuts" />
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Dem_Derog_Users_ouvrage" Association="aurs1Model.FK_Dem_Derog_Users_ouvrage">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Dem_Derog_Users_ouvre" Association="aurs1Model.FK_Dem_Derog_Users_ouvre">
-            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-            <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
           </AssociationSet>
           <AssociationSet Name="FK_HistoireDemDergDeletion_AspNetUsers" Association="aurs1Model.FK_HistoireDemDergDeletion_AspNetUsers">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -1436,7 +1398,7 @@
           <Property Name="date_heure" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="AspNetUsers" Relationship="aurs1Model.FK_HistoriqueUserDeletion_Admin" FromRole="HistoriqueUserDeletion" ToRole="AspNetUsers" />
           <NavigationProperty Name="AspNetUsers1" Relationship="aurs1Model.FK_HistoriqueUserDeletion_User" FromRole="HistoriqueUserDeletion" ToRole="AspNetUsers" />
-        </EntityType>
+          </EntityType>
         <EntityType Name="Module">
           <Key>
             <PropertyRef Name="ModuleId" />
@@ -1572,6 +1534,7 @@
           <NavigationProperty Name="HistoireStatutDeletion" Relationship="aurs1Model.FK_HistoireStatutDeletion_Statuts" FromRole="Statuts" ToRole="HistoireStatutDeletion" />
           <NavigationProperty Name="StatutRole" Relationship="aurs1Model.FK_StatutRole_Statuts" FromRole="Statuts" ToRole="StatutRole" />
           <NavigationProperty Name="AspNetUsers" Relationship="aurs1Model.FK_AspNetUsers_Statuts" FromRole="Statuts" ToRole="AspNetUsers" />
+          <Property Name="lastModif" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Type_Avis">
           <Key>
@@ -1809,13 +1772,12 @@
           <Property Name="Supp" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="AspNetUserRoles" Relationship="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserRoles" />
           <NavigationProperty Name="Statuts" Relationship="aurs1Model.FK_AspNetUsers_Statuts" FromRole="AspNetUsers" ToRole="Statuts" />
-          <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_Dem_Derog_Users_ouvrage" FromRole="AspNetUsers" ToRole="Demande_Derogation" />
-          <NavigationProperty Name="Demande_Derogation1" Relationship="aurs1Model.FK_Dem_Derog_Users_ouvre" FromRole="AspNetUsers" ToRole="Demande_Derogation" />
           <NavigationProperty Name="HistoireDemDergDeletion" Relationship="aurs1Model.FK_HistoireDemDergDeletion_AspNetUsers" FromRole="AspNetUsers" ToRole="HistoireDemDergDeletion" />
           <NavigationProperty Name="HistoireStatutDeletion" Relationship="aurs1Model.FK_HistoireStatutDeletion_Admin" FromRole="AspNetUsers" ToRole="HistoireStatutDeletion" />
           <NavigationProperty Name="HistoriqueUserDeletion" Relationship="aurs1Model.FK_HistoriqueUserDeletion_Admin" FromRole="AspNetUsers" ToRole="HistoriqueUserDeletion" />
           <NavigationProperty Name="HistoriqueUserDeletion1" Relationship="aurs1Model.FK_HistoriqueUserDeletion_User" FromRole="AspNetUsers" ToRole="HistoriqueUserDeletion" />
           <NavigationProperty Name="Notification" Relationship="aurs1Model.FK_Notification_AspNetUsers" FromRole="AspNetUsers" ToRole="Notification" />
+          <Property Name="lastModif" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Demande_Derogation">
           <Key>
@@ -1853,8 +1815,6 @@
           <Property Name="Contribution_Projet_DemDerg" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Fk_Commission" Type="Int32" />
           <Property Name="Supp" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="AspNetUsers" Relationship="aurs1Model.FK_Dem_Derog_Users_ouvrage" FromRole="Demande_Derogation" ToRole="AspNetUsers" />
-          <NavigationProperty Name="AspNetUsers1" Relationship="aurs1Model.FK_Dem_Derog_Users_ouvre" FromRole="Demande_Derogation" ToRole="AspNetUsers" />
           <NavigationProperty Name="Autorisation_Derogation" Relationship="aurs1Model.FK_Demande_Derogation_Autorisation_Derogation" FromRole="Demande_Derogation" ToRole="Autorisation_Derogation" />
           <NavigationProperty Name="Avis_Org" Relationship="aurs1Model.FK_DemDerg" FromRole="Demande_Derogation" ToRole="Avis_Org" />
           <NavigationProperty Name="Commission" Relationship="aurs1Model.FK_Demande_Derogation_Commission" FromRole="Demande_Derogation" ToRole="Commission" />
@@ -1894,30 +1854,6 @@
             </Principal>
             <Dependent Role="AspNetUsers">
               <PropertyRef Name="StatutId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Dem_Derog_Users_ouvrage">
-          <End Type="aurs1Model.AspNetUsers" Role="AspNetUsers" Multiplicity="0..1" />
-          <End Type="aurs1Model.Demande_Derogation" Role="Demande_Derogation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Demande_Derogation">
-              <PropertyRef Name="Maitre_Oeuvrage_DemDerg" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Dem_Derog_Users_ouvre">
-          <End Type="aurs1Model.AspNetUsers" Role="AspNetUsers" Multiplicity="0..1" />
-          <End Type="aurs1Model.Demande_Derogation" Role="Demande_Derogation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="AspNetUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Demande_Derogation">
-              <PropertyRef Name="Maitre_Oeuvre_DemDerg" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2485,6 +2421,7 @@
           <EntitySetMapping Name="Statuts">
             <EntityTypeMapping TypeName="aurs1Model.Statuts">
               <MappingFragment StoreEntitySet="Statuts">
+                <ScalarProperty Name="lastModif" ColumnName="lastModif" />
                 <ScalarProperty Name="supp" ColumnName="supp" />
                 <ScalarProperty Name="StatutDescription" ColumnName="StatutDescription" />
                 <ScalarProperty Name="StatutName" ColumnName="StatutName" />
@@ -2521,6 +2458,7 @@
           <EntitySetMapping Name="AspNetUsers">
             <EntityTypeMapping TypeName="aurs1Model.AspNetUsers">
               <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="lastModif" ColumnName="lastModif" />
                 <ScalarProperty Name="Supp" ColumnName="Supp" />
                 <ScalarProperty Name="Entreprise" ColumnName="Entreprise" />
                 <ScalarProperty Name="Organisme" ColumnName="Organisme" />

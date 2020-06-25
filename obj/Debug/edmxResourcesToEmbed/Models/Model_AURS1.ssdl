@@ -71,6 +71,7 @@
     <Property Name="Organisme" Type="int" />
     <Property Name="Entreprise" Type="nvarchar(max)" />
     <Property Name="Supp" Type="bit" Nullable="false" />
+    <Property Name="lastModif" Type="datetime" />
   </EntityType>
   <EntityType Name="Autorisation_Derogation">
     <Key>
@@ -142,8 +143,8 @@
     <Property Name="Date_Arrivee_DemDerg" Type="datetime" Nullable="false" />
     <Property Name="Intitule_DemDerg" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="Superficie_Terrain_DemDerg" Type="float" Nullable="false" />
-    <Property Name="Maitre_Oeuvrage_DemDerg" Type="nvarchar" MaxLength="128" Nullable="false" />
-    <Property Name="Maitre_Oeuvre_DemDerg" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Maitre_Oeuvrage_DemDerg" Type="nvarchar" MaxLength="128" />
+    <Property Name="Maitre_Oeuvre_DemDerg" Type="nvarchar" MaxLength="128" />
     <Property Name="Couverture_DemDerg" Type="bit" Nullable="false" />
     <Property Name="PrevisionUrbanistique_DemDerg" Type="nvarchar" MaxLength="1228" Nullable="false" />
     <Property Name="Ratio_resid_DemDerg" Type="int" Nullable="false" />
@@ -205,6 +206,36 @@
     </Key>
     <Property Name="Id_FormeMaitreOeuvrage_DemDerg" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="FormeMaitreOeuvrage_DemDerg" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="HistoireDemDergDeletion">
+    <Key>
+      <PropertyRef Name="IdHistoire" />
+    </Key>
+    <Property Name="IdHistoire" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="FK_DemDerg" Type="int" Nullable="false" />
+    <Property Name="AdminSupp" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Suppression" Type="bit" Nullable="false" />
+    <Property Name="date_heure" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="HistoireStatutDeletion">
+    <Key>
+      <PropertyRef Name="IdHistoire" />
+    </Key>
+    <Property Name="IdHistoire" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="FK_Statut" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="AdminSupp" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Suppression" Type="bit" Nullable="false" />
+    <Property Name="date_heure" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="HistoriqueUserDeletion">
+    <Key>
+      <PropertyRef Name="IdHistoire" />
+    </Key>
+    <Property Name="IdHistoire" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="UserConcernee" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="AdminSupp" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Suppression" Type="bit" Nullable="false" />
+    <Property Name="date_heure" Type="datetime" Nullable="false" />
   </EntityType>
   <EntityType Name="Module">
     <Key>
@@ -322,6 +353,7 @@
     <Property Name="StatutName" Type="text" Nullable="false" />
     <Property Name="StatutDescription" Type="text" />
     <Property Name="supp" Type="bit" Nullable="false" />
+    <Property Name="lastModif" Type="datetime" />
   </EntityType>
   <EntityType Name="Type_Avis">
     <Key>
@@ -431,30 +463,6 @@
       </Principal>
       <Dependent Role="AspNetUserRoles">
         <PropertyRef Name="UserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Dem_Derog_Users_ouvrage">
-    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
-    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUsers">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Demande_Derogation">
-        <PropertyRef Name="Maitre_Oeuvrage_DemDerg" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Dem_Derog_Users_ouvre">
-    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
-    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUsers">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Demande_Derogation">
-        <PropertyRef Name="Maitre_Oeuvre_DemDerg" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -642,6 +650,78 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_HistoireDemDergDeletion_AspNetUsers">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="HistoireDemDergDeletion" Type="Self.HistoireDemDergDeletion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HistoireDemDergDeletion">
+        <PropertyRef Name="AdminSupp" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HistoireDemDergDeletion_Demande_Derogation">
+    <End Role="Demande_Derogation" Type="Self.Demande_Derogation" Multiplicity="1" />
+    <End Role="HistoireDemDergDeletion" Type="Self.HistoireDemDergDeletion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Demande_Derogation">
+        <PropertyRef Name="Id_DemDerg" />
+      </Principal>
+      <Dependent Role="HistoireDemDergDeletion">
+        <PropertyRef Name="FK_DemDerg" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HistoireStatutDeletion_Admin">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="HistoireStatutDeletion" Type="Self.HistoireStatutDeletion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HistoireStatutDeletion">
+        <PropertyRef Name="AdminSupp" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HistoireStatutDeletion_Statuts">
+    <End Role="Statuts" Type="Self.Statuts" Multiplicity="1" />
+    <End Role="HistoireStatutDeletion" Type="Self.HistoireStatutDeletion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Statuts">
+        <PropertyRef Name="StatutId" />
+      </Principal>
+      <Dependent Role="HistoireStatutDeletion">
+        <PropertyRef Name="FK_Statut" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HistoriqueUserDeletion_Admin">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="HistoriqueUserDeletion" Type="Self.HistoriqueUserDeletion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HistoriqueUserDeletion">
+        <PropertyRef Name="AdminSupp" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HistoriqueUserDeletion_User">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+    <End Role="HistoriqueUserDeletion" Type="Self.HistoriqueUserDeletion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HistoriqueUserDeletion">
+        <PropertyRef Name="UserConcernee" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Nature_Courrier">
     <End Role="Nature_Courrier" Type="Self.Nature_Courrier" Multiplicity="0..1">
       <OnDelete Action="Cascade" />
@@ -772,6 +852,9 @@
     <EntitySet Name="Document_Derogation" EntityType="Self.Document_Derogation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="EtatAvancement" EntityType="Self.EtatAvancement" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Forme_MaitreOeuvrage_DemDerg" EntityType="Self.Forme_MaitreOeuvrage_DemDerg" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HistoireDemDergDeletion" EntityType="Self.HistoireDemDergDeletion" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HistoireStatutDeletion" EntityType="Self.HistoireStatutDeletion" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="HistoriqueUserDeletion" EntityType="Self.HistoriqueUserDeletion" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Module" EntityType="Self.Module" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Nature_Courrier" EntityType="Self.Nature_Courrier" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Nature_Demande_Derg" EntityType="Self.Nature_Demande_Derg" Schema="dbo" store:Type="Tables" />
@@ -815,14 +898,6 @@
     <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
       <End Role="AspNetUsers" EntitySet="AspNetUsers" />
       <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Dem_Derog_Users_ouvrage" Association="Self.FK_Dem_Derog_Users_ouvrage">
-      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Dem_Derog_Users_ouvre" Association="Self.FK_Dem_Derog_Users_ouvre">
-      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
     </AssociationSet>
     <AssociationSet Name="FK_Demande_Derogation_Autorisation_Derogation" Association="Self.FK_Demande_Derogation_Autorisation_Derogation">
       <End Role="Autorisation_Derogation" EntitySet="Autorisation_Derogation" />
@@ -879,6 +954,30 @@
     <AssociationSet Name="FK_Doc_Derg_TYPE_DOC" Association="Self.FK_Doc_Derg_TYPE_DOC">
       <End Role="TYPE_DOC" EntitySet="TYPE_DOC" />
       <End Role="Document_Derogation" EntitySet="Document_Derogation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HistoireDemDergDeletion_AspNetUsers" Association="Self.FK_HistoireDemDergDeletion_AspNetUsers">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="HistoireDemDergDeletion" EntitySet="HistoireDemDergDeletion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HistoireDemDergDeletion_Demande_Derogation" Association="Self.FK_HistoireDemDergDeletion_Demande_Derogation">
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+      <End Role="HistoireDemDergDeletion" EntitySet="HistoireDemDergDeletion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HistoireStatutDeletion_Admin" Association="Self.FK_HistoireStatutDeletion_Admin">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="HistoireStatutDeletion" EntitySet="HistoireStatutDeletion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HistoireStatutDeletion_Statuts" Association="Self.FK_HistoireStatutDeletion_Statuts">
+      <End Role="Statuts" EntitySet="Statuts" />
+      <End Role="HistoireStatutDeletion" EntitySet="HistoireStatutDeletion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HistoriqueUserDeletion_Admin" Association="Self.FK_HistoriqueUserDeletion_Admin">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="HistoriqueUserDeletion" EntitySet="HistoriqueUserDeletion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HistoriqueUserDeletion_User" Association="Self.FK_HistoriqueUserDeletion_User">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="HistoriqueUserDeletion" EntitySet="HistoriqueUserDeletion" />
     </AssociationSet>
     <AssociationSet Name="FK_Nature_Courrier" Association="Self.FK_Nature_Courrier">
       <End Role="Nature_Courrier" EntitySet="Nature_Courrier" />

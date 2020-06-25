@@ -18,8 +18,6 @@ namespace GestionnaireUtilisateurs.Models
         public AspNetUsers()
         {
             this.AspNetUserRoles = new HashSet<AspNetUserRoles>();
-            this.Demande_Derogation = new HashSet<Demande_Derogation>();
-            this.Demande_Derogation1 = new HashSet<Demande_Derogation>();
             this.HistoireDemDergDeletion = new HashSet<HistoireDemDergDeletion>();
             this.HistoireStatutDeletion = new HashSet<HistoireStatutDeletion>();
             this.HistoriqueUserDeletion = new HashSet<HistoriqueUserDeletion>();
@@ -55,14 +53,11 @@ namespace GestionnaireUtilisateurs.Models
         public Nullable<int> Organisme { get; set; }
         public string Entreprise { get; set; }
         public bool Supp { get; set; }
+        public Nullable<System.DateTime> lastModif { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetUserRoles> AspNetUserRoles { get; set; }
         public virtual Statuts Statuts { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Demande_Derogation> Demande_Derogation { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Demande_Derogation> Demande_Derogation1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HistoireDemDergDeletion> HistoireDemDergDeletion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

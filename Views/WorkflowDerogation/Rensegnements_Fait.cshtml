@@ -200,39 +200,14 @@
                     <div class="row" style="margin-bottom:25px">
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Maître d'ouvrage :</label>
-                            <select disabled="@NModifier" class="form-control form-control-sm chzn-selec" id="maitreOuvrage" name="Maitre_Oeuvrage_DemDerg"
-                                    oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
-                                <option value="">-------- Sélectionner le maître d'ouvrage --------</option>
-                                @foreach (var item in Model.aspNetUsers)
-                                {
-                                    if (item.Id == Model.DemDerg.Maitre_Oeuvrage_DemDerg)
-                                    {
-                                        <option value="@item.Id" selected>@item.Email</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@item.Id">@item.Email</option>
-                                    }
-                                }
-                            </select>
+                            <input disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="maitreOuvrage" name="Maitre_Oeuvrage_DemDerg" 
+                                    oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')"/>
                         </div>
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Maître d'oeuvre :</label>
-                            <select disabled="@NModifier" class="form-control form-control-sm chzn-selec" id="maitreOeuvre" name="Maitre_Oeuvre_DemDerg"
-                                    oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
-                                <option value="">-------- Sélectionner le maître d'ouvre --------</option>
-                                @foreach (var item in Model.aspNetUsers)
-                                {
-                                    if (item.Id == Model.DemDerg.Maitre_Oeuvre_DemDerg)
-                                    {
-                                        <option value="@item.Id" selected>@item.Email</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@item.Id">@item.Email</option>
-                                    }
-                                }
-                            </select>
+                            <input disabled="@NModifier" class="form-control form-control-sm chzn-selec" id="maitreOeuvre" name="Maitre_Oeuvre_DemDerg"
+                                    oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')" />
+                                
                         </div>
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Forme maître d'ouvrage :</label>

@@ -1,43 +1,36 @@
 ﻿@model GestionnaireUtilisateurs.Models.MultiModeles
 @{
-    ViewBag.Title = "Supprimer une Statut";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Suppression d'une Statut";
+    Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
 }
 
 <div class="row">
     <div class="col-md-6" style=" margin-left: auto; margin-right: auto;">
         <div class="card unnamedClass">
             <div class="card-body">
-                <h4> <span class="badge-dot badge-info"></span>  Suppression d'une statut</h4>
+                <h4> <span class="badge-dot badge-info"></span>  Suppression définitif d'une statut</h4>
                 <hr />
-                <h3>Vous etes sur de supprimer <span class="text-info">@ViewBag.statutName</span> ?</h3>
+                <h3>Vous etes sur de supprimer définitivement <span class="text-info">@ViewBag.statutName</span> ?</h3>
                 <div>
                     <hr />
 
                     @using (Html.BeginForm())
                     {
-                        @Html.AntiForgeryToken()
-
                         <div class="form-actions no-color">
-                            <input type="submit" value="Supprimer" class="btn btn-default btn-danger" /> |
-                            @Html.ActionLink("Back to List", "IndexStatut")
+                            <button type="submit" class="btn btn-default" style="background-color:indianred;color:white">
+
+                                <img src="~/Content/documentation/img/del.png" /> supprimer
+                            </button>  |
+                            @Html.ActionLink("Back to List", "Statuts")
                         </div>
                     }
                 </div>
             </div>
             <center><label style="font-weight: bold;font-style:oblique"><u>Utilisations </u></label></center><br />
-            <label style="font-style:oblique">Statut Role</label>
-            <ul>
-                @foreach (var statutRole in Model.statutRoles)
-                {
-                    <li>@statutRole.Statuts.StatutName +  @statutRole.AspNetRoles.Name</li>
-                }
-            </ul>
             <br />
-            <label style="font-style:oblique">Utilisateurs</label>
             @if (Model.aspNetUsers.Count() != 0)
             {
-                <label style="font-style:oblique">les utilisateurs suivants seront supprimés</label>
+                <label style="font-style:oblique">les utilisateurs suivants seront supprimés définitivement</label>
                 <ul>
                     @foreach (var user in Model.aspNetUsers)
                     {

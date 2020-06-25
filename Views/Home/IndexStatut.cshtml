@@ -17,7 +17,6 @@
                 <div class="col-lg-2">
                     @using (Html.BeginForm("EditStatut", "Home", FormMethod.Get))
                     {
-                        @Html.AntiForgeryToken()
                         <input type="hidden" id="IdHidden" name="id" value="-1">
                         <button disabled id="buttonModifie" type="submit" class="btn btn" style="background-color:#09aacc ; color:white;">
                             <i class="fa fa-edit"> Modifier  </i>
@@ -27,7 +26,6 @@
                 <div class="col-lg-2">
                     @using (Html.BeginForm("DeleteStatut", "Home", FormMethod.Get))
                     {
-                        @Html.AntiForgeryToken()
                         <input type="hidden" id="IdHidden2" name="id" value="-1">
                         <button disabled id="buttonDelete" type="submit" class="btn btn" style="background-color:#09aacc ; color:white;">
                             <i class="fa fa-trash"> Supprimer  </i>
@@ -39,7 +37,6 @@
                 <div class="col-md-4">
                     @using (Html.BeginForm("StatutTache", "Home", FormMethod.Get))
                     {
-                        @Html.AntiForgeryToken()
                         <input type="hidden" id="IdHidden3" name="id" value="-1">
                         <button disabled id="ManagementSelected" type="submit" class="btn btn" style="background-color:#09aacc ; color:white; ">
                             <i class="fa fa-sliders-h"> Gestion des roles   </i>

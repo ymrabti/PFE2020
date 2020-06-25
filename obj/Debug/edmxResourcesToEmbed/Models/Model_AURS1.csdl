@@ -6,15 +6,22 @@
     <EntitySet Name="AspNetRoles" EntityType="aurs1Model.AspNetRoles" />
     <EntitySet Name="AspNetUserRoles" EntityType="aurs1Model.AspNetUserRoles" />
     <EntitySet Name="Autorisation_Derogation" EntityType="aurs1Model.Autorisation_Derogation" />
+    <EntitySet Name="Avis_Org" EntityType="aurs1Model.Avis_Org" />
     <EntitySet Name="Commission" EntityType="aurs1Model.Commission" />
     <EntitySet Name="COMMUNES_RSK" EntityType="aurs1Model.COMMUNES_RSK" />
+    <EntitySet Name="Courrier" EntityType="aurs1Model.Courrier" />
     <EntitySet Name="derogs_demandees" EntityType="aurs1Model.derogs_demandees" />
+    <EntitySet Name="Document_Derogation" EntityType="aurs1Model.Document_Derogation" />
     <EntitySet Name="EtatAvancement" EntityType="aurs1Model.EtatAvancement" />
     <EntitySet Name="Forme_MaitreOeuvrage_DemDerg" EntityType="aurs1Model.Forme_MaitreOeuvrage_DemDerg" />
+    <EntitySet Name="HistoireDemDergDeletion" EntityType="aurs1Model.HistoireDemDergDeletion" />
+    <EntitySet Name="HistoireStatutDeletion" EntityType="aurs1Model.HistoireStatutDeletion" />
+    <EntitySet Name="HistoriqueUserDeletion" EntityType="aurs1Model.HistoriqueUserDeletion" />
     <EntitySet Name="Module" EntityType="aurs1Model.Module" />
     <EntitySet Name="Nature_Courrier" EntityType="aurs1Model.Nature_Courrier" />
     <EntitySet Name="Nature_Demande_Derg" EntityType="aurs1Model.Nature_Demande_Derg" />
     <EntitySet Name="Nature_Projet_DemDerg" EntityType="aurs1Model.Nature_Projet_DemDerg" />
+    <EntitySet Name="Notification" EntityType="aurs1Model.Notification" />
     <EntitySet Name="Organisme" EntityType="aurs1Model.Organisme" />
     <EntitySet Name="parcell" EntityType="aurs1Model.parcell" />
     <EntitySet Name="PROVINCES_RSK" EntityType="aurs1Model.PROVINCES_RSK" />
@@ -25,6 +32,7 @@
     <EntitySet Name="Statuts" EntityType="aurs1Model.Statuts" />
     <EntitySet Name="Type_Avis" EntityType="aurs1Model.Type_Avis" />
     <EntitySet Name="TYPE_DOC" EntityType="aurs1Model.TYPE_DOC" />
+    <EntitySet Name="TypeNotif" EntityType="aurs1Model.TypeNotif" />
     <AssociationSet Name="FK_ApplicationModule_Application" Association="aurs1Model.FK_ApplicationModule_Application">
       <End Role="Application" EntitySet="Application" />
       <End Role="ApplicationModule" EntitySet="ApplicationModule" />
@@ -45,22 +53,79 @@
       <End Role="AspNetRoles" EntitySet="AspNetRoles" />
       <End Role="StatutRole" EntitySet="StatutRole" />
     </AssociationSet>
+    <AssociationSet Name="FK_Organisme" Association="aurs1Model.FK_Organisme">
+      <End Role="Organisme" EntitySet="Organisme" />
+      <End Role="Avis_Org" EntitySet="Avis_Org" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TypAvis" Association="aurs1Model.FK_TypAvis">
+      <End Role="Type_Avis" EntitySet="Type_Avis" />
+      <End Role="Avis_Org" EntitySet="Avis_Org" />
+    </AssociationSet>
     <AssociationSet Name="FK_COMMUNES_RSK_PROVINCES_RSK" Association="aurs1Model.FK_COMMUNES_RSK_PROVINCES_RSK">
       <End Role="PROVINCES_RSK" EntitySet="PROVINCES_RSK" />
       <End Role="COMMUNES_RSK" EntitySet="COMMUNES_RSK" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Nature_Courrier" Association="aurs1Model.FK_Nature_Courrier">
+      <End Role="Nature_Courrier" EntitySet="Nature_Courrier" />
+      <End Role="Courrier" EntitySet="Courrier" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Doc_Derg_TYPE_DOC" Association="aurs1Model.FK_Doc_Derg_TYPE_DOC">
+      <End Role="TYPE_DOC" EntitySet="TYPE_DOC" />
+      <End Role="Document_Derogation" EntitySet="Document_Derogation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HistoireStatutDeletion_Statuts" Association="aurs1Model.FK_HistoireStatutDeletion_Statuts">
+      <End Role="Statuts" EntitySet="Statuts" />
+      <End Role="HistoireStatutDeletion" EntitySet="HistoireStatutDeletion" />
     </AssociationSet>
     <AssociationSet Name="FK_SousModule_Module" Association="aurs1Model.FK_SousModule_Module">
       <End Role="Module" EntitySet="Module" />
       <End Role="SousModule" EntitySet="SousModule" />
     </AssociationSet>
+    <AssociationSet Name="FK_Notification_TypeNotif" Association="aurs1Model.FK_Notification_TypeNotif">
+      <End Role="TypeNotif" EntitySet="TypeNotif" />
+      <End Role="Notification" EntitySet="Notification" />
+    </AssociationSet>
     <AssociationSet Name="FK_StatutRole_Statuts" Association="aurs1Model.FK_StatutRole_Statuts">
       <End Role="Statuts" EntitySet="Statuts" />
       <End Role="StatutRole" EntitySet="StatutRole" />
     </AssociationSet>
+    <EntitySet Name="AspNetUsers" EntityType="aurs1Model.AspNetUsers" />
     <EntitySet Name="Demande_Derogation" EntityType="aurs1Model.Demande_Derogation" />
+    <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_AspNetUsers_Statuts" Association="aurs1Model.FK_AspNetUsers_Statuts">
+      <End Role="Statuts" EntitySet="Statuts" />
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HistoireDemDergDeletion_AspNetUsers" Association="aurs1Model.FK_HistoireDemDergDeletion_AspNetUsers">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="HistoireDemDergDeletion" EntitySet="HistoireDemDergDeletion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HistoireStatutDeletion_Admin" Association="aurs1Model.FK_HistoireStatutDeletion_Admin">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="HistoireStatutDeletion" EntitySet="HistoireStatutDeletion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HistoriqueUserDeletion_Admin" Association="aurs1Model.FK_HistoriqueUserDeletion_Admin">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="HistoriqueUserDeletion" EntitySet="HistoriqueUserDeletion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HistoriqueUserDeletion_User" Association="aurs1Model.FK_HistoriqueUserDeletion_User">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="HistoriqueUserDeletion" EntitySet="HistoriqueUserDeletion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Notification_AspNetUsers" Association="aurs1Model.FK_Notification_AspNetUsers">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="Notification" EntitySet="Notification" />
+    </AssociationSet>
     <AssociationSet Name="FK_Demande_Derogation_Autorisation_Derogation" Association="aurs1Model.FK_Demande_Derogation_Autorisation_Derogation">
       <End Role="Autorisation_Derogation" EntitySet="Autorisation_Derogation" />
       <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DemDerg" Association="aurs1Model.FK_DemDerg">
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+      <End Role="Avis_Org" EntitySet="Avis_Org" />
     </AssociationSet>
     <AssociationSet Name="FK_Demande_Derogation_Commission" Association="aurs1Model.FK_Demande_Derogation_Commission">
       <End Role="Commission" EntitySet="Commission" />
@@ -70,6 +135,10 @@
       <End Role="COMMUNES_RSK" EntitySet="COMMUNES_RSK" />
       <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
     </AssociationSet>
+    <AssociationSet Name="FK_DemDerg_Cour" Association="aurs1Model.FK_DemDerg_Cour">
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+      <End Role="Courrier" EntitySet="Courrier" />
+    </AssociationSet>
     <AssociationSet Name="FK_Demande_Derogation_derogs_demandees" Association="aurs1Model.FK_Demande_Derogation_derogs_demandees">
       <End Role="derogs_demandees" EntitySet="derogs_demandees" />
       <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
@@ -77,6 +146,10 @@
     <AssociationSet Name="FK_Demande_Derogation_References_Foncieres" Association="aurs1Model.FK_Demande_Derogation_References_Foncieres">
       <End Role="References_Foncieres" EntitySet="References_Foncieres" />
       <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DemDerg_DocDerg" Association="aurs1Model.FK_DemDerg_DocDerg">
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+      <End Role="Document_Derogation" EntitySet="Document_Derogation" />
     </AssociationSet>
     <AssociationSet Name="FK_DemDerg_EtatAvc" Association="aurs1Model.FK_DemDerg_EtatAvc">
       <End Role="EtatAvancement" EntitySet="EtatAvancement" />
@@ -98,67 +171,13 @@
       <End Role="Statut_Juridique_DemDerg" EntitySet="Statut_Juridique_DemDerg" />
       <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
     </AssociationSet>
+    <AssociationSet Name="FK_HistoireDemDergDeletion_Demande_Derogation" Association="aurs1Model.FK_HistoireDemDergDeletion_Demande_Derogation">
+      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
+      <End Role="HistoireDemDergDeletion" EntitySet="HistoireDemDergDeletion" />
+    </AssociationSet>
     <AssociationSet Name="FK_parcell_Demande_Derogation" Association="aurs1Model.FK_parcell_Demande_Derogation">
       <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
       <End Role="parcell" EntitySet="parcell" />
-    </AssociationSet>
-    <EntitySet Name="Document_Derogation" EntityType="aurs1Model.Document_Derogation" />
-    <AssociationSet Name="FK_DemDerg_DocDerg" Association="aurs1Model.FK_DemDerg_DocDerg">
-      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
-      <End Role="Document_Derogation" EntitySet="Document_Derogation" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Doc_Derg_TYPE_DOC" Association="aurs1Model.FK_Doc_Derg_TYPE_DOC">
-      <End Role="TYPE_DOC" EntitySet="TYPE_DOC" />
-      <End Role="Document_Derogation" EntitySet="Document_Derogation" />
-    </AssociationSet>
-    <EntitySet Name="Avis_Org" EntityType="aurs1Model.Avis_Org" />
-    <AssociationSet Name="FK_DemDerg" Association="aurs1Model.FK_DemDerg">
-      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
-      <End Role="Avis_Org" EntitySet="Avis_Org" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Organisme" Association="aurs1Model.FK_Organisme">
-      <End Role="Organisme" EntitySet="Organisme" />
-      <End Role="Avis_Org" EntitySet="Avis_Org" />
-    </AssociationSet>
-    <AssociationSet Name="FK_TypAvis" Association="aurs1Model.FK_TypAvis">
-      <End Role="Type_Avis" EntitySet="Type_Avis" />
-      <End Role="Avis_Org" EntitySet="Avis_Org" />
-    </AssociationSet>
-    <EntitySet Name="Courrier" EntityType="aurs1Model.Courrier" />
-    <AssociationSet Name="FK_DemDerg_Cour" Association="aurs1Model.FK_DemDerg_Cour">
-      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
-      <End Role="Courrier" EntitySet="Courrier" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Nature_Courrier" Association="aurs1Model.FK_Nature_Courrier">
-      <End Role="Nature_Courrier" EntitySet="Nature_Courrier" />
-      <End Role="Courrier" EntitySet="Courrier" />
-    </AssociationSet>
-    <EntitySet Name="AspNetUsers" EntityType="aurs1Model.AspNetUsers" />
-    <EntitySet Name="Notification" EntityType="aurs1Model.Notification" />
-    <EntitySet Name="TypeNotif" EntityType="aurs1Model.TypeNotif" />
-    <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
-      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-      <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
-    </AssociationSet>
-    <AssociationSet Name="FK_AspNetUsers_Statuts" Association="aurs1Model.FK_AspNetUsers_Statuts">
-      <End Role="Statuts" EntitySet="Statuts" />
-      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Dem_Derog_Users_ouvrage" Association="aurs1Model.FK_Dem_Derog_Users_ouvrage">
-      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Dem_Derog_Users_ouvre" Association="aurs1Model.FK_Dem_Derog_Users_ouvre">
-      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-      <End Role="Demande_Derogation" EntitySet="Demande_Derogation" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Notification_AspNetUsers" Association="aurs1Model.FK_Notification_AspNetUsers">
-      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
-      <End Role="Notification" EntitySet="Notification" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Notification_TypeNotif" Association="aurs1Model.FK_Notification_TypeNotif">
-      <End Role="TypeNotif" EntitySet="TypeNotif" />
-      <End Role="Notification" EntitySet="Notification" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Application">
@@ -221,6 +240,19 @@
     <Property Name="EtatAvancemt_Autorisation" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_Demande_Derogation_Autorisation_Derogation" FromRole="Autorisation_Derogation" ToRole="Demande_Derogation" />
   </EntityType>
+  <EntityType Name="Avis_Org">
+    <Key>
+      <PropertyRef Name="Id_Avis" />
+    </Key>
+    <Property Name="Id_Avis" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FK_DemDerg" Type="Int32" />
+    <Property Name="FK_Organisme" Type="Int32" Nullable="false" />
+    <Property Name="FK_TypAvis" Type="Int32" Nullable="false" />
+    <Property Name="Detail_Avis" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Organisme" Relationship="aurs1Model.FK_Organisme" FromRole="Avis_Org" ToRole="Organisme" />
+    <NavigationProperty Name="Type_Avis" Relationship="aurs1Model.FK_TypAvis" FromRole="Avis_Org" ToRole="Type_Avis" />
+    <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_DemDerg" FromRole="Avis_Org" ToRole="Demande_Derogation" />
+  </EntityType>
   <EntityType Name="Commission">
     <Key>
       <PropertyRef Name="Id_Commission" />
@@ -249,6 +281,21 @@
     <NavigationProperty Name="PROVINCES_RSK" Relationship="aurs1Model.FK_COMMUNES_RSK_PROVINCES_RSK" FromRole="COMMUNES_RSK" ToRole="PROVINCES_RSK" />
     <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_Demande_Derogation_COMMUNES_RSK" FromRole="COMMUNES_RSK" ToRole="Demande_Derogation" />
   </EntityType>
+  <EntityType Name="Courrier">
+    <Key>
+      <PropertyRef Name="id_Courrier" />
+    </Key>
+    <Property Name="id_Courrier" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Code_Courrier" Type="Int32" />
+    <Property Name="Date_Courier" Type="DateTime" Precision="3" />
+    <Property Name="Source_Courrier" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Destination_Courrier" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="url_Courrier" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="FK_Nature_Courrier" Type="Int32" />
+    <Property Name="FK_DemDerg_Cour" Type="Int32" />
+    <NavigationProperty Name="Nature_Courrier" Relationship="aurs1Model.FK_Nature_Courrier" FromRole="Courrier" ToRole="Nature_Courrier" />
+    <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_DemDerg_Cour" FromRole="Courrier" ToRole="Demande_Derogation" />
+  </EntityType>
   <EntityType Name="derogs_demandees">
     <Key>
       <PropertyRef Name="ID" />
@@ -257,6 +304,21 @@
     <Property Name="NOM" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
     <Property Name="last" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_Demande_Derogation_derogs_demandees" FromRole="derogs_demandees" ToRole="Demande_Derogation" />
+  </EntityType>
+  <EntityType Name="Document_Derogation">
+    <Key>
+      <PropertyRef Name="Id_Doc_Derog" />
+    </Key>
+    <Property Name="Id_Doc_Derog" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Code_Doc_Derg" Type="Int32" />
+    <Property Name="Intitule_Doc_Derg" Type="Int32" Nullable="false" />
+    <Property Name="url_Doc_Derg" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="FK_DemDerg_DocDerg" Type="Int32" Nullable="false" />
+    <Property Name="FileName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="ContentType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ContentLenght" Type="Int64" Nullable="false" />
+    <NavigationProperty Name="TYPE_DOC" Relationship="aurs1Model.FK_Doc_Derg_TYPE_DOC" FromRole="Document_Derogation" ToRole="TYPE_DOC" />
+    <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_DemDerg_DocDerg" FromRole="Document_Derogation" ToRole="Demande_Derogation" />
   </EntityType>
   <EntityType Name="EtatAvancement">
     <Key>
@@ -275,6 +337,42 @@
     <Property Name="Id_FormeMaitreOeuvrage_DemDerg" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="FormeMaitreOeuvrage_DemDerg" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_DemDerg_FormeMaitreOeuvrage_DemDerg" FromRole="Forme_MaitreOeuvrage_DemDerg" ToRole="Demande_Derogation" />
+  </EntityType>
+  <EntityType Name="HistoireDemDergDeletion">
+    <Key>
+      <PropertyRef Name="IdHistoire" />
+    </Key>
+    <Property Name="IdHistoire" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="FK_DemDerg" Type="Int32" Nullable="false" />
+    <Property Name="AdminSupp" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Suppression" Type="Boolean" Nullable="false" />
+    <Property Name="date_heure" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="AspNetUsers" Relationship="aurs1Model.FK_HistoireDemDergDeletion_AspNetUsers" FromRole="HistoireDemDergDeletion" ToRole="AspNetUsers" />
+    <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_HistoireDemDergDeletion_Demande_Derogation" FromRole="HistoireDemDergDeletion" ToRole="Demande_Derogation" />
+  </EntityType>
+  <EntityType Name="HistoireStatutDeletion">
+    <Key>
+      <PropertyRef Name="IdHistoire" />
+    </Key>
+    <Property Name="IdHistoire" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="FK_Statut" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="AdminSupp" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Suppression" Type="Boolean" Nullable="false" />
+    <Property Name="date_heure" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="Statuts" Relationship="aurs1Model.FK_HistoireStatutDeletion_Statuts" FromRole="HistoireStatutDeletion" ToRole="Statuts" />
+    <NavigationProperty Name="AspNetUsers" Relationship="aurs1Model.FK_HistoireStatutDeletion_Admin" FromRole="HistoireStatutDeletion" ToRole="AspNetUsers" />
+  </EntityType>
+  <EntityType Name="HistoriqueUserDeletion">
+    <Key>
+      <PropertyRef Name="IdHistoire" />
+    </Key>
+    <Property Name="IdHistoire" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="UserConcernee" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="AdminSupp" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Suppression" Type="Boolean" Nullable="false" />
+    <Property Name="date_heure" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="AspNetUsers" Relationship="aurs1Model.FK_HistoriqueUserDeletion_Admin" FromRole="HistoriqueUserDeletion" ToRole="AspNetUsers" />
+    <NavigationProperty Name="AspNetUsers1" Relationship="aurs1Model.FK_HistoriqueUserDeletion_User" FromRole="HistoriqueUserDeletion" ToRole="AspNetUsers" />
   </EntityType>
   <EntityType Name="Module">
     <Key>
@@ -310,6 +408,19 @@
     <Property Name="Nature_Projet_DemDerg1" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="last" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_DemDerg_Nature_Projet_DemDerg" FromRole="Nature_Projet_DemDerg" ToRole="Demande_Derogation" />
+  </EntityType>
+  <EntityType Name="Notification">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Type" Type="Int32" Nullable="false" />
+    <Property Name="heure_date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Clicked" Type="Boolean" Nullable="false" />
+    <Property Name="danger" Type="Int32" Nullable="false" />
+    <Property Name="IdUser" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="TypeNotif" Relationship="aurs1Model.FK_Notification_TypeNotif" FromRole="Notification" ToRole="TypeNotif" />
+    <NavigationProperty Name="AspNetUsers" Relationship="aurs1Model.FK_Notification_AspNetUsers" FromRole="Notification" ToRole="AspNetUsers" />
   </EntityType>
   <EntityType Name="Organisme">
     <Key>
@@ -394,9 +505,11 @@
     <Property Name="StatutId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
     <Property Name="StatutName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="StatutDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="supp" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="HistoireStatutDeletion" Relationship="aurs1Model.FK_HistoireStatutDeletion_Statuts" FromRole="Statuts" ToRole="HistoireStatutDeletion" />
     <NavigationProperty Name="StatutRole" Relationship="aurs1Model.FK_StatutRole_Statuts" FromRole="Statuts" ToRole="StatutRole" />
     <NavigationProperty Name="AspNetUsers" Relationship="aurs1Model.FK_AspNetUsers_Statuts" FromRole="Statuts" ToRole="AspNetUsers" />
-    <Property Name="supp" Type="Boolean" Nullable="false" />
+    <Property Name="lastModif" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="Type_Avis">
     <Key>
@@ -415,6 +528,14 @@
     <Property Name="NOM_Document" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Obligation" Type="Int32" />
     <NavigationProperty Name="Document_Derogation" Relationship="aurs1Model.FK_Doc_Derg_TYPE_DOC" FromRole="TYPE_DOC" ToRole="Document_Derogation" />
+  </EntityType>
+  <EntityType Name="TypeNotif">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Text" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Notification" Relationship="aurs1Model.FK_Notification_TypeNotif" FromRole="TypeNotif" ToRole="Notification" />
   </EntityType>
   <Association Name="FK_ApplicationModule_Application">
     <End Type="aurs1Model.Application" Role="Application" Multiplicity="1" />
@@ -478,6 +599,34 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Organisme">
+    <End Type="aurs1Model.Organisme" Role="Organisme" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="aurs1Model.Avis_Org" Role="Avis_Org" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Organisme">
+        <PropertyRef Name="Id_Organisme" />
+      </Principal>
+      <Dependent Role="Avis_Org">
+        <PropertyRef Name="FK_Organisme" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TypAvis">
+    <End Type="aurs1Model.Type_Avis" Role="Type_Avis" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="aurs1Model.Avis_Org" Role="Avis_Org" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Type_Avis">
+        <PropertyRef Name="Id_TypAvis" />
+      </Principal>
+      <Dependent Role="Avis_Org">
+        <PropertyRef Name="FK_TypAvis" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_COMMUNES_RSK_PROVINCES_RSK">
     <End Type="aurs1Model.PROVINCES_RSK" Role="PROVINCES_RSK" Multiplicity="0..1" />
     <End Type="aurs1Model.COMMUNES_RSK" Role="COMMUNES_RSK" Multiplicity="*" />
@@ -487,6 +636,44 @@
       </Principal>
       <Dependent Role="COMMUNES_RSK">
         <PropertyRef Name="IDPROV" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Nature_Courrier">
+    <End Type="aurs1Model.Nature_Courrier" Role="Nature_Courrier" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="aurs1Model.Courrier" Role="Courrier" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Nature_Courrier">
+        <PropertyRef Name="Id_Nature_Courrier" />
+      </Principal>
+      <Dependent Role="Courrier">
+        <PropertyRef Name="FK_Nature_Courrier" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Doc_Derg_TYPE_DOC">
+    <End Type="aurs1Model.TYPE_DOC" Role="TYPE_DOC" Multiplicity="1" />
+    <End Type="aurs1Model.Document_Derogation" Role="Document_Derogation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TYPE_DOC">
+        <PropertyRef Name="ID_DOCUMENT" />
+      </Principal>
+      <Dependent Role="Document_Derogation">
+        <PropertyRef Name="Intitule_Doc_Derg" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HistoireStatutDeletion_Statuts">
+    <End Type="aurs1Model.Statuts" Role="Statuts" Multiplicity="1" />
+    <End Type="aurs1Model.HistoireStatutDeletion" Role="HistoireStatutDeletion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Statuts">
+        <PropertyRef Name="StatutId" />
+      </Principal>
+      <Dependent Role="HistoireStatutDeletion">
+        <PropertyRef Name="FK_Statut" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -502,6 +689,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Notification_TypeNotif">
+    <End Type="aurs1Model.TypeNotif" Role="TypeNotif" Multiplicity="1" />
+    <End Type="aurs1Model.Notification" Role="Notification" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TypeNotif">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Notification">
+        <PropertyRef Name="Type" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_StatutRole_Statuts">
     <End Type="aurs1Model.Statuts" Role="Statuts" Multiplicity="1" />
     <End Type="aurs1Model.StatutRole" Role="StatutRole" Multiplicity="*" />
@@ -514,6 +713,47 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="AspNetUsers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="UserNameAr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Nom" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Prenom" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Ville" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CIN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Sexe" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="NomAr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PrenomAr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Intiulé" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Adresse" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="demandeur" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+    <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="StatutId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="typeUtilisateur" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Organisme" Type="Int32" />
+    <Property Name="Entreprise" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Supp" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="AspNetUserRoles" Relationship="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserRoles" />
+    <NavigationProperty Name="Statuts" Relationship="aurs1Model.FK_AspNetUsers_Statuts" FromRole="AspNetUsers" ToRole="Statuts" />
+    <NavigationProperty Name="HistoireDemDergDeletion" Relationship="aurs1Model.FK_HistoireDemDergDeletion_AspNetUsers" FromRole="AspNetUsers" ToRole="HistoireDemDergDeletion" />
+    <NavigationProperty Name="HistoireStatutDeletion" Relationship="aurs1Model.FK_HistoireStatutDeletion_Admin" FromRole="AspNetUsers" ToRole="HistoireStatutDeletion" />
+    <NavigationProperty Name="HistoriqueUserDeletion" Relationship="aurs1Model.FK_HistoriqueUserDeletion_Admin" FromRole="AspNetUsers" ToRole="HistoriqueUserDeletion" />
+    <NavigationProperty Name="HistoriqueUserDeletion1" Relationship="aurs1Model.FK_HistoriqueUserDeletion_User" FromRole="AspNetUsers" ToRole="HistoriqueUserDeletion" />
+    <NavigationProperty Name="Notification" Relationship="aurs1Model.FK_Notification_AspNetUsers" FromRole="AspNetUsers" ToRole="Notification" />
+    <Property Name="lastModif" Type="DateTime" Precision="3" />
+  </EntityType>
   <EntityType Name="Demande_Derogation">
     <Key>
       <PropertyRef Name="Id_DemDerg" />
@@ -524,8 +764,8 @@
     <Property Name="Date_Arrivee_DemDerg" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="Intitule_DemDerg" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="Superficie_Terrain_DemDerg" Type="Double" Nullable="false" />
-    <Property Name="Maitre_Oeuvrage_DemDerg" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="Maitre_Oeuvre_DemDerg" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Maitre_Oeuvrage_DemDerg" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Maitre_Oeuvre_DemDerg" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
     <Property Name="Couverture_DemDerg" Type="Boolean" Nullable="false" />
     <Property Name="PrevisionUrbanistique_DemDerg" Type="String" Nullable="false" MaxLength="1228" FixedLength="false" Unicode="true" />
     <Property Name="Ratio_resid_DemDerg" Type="Int32" Nullable="false" />
@@ -549,24 +789,109 @@
     <Property Name="Id_Autorisation" Type="Int32" />
     <Property Name="Contribution_Projet_DemDerg" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="Fk_Commission" Type="Int32" />
+    <Property Name="Supp" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="Autorisation_Derogation" Relationship="aurs1Model.FK_Demande_Derogation_Autorisation_Derogation" FromRole="Demande_Derogation" ToRole="Autorisation_Derogation" />
+    <NavigationProperty Name="Avis_Org" Relationship="aurs1Model.FK_DemDerg" FromRole="Demande_Derogation" ToRole="Avis_Org" />
     <NavigationProperty Name="Commission" Relationship="aurs1Model.FK_Demande_Derogation_Commission" FromRole="Demande_Derogation" ToRole="Commission" />
     <NavigationProperty Name="COMMUNES_RSK" Relationship="aurs1Model.FK_Demande_Derogation_COMMUNES_RSK" FromRole="Demande_Derogation" ToRole="COMMUNES_RSK" />
+    <NavigationProperty Name="Courrier" Relationship="aurs1Model.FK_DemDerg_Cour" FromRole="Demande_Derogation" ToRole="Courrier" />
     <NavigationProperty Name="derogs_demandees" Relationship="aurs1Model.FK_Demande_Derogation_derogs_demandees" FromRole="Demande_Derogation" ToRole="derogs_demandees" />
     <NavigationProperty Name="References_Foncieres" Relationship="aurs1Model.FK_Demande_Derogation_References_Foncieres" FromRole="Demande_Derogation" ToRole="References_Foncieres" />
+    <NavigationProperty Name="Document_Derogation" Relationship="aurs1Model.FK_DemDerg_DocDerg" FromRole="Demande_Derogation" ToRole="Document_Derogation" />
     <NavigationProperty Name="EtatAvancement" Relationship="aurs1Model.FK_DemDerg_EtatAvc" FromRole="Demande_Derogation" ToRole="EtatAvancement" />
     <NavigationProperty Name="Forme_MaitreOeuvrage_DemDerg" Relationship="aurs1Model.FK_DemDerg_FormeMaitreOeuvrage_DemDerg" FromRole="Demande_Derogation" ToRole="Forme_MaitreOeuvrage_DemDerg" />
     <NavigationProperty Name="Nature_Demande_Derg" Relationship="aurs1Model.FK_DemDerg_Nature_Dem" FromRole="Demande_Derogation" ToRole="Nature_Demande_Derg" />
     <NavigationProperty Name="Nature_Projet_DemDerg" Relationship="aurs1Model.FK_DemDerg_Nature_Projet_DemDerg" FromRole="Demande_Derogation" ToRole="Nature_Projet_DemDerg" />
     <NavigationProperty Name="Statut_Juridique_DemDerg" Relationship="aurs1Model.FK_DemDerg_StatutJuridique_DemDerg" FromRole="Demande_Derogation" ToRole="Statut_Juridique_DemDerg" />
+    <NavigationProperty Name="HistoireDemDergDeletion" Relationship="aurs1Model.FK_HistoireDemDergDeletion_Demande_Derogation" FromRole="Demande_Derogation" ToRole="HistoireDemDergDeletion" />
     <NavigationProperty Name="parcell" Relationship="aurs1Model.FK_parcell_Demande_Derogation" FromRole="Demande_Derogation" ToRole="parcell" />
-    <NavigationProperty Name="Document_Derogation" Relationship="aurs1Model.FK_DemDerg_DocDerg" FromRole="Demande_Derogation" ToRole="Document_Derogation" />
-    <NavigationProperty Name="Avis_Org" Relationship="aurs1Model.FK_DemDerg" FromRole="Demande_Derogation" ToRole="Avis_Org" />
-    <NavigationProperty Name="Courrier" Relationship="aurs1Model.FK_DemDerg_Cour" FromRole="Demande_Derogation" ToRole="Courrier" />
-    <NavigationProperty Name="AspNetUsers" Relationship="aurs1Model.FK_Dem_Derog_Users_ouvrage" FromRole="Demande_Derogation" ToRole="AspNetUsers" />
-    <NavigationProperty Name="AspNetUsers1" Relationship="aurs1Model.FK_Dem_Derog_Users_ouvre" FromRole="Demande_Derogation" ToRole="AspNetUsers" />
-    <Property Name="Supp" Type="Boolean" Nullable="false" />
   </EntityType>
+  <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+    <End Type="aurs1Model.AspNetUsers" Role="AspNetUsers" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="aurs1Model.AspNetUserRoles" Role="AspNetUserRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserRoles">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_AspNetUsers_Statuts">
+    <End Type="aurs1Model.Statuts" Role="Statuts" Multiplicity="0..1" />
+    <End Type="aurs1Model.AspNetUsers" Role="AspNetUsers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Statuts">
+        <PropertyRef Name="StatutId" />
+      </Principal>
+      <Dependent Role="AspNetUsers">
+        <PropertyRef Name="StatutId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HistoireDemDergDeletion_AspNetUsers">
+    <End Type="aurs1Model.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
+    <End Type="aurs1Model.HistoireDemDergDeletion" Role="HistoireDemDergDeletion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HistoireDemDergDeletion">
+        <PropertyRef Name="AdminSupp" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HistoireStatutDeletion_Admin">
+    <End Type="aurs1Model.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
+    <End Type="aurs1Model.HistoireStatutDeletion" Role="HistoireStatutDeletion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HistoireStatutDeletion">
+        <PropertyRef Name="AdminSupp" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HistoriqueUserDeletion_Admin">
+    <End Type="aurs1Model.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
+    <End Type="aurs1Model.HistoriqueUserDeletion" Role="HistoriqueUserDeletion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HistoriqueUserDeletion">
+        <PropertyRef Name="AdminSupp" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HistoriqueUserDeletion_User">
+    <End Type="aurs1Model.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
+    <End Type="aurs1Model.HistoriqueUserDeletion" Role="HistoriqueUserDeletion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HistoriqueUserDeletion">
+        <PropertyRef Name="UserConcernee" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Notification_AspNetUsers">
+    <End Type="aurs1Model.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
+    <End Type="aurs1Model.Notification" Role="Notification" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Notification">
+        <PropertyRef Name="IdUser" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Demande_Derogation_Autorisation_Derogation">
     <End Type="aurs1Model.Autorisation_Derogation" Role="Autorisation_Derogation" Multiplicity="0..1" />
     <End Type="aurs1Model.Demande_Derogation" Role="Demande_Derogation" Multiplicity="*" />
@@ -576,6 +901,20 @@
       </Principal>
       <Dependent Role="Demande_Derogation">
         <PropertyRef Name="Id_Autorisation" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DemDerg">
+    <End Type="aurs1Model.Demande_Derogation" Role="Demande_Derogation" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="aurs1Model.Avis_Org" Role="Avis_Org" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Demande_Derogation">
+        <PropertyRef Name="Id_DemDerg" />
+      </Principal>
+      <Dependent Role="Avis_Org">
+        <PropertyRef Name="FK_DemDerg" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -603,6 +942,20 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_DemDerg_Cour">
+    <End Type="aurs1Model.Demande_Derogation" Role="Demande_Derogation" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="aurs1Model.Courrier" Role="Courrier" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Demande_Derogation">
+        <PropertyRef Name="Id_DemDerg" />
+      </Principal>
+      <Dependent Role="Courrier">
+        <PropertyRef Name="FK_DemDerg_Cour" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Demande_Derogation_derogs_demandees">
     <End Type="aurs1Model.derogs_demandees" Role="derogs_demandees" Multiplicity="1" />
     <End Type="aurs1Model.Demande_Derogation" Role="Demande_Derogation" Multiplicity="*" />
@@ -624,6 +977,20 @@
       </Principal>
       <Dependent Role="Demande_Derogation">
         <PropertyRef Name="Type_Terrain" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DemDerg_DocDerg">
+    <End Type="aurs1Model.Demande_Derogation" Role="Demande_Derogation" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="aurs1Model.Document_Derogation" Role="Document_Derogation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Demande_Derogation">
+        <PropertyRef Name="Id_DemDerg" />
+      </Principal>
+      <Dependent Role="Document_Derogation">
+        <PropertyRef Name="FK_DemDerg_DocDerg" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -697,6 +1064,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_HistoireDemDergDeletion_Demande_Derogation">
+    <End Type="aurs1Model.Demande_Derogation" Role="Demande_Derogation" Multiplicity="1" />
+    <End Type="aurs1Model.HistoireDemDergDeletion" Role="HistoireDemDergDeletion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Demande_Derogation">
+        <PropertyRef Name="Id_DemDerg" />
+      </Principal>
+      <Dependent Role="HistoireDemDergDeletion">
+        <PropertyRef Name="FK_DemDerg" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_parcell_Demande_Derogation">
     <End Type="aurs1Model.Demande_Derogation" Role="Demande_Derogation" Multiplicity="0..1" />
     <End Type="aurs1Model.parcell" Role="parcell" Multiplicity="*" />
@@ -706,278 +1085,6 @@
       </Principal>
       <Dependent Role="parcell">
         <PropertyRef Name="Fk_DemDerog" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="Document_Derogation">
-    <Key>
-      <PropertyRef Name="Id_Doc_Derog" />
-    </Key>
-    <Property Name="Id_Doc_Derog" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Code_Doc_Derg" Type="Int32" />
-    <Property Name="Intitule_Doc_Derg" Type="Int32" Nullable="false" />
-    <Property Name="url_Doc_Derg" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="false" />
-    <Property Name="FK_DemDerg_DocDerg" Type="Int32" Nullable="false" />
-    <Property Name="FileName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="ContentType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="ContentLenght" Type="Int64" Nullable="false" />
-    <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_DemDerg_DocDerg" FromRole="Document_Derogation" ToRole="Demande_Derogation" />
-    <NavigationProperty Name="TYPE_DOC" Relationship="aurs1Model.FK_Doc_Derg_TYPE_DOC" FromRole="Document_Derogation" ToRole="TYPE_DOC" />
-  </EntityType>
-  <Association Name="FK_DemDerg_DocDerg">
-    <End Type="aurs1Model.Demande_Derogation" Role="Demande_Derogation" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="aurs1Model.Document_Derogation" Role="Document_Derogation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Demande_Derogation">
-        <PropertyRef Name="Id_DemDerg" />
-      </Principal>
-      <Dependent Role="Document_Derogation">
-        <PropertyRef Name="FK_DemDerg_DocDerg" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Doc_Derg_TYPE_DOC">
-    <End Type="aurs1Model.TYPE_DOC" Role="TYPE_DOC" Multiplicity="1" />
-    <End Type="aurs1Model.Document_Derogation" Role="Document_Derogation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="TYPE_DOC">
-        <PropertyRef Name="ID_DOCUMENT" />
-      </Principal>
-      <Dependent Role="Document_Derogation">
-        <PropertyRef Name="Intitule_Doc_Derg" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="Avis_Org">
-    <Key>
-      <PropertyRef Name="Id_Avis" />
-    </Key>
-    <Property Name="Id_Avis" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="FK_DemDerg" Type="Int32" />
-    <Property Name="FK_Organisme" Type="Int32" Nullable="false" />
-    <Property Name="FK_TypAvis" Type="Int32" Nullable="false" />
-    <Property Name="Detail_Avis" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_DemDerg" FromRole="Avis_Org" ToRole="Demande_Derogation" />
-    <NavigationProperty Name="Organisme" Relationship="aurs1Model.FK_Organisme" FromRole="Avis_Org" ToRole="Organisme" />
-    <NavigationProperty Name="Type_Avis" Relationship="aurs1Model.FK_TypAvis" FromRole="Avis_Org" ToRole="Type_Avis" />
-  </EntityType>
-  <Association Name="FK_DemDerg">
-    <End Type="aurs1Model.Demande_Derogation" Role="Demande_Derogation" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="aurs1Model.Avis_Org" Role="Avis_Org" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Demande_Derogation">
-        <PropertyRef Name="Id_DemDerg" />
-      </Principal>
-      <Dependent Role="Avis_Org">
-        <PropertyRef Name="FK_DemDerg" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Organisme">
-    <End Type="aurs1Model.Organisme" Role="Organisme" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="aurs1Model.Avis_Org" Role="Avis_Org" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Organisme">
-        <PropertyRef Name="Id_Organisme" />
-      </Principal>
-      <Dependent Role="Avis_Org">
-        <PropertyRef Name="FK_Organisme" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_TypAvis">
-    <End Type="aurs1Model.Type_Avis" Role="Type_Avis" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="aurs1Model.Avis_Org" Role="Avis_Org" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Type_Avis">
-        <PropertyRef Name="Id_TypAvis" />
-      </Principal>
-      <Dependent Role="Avis_Org">
-        <PropertyRef Name="FK_TypAvis" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="Courrier">
-    <Key>
-      <PropertyRef Name="id_Courrier" />
-    </Key>
-    <Property Name="id_Courrier" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Code_Courrier" Type="Int32" />
-    <Property Name="Date_Courier" Type="DateTime" Precision="3" />
-    <Property Name="Source_Courrier" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="Destination_Courrier" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="url_Courrier" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="FK_Nature_Courrier" Type="Int32" />
-    <Property Name="FK_DemDerg_Cour" Type="Int32" />
-    <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_DemDerg_Cour" FromRole="Courrier" ToRole="Demande_Derogation" />
-    <NavigationProperty Name="Nature_Courrier" Relationship="aurs1Model.FK_Nature_Courrier" FromRole="Courrier" ToRole="Nature_Courrier" />
-  </EntityType>
-  <Association Name="FK_DemDerg_Cour">
-    <End Type="aurs1Model.Demande_Derogation" Role="Demande_Derogation" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="aurs1Model.Courrier" Role="Courrier" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Demande_Derogation">
-        <PropertyRef Name="Id_DemDerg" />
-      </Principal>
-      <Dependent Role="Courrier">
-        <PropertyRef Name="FK_DemDerg_Cour" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Nature_Courrier">
-    <End Type="aurs1Model.Nature_Courrier" Role="Nature_Courrier" Multiplicity="0..1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="aurs1Model.Courrier" Role="Courrier" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Nature_Courrier">
-        <PropertyRef Name="Id_Nature_Courrier" />
-      </Principal>
-      <Dependent Role="Courrier">
-        <PropertyRef Name="FK_Nature_Courrier" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="AspNetUsers">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="UserNameAr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Nom" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Prenom" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Ville" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="CIN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Sexe" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="NomAr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="PrenomAr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Intiulé" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Adresse" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="demandeur" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-    <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
-    <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
-    <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
-    <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
-    <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
-    <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
-    <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
-    <Property Name="StatutId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-    <Property Name="typeUtilisateur" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Organisme" Type="Int32" />
-    <Property Name="Entreprise" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Supp" Type="Boolean" Nullable="false" />
-    <NavigationProperty Name="AspNetUserRoles" Relationship="aurs1Model.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserRoles" />
-    <NavigationProperty Name="Statuts" Relationship="aurs1Model.FK_AspNetUsers_Statuts" FromRole="AspNetUsers" ToRole="Statuts" />
-    <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_Dem_Derog_Users_ouvrage" FromRole="AspNetUsers" ToRole="Demande_Derogation" />
-    <NavigationProperty Name="Demande_Derogation1" Relationship="aurs1Model.FK_Dem_Derog_Users_ouvre" FromRole="AspNetUsers" ToRole="Demande_Derogation" />
-    <NavigationProperty Name="Notification" Relationship="aurs1Model.FK_Notification_AspNetUsers" FromRole="AspNetUsers" ToRole="Notification" />
-  </EntityType>
-  <EntityType Name="Notification">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Type" Type="Int32" Nullable="false" />
-    <Property Name="heure_date" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="Clicked" Type="Boolean" Nullable="false" />
-    <Property Name="danger" Type="Int32" Nullable="false" />
-    <Property Name="IdUser" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="AspNetUsers" Relationship="aurs1Model.FK_Notification_AspNetUsers" FromRole="Notification" ToRole="AspNetUsers" />
-    <NavigationProperty Name="TypeNotif" Relationship="aurs1Model.FK_Notification_TypeNotif" FromRole="Notification" ToRole="TypeNotif" />
-  </EntityType>
-  <EntityType Name="TypeNotif">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Text" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="Notification" Relationship="aurs1Model.FK_Notification_TypeNotif" FromRole="TypeNotif" ToRole="Notification" />
-  </EntityType>
-  <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
-    <End Type="aurs1Model.AspNetUsers" Role="AspNetUsers" Multiplicity="1">
-      <OnDelete Action="Cascade" />
-    </End>
-    <End Type="aurs1Model.AspNetUserRoles" Role="AspNetUserRoles" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUsers">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="AspNetUserRoles">
-        <PropertyRef Name="UserId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_AspNetUsers_Statuts">
-    <End Type="aurs1Model.Statuts" Role="Statuts" Multiplicity="0..1" />
-    <End Type="aurs1Model.AspNetUsers" Role="AspNetUsers" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Statuts">
-        <PropertyRef Name="StatutId" />
-      </Principal>
-      <Dependent Role="AspNetUsers">
-        <PropertyRef Name="StatutId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Dem_Derog_Users_ouvrage">
-    <End Type="aurs1Model.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
-    <End Type="aurs1Model.Demande_Derogation" Role="Demande_Derogation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUsers">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Demande_Derogation">
-        <PropertyRef Name="Maitre_Oeuvrage_DemDerg" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Dem_Derog_Users_ouvre">
-    <End Type="aurs1Model.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
-    <End Type="aurs1Model.Demande_Derogation" Role="Demande_Derogation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUsers">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Demande_Derogation">
-        <PropertyRef Name="Maitre_Oeuvre_DemDerg" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Notification_AspNetUsers">
-    <End Type="aurs1Model.AspNetUsers" Role="AspNetUsers" Multiplicity="1" />
-    <End Type="aurs1Model.Notification" Role="Notification" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="AspNetUsers">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Notification">
-        <PropertyRef Name="IdUser" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Notification_TypeNotif">
-    <End Type="aurs1Model.TypeNotif" Role="TypeNotif" Multiplicity="1" />
-    <End Type="aurs1Model.Notification" Role="Notification" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="TypeNotif">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="Notification">
-        <PropertyRef Name="Type" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

@@ -55,6 +55,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Avis_Org">
+      <EntityTypeMapping TypeName="aurs1Model.Avis_Org">
+        <MappingFragment StoreEntitySet="Avis_Org">
+          <ScalarProperty Name="Detail_Avis" ColumnName="Detail_Avis" />
+          <ScalarProperty Name="FK_TypAvis" ColumnName="FK_TypAvis" />
+          <ScalarProperty Name="FK_Organisme" ColumnName="FK_Organisme" />
+          <ScalarProperty Name="FK_DemDerg" ColumnName="FK_DemDerg" />
+          <ScalarProperty Name="Id_Avis" ColumnName="Id_Avis" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Commission">
       <EntityTypeMapping TypeName="aurs1Model.Commission">
         <MappingFragment StoreEntitySet="Commission">
@@ -82,12 +93,40 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Courrier">
+      <EntityTypeMapping TypeName="aurs1Model.Courrier">
+        <MappingFragment StoreEntitySet="Courrier">
+          <ScalarProperty Name="FK_DemDerg_Cour" ColumnName="FK_DemDerg_Cour" />
+          <ScalarProperty Name="FK_Nature_Courrier" ColumnName="FK_Nature_Courrier" />
+          <ScalarProperty Name="url_Courrier" ColumnName="url_Courrier" />
+          <ScalarProperty Name="Destination_Courrier" ColumnName="Destination_Courrier" />
+          <ScalarProperty Name="Source_Courrier" ColumnName="Source_Courrier" />
+          <ScalarProperty Name="Date_Courier" ColumnName="Date_Courier" />
+          <ScalarProperty Name="Code_Courrier" ColumnName="Code_Courrier" />
+          <ScalarProperty Name="id_Courrier" ColumnName="id_Courrier" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="derogs_demandees">
       <EntityTypeMapping TypeName="aurs1Model.derogs_demandees">
         <MappingFragment StoreEntitySet="derogs_demandees">
           <ScalarProperty Name="last" ColumnName="last" />
           <ScalarProperty Name="NOM" ColumnName="NOM" />
           <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Document_Derogation">
+      <EntityTypeMapping TypeName="aurs1Model.Document_Derogation">
+        <MappingFragment StoreEntitySet="Document_Derogation">
+          <ScalarProperty Name="ContentLenght" ColumnName="ContentLenght" />
+          <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+          <ScalarProperty Name="FileName" ColumnName="FileName" />
+          <ScalarProperty Name="FK_DemDerg_DocDerg" ColumnName="FK_DemDerg_DocDerg" />
+          <ScalarProperty Name="url_Doc_Derg" ColumnName="url_Doc_Derg" />
+          <ScalarProperty Name="Intitule_Doc_Derg" ColumnName="Intitule_Doc_Derg" />
+          <ScalarProperty Name="Code_Doc_Derg" ColumnName="Code_Doc_Derg" />
+          <ScalarProperty Name="Id_Doc_Derog" ColumnName="Id_Doc_Derog" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -106,6 +145,39 @@
         <MappingFragment StoreEntitySet="Forme_MaitreOeuvrage_DemDerg">
           <ScalarProperty Name="FormeMaitreOeuvrage_DemDerg" ColumnName="FormeMaitreOeuvrage_DemDerg" />
           <ScalarProperty Name="Id_FormeMaitreOeuvrage_DemDerg" ColumnName="Id_FormeMaitreOeuvrage_DemDerg" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HistoireDemDergDeletion">
+      <EntityTypeMapping TypeName="aurs1Model.HistoireDemDergDeletion">
+        <MappingFragment StoreEntitySet="HistoireDemDergDeletion">
+          <ScalarProperty Name="date_heure" ColumnName="date_heure" />
+          <ScalarProperty Name="Suppression" ColumnName="Suppression" />
+          <ScalarProperty Name="AdminSupp" ColumnName="AdminSupp" />
+          <ScalarProperty Name="FK_DemDerg" ColumnName="FK_DemDerg" />
+          <ScalarProperty Name="IdHistoire" ColumnName="IdHistoire" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HistoireStatutDeletion">
+      <EntityTypeMapping TypeName="aurs1Model.HistoireStatutDeletion">
+        <MappingFragment StoreEntitySet="HistoireStatutDeletion">
+          <ScalarProperty Name="date_heure" ColumnName="date_heure" />
+          <ScalarProperty Name="Suppression" ColumnName="Suppression" />
+          <ScalarProperty Name="AdminSupp" ColumnName="AdminSupp" />
+          <ScalarProperty Name="FK_Statut" ColumnName="FK_Statut" />
+          <ScalarProperty Name="IdHistoire" ColumnName="IdHistoire" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HistoriqueUserDeletion">
+      <EntityTypeMapping TypeName="aurs1Model.HistoriqueUserDeletion">
+        <MappingFragment StoreEntitySet="HistoriqueUserDeletion">
+          <ScalarProperty Name="date_heure" ColumnName="date_heure" />
+          <ScalarProperty Name="Suppression" ColumnName="Suppression" />
+          <ScalarProperty Name="AdminSupp" ColumnName="AdminSupp" />
+          <ScalarProperty Name="UserConcernee" ColumnName="UserConcernee" />
+          <ScalarProperty Name="IdHistoire" ColumnName="IdHistoire" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -140,6 +212,18 @@
           <ScalarProperty Name="last" ColumnName="last" />
           <ScalarProperty Name="Nature_Projet_DemDerg1" ColumnName="Nature_Projet_DemDerg" />
           <ScalarProperty Name="Id_Nature_Projet_DemDerg" ColumnName="Id_Nature_Projet_DemDerg" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Notification">
+      <EntityTypeMapping TypeName="aurs1Model.Notification">
+        <MappingFragment StoreEntitySet="Notification">
+          <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+          <ScalarProperty Name="danger" ColumnName="danger" />
+          <ScalarProperty Name="Clicked" ColumnName="Clicked" />
+          <ScalarProperty Name="heure_date" ColumnName="heure_date" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -219,6 +303,7 @@
     <EntitySetMapping Name="Statuts">
       <EntityTypeMapping TypeName="aurs1Model.Statuts">
         <MappingFragment StoreEntitySet="Statuts">
+          <ScalarProperty Name="lastModif" ColumnName="lastModif" />
           <ScalarProperty Name="supp" ColumnName="supp" />
           <ScalarProperty Name="StatutDescription" ColumnName="StatutDescription" />
           <ScalarProperty Name="StatutName" ColumnName="StatutName" />
@@ -241,6 +326,49 @@
           <ScalarProperty Name="NOM_Document" ColumnName="NOM_Document" />
           <ScalarProperty Name="OBJECTID" ColumnName="OBJECTID" />
           <ScalarProperty Name="ID_DOCUMENT" ColumnName="ID_DOCUMENT" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TypeNotif">
+      <EntityTypeMapping TypeName="aurs1Model.TypeNotif">
+        <MappingFragment StoreEntitySet="TypeNotif">
+          <ScalarProperty Name="Text" ColumnName="Text" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AspNetUsers">
+      <EntityTypeMapping TypeName="aurs1Model.AspNetUsers">
+        <MappingFragment StoreEntitySet="AspNetUsers">
+          <ScalarProperty Name="lastModif" ColumnName="lastModif" />
+          <ScalarProperty Name="Supp" ColumnName="Supp" />
+          <ScalarProperty Name="Entreprise" ColumnName="Entreprise" />
+          <ScalarProperty Name="Organisme" ColumnName="Organisme" />
+          <ScalarProperty Name="typeUtilisateur" ColumnName="typeUtilisateur" />
+          <ScalarProperty Name="StatutId" ColumnName="StatutId" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+          <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+          <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+          <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+          <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="demandeur" ColumnName="demandeur" />
+          <ScalarProperty Name="Adresse" ColumnName="Adresse" />
+          <ScalarProperty Name="Intiulé" ColumnName="Intiulé" />
+          <ScalarProperty Name="PrenomAr" ColumnName="PrenomAr" />
+          <ScalarProperty Name="NomAr" ColumnName="NomAr" />
+          <ScalarProperty Name="Sexe" ColumnName="Sexe" />
+          <ScalarProperty Name="CIN" ColumnName="CIN" />
+          <ScalarProperty Name="Ville" ColumnName="Ville" />
+          <ScalarProperty Name="Prenom" ColumnName="Prenom" />
+          <ScalarProperty Name="Nom" ColumnName="Nom" />
+          <ScalarProperty Name="UserNameAr" ColumnName="UserNameAr" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -279,99 +407,6 @@
           <ScalarProperty Name="NumVersion_DemDerog" ColumnName="NumVersion_DemDerog" />
           <ScalarProperty Name="Code_DemDerg" ColumnName="Code_DemDerg" />
           <ScalarProperty Name="Id_DemDerg" ColumnName="Id_DemDerg" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Document_Derogation">
-      <EntityTypeMapping TypeName="aurs1Model.Document_Derogation">
-        <MappingFragment StoreEntitySet="Document_Derogation">
-          <ScalarProperty Name="ContentLenght" ColumnName="ContentLenght" />
-          <ScalarProperty Name="ContentType" ColumnName="ContentType" />
-          <ScalarProperty Name="FileName" ColumnName="FileName" />
-          <ScalarProperty Name="FK_DemDerg_DocDerg" ColumnName="FK_DemDerg_DocDerg" />
-          <ScalarProperty Name="url_Doc_Derg" ColumnName="url_Doc_Derg" />
-          <ScalarProperty Name="Intitule_Doc_Derg" ColumnName="Intitule_Doc_Derg" />
-          <ScalarProperty Name="Code_Doc_Derg" ColumnName="Code_Doc_Derg" />
-          <ScalarProperty Name="Id_Doc_Derog" ColumnName="Id_Doc_Derog" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Avis_Org">
-      <EntityTypeMapping TypeName="aurs1Model.Avis_Org">
-        <MappingFragment StoreEntitySet="Avis_Org">
-          <ScalarProperty Name="Detail_Avis" ColumnName="Detail_Avis" />
-          <ScalarProperty Name="FK_TypAvis" ColumnName="FK_TypAvis" />
-          <ScalarProperty Name="FK_Organisme" ColumnName="FK_Organisme" />
-          <ScalarProperty Name="FK_DemDerg" ColumnName="FK_DemDerg" />
-          <ScalarProperty Name="Id_Avis" ColumnName="Id_Avis" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Courrier">
-      <EntityTypeMapping TypeName="aurs1Model.Courrier">
-        <MappingFragment StoreEntitySet="Courrier">
-          <ScalarProperty Name="FK_DemDerg_Cour" ColumnName="FK_DemDerg_Cour" />
-          <ScalarProperty Name="FK_Nature_Courrier" ColumnName="FK_Nature_Courrier" />
-          <ScalarProperty Name="url_Courrier" ColumnName="url_Courrier" />
-          <ScalarProperty Name="Destination_Courrier" ColumnName="Destination_Courrier" />
-          <ScalarProperty Name="Source_Courrier" ColumnName="Source_Courrier" />
-          <ScalarProperty Name="Date_Courier" ColumnName="Date_Courier" />
-          <ScalarProperty Name="Code_Courrier" ColumnName="Code_Courrier" />
-          <ScalarProperty Name="id_Courrier" ColumnName="id_Courrier" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="AspNetUsers">
-      <EntityTypeMapping TypeName="aurs1Model.AspNetUsers">
-        <MappingFragment StoreEntitySet="AspNetUsers">
-          <ScalarProperty Name="Supp" ColumnName="Supp" />
-          <ScalarProperty Name="Entreprise" ColumnName="Entreprise" />
-          <ScalarProperty Name="Organisme" ColumnName="Organisme" />
-          <ScalarProperty Name="typeUtilisateur" ColumnName="typeUtilisateur" />
-          <ScalarProperty Name="StatutId" ColumnName="StatutId" />
-          <ScalarProperty Name="UserName" ColumnName="UserName" />
-          <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
-          <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
-          <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
-          <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
-          <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
-          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-          <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
-          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
-          <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="demandeur" ColumnName="demandeur" />
-          <ScalarProperty Name="Adresse" ColumnName="Adresse" />
-          <ScalarProperty Name="Intiulé" ColumnName="Intiulé" />
-          <ScalarProperty Name="PrenomAr" ColumnName="PrenomAr" />
-          <ScalarProperty Name="NomAr" ColumnName="NomAr" />
-          <ScalarProperty Name="Sexe" ColumnName="Sexe" />
-          <ScalarProperty Name="CIN" ColumnName="CIN" />
-          <ScalarProperty Name="Ville" ColumnName="Ville" />
-          <ScalarProperty Name="Prenom" ColumnName="Prenom" />
-          <ScalarProperty Name="Nom" ColumnName="Nom" />
-          <ScalarProperty Name="UserNameAr" ColumnName="UserNameAr" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Notification">
-      <EntityTypeMapping TypeName="aurs1Model.Notification">
-        <MappingFragment StoreEntitySet="Notification">
-          <ScalarProperty Name="IdUser" ColumnName="IdUser" />
-          <ScalarProperty Name="danger" ColumnName="danger" />
-          <ScalarProperty Name="Clicked" ColumnName="Clicked" />
-          <ScalarProperty Name="heure_date" ColumnName="heure_date" />
-          <ScalarProperty Name="Type" ColumnName="Type" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="TypeNotif">
-      <EntityTypeMapping TypeName="aurs1Model.TypeNotif">
-        <MappingFragment StoreEntitySet="TypeNotif">
-          <ScalarProperty Name="Text" ColumnName="Text" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -11,18 +12,109 @@ namespace GestionnaireUtilisateurs.Controllers
     public class CorbeilleController : Controller
     {
         public aurs1Entities database = new aurs1Entities();
+        public string admin()
+        {
+            return User.Identity.GetUserId();
+        }
+        public void EnvoyerLaNotification(int type, int danger, string uid)
+        {
+            Notification notification = new Notification
+            {
+                IdUser = uid,
+                Type = type,
+                heure_date = DateTime.Now,
+                danger = danger
+            };
+            database.Notification.Add(notification);
+            database.SaveChanges();
+        }
+        private void LogUserHistoryDel(string uid)
+        {
+            var user = database.AspNetUsers.Find(uid);
+            user.lastModif = DateTime.Now;
+            database.SaveChanges();
+            HistoriqueUserDeletion historiqueUser = new HistoriqueUserDeletion
+            {
+                AdminSupp = admin(),
+                date_heure = DateTime.Now,
+                IdHistoire = Guid.NewGuid().ToString(),
+                Suppression = false,
+                UserConcernee = uid
+            };
+            database.HistoriqueUserDeletion.Add(historiqueUser);
+            database.SaveChanges();
+        }
+        private void LogStatutHistoryDel(string sid)
+        {
+            var statut = database.Statuts.Find(sid);
+            statut.lastModif = DateTime.Now;
+            HistoireStatutDeletion historiqueStatut = new HistoireStatutDeletion
+            {
+                AdminSupp = admin(),
+                date_heure = DateTime.Now,
+                IdHistoire = Guid.NewGuid().ToString(),
+                Suppression = false,
+                FK_Statut = sid
+            };
+            database.HistoireStatutDeletion.Add(historiqueStatut);
+            database.SaveChanges();
+        }
+
         [Authorize(Roles = WorkflowDerogationController.Administrator)]
         public ActionResult Users()
         {
             MultiModeles multiModeles = new MultiModeles
             {
-                aspNetUsers = database.AspNetUsers.Where(i => i.Supp)
+                aspNetUsers = database.AspNetUsers.Where(i => i.Supp).OrderBy(i => i.lastModif)
             };
             return View(multiModeles);
         }
 
+
+
+
         [Authorize(Roles = WorkflowDerogationController.Administrator)]
         public ActionResult RestoreUser(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var user = database.AspNetUsers.Find(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            if (user.Nom == "")
+            {
+                if (user.Prenom == "") { ViewBag.utilisateur = "sans nom"; } else { ViewBag.utilisateur = user.Prenom; }
+            }
+            else
+            {
+                if (user.Prenom == "") { ViewBag.utilisateur = user.Nom; } else { ViewBag.utilisateur = user.Nom + " " + user.Prenom; }
+            }
+
+            if (user.Statuts == null)
+            {
+                ViewBag.statutName = "";
+            }
+            else
+            {
+                ViewBag.statutName = user.Statuts.StatutName;
+            }
+
+            var multiModeles = new MultiModeles
+            {
+                aspNetUserRoles = user.AspNetUserRoles,
+                DemDergs = database.Demande_Derogation.Where(p => p.Maitre_Oeuvrage_DemDerg == id || p.Maitre_Oeuvre_DemDerg == id).ToList()
+            };
+            return View(multiModeles);
+        }
+
+
+        [Authorize(Roles = WorkflowDerogationController.Administrator)]
+        [HttpPost, ActionName("RestoreUser")]
+        public ActionResult RestoreUserConfirm(string id)
         {
             var user = database.AspNetUsers.Find(id);
             user.Supp = false; database.SaveChanges();
@@ -40,30 +132,56 @@ namespace GestionnaireUtilisateurs.Controllers
                 userRole.Delete = element.Supprimer;
                 userRoles.Add(userRole);
             }
-            database.AspNetUserRoles.AddRange(userRoles); database.SaveChanges();
-            Notification notification = new Notification
-            {
-                IdUser = user.Id,
-                Type = 5,
-                heure_date = DateTime.Now,
-                danger = 9
-            };
-            database.Notification.Add(notification);
+            database.AspNetUserRoles.AddRange(userRoles);
             database.SaveChanges();
-            HistoriqueUserDeletion historiqueUser = new HistoriqueUserDeletion
-            {
-                AdminSupp = User.Identity.GetUserId(),
-                date_heure = DateTime.Now,
-                Suppression = false,
-                UserConcernee = user.Id
-            };
-            database.HistoriqueUserDeletion.Add(historiqueUser);
-            database.SaveChanges();
+            EnvoyerLaNotification(5, 3, user.Id);
+            LogUserHistoryDel(user.Id);
             return RedirectToAction("Users");
         }
 
+
+
         [Authorize(Roles = WorkflowDerogationController.Administrator)]
         public ActionResult DeleteUser(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var user = database.AspNetUsers.Find(id);
+            if (user == null)
+            {
+                return HttpNotFound();
+            }
+            if (user.Nom == "")
+            {
+                if (user.Prenom == "") { ViewBag.utilisateur = "sans nom"; } else { ViewBag.utilisateur = user.Prenom; }
+            }
+            else
+            {
+                if (user.Prenom == "") { ViewBag.utilisateur = user.Nom; } else { ViewBag.utilisateur = user.Nom + " " + user.Prenom; }
+            }
+
+            if (user.Statuts == null)
+            {
+                ViewBag.statutName = "";
+            }
+            else
+            {
+                ViewBag.statutName = user.Statuts.StatutName;
+            }
+
+            var multiModeles = new MultiModeles
+            {
+                aspNetUserRoles = user.AspNetUserRoles,
+                DemDergs = database.Demande_Derogation.Where(p => p.Maitre_Oeuvrage_DemDerg == id || p.Maitre_Oeuvre_DemDerg == id).ToList()
+            };
+            return View(multiModeles);
+        }
+
+        [Authorize(Roles = WorkflowDerogationController.Administrator)]
+        [HttpPost, ActionName("DeleteUser")]
+        public ActionResult DeleteUserConfirm(string id)
         {
             var user = database.AspNetUsers.Find(id);
             if (user.AspNetUserRoles.Where(a => a.AspNetRoles.Name == WorkflowDerogationController.Administrator).Count() == 0)
@@ -81,6 +199,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return RedirectToAction("Users");
         }
 
+
         /**                //////////////               */
 
 
@@ -90,24 +209,52 @@ namespace GestionnaireUtilisateurs.Controllers
         {
             MultiModeles multiModeles = new MultiModeles
             {
-                statuts = database.Statuts.Where(i => i.supp)
+                statuts = database.Statuts.Where(i => i.supp).OrderBy(i => i.lastModif)
             };
             return View(multiModeles);
         }
 
-        [HttpPost, Authorize(Roles = WorkflowDerogationController.Administrator)]
+
+        [Authorize(Roles = WorkflowDerogationController.Administrator)]
         public ActionResult RestoreStatut(string id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var statut = database.Statuts.Find(id);
+            if (statut == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.statutName = statut.StatutName;
+            var multiModeles = new MultiModeles
+            {
+                aspNetUsers = statut.AspNetUsers.Where(i => i.Supp),
+                statutRoles = statut.StatutRole
+            };
+            return View(multiModeles);
+        }
+
+
+
+        [Authorize(Roles = WorkflowDerogationController.Administrator)]
+        [HttpPost, ActionName("RestoreStatut")]
+        public ActionResult RestoreStatutConfirm(string id)
+        {
             Statuts statut = database.Statuts.Find(id);
+            statut.supp = false;
             var users = statut.AspNetUsers;
             foreach (var user in users)
             {
-                var tachesfromstatut = database.StatutRole.Where(st => st.StatutId == id).ToList();
+                user.Supp = false;
+                database.SaveChanges();
+                var tachesfromstatut = statut.StatutRole;
                 var userRoles = new List<AspNetUserRoles>();
                 foreach (var element in tachesfromstatut)
                 {
                     AspNetUserRoles userRole = new AspNetUserRoles();
-                    userRole.UserId = id;
+                    userRole.UserId = user.Id;
                     userRole.RoleId = element.RoleId;
                     userRole.Create = element.Cree;
                     userRole.Update = element.Modifier;
@@ -115,23 +262,39 @@ namespace GestionnaireUtilisateurs.Controllers
                     userRole.Delete = element.Supprimer;
                     userRoles.Add(userRole);
                 }
-                database.AspNetUserRoles.AddRange(userRoles); 
+                database.AspNetUserRoles.AddRange(userRoles);
                 database.SaveChanges();
-                HistoireStatutDeletion historiqueStatut = new HistoireStatutDeletion
-                {
-                    AdminSupp = User.Identity.GetUserId(),
-                    date_heure = DateTime.Now,
-                    Suppression = false,
-                    FK_Statut = statut.StatutId
-                };
-                database.HistoireStatutDeletion.Add(historiqueStatut);
-                database.SaveChanges();
+                LogStatutHistoryDel(statut.StatutId);
             }
             return RedirectToAction("Statuts");
         }
 
-        [HttpPost, Authorize(Roles = WorkflowDerogationController.Administrator)]
+
+        [Authorize(Roles = WorkflowDerogationController.Administrator)]
         public ActionResult DeleteStatut(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var statut = database.Statuts.Find(id);
+            if (statut == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.statutName = statut.StatutName;
+            var multiModeles = new MultiModeles
+            {
+                aspNetUsers = statut.AspNetUsers.Where(i => !i.Supp),
+                statutRoles = statut.StatutRole
+            };
+            return View(multiModeles);
+        }
+
+
+        [Authorize(Roles = WorkflowDerogationController.Administrator)]
+        [HttpPost, ActionName("DeleteStatut")]
+        public ActionResult DeleteStatutConfirm(string id)
         {
             Statuts statut = database.Statuts.Find(id);
             var users = statut.AspNetUsers;

@@ -1,14 +1,14 @@
 ﻿@model GestionnaireUtilisateurs.Models.MultiModeles
 @{
     ViewBag.Title = "Supprimer un utilisateur";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
 }
 
     <div class="row">
         <div class="col-md-6" style=" margin-left: auto; margin-right: auto;">
             <div class="card unnamedClass">
                 <div class="card-body">
-                    <h4> <span class="badge-dot badge-info"></span>  Suppression d'une modules</h4>
+                    <h4> <span class="badge-dot badge-info"></span>  Suppression d'un utilisateur</h4>
                     <hr />
                     <h3>Vous etes sur de supprimer l'utilisateur <span class="text-info">@ViewBag.utilisateur</span> ?</h3><br />
                     <h2>de statut <span class="text-info">@ViewBag.statutName</span></h2>
@@ -35,13 +35,6 @@
                     }
                 </ul>
                 <br />
-                <label style="font-style:oblique">Demandes derogations</label>
-                <ul>
-                    @foreach (var demderg in Model.DemDergs)
-                    {
-                        <li>@demderg.Intitule_DemDerg</li>
-                    }
-                </ul>
             </div>
         </div>
     </div>

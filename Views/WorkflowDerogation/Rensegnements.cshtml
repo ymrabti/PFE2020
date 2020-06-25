@@ -168,25 +168,15 @@
                     <div class="row" style="margin-bottom:25px">
                         <div class="col-sm-4">
                             <label for="name" style="font-size:12px;">Maître d'ouvrage :</label>
-                            <select disabled="@NCree" class="form-control form-control-sm" id="maitreOuvrage" name="Maitre_Oeuvrage_DemDerg"
-                                    oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
-                                <option value="">-------- Sélectionner le maître d'ouvrage --------</option>
-                                @foreach (var item in Model.aspNetUsers)
-                                {
-                                    <option value="@item.Id">@item.Email</option>
-                                }
-                            </select>
+                            <input disabled="@NCree" required class="form-control form-control-sm" id="maitreOuvrage" name="Maitre_Oeuvrage_DemDerg"
+                                    oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')"/>
+                                
                         </div>
                         <div class="col-sm-4">
                             <label for="name" style="font-size:12px;">Maître d'oeuvre :</label>
-                            <select disabled="@NCree" class="form-control form-control-sm" id="maitreOeuvre" name="Maitre_Oeuvre_DemDerg"
-                                    oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')">
-                                <option value="">-------- Sélectionner le maître d'ouvre --------</option>
-                                @foreach (var item in Model.aspNetUsers)
-                                {
-                                    <option value="@item.Id">@item.Email</option>
-                                }
-                            </select>
+                            <input disabled="@NCree" required class="form-control form-control-sm" id="maitreOeuvre" name="Maitre_Oeuvre_DemDerg"
+                                    oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')"/>
+                                
                         </div>
                         <div class="col-sm-4">
                             <label for="name" style="font-size:12px;">Forme maître d'ouvrage :</label>

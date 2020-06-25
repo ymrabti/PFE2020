@@ -57,8 +57,6 @@ namespace GestionnaireUtilisateurs.Models
         public Nullable<int> Fk_Commission { get; set; }
         public bool Supp { get; set; }
     
-        public virtual AspNetUsers AspNetUsers { get; set; }
-        public virtual AspNetUsers AspNetUsers1 { get; set; }
         public virtual Autorisation_Derogation Autorisation_Derogation { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Avis_Org> Avis_Org { get; set; }

@@ -17,6 +17,12 @@ namespace GestionnaireUtilisateurs.Controllers
         private ApplicationUserManager _userManager;
         aurs1Entities database = new aurs1Entities();
         public const string Administrator = "Administrator";
+        //public string admin()=User.Identity.GetUserId();
+
+        public string admin()
+        {
+            return User.Identity.GetUserId();
+        }
         public ApplicationUserManager UserManager
         {
             get
@@ -43,11 +49,56 @@ namespace GestionnaireUtilisateurs.Controllers
             return mModels;
         }
 
+        public void EnvoyerLaNotification(int type, int danger, string uid)
+        {
+            Notification notification = new Notification
+            {
+                IdUser = uid,
+                Type = type,
+                heure_date = DateTime.Now,
+                danger = danger
+            };
+            database.Notification.Add(notification);
+            database.SaveChanges();
+        }
+        private void LogUserHistoryDel(bool supression, string uid)
+        {
+            var user = database.AspNetUsers.Find(uid);
+            user.lastModif = DateTime.Now;
+            database.SaveChanges();
+            HistoriqueUserDeletion historiqueUser = new HistoriqueUserDeletion
+            {
+                AdminSupp = admin(),
+                date_heure = DateTime.Now,
+                IdHistoire = Guid.NewGuid().ToString(),
+                Suppression = supression,
+                UserConcernee = uid
+            };
+            database.HistoriqueUserDeletion.Add(historiqueUser);
+            database.SaveChanges();
+        }
+        private void LogStatutHistoryDel(bool suppression, string sid)
+        {
+            var statut = database.Statuts.Find(sid);
+            statut.lastModif = DateTime.Now;
+            HistoireStatutDeletion historiqueStatut = new HistoireStatutDeletion
+            {
+                AdminSupp = admin(),
+                date_heure = DateTime.Now,
+                IdHistoire = Guid.NewGuid().ToString(),
+                Suppression = suppression,
+                FK_Statut = sid
+            };
+            database.HistoireStatutDeletion.Add(historiqueStatut);
+            database.SaveChanges();
+        }
+
         [Authorize(Roles = Administrator)]
         public ActionResult Index()
         {
             return View(multiModeles());
         }
+        
 
         [Authorize(Roles = Administrator)]
         public ActionResult AddUser()
@@ -109,24 +160,8 @@ namespace GestionnaireUtilisateurs.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirmez votre compte", "Confirmez votre compte en cliquant <a href=\"" + callbackUrl + "\">ici</a>");
 
-                    HistoriqueUserDeletion historiqueUser = new HistoriqueUserDeletion
-                    {
-                        AdminSupp = User.Identity.GetUserId(),
-                        date_heure = DateTime.Now,
-                        Suppression = false,
-                        UserConcernee = uid
-                    };
-                    database.HistoriqueUserDeletion.Add(historiqueUser);
-                    database.SaveChanges();
-                    Notification notification = new Notification
-                    {
-                        IdUser = uid,
-                        Type = 5,
-                        heure_date = DateTime.Now,
-                        danger = 3
-                    };
-                    database.Notification.Add(notification);
-                    database.SaveChanges();
+                    LogUserHistoryDel(false, uid);
+                    EnvoyerLaNotification(5, 3, uid);
                     return RedirectToAction("Index", "Home");
                 }
                 ViewBag.errors = result.Errors;
@@ -160,7 +195,6 @@ namespace GestionnaireUtilisateurs.Controllers
 
         [Authorize(Roles = Administrator)]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditUser(RegisterParentViewModel parentViewModel)
         {
             ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
@@ -187,15 +221,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 var res = await database.SaveChangesAsync();
                 if (user.Email != parentViewModel.Email)
                 {
-                    Notification notification = new Notification
-                    {
-                        IdUser = uid,
-                        Type = 3,
-                        heure_date = DateTime.Now,
-                        danger = 1
-                    };
-                    database.Notification.Add(notification);
-                    database.SaveChanges();
+                    EnvoyerLaNotification(3, 1, uid);
                 }
                 if (res == 0)
                 {
@@ -215,15 +241,7 @@ namespace GestionnaireUtilisateurs.Controllers
                         //password does not meet standards
                         ViewBag.Statuts = database.Statuts.Where(k => !k.supp).ToList();
                         ViewBag.errors = result.Errors;
-                        Notification notification = new Notification
-                        {
-                            IdUser = uid,
-                            Type = 2,
-                            heure_date = DateTime.Now,
-                            danger = 6
-                        };
-                        database.Notification.Add(notification);
-                        database.SaveChanges();
+                        EnvoyerLaNotification(2, 6, uid);
                         return View(parentViewModel);
                     }
                 }
@@ -248,25 +266,9 @@ namespace GestionnaireUtilisateurs.Controllers
                     }
                     database.AspNetUserRoles.AddRange(userRoles);
                     database.SaveChanges();
-                    Notification notification = new Notification
-                    {
-                        IdUser = uid,
-                        Type = 5,
-                        heure_date = DateTime.Now,
-                        danger = 3
-                    };
-                    database.Notification.Add(notification);
-                    database.SaveChanges();
+                    EnvoyerLaNotification(5, 3, uid);
                 }
-                HistoriqueUserDeletion historiqueUser = new HistoriqueUserDeletion
-                {
-                    AdminSupp = User.Identity.GetUserId(),
-                    date_heure = DateTime.Now,
-                    Suppression = false,
-                    UserConcernee = uid
-                };
-                database.HistoriqueUserDeletion.Add(historiqueUser);
-                database.SaveChanges();
+                LogUserHistoryDel(false, uid);
                 return RedirectToAction("Index");
             }
             return View(parentViewModel);
@@ -305,15 +307,13 @@ namespace GestionnaireUtilisateurs.Controllers
 
             var multiModeles = new MultiModeles
             {
-                aspNetUserRoles = user.AspNetUserRoles,
-                DemDergs = database.Demande_Derogation.Where(p => p.Maitre_Oeuvrage_DemDerg == id || p.Maitre_Oeuvre_DemDerg == id).ToList()
+                aspNetUserRoles = user.AspNetUserRoles
             };
             return View(multiModeles);
         }
 
         [Authorize(Roles = Administrator)]
         [HttpPost, ActionName("DeleteUser")]
-        [ValidateAntiForgeryToken]
         public ActionResult DeleteUserConfirmed(string id)
         {
 
@@ -323,62 +323,12 @@ namespace GestionnaireUtilisateurs.Controllers
                 var userRoles = user.AspNetUserRoles;
                 database.AspNetUserRoles.RemoveRange(userRoles);
 
-                var movre = user.Demande_Derogation;
-                foreach (var mo in movre)
-                {
-                    mo.Maitre_Oeuvre_DemDerg = null; database.SaveChanges();
-                    //var avis = mo.Avis_Org; var courriers = mo.Courrier;
-                    //var documents = mo.Document_Derogation; var parcells = mo.parcell;
-                    //database.Avis_Org.RemoveRange(avis);
-                    //database.Courrier.RemoveRange(courriers);
-                    //database.Document_Derogation.RemoveRange(documents);
-                    //database.parcell.RemoveRange(parcells);
-                }
-                //database.Demande_Derogation.RemoveRange(movre);
-
-                var movrage = user.Demande_Derogation1;
-                foreach (var mo in movrage)
-                {
-                    mo.Maitre_Oeuvrage_DemDerg = null; database.SaveChanges();
-                    //var avis = mo.Avis_Org; var courriers = mo.Courrier;
-                    //var documents = mo.Document_Derogation; var parcells = mo.parcell;
-                    //database.Avis_Org.RemoveRange(avis);
-                    //database.Courrier.RemoveRange(courriers);
-                    //database.Document_Derogation.RemoveRange(documents);
-                    //database.parcell.RemoveRange(parcells);
-                }
-                //database.Demande_Derogation.RemoveRange(movrage);
 
                 //database.AspNetUsers.Remove(user);
                 user.Supp = true;
 
-                Notification notificationx = new Notification
-                {
-                    IdUser = user.Id,
-                    Type = 5,
-                    heure_date = DateTime.Now,
-                    danger = 9
-                };
-                database.Notification.Add(notificationx);
-                database.SaveChanges();
-                Notification notification = new Notification
-                {
-                    IdUser = user.Id,
-                    Type = 4,
-                    heure_date = DateTime.Now,
-                    danger = 9
-                };
-                database.Notification.Add(notification);
-                database.SaveChanges();
-                HistoriqueUserDeletion historiqueUser = new HistoriqueUserDeletion
-                {
-                    AdminSupp = User.Identity.GetUserId(),
-                    date_heure = DateTime.Now,
-                    Suppression = true,
-                    UserConcernee = id
-                };
-                database.HistoriqueUserDeletion.Add(historiqueUser);
-                database.SaveChanges();
+                EnvoyerLaNotification(5, 3, id); EnvoyerLaNotification(4, 9, id);
+                LogUserHistoryDel(true, id);
             }
 
             return RedirectToAction("Index");
@@ -405,7 +355,12 @@ namespace GestionnaireUtilisateurs.Controllers
             ViewBag.UserId = aspNetUser.Id;
             ViewBag.Prenom = aspNetUser.Prenom;
             ViewBag.Email = aspNetUser.Email;
-            ViewBag.StatusName = aspNetUser.Statuts.StatutName;
+
+            if (aspNetUser.Statuts.supp)
+            {
+                ViewBag.StatusName = "Supprimée";
+            }
+            else { ViewBag.StatusName = aspNetUser.Statuts.StatutName; }
             ViewBag.Modules = new SelectList(database.Module);
 
             var model = new MultiModeles
@@ -420,7 +375,6 @@ namespace GestionnaireUtilisateurs.Controllers
 
         [Authorize(Roles = Administrator)]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult UserTache(string[] Create, string[] Read, string[] Update, string[] Delete
             , string[] UserId, string[] RoleId)
         {
@@ -449,18 +403,10 @@ namespace GestionnaireUtilisateurs.Controllers
 
                 }
                 database.SaveChanges();
-                Notification notification = new Notification
-                {
-                    IdUser = currentUser,
-                    Type = 5,
-                    heure_date = DateTime.Now,
-                    danger = 3
-                };
-                database.Notification.Add(notification);
-                database.SaveChanges();
+                EnvoyerLaNotification(5, 3, currentUser);
                 return RedirectToAction("Index");
             }
-            return RedirectToAction("UserTache",new { id=UserId[0]});
+            return RedirectToAction("UserTache", new { id = UserId[0] });
         }
 
         /// ///////////////////////             STATUT                    //////////////////////
@@ -488,15 +434,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 statut.StatutId = sid_;
                 database.Statuts.Add(statut);
                 database.SaveChanges();
-                HistoireStatutDeletion historiqueStatut = new HistoireStatutDeletion
-                {
-                    AdminSupp = User.Identity.GetUserId(),
-                    date_heure = DateTime.Now,
-                    Suppression = false,
-                    FK_Statut = sid_
-                };
-                database.HistoireStatutDeletion.Add(historiqueStatut);
-                database.SaveChanges();
+                LogStatutHistoryDel(false, sid_);
                 return RedirectToAction("IndexStatut");
             }
             return View();
@@ -515,13 +453,16 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 return HttpNotFound();
             }
+            if (statut.supp)
+            {
+                return RedirectToAction("IndexStatut");
+            }
             ViewBag.statutId = statut.StatutId;
             ViewBag.statutName = statut.StatutName;
             ViewBag.statutDescription = statut.StatutDescription;
             return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult EditStatut([Bind(Include = "StatutId,StatutName,StatutDescription")] Statuts statut)
         {
             if (ModelState.IsValid)
@@ -532,15 +473,8 @@ namespace GestionnaireUtilisateurs.Controllers
                 }
                 database.Entry(statut).State = EntityState.Modified;
                 database.SaveChanges();
-                HistoireStatutDeletion historiqueStatut = new HistoireStatutDeletion
-                {
-                    AdminSupp = User.Identity.GetUserId(),
-                    date_heure = DateTime.Now,
-                    Suppression = false,
-                    FK_Statut = statut.StatutId
-                };
-                database.HistoireStatutDeletion.Add(historiqueStatut);
-                database.SaveChanges();
+
+                LogStatutHistoryDel(false, statut.StatutId);
                 return RedirectToAction("IndexStatut");
             }
             return View();
@@ -559,20 +493,28 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 return HttpNotFound();
             }
+            if (statut.supp)
+            {
+                return RedirectToAction("IndexStatut");
+            }
             ViewBag.statutName = statut.StatutName;
             var multiModeles = new MultiModeles
             {
-                aspNetUsers = statut.AspNetUsers,
+                aspNetUsers = statut.AspNetUsers.Where(i => !i.Supp),
                 statutRoles = statut.StatutRole
             };
             return View(multiModeles);
         }
 
         [HttpPost, ActionName("DeleteStatut")]
-        [ValidateAntiForgeryToken]
         public ActionResult DeleteStatutConfirmed(string id)
         {
             Statuts statut = database.Statuts.Find(id);
+
+            if (statut.supp)
+            {
+                return RedirectToAction("IndexStatut");
+            }
             var users = statut.AspNetUsers;
             int Admins = 0;
 
@@ -591,72 +533,15 @@ namespace GestionnaireUtilisateurs.Controllers
                     var userRoles = user.AspNetUserRoles;
                     database.AspNetUserRoles.RemoveRange(userRoles);
 
-                    var movre = user.Demande_Derogation;
-                    foreach (var mo in movre)
-                    {
-                        mo.Maitre_Oeuvre_DemDerg = null; database.SaveChanges();
-                        //var avis = mo.Avis_Org; var courriers = mo.Courrier;
-                        //var documents = mo.Document_Derogation; var parcells = mo.parcell;
-                        //database.Avis_Org.RemoveRange(avis);
-                        //database.Courrier.RemoveRange(courriers);
-                        //database.Document_Derogation.RemoveRange(documents);
-                        //database.parcell.RemoveRange(parcells);
-                    }
-                    //database.Demande_Derogation.RemoveRange(movre);
-
-                    var movrage = user.Demande_Derogation1;
-                    foreach (var mo in movrage)
-                    {
-                        mo.Maitre_Oeuvrage_DemDerg = null; database.SaveChanges();
-                        //var avis = mo.Avis_Org; var courriers = mo.Courrier;
-                        //var documents = mo.Document_Derogation; var parcells = mo.parcell;
-                        //database.Avis_Org.RemoveRange(avis);
-                        //database.Courrier.RemoveRange(courriers);
-                        //database.Document_Derogation.RemoveRange(documents);
-                        //database.parcell.RemoveRange(parcells);
-                    }
-                    //database.Demande_Derogation.RemoveRange(movrage);
                     user.Supp = true;
                     database.SaveChanges();
-                    Notification notificationx = new Notification
-                    {
-                        IdUser = user.Id,
-                        Type = 5,
-                        heure_date = DateTime.Now,
-                        danger = 9
-                    };
-                    database.Notification.Add(notificationx);
-                    database.SaveChanges();
-                    Notification notification = new Notification
-                    {
-                        IdUser = user.Id,
-                        Type = 4,
-                        heure_date = DateTime.Now,
-                        danger = 9
-                    };
-                    database.Notification.Add(notification);
-                    database.SaveChanges();
-                    HistoriqueUserDeletion historiqueUser = new HistoriqueUserDeletion
-                    {
-                        AdminSupp = User.Identity.GetUserId(),
-                        date_heure = DateTime.Now,
-                        Suppression = true,
-                        UserConcernee = user.Id
-                    };
-                    database.HistoriqueUserDeletion.Add(historiqueUser);
-                    database.SaveChanges();
+                    EnvoyerLaNotification(5, 3, user.Id); EnvoyerLaNotification(4, 9, user.Id);
+                    LogUserHistoryDel(true, user.Id);
                     //database.AspNetUsers.Remove(user);
                 }
                 statut.supp = true;
-                HistoireStatutDeletion historiqueStatut = new HistoireStatutDeletion
-                {
-                    AdminSupp = User.Identity.GetUserId(),
-                    date_heure = DateTime.Now,
-                    Suppression = true,
-                    FK_Statut = statut.StatutId
-                };
-                database.HistoireStatutDeletion.Add(historiqueStatut);
-                database.SaveChanges();
+
+                LogStatutHistoryDel(true, statut.StatutId);
                 //database.Statuts.Remove(statut);
                 database.SaveChanges();
             }
@@ -691,15 +576,8 @@ namespace GestionnaireUtilisateurs.Controllers
 
                 data = new { dd = "error", statutss };
 
-                HistoireStatutDeletion historiqueStatut = new HistoireStatutDeletion
-                {
-                    AdminSupp = User.Identity.GetUserId(),
-                    date_heure = DateTime.Now,
-                    Suppression = false,
-                    FK_Statut = Statut.StatutId
-                };
-                database.HistoireStatutDeletion.Add(historiqueStatut);
-                database.SaveChanges();
+
+                LogStatutHistoryDel(false, Statut.StatutId);
                 return Json(data, JsonRequestBehavior.AllowGet);
             }
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
@@ -755,6 +633,10 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 return HttpNotFound();
             }
+            if (statuts.supp)
+            {
+                return RedirectToAction("IndexStatut");
+            }
             ViewBag.Nom = statuts.StatutName;
             ViewBag.StatutId = statuts.StatutId;
 
@@ -769,7 +651,6 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(model);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult StatutTache(string[] Create, string[] Read, string[] Update, string[] Delete
             , string[] StatutId, string[] RoleId)
         {

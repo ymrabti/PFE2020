@@ -26,6 +26,7 @@ namespace GestionnaireUtilisateurs.Models
         public string StatutName { get; set; }
         public string StatutDescription { get; set; }
         public bool supp { get; set; }
+        public Nullable<System.DateTime> lastModif { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HistoireStatutDeletion> HistoireStatutDeletion { get; set; }
