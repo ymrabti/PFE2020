@@ -105,11 +105,12 @@
             <div class="form-horizontal">
                 @using (Html.BeginForm("AvisOrg", "WorkflowDerogation", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
+                    @Html.AntiForgeryToken()
                     <div class="row">
 
                         <div class="col-lg-3">
                             <div class="form-group">
-                                <input type="hidden" name="FK_Organisme" value="@idAURS"/>
+                                <input type="hidden" name="FK_Organisme" value="@idAURS" />
                                 <label for="inputText11" style="font-size:12px;">Avis AURS : <label style="color:red">*</label></label>
 
                                 <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="avisAURS" name="FK_TypAvis">

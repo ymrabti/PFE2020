@@ -63,6 +63,7 @@
                         <div class="listeDoc">
                             @using (Html.BeginForm("Ged", "WorkflowDerogation", FormMethod.Post, new { enctype = "multipart/form-data" }))
                             {
+                                @Html.AntiForgeryToken()
                                 <center><label class="text-danger">@Model.Message2View</label></center>
                                 <input type='hidden' name='FK_DemDerg_DocDerg' value='@Model.DemDerg.Id_DemDerg' />
                                 <table class="table table-striped table-bordered first" id="listeDoc">
@@ -95,14 +96,14 @@
                                                         }
                                                         else
                                                         {
-                                                            string fileName = item.FileName ;
+                                                            string fileName = item.FileName;
                                                             if (fileName.Length < indexstart + indexend + 1)
                                                             {
                                                                 @fileName
                                                             }
                                                             else
                                                             {
-                                                                fileName = fileName.Substring(0, indexstart) + "..." + fileName.Substring(fileName.Length - indexend, indexend)+ " (" + item.ContentType + ")";
+                                                                fileName = fileName.Substring(0, indexstart) + "..." + fileName.Substring(fileName.Length - indexend, indexend) + " (" + item.ContentType + ")";
                                                                 @fileName;
                                                             }
                                                         }

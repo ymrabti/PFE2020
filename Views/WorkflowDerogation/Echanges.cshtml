@@ -57,6 +57,7 @@
         <div class="card-body">
             @using (Html.BeginForm("Echanges", "WorkflowDerogation", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
+                @Html.AntiForgeryToken()
                 <div class="form-horizontal">
                     <div class="listeCourrier">
                         <table @*data-tablesaw-mode="columntoggle"*@ class="table table-bordered first" id="tableFilter">

@@ -113,7 +113,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
         [Authorize(Roles = WorkflowDerogationController.Administrator)]
-        [HttpPost, ActionName("RestoreUser")]
+        [HttpPost,ValidateAntiForgeryToken, ActionName("RestoreUser")]
         public ActionResult RestoreUserConfirm(string id)
         {
             var user = database.AspNetUsers.Find(id);
@@ -180,7 +180,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
         [Authorize(Roles = WorkflowDerogationController.Administrator)]
-        [HttpPost, ActionName("DeleteUser")]
+        [HttpPost, ValidateAntiForgeryToken, ActionName("DeleteUser")]
         public ActionResult DeleteUserConfirm(string id)
         {
             var user = database.AspNetUsers.Find(id);
@@ -239,7 +239,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
         [Authorize(Roles = WorkflowDerogationController.Administrator)]
-        [HttpPost, ActionName("RestoreStatut")]
+        [HttpPost, ValidateAntiForgeryToken, ActionName("RestoreStatut")]
         public ActionResult RestoreStatutConfirm(string id)
         {
             Statuts statut = database.Statuts.Find(id);
@@ -293,7 +293,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
         [Authorize(Roles = WorkflowDerogationController.Administrator)]
-        [HttpPost, ActionName("DeleteStatut")]
+        [HttpPost, ValidateAntiForgeryToken, ActionName("DeleteStatut")]
         public ActionResult DeleteStatutConfirm(string id)
         {
             Statuts statut = database.Statuts.Find(id);

@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "Les Statuts";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
 }
 
 <div class="tab-content" style="text-align:left; background-color: white; width: 100%; padding-top:15px; box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
@@ -51,6 +51,8 @@
                     <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Nom de Statut</th>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Description de Statut</th>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Autorisations</th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="0" style="background-color:#d9edf7;">Dernier Modification</th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="0" style="background-color:#d9edf7;">Par</th>
 
                 </tr>
 
@@ -72,6 +74,26 @@
                                     <li>@ele.AspNetRoles.Name</li>
                                 }
                             </ul>
+                        </td>
+                        <td>
+                            @if (item.HistoireStatutDeletion.Count() == 0)
+                            {
+                                <div>----------</div>
+                            }
+                            else
+                            {
+                                <div>@Html.DisplayFor(modelItem => item.HistoireStatutDeletion.OrderBy(i => i.date_heure).Last().date_heure)</div>
+                            }
+                        </td>
+                        <td>
+                            @if (item.HistoireStatutDeletion.Count() == 0)
+                            {
+                                <div>----------</div>
+                            }
+                            else
+                            {
+                                <div>@Html.DisplayFor(modelItem => item.HistoireStatutDeletion.OrderBy(i => i.date_heure).Last().AspNetUsers.Email)</div>
+                            }
                         </td>
                     </tr>
                 }

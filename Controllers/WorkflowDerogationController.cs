@@ -10,20 +10,22 @@ using System.Web.Mvc;
 
 namespace GestionnaireUtilisateurs.Controllers
 {
-    public enum Workflow
+    public class WorkflowTache
     {
-        Renseignements = 15,
-        Situation_Géographique = 16,
-        GED = 17,
-        Programmation = 18,
-        Avis = 19,
-        Echanges = 20,
-        Autorisation = 21,
-        Cloture = 22
+        public string Nom { get; set; }
+        public int numeroTache { get; set; }
+        //public WorkflowTache(string str,int n)
+        //{
+        //    this.Nom = str;this.numeroTache = n;
+        //}
     }
+
+
     public class WorkflowDerogationController : Controller
     {
         static int nombre_res_ppage = 5;
+
+
         public const string Administrator = "Administrator";
 
         public const string _Rensegnement = "Rensegnement";
@@ -41,9 +43,19 @@ namespace GestionnaireUtilisateurs.Controllers
             + "," + _SitGeo + "," + _GED + "," + _Echanges + ","
             + _Autorisation + "," + _Cloture + "," + _Avis + "," + _Programmation;
 
-
-
         public const string _WorkflowDerogation = Administrator + "," + _WorkflowDerogationExeptAdmin;
+
+        public readonly WorkflowTache _Rens = new WorkflowTache { Nom =  "Rensegnement", numeroTache =15};
+        public readonly WorkflowTache _Prog = new WorkflowTache { Nom = "Programmation", numeroTache =18} ;
+        public readonly WorkflowTache _Aut = new WorkflowTache { Nom = "Autorisation", numeroTache =21} ;
+
+        public readonly WorkflowTache _GED_ = new WorkflowTache { Nom = "GED", numeroTache =17} ;
+        public readonly WorkflowTache _Avis_ = new WorkflowTache { Nom = "Avis", numeroTache =19} ;
+        public readonly WorkflowTache _SitGeo_ = new WorkflowTache { Nom = "Situation Géographique", numeroTache =16} ;
+
+        public readonly WorkflowTache _Clot = new WorkflowTache { Nom = "Cloture", numeroTache =22} ;
+        public readonly WorkflowTache _Ech = new WorkflowTache { Nom = "Echanges", numeroTache =20} ;
+
         public ActionResult correctAction(int idTache, int IdDemDerog, MultiModeles multiTab)
         {
             if (IdDemDerog == 0)
@@ -500,6 +512,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
+        [Authorize(Roles = Administrator + "," + _GED)]
         public ActionResult DeleteDocument(int Id_Doc_Derog, int FK_DemDerg_DocDerg)
         {
             var _Actions = Actions(_GED);
@@ -528,7 +541,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
 
-        [HttpPost]
+        [HttpPost,ValidateAntiForgeryToken]
         public ActionResult Ged(HttpPostedFileBase[] url_Doc_Derg, int[] Intitule_Doc_Derg
             , int valider, int FK_DemDerg_DocDerg)
         {
@@ -602,39 +615,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return exist;
         }
 
-        //[HttpPost]
-        //public JsonResult Ged(FormCollection form, HttpPostedFileBase[] filetype)
-        //{
-        //    var av = form["ged"];
-        //    var avv = JsonConvert.DeserializeObject<List<Document_Derogation>>(av);
-        //    for (int i = 0; i < avv.Count; i++)
-        //    {
-        //        var con = new Document_Derogation
-        //        {
-        //            Code_Doc_Derg = avv[i].Code_Doc_Derg,
-        //            Intitule_Doc_Derg = avv[i].Intitule_Doc_Derg,
-        //            url_Doc_Derg = avv[i].url_Doc_Derg,
-        //            FK_DemDerg_DocDerg = avv[i].FK_DemDerg_DocDerg
-        //        };
-        //        db.Document_Derogation.Add(con);
-
-        //    }
-        //    var id_derg = Int32.Parse(form["id"]);
-        //    var valider = form["valider"];
-        //    var demderg = db.Demande_Derogation.Find((id_derg));
-        //    if (valider == "1")
-        //    {
-        //        demderg.FK_DemDerg_EtatAvc = 18;
-        //        db.SaveChanges();
-        //        return Json(Url.Action("Programmation", "WorkflowDerogation", new { FK_DemDerg_Com = id_derg }));
-        //    }
-        //    else
-        //    {
-        //        demderg.FK_DemDerg_EtatAvc = 17;
-        //        db.SaveChanges();
-        //        return Json(Url.Action("Encours", "WorkflowDerogation", new { page = 1 }));
-        //    }
-        //}
+        
 
         [Authorize(Roles = Administrator + "," + _Programmation)]
         public ActionResult Programmation(int? FK_DemDerg_Com)
@@ -663,7 +644,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Programmation(int FK_DemDerg_Com, int enregistrer)
         {
             var _Actions = Actions(_Programmation);
@@ -817,10 +798,10 @@ namespace GestionnaireUtilisateurs.Controllers
             };
             return correctAction(19, FK_DemDerg, multiTab);
         }
-        [Authorize(Roles = Administrator + "," + _Avis), HttpPost]
+        [Authorize(Roles = Administrator + "," + _Avis), HttpPost, ValidateAntiForgeryToken]
         public ActionResult AvisOrg(int[] FK_Organisme, int[] FK_TypAvis,
                     string[] Detail_Avis, int FK_DemDerg, string Avis_Remarque_DemDerg,
-                    HttpPostedFileBase url_Doc_Derg, int valider, Avis_Org[] avis_Orgs)
+                    HttpPostedFileBase url_Doc_Derg, int valider)
         {
             var _Actions = Actions(_Avis);
             bool Read = _Actions[0];
@@ -966,7 +947,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
 
-        [HttpPost, Authorize(Roles = Administrator + "," + _Echanges)]
+        [HttpPost, Authorize(Roles = Administrator + "," + _Echanges), ValidateAntiForgeryToken]
         public ActionResult Echanges(int[] FK_Nature_Courrier, DateTime[] Date_Courier, int FK_DemDerg
             , string[] Source_Courrier, string[] Destination_Courrier, HttpPostedFileBase[] file, int valider)
         {
@@ -1068,7 +1049,7 @@ namespace GestionnaireUtilisateurs.Controllers
             };
             return correctAction(21, FK_DemDerg, multiTab);
         }
-        [HttpPost]
+        [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Autorisation(int Id_Aut, Autorisation_Derogation AutDerog, int valider, int Fk_DEMDEROG)
         {
             var _Actions = Actions(_Autorisation);
@@ -1145,7 +1126,7 @@ namespace GestionnaireUtilisateurs.Controllers
             };
             return correctAction(22, FK_DemDerg, multiTab);
         }
-        [HttpPost]
+        [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Cloture(int? FK_DemDerg_AutDerg)
         {
             var _Actions = Actions(_Cloture);
@@ -1162,11 +1143,12 @@ namespace GestionnaireUtilisateurs.Controllers
             return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
 
         }
-
+        [Authorize]
         public ActionResult NotFound()
         {
             return View();
         }
+        [Authorize]
         public ActionResult BadGateAway()
         {
             return View();

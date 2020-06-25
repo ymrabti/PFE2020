@@ -55,6 +55,7 @@
             <div class="form-horizontal">
                 @using (Html.BeginForm("Autorisation", "WorkflowDerogation", FormMethod.Post, new { id = "formsubmit" }))
                 {
+                    @Html.AntiForgeryToken()
                     if (Model.DemDerg.Autorisation_Derogation != null)
                     {
                         <input type="hidden" id="Id_Aut" name="Id_Aut" value="@Model.DemDerg.Id_Autorisation" />

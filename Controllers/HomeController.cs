@@ -98,7 +98,7 @@ namespace GestionnaireUtilisateurs.Controllers
         {
             return View(multiModeles());
         }
-        
+
 
         [Authorize(Roles = Administrator)]
         public ActionResult AddUser()
@@ -107,7 +107,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return View();
         }
 
-        [Authorize(Roles = Administrator)]
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddUser(RegisterViewModel model)
@@ -193,8 +193,8 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(viewModel);
         }
 
-        [Authorize(Roles = Administrator)]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditUser(RegisterParentViewModel parentViewModel)
         {
             ViewBag.StatutId = new SelectList(database.Statuts, "StatutId", "StatutName");
@@ -312,7 +312,8 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(multiModeles);
         }
 
-        [Authorize(Roles = Administrator)]
+
+        [ValidateAntiForgeryToken]
         [HttpPost, ActionName("DeleteUser")]
         public ActionResult DeleteUserConfirmed(string id)
         {
@@ -373,7 +374,8 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = Administrator)]
+
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult UserTache(string[] Create, string[] Read, string[] Update, string[] Delete
             , string[] UserId, string[] RoleId)
@@ -462,7 +464,8 @@ namespace GestionnaireUtilisateurs.Controllers
             ViewBag.statutDescription = statut.StatutDescription;
             return View();
         }
-        [HttpPost]
+
+        [HttpPost, ValidateAntiForgeryToken]
         public ActionResult EditStatut([Bind(Include = "StatutId,StatutName,StatutDescription")] Statuts statut)
         {
             if (ModelState.IsValid)
@@ -506,7 +509,7 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(multiModeles);
         }
 
-        [HttpPost, ActionName("DeleteStatut")]
+        [HttpPost, ValidateAntiForgeryToken, ActionName("DeleteStatut")]
         public ActionResult DeleteStatutConfirmed(string id)
         {
             Statuts statut = database.Statuts.Find(id);
@@ -582,6 +585,7 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }
+        [Authorize(Roles = Administrator)]
         public JsonResult ResetRolesFromStatut(string UserId)
         {
             var statut = database.AspNetUsers.Find(UserId).Statuts;
@@ -650,7 +654,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
             return View(model);
         }
-        [HttpPost]
+        [HttpPost, ValidateAntiForgeryToken]
         public ActionResult StatutTache(string[] Create, string[] Read, string[] Update, string[] Delete
             , string[] StatutId, string[] RoleId)
         {
@@ -826,6 +830,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
+        [Authorize(Roles = Administrator)]
         public async Task<JsonResult> AddModulePartiale([Bind(Include = "ModuleName,ModuleDescription")] Module model)
         {
             var data = new object();
@@ -964,6 +969,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
+        [Authorize(Roles = Administrator)]
         public async Task<JsonResult> AddSubModulePartiale([Bind(Include = "SousModuleName,SousModuleDescription,ModuleId")]
         SousModule sousModule)
         {
@@ -1115,6 +1121,7 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
+        [Authorize(Roles = Administrator)]
         public async Task<JsonResult> AddTachePartiale([Bind(Include = "Name,SouModuleId,RoleDescription")] AspNetRoles role)
         {
             var data = new object();
@@ -1150,7 +1157,43 @@ namespace GestionnaireUtilisateurs.Controllers
         [Authorize]
         public ActionResult AURS()
         {
+            ViewBag.f = -99; ViewBag.str = "..."; ViewBag.date = DateTime.UtcNow;
             return View();
+        }
+        [HttpPost, ValidateAntiForgeryToken]
+        public JsonResult AURS(int f, string str, DateTime date)
+        {
+            var data = new object();
+            if (ModelState.IsValid)
+            {
+                ViewBag.f = f; ViewBag.str = str; ViewBag.date = date;
+                data = new { dd = "success", f, str, date };
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
+        }
+        /// ///////////////////////             AUTRESAUTRES                    //////////////////////
+        /// ///////////////////////             AUTRESAUTRES                    //////////////////////
+        /// ///////////////////////             AUTRESAUTRES                    //////////////////////
+        /// 
+
+        [Authorize]
+        public PartialViewResult NavBar()
+        {
+            var UID = User.Identity.GetUserId();
+            var user = database.AspNetUsers.Find(UID);
+            var model = new MultiModeles
+            {
+                notifications = user.Notification.OrderByDescending(i=>i.heure_date).Take(5).ToList()
+            };
+            //C:\Users\HPr\source\repos\GestionnaireUtilisateurs\Views\Shared\_NavBar.cshtml
+            return PartialView("~/Views/Shared/_NavBar.cshtml", model);
+        }
+
+        [Authorize]
+        public ActionResult NotificationClick()
+        {
+            return
         }
     }
 }

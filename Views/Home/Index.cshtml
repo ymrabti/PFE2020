@@ -1,7 +1,7 @@
 ﻿@model GestionnaireUtilisateurs.Models.MultiModeles
 @{
     ViewBag.Title = "Utilisateurs";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
 }
 <style>
     .indexusers {
@@ -66,6 +66,8 @@
                     <th data-tablesaw-sortable-col data-tablesaw-priority="0" style="background-color:#d9edf7;">Email</th>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="0" style="background-color:#d9edf7;">Ville</th>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="1" style="background-color:#d9edf7;">Roles</th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="0" style="background-color:#d9edf7;">Dernier Modification</th>
+                    <th data-tablesaw-sortable-col data-tablesaw-priority="0" style="background-color:#d9edf7;">Par</th>
                 </tr>
             </thead>
             <tbody id="tabletargetted">
@@ -106,6 +108,26 @@
                                     </li>
                                 }
                             </ul>
+                        </td>
+                        <td>
+                            @if (item.HistoriqueUserDeletion1.Count() == 0)
+                            {
+                                <div>----------</div>
+                            }
+                            else
+                            {
+                                <div>@Html.DisplayFor(modelItem => item.HistoriqueUserDeletion1.OrderBy(i => i.date_heure).Last().date_heure)</div>
+                            }
+                        </td>
+                        <td>
+                            @if (item.HistoriqueUserDeletion1.Count() == 0)
+                            {
+                                <div>----------</div>
+                            }
+                            else
+                            {
+                                <div>@Html.DisplayFor(modelItem => item.HistoriqueUserDeletion1.OrderBy(i => i.date_heure).Last().AspNetUsers.Email)</div>
+                            }
                         </td>
                     </tr>
                 }

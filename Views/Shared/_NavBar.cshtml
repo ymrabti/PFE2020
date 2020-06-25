@@ -1,4 +1,15 @@
-﻿
+﻿@model GestionnaireUtilisateurs.Models.MultiModeles
+@using Microsoft.AspNet.Identity;
+
+<style>
+    .MyNotifation{
+
+    }
+    .MyNotifation:hover{
+        
+    }
+</style>
+
 <nav class="navbar navbar-expand-lg bg-white fixed-top">
     <a class="navbar-brand" href="https://www.aurs.org.ma/fr/" target="_blank">
         <img src="~/documentation/img/aurs.png" style="width: 65px;" />
@@ -7,8 +18,8 @@
         </h3>
 
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" 
-            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" 
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
             aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -17,18 +28,55 @@
             <li class="nav-item dropdown notification">
                 <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-fw fa-bell"></i>
-                    <span class="fa fa-circle" id="ntCnt" style="color:red; width:30px;height:30px;text-align-last:center;top:0px;right:0px">+99</span>
+                    @if (Model.notifications.Where(k => !k.Clicked).Count() == 0)
+                    {
+                        <span class="fa fa-circle" style="color:forestgreen; width:30px;height:30px;text-align-last:center;top:0px;right:0px">
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="indicator" style="color:White; width:30px;height:30px;text-align-last:center;top:0px;right:0px">
+                            @Model.notifications.Where(k => !k.Clicked).Count()
+                        </span>
+                    }
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
                     <li>
-                        <div class="notification-title"> Notification</div>
+                        <div class="notification-title"> Notifications</div>
                         <div class="notification-list">
-                            <div class="list-group" id="listNotifs">
+                            <div class="list-group" style="padding:4px" id="listNotifs">
+                                @foreach (var notif in Model.notifications)
+                                {
+                                    using (Html.BeginForm("NotificationClick", "Home", FormMethod.Get))
+                                    {
+                                        <div style="margin-bottom:3px;margin-left:2px;margin-left:2px;">
+                                            @if (notif.Clicked)
+                                            {
+                                                <div style="margin-bottom:1px;cursor:pointer" class="notification-title" onclick="this.closest('form').submit();">
+                                                    <input type="hidden" name="NotifId" value="@notif.Id" />
+                                                    <input type="hidden" name="ReturnUrl" value="@Request.Url.PathAndQuery" />
+                                                    <p>@notif.TypeNotif.Text</p>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div style="margin-bottom:1px;cursor:pointer;color:antiquewhite;background-color:#747474;" 
+                                                     class="notification-title"  onclick="this.closest('form').submit();">
+                                                    <input type="hidden" name="NotifId" value="@notif.Id" />
+                                                    <input type="hidden" name="ReturnUrl" value="@Request.Url.PathAndQuery" />
+                                                    <p>@notif.TypeNotif.Text</p>
+                                                </div>
+                                            }
+                                            <div class="notification-date"><label>@notif.heure_date</label></div>
+                                            <br />
+                                        </div>
+                                    }
+                                }
                             </div>
                         </div>
                     </li>
                     <li>
-                        <div class="list-footer"> <a href="#">View all notifications</a></div>
+                        <div class="list-footer"> <a href="@Url.Action("AllNotifications","Home")">Afiicher tous les notifications</a></div>
                     </li>
                 </ul>
             </li>

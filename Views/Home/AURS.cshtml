@@ -1,11 +1,42 @@
-﻿
+﻿@using Microsoft.AspNet.Identity;
 @{
-    Layout = "~/Views/Shared/_Xlayout.cshtml";
+    ViewBag.Title = "AURS";
     Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
 }
 
-<center>
-    <img src="~/Content/documentation/img/aurs.png" alt="AURS" style="max-height:50%;rotation:90deg" /><br />
-    <img src="~/Content/documentation/img/aurs.png" alt="AURS" style="max-height:50%;rotation:90deg" /><br />
-</center>
+@*<center>
+        <img src="~/Content/documentation/img/aurs.png" alt="AURS" style="max-height:50%;rotation:90deg" /><br />
+        <img src="~/Content/documentation/img/aurs.png" alt="AURS" style="max-height:50%;rotation:90deg" /><br />
+    </center>*@
 
+@using (Ajax.BeginForm("AURS", new AjaxOptions { HttpMethod = "Post", OnFailure = "OnFailure()", OnSuccess = "OnSuccess(data)" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-md-4"><input required class="form-control" type="text" name="f" value="@User.Identity.GetUserId()" /></div>
+        <div class="col-md-4"><input required class="form-control" type="text" name="str" value="@Request.Url.PathAndQuery" /></div>
+        <div class="col-md-4"><input required class="form-control" type="datetime-local" name="date" value="@ViewBag.date" /></div>
+    </div>
+    <div class="row" style="margin-top:20px">
+        <div class="col-md-4"></div>
+        <div class="col-md-4"><input class="form-control buttonsReapeateds" type="submit" value="submit me" /></div>
+        <div class="col-md-4"></div>
+    </div>
+}
+
+@section Scripts{
+
+    <script>
+        function OnFailure() {
+            alert("Fail");
+        }
+
+        function OnSuccess(data) {
+            var date = new Date();
+            date = data.date;
+            alert("Success" + data.f + "\n" + data.str + "\n" + date);
+        }
+
+    </script>
+
+}

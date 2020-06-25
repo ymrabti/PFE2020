@@ -17,6 +17,7 @@
 
                     @using (Html.BeginForm())
                     {
+                        @Html.AntiForgeryToken()
                         <div class="form-actions no-color">
                             <button type="submit" class="btn btn-default" style="background-color:indianred;color:white">
 
