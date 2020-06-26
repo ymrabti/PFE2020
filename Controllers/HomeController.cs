@@ -1098,7 +1098,8 @@ namespace GestionnaireUtilisateurs.Controllers
         public ActionResult AURS()
         {
             ViewBag.f = -99; ViewBag.str = "..."; ViewBag.date = DateTime.UtcNow;
-            return View();
+            COMMUNES_RSK rSK = database.COMMUNES_RSK.First();
+            return View(rSK);
         }
         [HttpPost, ValidateAntiForgeryToken]
         public JsonResult AURS(int f, string str, DateTime date, object BaileyJay)
@@ -1130,7 +1131,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 var UID = User.Identity.GetUserId();
                 var user = database.AspNetUsers.Find(UID);
                 var notifs = user.Notification;
-                ViewBag.NotifsCount = notifs.Count();
+                ViewBag.NotifsCount = notifs.Where(k=>!k.Clicked).Count();
                 var model = new MultiModeles
                 {
                     notifications = notifs.OrderByDescending(i => i.heure_date).ToList()
