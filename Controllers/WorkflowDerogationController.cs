@@ -1186,15 +1186,19 @@ namespace GestionnaireUtilisateurs.Controllers
         public ActionResult EncoursParProfils()
         {
             var demandes = database.Demande_Derogation.Where(k => !k.Supp).Where(i => !i.Cloture_DemDerg);
+            var demandes_ = database.Demande_Derogation.Where(i => i.EtatAvancement==null);
             List<WorkflowTache> workflowTaches = taches_WorkflowDerogation();
             foreach (var tache in workflowTaches)
             {
                 string NomTache = tache.Nom;int NumTache = tache.numeroTache;
-                if (User.IsInRole(NomTache)) { demandes = demandes.Where(i => i.FK_DemDerg_EtatAvc == tache.numeroTache); }
+                if (User.IsInRole(NomTache)) 
+                {
+                    demandes_ = demandes_.Union(demandes.Where(i => i.FK_DemDerg_EtatAvc == NumTache)); 
+                }
             }
             var model = new MultiModeles
             {
-                DemDergs = demandes.ToList()
+                DemDergs = demandes_.ToList()
             };
 
             return View(model);

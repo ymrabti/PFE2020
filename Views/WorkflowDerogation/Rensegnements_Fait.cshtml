@@ -200,14 +200,14 @@
                     <div class="row" style="margin-bottom:25px">
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Maître d'ouvrage :</label>
-                            <input disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="maitreOuvrage" name="Maitre_Oeuvrage_DemDerg" 
-                                    oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')"/>
+                            <input disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="maitreOuvrage" name="Maitre_Oeuvrage_DemDerg"
+                                   oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')" />
                         </div>
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Maître d'oeuvre :</label>
                             <input disabled="@NModifier" class="form-control form-control-sm chzn-selec" id="maitreOeuvre" name="Maitre_Oeuvre_DemDerg"
-                                    oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')" />
-                                
+                                   oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')" />
+
                         </div>
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Forme maître d'ouvrage :</label>
@@ -345,6 +345,8 @@
                     </center>
 
                 }
+
+                <br />@Html.ActionLink("Retour a la liste des demandes", "Encours")<br />
             </div>
         </div>
     </div>

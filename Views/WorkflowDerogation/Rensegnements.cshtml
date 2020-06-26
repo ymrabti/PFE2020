@@ -169,14 +169,14 @@
                         <div class="col-sm-4">
                             <label for="name" style="font-size:12px;">Maître d'ouvrage :</label>
                             <input disabled="@NCree" required class="form-control form-control-sm" id="maitreOuvrage" name="Maitre_Oeuvrage_DemDerg"
-                                    oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')"/>
-                                
+                                   oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')" />
+
                         </div>
                         <div class="col-sm-4">
                             <label for="name" style="font-size:12px;">Maître d'oeuvre :</label>
                             <input disabled="@NCree" required class="form-control form-control-sm" id="maitreOeuvre" name="Maitre_Oeuvre_DemDerg"
-                                    oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')"/>
-                                
+                                   oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')" />
+
                         </div>
                         <div class="col-sm-4">
                             <label for="name" style="font-size:12px;">Forme maître d'ouvrage :</label>
@@ -287,6 +287,8 @@
                     </center>
 
                 }
+
+                <br />@Html.ActionLink("Retour a la liste des demandes", "Encours")<br />
             </div>
         </div>
     </div>
