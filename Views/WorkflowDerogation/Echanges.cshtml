@@ -24,29 +24,11 @@
     </nav>
 </section>
 
-<center>
-    <label class="text-capitalize text-info" style="background-color:gray;margin-bottom:10px">
-        Lire  @if (Lire)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
 
-        Cree  @if (Cree)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
-
-        Modifier  @if (Modifier)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
-        Supprimer  @if (Supprimer)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
-    </label>
-
-</center>
+@using GestionnaireUtilisateurs.Controllers
+@{
+    Html.RenderAction("Indicators", "WorkflowDerogation", new { Tache = WorkflowDerogationController._Echanges });
+}
 
 @if (Lire)
 {
@@ -266,21 +248,21 @@
 }
 else
 {
-<div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
-    <div class="card-body">
-        <center>
-            <label class="text-danger">
-                <span>
-                    <i class="fa fa-accessible-icon"></i>
-                    <strong>
-                        Vous n'avez pas le droit d'afficher cette information
-                    </strong>
-                </span>
-            </label>
-            <br />
-            <a href="@Url.Action("Encours","WorkflowDerogation")">Reteur</a>
-        </center>
+    <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+        <div class="card-body">
+            <center>
+                <label class="text-danger">
+                    <span>
+                        <i class="fa fa-accessible-icon"></i>
+                        <strong>
+                            Vous n'avez pas le droit d'afficher cette information
+                        </strong>
+                    </span>
+                </label>
+                <br />
+                <a href="@Url.Action("Encours","WorkflowDerogation")">Reteur</a>
+            </center>
+        </div>
     </div>
-</div>
 }
 

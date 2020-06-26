@@ -25,33 +25,14 @@
         </ol>
     </nav>
 </section>
-<center>
-    <label class="text-capitalize text-info" style="background-color:gray;margin-bottom:10px">
-        Lire  @if (Lire)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
-
-        Cree  @if (Cree)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
-
-        Modifier  @if (Modifier)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
-        Supprimer  @if (Supprimer)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
-    </label>
-
-</center>
-@Html.Partial("WorkflowG", Model)
+@using GestionnaireUtilisateurs.Controllers
+@{
+    Html.RenderAction("Indicators", "WorkflowDerogation", new { Tache = WorkflowDerogationController._Programmation });
+}
 
 @if (Lire)
 {
+    @Html.Partial("WorkflowG", Model)
     <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
         <div class="card-body">
             <div class="form-horizontal">
@@ -91,7 +72,6 @@
                 }
                 <br />
 
-                <br />@Html.ActionLink("Retour a la liste des demandes", "Encours")<br />
                 <center><label style="font-weight: bold"><u>Liste des commissions programmées</u></label></center><br />
                 <br />
                 <div class="table-responsive">
@@ -151,6 +131,8 @@
                         <p class="text-right">
                             @using (Html.BeginForm())
                             {
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="FK_DemDerg_Com" value="@Model.DemDerg.Id_DemDerg"/>
                                 <button class="btn btn-lg" type="submit" value="0" name="enregistrer" style="background-color:#09aacc; color:white">
                                     Enregistrer  <i class="fa fa-level-down-alt"></i>
                                 </button>
@@ -161,6 +143,7 @@
                         </p>
                     </center>
                 </div>
+                <br />@Html.ActionLink("Retour a la liste des demandes", "Encours")<br />
             </div>
         </div>
     </div>
@@ -179,6 +162,7 @@ else
                     </span>
                 </label>
             </center>
+            <br />@Html.ActionLink("Retour a la liste des demandes", "Encours")<br />
         </div>
     </div>
 }

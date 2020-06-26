@@ -22,29 +22,11 @@
         </ol>
     </nav>
 </section>
-<center>
-    <label class="text-capitalize text-info" style="background-color:gray;margin-bottom:10px">
-        Lire  @if (Lire)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
 
-        Cree  @if (Cree)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
-
-        Modifier  @if (Modifier)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
-        Supprimer  @if (Supprimer)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
-    </label>
-
-</center>
+@using GestionnaireUtilisateurs.Controllers
+@{
+    Html.RenderAction("Indicators", "WorkflowDerogation", new { Tache = WorkflowDerogationController._Cloture });
+}
 @if (Lire)
 {
     Html.Partial("WorkflowG", Model);

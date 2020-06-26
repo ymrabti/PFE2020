@@ -29,7 +29,7 @@
                 <li class="nav-item dropdown notification">
                     <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-fw fa-bell"></i>
-                        @if (Model.notifications.Where(k => !k.Clicked).Count() == 0)
+                        @if (ViewBag.NotifsCount == 0)
                         {
                             <span class="fa fa-circle" style="color:forestgreen; width:30px;height:30px;text-align-last:center;top:0px;right:0px">
                             </span>
@@ -37,7 +37,7 @@
                         else
                         {
                             <span class="indicator" style="color:White; width:30px;height:30px;text-align-last:center;top:0px;right:0px">
-                                @Model.notifications.Where(k => !k.Clicked).Count()
+                                @ViewBag.NotifsCount
                             </span>
                         }
 

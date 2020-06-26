@@ -1122,9 +1122,11 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 var UID = User.Identity.GetUserId();
                 var user = database.AspNetUsers.Find(UID);
+                var notifs = user.Notification;
+                ViewBag.NotifsCount = notifs.Count();
                 var model = new MultiModeles
                 {
-                    notifications = user.Notification.OrderByDescending(i => i.heure_date).Take(5).ToList()
+                    notifications = notifs.OrderByDescending(i => i.heure_date).ToList()
                 };
                 return PartialView("~/Views/Shared/_NavBar.cshtml", model);
             }

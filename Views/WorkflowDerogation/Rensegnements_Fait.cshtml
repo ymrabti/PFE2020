@@ -26,29 +26,12 @@
 </section>
 
 
-<center>
-    <label class="text-capitalize text-info" style="background-color:gray;margin-bottom:10px">
-        Lire  @if (Lire)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
 
-        Cree  @if (Cree)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
+@using GestionnaireUtilisateurs.Controllers
+@{
+    Html.RenderAction("Indicators", "WorkflowDerogation", new { Tache = WorkflowDerogationController._Rensegnement });
+}
 
-        Modifier  @if (Modifier)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
-        Supprimer  @if (Supprimer)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
-    </label>
-
-</center>
 @if (Lire)
 {
     <div>@Html.Partial("WorkflowG", Model)</div>
@@ -201,11 +184,13 @@
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Maître d'ouvrage :</label>
                             <input disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="maitreOuvrage" name="Maitre_Oeuvrage_DemDerg"
+                                   value="@Model.DemDerg.Maitre_Oeuvrage_DemDerg"
                                    oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')" />
                         </div>
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Maître d'oeuvre :</label>
                             <input disabled="@NModifier" class="form-control form-control-sm chzn-selec" id="maitreOeuvre" name="Maitre_Oeuvre_DemDerg"
+                                   value="@Model.DemDerg.Maitre_Oeuvre_DemDerg"
                                    oninvalid="this.setCustomValidity('Maître d\'ouvrage obligatoire !')" oninput="this.setCustomValidity('')" />
 
                         </div>
@@ -427,6 +412,7 @@ else
                     </span>
                 </label>
             </center>
+            <br />@Html.ActionLink("Retour a la liste des demandes", "Encours")<br />
         </div>
     </div>
 }

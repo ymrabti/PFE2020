@@ -22,29 +22,11 @@
         </ol>
     </nav>
 </section>
-<center>
-    <label class="text-capitalize text-info" style="background-color:gray;margin-bottom:10px">
-        Lire  @if (Lire)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
 
-        Cree  @if (Cree)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
-
-        Modifier  @if (Modifier)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
-        Supprimer  @if (Supprimer)
-        {<span class="fa fa-circle" style="color:#00ff00;"></span>}
-        else
-        { <span class="fa fa-circle" style="color:#ff0000;"></span>}
-    </label>
-
-</center>
+@using GestionnaireUtilisateurs.Controllers
+@{
+    Html.RenderAction("Indicators", "WorkflowDerogation", new { Tache = WorkflowDerogationController._GED });
+}
 
 
 @if (Lire)
@@ -159,20 +141,11 @@
                     <div class="col-md-2">
                     </div>
                 </div>
-                <br />@Html.ActionLink("Retour a la liste des demandes","Encours")<br />
+                <br />@Html.ActionLink("Retour a la liste des demandes", "Encours")<br />
             </div>
         </div>
     </div>
 
-    @*<script src="~/Content/dwnlds/jquery.slimscroll.js"></script>
-        <script src="~/Content/dwnlds/bootstrap.bundle.js"></script>
-        <script src="~/Content/dwnlds/chosen.jquery.js"></script>
-        <script src="~/Content/dwnlds/jquery-1.8.3.js"></script>
-        <script src="~/Content/dwnlds/jquery-3.3.1.min.js"></script>
-        <script src="~/Content/dwnlds/jquery-ui.js"></script>
-        <link href="~/Content/dwnlds/chosen.css" rel="stylesheet" />
-        <link href="~/Content/dwnlds/jquery-ui.css" rel="stylesheet" />*@
-    @*<script src="~/Content/fileInputCustom.js"></script>*@
     if (Cree)
     {
         <script language="javascript">
@@ -256,6 +229,7 @@ else
                     </span>
                 </label>
             </center>
+            <br />@Html.ActionLink("Retour a la liste des demandes", "Encours")<br />
         </div>
     </div>
 }

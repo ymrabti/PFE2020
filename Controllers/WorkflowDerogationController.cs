@@ -84,6 +84,8 @@ namespace GestionnaireUtilisateurs.Controllers
             }
         }
 
+
+        #region Rensegnements
         [Authorize(Roles = Administrator + "," + _Rensegnement)]
         public ActionResult Rensegnements()
         {
@@ -251,7 +253,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 Communes = database.COMMUNES_RSK.OrderBy(U => U.COMMUNE).ToList(),
                 Provs = database.PROVINCES_RSK.OrderBy(x => x.Provicne).ToList(),
                 References_Foncieres = database.References_Foncieres.OrderBy(x => x.NomRF).ToList(),
-                aspNetUsers = database.AspNetUsers.Where(a=>!a.Supp).OrderBy(p => p.Email).ToList(),
+                aspNetUsers = database.AspNetUsers.Where(a => !a.Supp).OrderBy(p => p.Email).ToList(),
                 Derogs_Demandees = database.derogs_demandees.OrderBy(u => u.last).ThenBy(u => u.NOM).ToList()
             };
             //return View(multiTab);
@@ -390,8 +392,11 @@ namespace GestionnaireUtilisateurs.Controllers
             }
         }
 
+        #endregion
 
 
+
+        #region SituationGeo
 
         [Authorize(Roles = Administrator + "," + _SitGeo)]
         public ActionResult SituationGeo(int Id_DemDerg)
@@ -431,7 +436,9 @@ namespace GestionnaireUtilisateurs.Controllers
 
         }
 
+        #endregion
 
+        #region Ged
         [Authorize(Roles = Administrator + "," + _GED)]
         public ActionResult Ged(int FK_DemDerg_DocDerg)
         {
@@ -468,7 +475,7 @@ namespace GestionnaireUtilisateurs.Controllers
                     var document = database.Document_Derogation.Find(Id_Doc_Derog);
                     database.Document_Derogation.Remove(document);
                     database.SaveChanges();
-                    string Directory = CheckFolder(FK_DemDerg_DocDerg,0);
+                    string Directory = CheckFolder(FK_DemDerg_DocDerg, 0);
                     string fileName = document.FileName;
                     string path = Path.Combine(Directory, fileName /*+ Path.GetExtension(file.FileName)*/);
                     FileInfo fileInfo = new FileInfo(path);
@@ -488,7 +495,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
 
-        [HttpPost,ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Ged(HttpPostedFileBase[] url_Doc_Derg, int[] Intitule_Doc_Derg
             , int valider, int FK_DemDerg_DocDerg)
         {
@@ -536,7 +543,7 @@ namespace GestionnaireUtilisateurs.Controllers
                     {
                         demande.FK_DemDerg_EtatAvc = 18;
                         database.SaveChanges();
-                        return RedirectToAction("Programmation", new { FK_DemDerg_DocDerg });
+                        return RedirectToAction("Programmation", new { FK_DemDerg_Com = FK_DemDerg_DocDerg });
                     }
                 }
                 else
@@ -548,8 +555,9 @@ namespace GestionnaireUtilisateurs.Controllers
             return RedirectToAction("Ged", new { FK_DemDerg_DocDerg });
         }
 
+        #endregion
 
-        
+        #region Programmation
 
         [Authorize(Roles = Administrator + "," + _Programmation)]
         public ActionResult Programmation(int? FK_DemDerg_Com)
@@ -571,7 +579,7 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             var multiTab = new MultiModeles
             {
-                Comss = database.Commission.Where(v => v.Date_Commission > DateTime.Today).OrderBy(var => var.Date_Commission).ToList(),
+                Comss = database.Commission.OrderBy(var => var.Date_Commission).Where(v => v.Date_Commission > DateTime.Today).ToList(),
                 DemDerg = database.Demande_Derogation.Find(FK_DemDerg_Com)
             };
             return correctAction(18, FK_DemDerg_Com.Value, multiTab);
@@ -606,12 +614,12 @@ namespace GestionnaireUtilisateurs.Controllers
                     database.SaveChanges();
                     return RedirectToAction("AvisOrg", "WorkflowDerogation", new { FK_DemDerg = FK_DemDerg_Com });
                 }
-                else { return RedirectToAction("Programmation", "WorkflowDerogation", new { page = 1 }); }
+                else { return RedirectToAction("Programmation", "WorkflowDerogation", new { FK_DemDerg_Com }); }
             }
         }
 
 
-        [Authorize(Roles = Administrator + "," + _Programmation)]
+        [HttpPost, ValidateAntiForgeryToken]
         public ActionResult CreateCommission(Commission commission, int FK_DemDerg_Com)
         {
             var _Actions = Actions(_Programmation);
@@ -667,48 +675,10 @@ namespace GestionnaireUtilisateurs.Controllers
             return RedirectToAction("Programmation", "WorkflowDerogation", new { FK_DemDerg_Com });
         }
 
-        private string CheckFolder(int Id_DemDerg, int typeDoc)//0 ged,1 pv,2 courrier
-        {
-            String path = Server.MapPath("~/GED_DEROG/");
-            String pathDemande = "";
-            switch (typeDoc)
-            {
-                case 0:
-                    pathDemande = Server.MapPath("~/GED_DEROG/" + Id_DemDerg + "/");
-                    break;
-                case 1:
-                    pathDemande = Server.MapPath("~/GED_DEROG/" + Id_DemDerg + "/PV_COMMISSION/");
-                    break;
-                case 2:
-                    pathDemande = Server.MapPath("~/GED_DEROG/" + Id_DemDerg + "/COURRIER/");
-                    break;
-                default:
-                    pathDemande = Server.MapPath("~/GED_DEROG/" + Id_DemDerg + "/COURRIER/");
-                    break;
-            }
-
-            var x = Directory.Exists(path);
-            if (!x)
-            {
-                Directory.CreateDirectory(path);
-                var y = Directory.Exists(pathDemande);
-                if (!y)
-                {
-                    Directory.CreateDirectory(pathDemande);
-                }
-            }
-            else
-            {
-                var y = Directory.Exists(pathDemande);
-                if (!y)
-                {
-                    Directory.CreateDirectory(pathDemande);
-                }
-            }
-            return pathDemande;
-        }
+        #endregion
 
 
+        #region Avis
         [Authorize(Roles = Administrator + "," + _Avis)]
         public ActionResult AvisOrg(int FK_DemDerg)
         {
@@ -857,6 +827,10 @@ namespace GestionnaireUtilisateurs.Controllers
             return RedirectToAction("AvisOrg", "WorkflowDerogation", new { FK_DemDerg });
         }
 
+        #endregion
+
+
+        #region Echanges
 
         [Authorize(Roles = Administrator + "," + _Echanges)]
         public ActionResult Echanges(int FK_DemDerg)
@@ -877,8 +851,6 @@ namespace GestionnaireUtilisateurs.Controllers
             };
             return correctAction(20, FK_DemDerg, multiTab);
         }
-
-
 
 
         [HttpPost, Authorize(Roles = Administrator + "," + _Echanges), ValidateAntiForgeryToken]
@@ -962,8 +934,11 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
+        #endregion
 
 
+
+        #region Autorisation
 
         [Authorize(Roles = Administrator + "," + _Autorisation)]
         public ActionResult Autorisation(int FK_DemDerg)
@@ -1040,7 +1015,10 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
+        #endregion
 
+
+        #region Cloture
         [Authorize(Roles = Administrator + "," + _Cloture)]
         public ActionResult Cloture(int FK_DemDerg)
         {
@@ -1077,6 +1055,11 @@ namespace GestionnaireUtilisateurs.Controllers
             return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
 
         }
+
+        #endregion
+
+        #region Errors
+
         [Authorize]
         public ActionResult NotFound()
         {
@@ -1089,9 +1072,10 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
+        #endregion
 
 
-
+        #region Encours
         [Authorize(Roles = _WorkflowDerogation)]
         public ActionResult Encours(short? page, bool? finalisees)
         {
@@ -1186,14 +1170,14 @@ namespace GestionnaireUtilisateurs.Controllers
         public ActionResult EncoursParProfils()
         {
             var demandes = database.Demande_Derogation.Where(k => !k.Supp).Where(i => !i.Cloture_DemDerg);
-            var demandes_ = database.Demande_Derogation.Where(i => i.EtatAvancement==null);
+            var demandes_ = database.Demande_Derogation.Where(i => i.EtatAvancement == null);
             List<WorkflowTache> workflowTaches = taches_WorkflowDerogation();
             foreach (var tache in workflowTaches)
             {
-                string NomTache = tache.Nom;int NumTache = tache.numeroTache;
-                if (User.IsInRole(NomTache)) 
+                string NomTache = tache.Nom; int NumTache = tache.numeroTache;
+                if (User.IsInRole(NomTache))
                 {
-                    demandes_ = demandes_.Union(demandes.Where(i => i.FK_DemDerg_EtatAvc == NumTache)); 
+                    demandes_ = demandes_.Union(demandes.Where(i => i.FK_DemDerg_EtatAvc == NumTache));
                 }
             }
             var model = new MultiModeles
@@ -1204,11 +1188,10 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(model);
         }
 
+        #endregion
 
 
-
-
-
+        #region Renders
         [Authorize(Roles = _WorkflowDerogation)]
         public ActionResult WorkflowG(int idDemDerog)
         {
@@ -1219,19 +1202,30 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(multiModeles);
         }
 
+        public PartialViewResult Indicators(string Tache)
+        {
+
+            var _Actions = Actions(Tache);
+            ViewBag.Read = _Actions[0];
+            ViewBag.Create = _Actions[1];
+            ViewBag.Update = _Actions[2];
+            ViewBag.Delete = _Actions[3];
+
+            return PartialView("~/Views/Shared/_Indicators.cshtml");
+        }
+        #endregion
+
+
         #region Programmes d'assistance
 
         static int nombre_res_ppage = 5;
         public const string Administrator = "Administrator";
-
         public const string _Rensegnement = "Rensegnement";
         public const string _Programmation = "Programmation";
         public const string _Autorisation = "Autorisation";
-
         public const string _GED = "GED";
         public const string _Avis = "Avis";
         public const string _SitGeo = "Situation Géographique";
-
         public const string _Cloture = "Cloture";
         public const string _Echanges = "Echanges";
 
@@ -1241,21 +1235,61 @@ namespace GestionnaireUtilisateurs.Controllers
 
         public const string _WorkflowDerogation = Administrator + "," + _WorkflowDerogationExeptAdmin;
 
-        
+
+        private string CheckFolder(int Id_DemDerg, int typeDoc)//0 ged,1 pv,2 courrier
+        {
+            String path = Server.MapPath("~/GED_DEROG/");
+            String pathDemande = "";
+            switch (typeDoc)
+            {
+                case 0:
+                    pathDemande = Server.MapPath("~/GED_DEROG/" + Id_DemDerg + "/");
+                    break;
+                case 1:
+                    pathDemande = Server.MapPath("~/GED_DEROG/" + Id_DemDerg + "/PV_COMMISSION/");
+                    break;
+                case 2:
+                    pathDemande = Server.MapPath("~/GED_DEROG/" + Id_DemDerg + "/COURRIER/");
+                    break;
+                default:
+                    pathDemande = Server.MapPath("~/GED_DEROG/" + Id_DemDerg + "/COURRIER/");
+                    break;
+            }
+
+            var x = Directory.Exists(path);
+            if (!x)
+            {
+                Directory.CreateDirectory(path);
+                var y = Directory.Exists(pathDemande);
+                if (!y)
+                {
+                    Directory.CreateDirectory(pathDemande);
+                }
+            }
+            else
+            {
+                var y = Directory.Exists(pathDemande);
+                if (!y)
+                {
+                    Directory.CreateDirectory(pathDemande);
+                }
+            }
+            return pathDemande;
+        }
 
         public List<WorkflowTache> taches_WorkflowDerogation()
         {
             List<WorkflowTache> tous = new List<WorkflowTache>();
-            WorkflowTache _Rens = new WorkflowTache { Nom = "Rensegnement", numeroTache = 15 };
-            WorkflowTache _SitGeo_ = new WorkflowTache { Nom = "Situation Géographique", numeroTache = 16 };
-            WorkflowTache _GED_ = new WorkflowTache { Nom = "GED", numeroTache = 17 };
-            WorkflowTache _Prog = new WorkflowTache { Nom = "Programmation", numeroTache = 18 };
-            WorkflowTache _Avis_ = new WorkflowTache { Nom = "Avis", numeroTache = 19 };
-            WorkflowTache _Ech = new WorkflowTache { Nom = "Echanges", numeroTache = 20 };
-            WorkflowTache _Aut = new WorkflowTache { Nom = "Autorisation", numeroTache = 21 };
-            WorkflowTache _Clot = new WorkflowTache { Nom = "Cloture", numeroTache = 22 };
-            tous.Add(_Rens);tous.Add(_SitGeo_);tous.Add(_GED_);tous.Add(_Prog);tous.Add(_Avis_);
-            tous.Add(_Ech);tous.Add(_Aut);tous.Add(_Clot);
+            WorkflowTache _Rens = new WorkflowTache { Nom = _Rensegnement, numeroTache = 15 };
+            WorkflowTache _SitGeo_ = new WorkflowTache { Nom = _SitGeo, numeroTache = 16 };
+            WorkflowTache _GED_ = new WorkflowTache { Nom = _GED, numeroTache = 17 };
+            WorkflowTache _Prog = new WorkflowTache { Nom = _Programmation, numeroTache = 18 };
+            WorkflowTache _Avis_ = new WorkflowTache { Nom = _Avis, numeroTache = 19 };
+            WorkflowTache _Ech = new WorkflowTache { Nom = _Echanges, numeroTache = 20 };
+            WorkflowTache _Aut = new WorkflowTache { Nom = _Autorisation, numeroTache = 21 };
+            WorkflowTache _Clot = new WorkflowTache { Nom = _Cloture, numeroTache = 22 };
+            tous.Add(_Rens); tous.Add(_SitGeo_); tous.Add(_GED_); tous.Add(_Prog); tous.Add(_Avis_);
+            tous.Add(_Ech); tous.Add(_Aut); tous.Add(_Clot);
             return tous;
         }
 
@@ -1284,7 +1318,7 @@ namespace GestionnaireUtilisateurs.Controllers
         public static bool Deleted = false;
         public void checkUserDeleted()
         {
-            Deleted= database.AspNetUsers.Find(User.Identity.GetUserId()).Supp;
+            Deleted = database.AspNetUsers.Find(User.Identity.GetUserId()).Supp;
         }
         bool FileExist(string filename, int FK_DemDerg_DocDerg)
         {
