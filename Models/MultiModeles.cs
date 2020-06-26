@@ -11,6 +11,7 @@ namespace GestionnaireUtilisateurs.Models
 
         [DisplayName("Utilisateur")]
         public IEnumerable<AspNetUsers> aspNetUsers { get; set; }
+        public AspNetUsers User { get; set; }
 
         [DisplayName("Tache")]
         public IEnumerable<AspNetRoles> aspNetRoles { get; set; }

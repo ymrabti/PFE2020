@@ -23,38 +23,8 @@ namespace GestionnaireUtilisateurs.Controllers
 
     public class WorkflowDerogationController : Controller
     {
-        static int nombre_res_ppage = 5;
+        public aurs1Entities database = new aurs1Entities();
 
-
-        public const string Administrator = "Administrator";
-
-        public const string _Rensegnement = "Rensegnement";
-        public const string _Programmation = "Programmation";
-        public const string _Autorisation = "Autorisation";
-
-        public const string _GED = "GED";
-        public const string _Avis = "Avis";
-        public const string _SitGeo = "Situation Géographique";
-
-        public const string _Cloture = "Cloture";
-        public const string _Echanges = "Echanges";
-
-        public const string _WorkflowDerogationExeptAdmin = _Rensegnement
-            + "," + _SitGeo + "," + _GED + "," + _Echanges + ","
-            + _Autorisation + "," + _Cloture + "," + _Avis + "," + _Programmation;
-
-        public const string _WorkflowDerogation = Administrator + "," + _WorkflowDerogationExeptAdmin;
-
-        public readonly WorkflowTache _Rens = new WorkflowTache { Nom =  "Rensegnement", numeroTache =15};
-        public readonly WorkflowTache _Prog = new WorkflowTache { Nom = "Programmation", numeroTache =18} ;
-        public readonly WorkflowTache _Aut = new WorkflowTache { Nom = "Autorisation", numeroTache =21} ;
-
-        public readonly WorkflowTache _GED_ = new WorkflowTache { Nom = "GED", numeroTache =17} ;
-        public readonly WorkflowTache _Avis_ = new WorkflowTache { Nom = "Avis", numeroTache =19} ;
-        public readonly WorkflowTache _SitGeo_ = new WorkflowTache { Nom = "Situation Géographique", numeroTache =16} ;
-
-        public readonly WorkflowTache _Clot = new WorkflowTache { Nom = "Cloture", numeroTache =22} ;
-        public readonly WorkflowTache _Ech = new WorkflowTache { Nom = "Echanges", numeroTache =20} ;
 
         public ActionResult correctAction(int idTache, int IdDemDerog, MultiModeles multiTab)
         {
@@ -112,37 +82,6 @@ namespace GestionnaireUtilisateurs.Controllers
                     return View(multiTab);
                 }
             }
-        }
-
-        public bool[] Actions(string RoleName)
-        {
-            bool[] _actions = new bool[4];
-            var UserId = User.Identity.GetUserId();
-            var RoleId = database.AspNetRoles.Where(role => role.Name == RoleName).FirstOrDefault().Id;
-            if (User.IsInRole(Administrator))
-            {
-                _actions[0] = true;
-                _actions[1] = true;
-                _actions[2] = true;
-                _actions[3] = true;
-            }
-            else
-            {
-                AspNetUserRoles Actions = database.AspNetUserRoles.Find(UserId, RoleId);
-                _actions[0] = Actions.Read;
-                _actions[1] = Actions.Create;
-                _actions[2] = Actions.Update;
-                _actions[3] = Actions.Delete;
-            }
-            return _actions;
-        }
-
-        public aurs1Entities database = new aurs1Entities();
-        public static bool Deleted = false;
-
-        public void checkUserDeleted()
-        {
-            Deleted= database.AspNetUsers.Find(User.Identity.GetUserId()).Supp;
         }
 
         [Authorize(Roles = Administrator + "," + _Rensegnement)]
@@ -529,6 +468,14 @@ namespace GestionnaireUtilisateurs.Controllers
                     var document = database.Document_Derogation.Find(Id_Doc_Derog);
                     database.Document_Derogation.Remove(document);
                     database.SaveChanges();
+                    string Directory = CheckFolder(FK_DemDerg_DocDerg,0);
+                    string fileName = document.FileName;
+                    string path = Path.Combine(Directory, fileName /*+ Path.GetExtension(file.FileName)*/);
+                    FileInfo fileInfo = new FileInfo(path);
+                    if (fileInfo.Exists)
+                    {
+                        fileInfo.Delete();
+                    }
                     return RedirectToAction("Ged", new { FK_DemDerg_DocDerg });
                 }
                 else
@@ -601,19 +548,6 @@ namespace GestionnaireUtilisateurs.Controllers
             return RedirectToAction("Ged", new { FK_DemDerg_DocDerg });
         }
 
-        bool FileExist(string filename, int FK_DemDerg_DocDerg)
-        {
-            var path = Server.MapPath("~/GED_DEROG/" + FK_DemDerg_DocDerg + "/");
-            var files = Directory.GetFiles(path); bool exist = false;
-            foreach (string filepath in files)
-            {
-                if (filename.Split(new string[] { "\\GED_DEROG\\" + FK_DemDerg_DocDerg + "\\" }, StringSplitOptions.None).Last() == filename)
-                {
-                    exist = true;
-                }
-            }
-            return exist;
-        }
 
         
 
@@ -1251,28 +1185,16 @@ namespace GestionnaireUtilisateurs.Controllers
         [Authorize(Roles = _WorkflowDerogationExeptAdmin)]
         public ActionResult EncoursParProfils()
         {
-            List<int> etas_user = new List<int>();
             var demandes = database.Demande_Derogation.Where(k => !k.Supp).Where(i => !i.Cloture_DemDerg);
-            IEnumerable<Demande_Derogation> d15 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 1);
-            IEnumerable<Demande_Derogation> d16 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 1);
-            IEnumerable<Demande_Derogation> d17 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 1);
-            IEnumerable<Demande_Derogation> d18 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 1);
-            IEnumerable<Demande_Derogation> d19 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 1);
-            IEnumerable<Demande_Derogation> d20 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 1);
-            IEnumerable<Demande_Derogation> d21 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 1);
-            IEnumerable<Demande_Derogation> d22 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 1);
-            if (User.IsInRole(_Rensegnement)) { d15 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 15); }
-            if (User.IsInRole(_SitGeo)) { d16 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 16); ; }
-            if (User.IsInRole(_GED)) { d17 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 17); }
-            if (User.IsInRole(_Programmation)) { d18 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 18); ; }
-            if (User.IsInRole(_Avis)) { d19 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 19); ; }
-            if (User.IsInRole(_Echanges)) { d20 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 20); ; }
-            if (User.IsInRole(_Autorisation)) { d21 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 21); ; }
-            if (User.IsInRole(_Cloture)) { d22 = demandes.Where(i => i.FK_DemDerg_EtatAvc == 22); ; }
-            var d = d15.Union(d16).Union(d17).Union(d18).Union(d19).Union(d20).Union(d21).Union(d22);
+            List<WorkflowTache> workflowTaches = taches_WorkflowDerogation();
+            foreach (var tache in workflowTaches)
+            {
+                string NomTache = tache.Nom;int NumTache = tache.numeroTache;
+                if (User.IsInRole(NomTache)) { demandes = demandes.Where(i => i.FK_DemDerg_EtatAvc == tache.numeroTache); }
+            }
             var model = new MultiModeles
             {
-                DemDergs = d.ToList()
+                DemDergs = demandes.ToList()
             };
 
             return View(model);
@@ -1293,9 +1215,88 @@ namespace GestionnaireUtilisateurs.Controllers
             return View(multiModeles);
         }
 
+        #region Programmes d'assistance
+
+        static int nombre_res_ppage = 5;
+        public const string Administrator = "Administrator";
+
+        public const string _Rensegnement = "Rensegnement";
+        public const string _Programmation = "Programmation";
+        public const string _Autorisation = "Autorisation";
+
+        public const string _GED = "GED";
+        public const string _Avis = "Avis";
+        public const string _SitGeo = "Situation Géographique";
+
+        public const string _Cloture = "Cloture";
+        public const string _Echanges = "Echanges";
+
+        public const string _WorkflowDerogationExeptAdmin = _Rensegnement
+            + "," + _SitGeo + "," + _GED + "," + _Echanges + ","
+            + _Autorisation + "," + _Cloture + "," + _Avis + "," + _Programmation;
+
+        public const string _WorkflowDerogation = Administrator + "," + _WorkflowDerogationExeptAdmin;
+
+        
+
+        public List<WorkflowTache> taches_WorkflowDerogation()
+        {
+            List<WorkflowTache> tous = new List<WorkflowTache>();
+            WorkflowTache _Rens = new WorkflowTache { Nom = "Rensegnement", numeroTache = 15 };
+            WorkflowTache _SitGeo_ = new WorkflowTache { Nom = "Situation Géographique", numeroTache = 16 };
+            WorkflowTache _GED_ = new WorkflowTache { Nom = "GED", numeroTache = 17 };
+            WorkflowTache _Prog = new WorkflowTache { Nom = "Programmation", numeroTache = 18 };
+            WorkflowTache _Avis_ = new WorkflowTache { Nom = "Avis", numeroTache = 19 };
+            WorkflowTache _Ech = new WorkflowTache { Nom = "Echanges", numeroTache = 20 };
+            WorkflowTache _Aut = new WorkflowTache { Nom = "Autorisation", numeroTache = 21 };
+            WorkflowTache _Clot = new WorkflowTache { Nom = "Cloture", numeroTache = 22 };
+            tous.Add(_Rens);tous.Add(_SitGeo_);tous.Add(_GED_);tous.Add(_Prog);tous.Add(_Avis_);
+            tous.Add(_Ech);tous.Add(_Aut);tous.Add(_Clot);
+            return tous;
+        }
+
+        public bool[] Actions(string RoleName)
+        {
+            bool[] _actions = new bool[4];
+            var UserId = User.Identity.GetUserId();
+            var RoleId = database.AspNetRoles.Where(role => role.Name == RoleName).FirstOrDefault().Id;
+            if (User.IsInRole(Administrator))
+            {
+                _actions[0] = true;
+                _actions[1] = true;
+                _actions[2] = true;
+                _actions[3] = true;
+            }
+            else
+            {
+                AspNetUserRoles Actions = database.AspNetUserRoles.Find(UserId, RoleId);
+                _actions[0] = Actions.Read;
+                _actions[1] = Actions.Create;
+                _actions[2] = Actions.Update;
+                _actions[3] = Actions.Delete;
+            }
+            return _actions;
+        }
+        public static bool Deleted = false;
+        public void checkUserDeleted()
+        {
+            Deleted= database.AspNetUsers.Find(User.Identity.GetUserId()).Supp;
+        }
+        bool FileExist(string filename, int FK_DemDerg_DocDerg)
+        {
+            var path = Server.MapPath("~/GED_DEROG/" + FK_DemDerg_DocDerg + "/");
+            var files = Directory.GetFiles(path); bool exist = false;
+            foreach (string filepath in files)
+            {
+                if (filename.Split(new string[] { "\\GED_DEROG\\" + FK_DemDerg_DocDerg + "\\" }, StringSplitOptions.None).Last() == filename)
+                {
+                    exist = true;
+                }
+            }
+            return exist;
+        }
+
+        #endregion
+
     }
-
-
-
-
 }

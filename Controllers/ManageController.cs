@@ -32,9 +32,9 @@
 //            {
 //                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
 //            }
-//            private set 
-//            { 
-//                _signInManager = value; 
+//            private set
+//            {
+//                _signInManager = value;
 //            }
 //        }
 
@@ -333,7 +333,7 @@
 //            base.Dispose(disposing);
 //        }
 
-//#region Programmes d'assistance
+//        #region Programmes d'assistance
 //        // Utilisé pour la protection XSRF lors de l'ajout de connexions externes
 //        private const string XsrfKey = "XsrfId";
 
@@ -384,6 +384,6 @@
 //            Error
 //        }
 
-//#endregion
+//        #endregion
 //    }
 //}

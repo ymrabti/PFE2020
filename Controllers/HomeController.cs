@@ -15,14 +15,6 @@ namespace GestionnaireUtilisateurs.Controllers
     public class HomeController : Controller
     {
         private ApplicationUserManager _userManager;
-        aurs1Entities database = new aurs1Entities();
-        public const string Administrator = "Administrator";
-        //public string admin()=User.Identity.GetUserId();
-
-        public string admin()
-        {
-            return User.Identity.GetUserId();
-        }
         public ApplicationUserManager UserManager
         {
             get
@@ -34,64 +26,11 @@ namespace GestionnaireUtilisateurs.Controllers
                 _userManager = value;
             }
         }
-        private MultiModeles multiModeles()
-        {
-            var rolesAdmin = database.AspNetUserRoles.Where(ol => ol.AspNetRoles.Name == Administrator);
-            var mModels = new MultiModeles
-            {
-                aspNetUsers = database.AspNetUsers.Where(k => !k.Supp).Where(i => i.AspNetUserRoles.Where(ii => ii.AspNetRoles.Name == Administrator).Count() == 0).ToList(),
-                modules = database.Module.ToList(),
-                sousModules = database.SousModule.ToList(),
-                aspNetRoles = database.AspNetRoles.Where(p => p.Name != Administrator).ToList(),
-                statuts = database.Statuts.Where(k => !k.supp).ToList(),
-                statutRoles = database.StatutRole.ToList()
-            };
-            return mModels;
-        }
 
-        public void EnvoyerLaNotification(int type, int danger, string uid)
-        {
-            Notification notification = new Notification
-            {
-                IdUser = uid,
-                Type = type,
-                heure_date = DateTime.Now,
-                danger = danger
-            };
-            database.Notification.Add(notification);
-            database.SaveChanges();
-        }
-        private void LogUserHistoryDel(bool supression, string uid)
-        {
-            var user = database.AspNetUsers.Find(uid);
-            user.lastModif = DateTime.Now;
-            database.SaveChanges();
-            HistoriqueUserDeletion historiqueUser = new HistoriqueUserDeletion
-            {
-                AdminSupp = admin(),
-                date_heure = DateTime.Now,
-                IdHistoire = Guid.NewGuid().ToString(),
-                Suppression = supression,
-                UserConcernee = uid
-            };
-            database.HistoriqueUserDeletion.Add(historiqueUser);
-            database.SaveChanges();
-        }
-        private void LogStatutHistoryDel(bool suppression, string sid)
-        {
-            var statut = database.Statuts.Find(sid);
-            statut.lastModif = DateTime.Now;
-            HistoireStatutDeletion historiqueStatut = new HistoireStatutDeletion
-            {
-                AdminSupp = admin(),
-                date_heure = DateTime.Now,
-                IdHistoire = Guid.NewGuid().ToString(),
-                Suppression = suppression,
-                FK_Statut = sid
-            };
-            database.HistoireStatutDeletion.Add(historiqueStatut);
-            database.SaveChanges();
-        }
+        aurs1Entities database = new aurs1Entities();
+
+
+        
 
         [Authorize(Roles = Administrator)]
         public ActionResult Index()
@@ -1177,23 +1116,161 @@ namespace GestionnaireUtilisateurs.Controllers
         /// ///////////////////////             AUTRESAUTRES                    //////////////////////
         /// 
 
-        [Authorize]
         public PartialViewResult NavBar()
         {
-            var UID = User.Identity.GetUserId();
-            var user = database.AspNetUsers.Find(UID);
-            var model = new MultiModeles
+            if (User.Identity.IsAuthenticated)
             {
-                notifications = user.Notification.OrderByDescending(i=>i.heure_date).Take(5).ToList()
-            };
-            //C:\Users\HPr\source\repos\GestionnaireUtilisateurs\Views\Shared\_NavBar.cshtml
-            return PartialView("~/Views/Shared/_NavBar.cshtml", model);
+                var UID = User.Identity.GetUserId();
+                var user = database.AspNetUsers.Find(UID);
+                var model = new MultiModeles
+                {
+                    notifications = user.Notification.OrderByDescending(i => i.heure_date).Take(5).ToList()
+                };
+                return PartialView("~/Views/Shared/_NavBar.cshtml", model);
+            }
+            else
+            {
+                var model = new MultiModeles
+                {
+                };
+                return PartialView("~/Views/Shared/_NavBar.cshtml", model);
+            }
         }
 
         [Authorize]
-        public ActionResult NotificationClick()
+        public ActionResult NotificationClick(int NotifId, string Lien)
         {
-            return
+            if (Lien == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Notification notification = database.Notification.Find(NotifId);
+            string userId = User.Identity.GetUserId();
+            if (notification == null || notification.IdUser != userId)
+            {
+                return RedirectToLocal(Lien);
+            }
+            else
+            {
+                notification.Clicked = true; database.SaveChanges();
+                if (notification.Type == 5)
+                {
+                    MultiModeles multi = new MultiModeles
+                    {
+                        User = notification.AspNetUsers
+                        ,
+                        aspNetUserRoles = notification.AspNetUsers.AspNetUserRoles
+                    };
+                    ViewBag.url = Lien;
+                    return View(multi);
+                }
+                else
+                {
+                    return RedirectToLocal(Lien);
+                }
+            }
         }
+
+        //[HttpPost, ValidateAntiForgeryToken]
+        //public JsonResult GetAllNotifications(string _User)
+        //{
+        //    var data = new object();
+        //    if (ModelState.IsValid)
+        //    {
+        //        string uid = User.Identity.GetUserId();
+        //        if (uid != _User)
+        //        {
+        //            return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
+        //        }
+        //        AspNetUsers user = database.AspNetUsers.Find(uid);
+        //        var notifications = from p in user.Notification.ToList()
+        //                            select new Notification
+        //                            {
+        //                                Id = p.Id,
+        //                                heure_date = p.heure_date,
+        //                                TypeNotif = p.TypeNotif
+        //                            };
+        //        data = new { dd = "success", notifications };
+        //        return Json(data, JsonRequestBehavior.AllowGet);
+        //    }
+        //    return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
+        //}
+
+
+
+
+        #region Programmes d'assistance
+        private ActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            return RedirectToAction("Index", "Home");
+        }
+        public const string Administrator = "Administrator";
+        public string admin()
+        {
+            return User.Identity.GetUserId();
+        }
+        private MultiModeles multiModeles()
+        {
+            var rolesAdmin = database.AspNetUserRoles.Where(ol => ol.AspNetRoles.Name == Administrator);
+            var mModels = new MultiModeles
+            {
+                aspNetUsers = database.AspNetUsers.Where(k => !k.Supp).Where(i => i.AspNetUserRoles.Where(ii => ii.AspNetRoles.Name == Administrator).Count() == 0).ToList(),
+                modules = database.Module.ToList(),
+                sousModules = database.SousModule.ToList(),
+                aspNetRoles = database.AspNetRoles.Where(p => p.Name != Administrator).ToList(),
+                statuts = database.Statuts.Where(k => !k.supp).ToList(),
+                statutRoles = database.StatutRole.ToList()
+            };
+            return mModels;
+        }
+
+        public void EnvoyerLaNotification(int type, int danger, string uid)
+        {
+            Notification notification = new Notification
+            {
+                IdUser = uid,
+                Type = type,
+                heure_date = DateTime.Now,
+                danger = danger
+            };
+            database.Notification.Add(notification);
+            database.SaveChanges();
+        }
+        private void LogUserHistoryDel(bool supression, string uid)
+        {
+            var user = database.AspNetUsers.Find(uid);
+            user.lastModif = DateTime.Now;
+            database.SaveChanges();
+            HistoriqueUserDeletion historiqueUser = new HistoriqueUserDeletion
+            {
+                AdminSupp = admin(),
+                date_heure = DateTime.Now,
+                IdHistoire = Guid.NewGuid().ToString(),
+                Suppression = supression,
+                UserConcernee = uid
+            };
+            database.HistoriqueUserDeletion.Add(historiqueUser);
+            database.SaveChanges();
+        }
+        private void LogStatutHistoryDel(bool suppression, string sid)
+        {
+            var statut = database.Statuts.Find(sid);
+            statut.lastModif = DateTime.Now;
+            HistoireStatutDeletion historiqueStatut = new HistoireStatutDeletion
+            {
+                AdminSupp = admin(),
+                date_heure = DateTime.Now,
+                IdHistoire = Guid.NewGuid().ToString(),
+                Suppression = suppression,
+                FK_Statut = sid
+            };
+            database.HistoireStatutDeletion.Add(historiqueStatut);
+            database.SaveChanges();
+        }
+        #endregion
     }
 }

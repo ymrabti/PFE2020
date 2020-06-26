@@ -15,15 +15,41 @@
     <div class="row">
         <div class="col-md-4"><input required class="form-control" type="text" name="f" value="@User.Identity.GetUserId()" /></div>
         <div class="col-md-4"><input required class="form-control" type="text" name="str" value="@Request.Url.PathAndQuery" /></div>
-        <div class="col-md-4"><input required class="form-control" type="datetime-local" name="date" value="@ViewBag.date" /></div>
+        <div class="col-md-4">
+            <select itemscope required class="form-control form-control-sm" name="BaileyJay" id="select">
+                <option value="">select</option>
+                <optgroup label="countrie">
+                    <option value="User">SomeThing</option>
+                    <option value="User">SomeThing1</option>
+                    <option value="User">SomeThing2</option>
+                    <option value="User">SomeThing3</option>
+                </optgroup>
+                <optgroup label="Continent">
+                    <option value="User">Con</option>
+                    <option value="User">Con1</option>
+                    <option value="User">Con2</option>
+                    <option value="User">Con3</option>
+                    <option value="User">Con4</option>
+                </optgroup>
+                <optgroup label="Region">
+                    <option value="User">Region</option>
+                    <option value="User">Region</option>
+                    <option value="User">Region</option>
+                    <option value="User">Region</option>
+                    <option value="User">Region</option>
+                </optgroup>
+            </select>
+        </div>
     </div>
     <div class="row" style="margin-top:20px">
         <div class="col-md-4"></div>
-        <div class="col-md-4"><input class="form-control buttonsReapeateds" type="submit" value="submit me" /></div>
+        <div class="col-md-4"><input required class="form-control" type="datetime-local" name="date" value="@ViewBag.date" /></div>
         <div class="col-md-4"></div>
     </div>
+    <div class="row" style="margin-top:20px">
+        <div class="col-md-4"><input class="form-control buttonsReapeateds" type="submit" value="submit me" /></div>
+    </div>
 }
-
 @section Scripts{
 
     <script>
@@ -37,6 +63,16 @@
             alert("Success" + data.f + "\n" + data.str + "\n" + date);
         }
 
+        $('#select').chosen({
+
+            disable_search: false,
+            create_option: true,
+            persistent_create_option: true,
+            skip_no_results: true,
+            placeholder_text_single: "-------- Indice --------",
+            no_results_text: "Aucun résultat ne correspond"
+        });
     </script>
+
 
 }

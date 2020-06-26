@@ -1,13 +1,11 @@
 ﻿@model GestionnaireUtilisateurs.Models.MultiModeles
 @using Microsoft.AspNet.Identity;
-
 <style>
-    .MyNotifation{
+    .MyNotifation {
+    }
 
-    }
-    .MyNotifation:hover{
-        
-    }
+        .MyNotifation:hover {
+        }
 </style>
 
 <nav class="navbar navbar-expand-lg bg-white fixed-top">
@@ -25,61 +23,78 @@
     </button>
     <div class="collapse navbar-collapse " id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto navbar-right-top">
-            <li class="nav-item dropdown notification">
-                <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-fw fa-bell"></i>
-                    @if (Model.notifications.Where(k => !k.Clicked).Count() == 0)
-                    {
-                        <span class="fa fa-circle" style="color:forestgreen; width:30px;height:30px;text-align-last:center;top:0px;right:0px">
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="indicator" style="color:White; width:30px;height:30px;text-align-last:center;top:0px;right:0px">
-                            @Model.notifications.Where(k => !k.Clicked).Count()
-                        </span>
-                    }
-                </a>
-                <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
-                    <li>
-                        <div class="notification-title"> Notifications</div>
-                        <div class="notification-list">
-                            <div class="list-group" style="padding:4px" id="listNotifs">
-                                @foreach (var notif in Model.notifications)
-                                {
-                                    using (Html.BeginForm("NotificationClick", "Home", FormMethod.Get))
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li class="nav-item dropdown notification">
+                    <a class="nav-link nav-icons" href="#" id="navbarDropdownMenuLink1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-fw fa-bell"></i>
+                        @if (Model.notifications.Where(k => !k.Clicked).Count() == 0)
+                        {
+                            <span class="fa fa-circle" style="color:forestgreen; width:30px;height:30px;text-align-last:center;top:0px;right:0px">
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="indicator" style="color:White; width:30px;height:30px;text-align-last:center;top:0px;right:0px">
+                                @Model.notifications.Where(k => !k.Clicked).Count()
+                            </span>
+                        }
+
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right notification-dropdown">
+                        <li>
+                            <div class="notification-title"> Notifications</div>
+                            <div class="notification-list">
+                                <div class="list-group" style="padding:4px" id="listNotifs">
+                                    @foreach (var notif in Model.notifications)
                                     {
-                                        <div style="margin-bottom:3px;margin-left:2px;margin-left:2px;">
-                                            @if (notif.Clicked)
-                                            {
-                                                <div style="margin-bottom:1px;cursor:pointer" class="notification-title" onclick="this.closest('form').submit();">
-                                                    <input type="hidden" name="NotifId" value="@notif.Id" />
-                                                    <input type="hidden" name="ReturnUrl" value="@Request.Url.PathAndQuery" />
-                                                    <p>@notif.TypeNotif.Text</p>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div style="margin-bottom:1px;cursor:pointer;color:antiquewhite;background-color:#747474;" 
-                                                     class="notification-title"  onclick="this.closest('form').submit();">
-                                                    <input type="hidden" name="NotifId" value="@notif.Id" />
-                                                    <input type="hidden" name="ReturnUrl" value="@Request.Url.PathAndQuery" />
-                                                    <p>@notif.TypeNotif.Text</p>
-                                                </div>
-                                            }
-                                            <div class="notification-date"><label>@notif.heure_date</label></div>
-                                            <br />
-                                        </div>
+                                        using (Html.BeginForm("NotificationClick", "Home", FormMethod.Get))
+                                        {
+                                            <div style="margin-bottom:3px;margin-left:2px;margin-left:2px;">
+                                                @if (notif.Clicked)
+                                                {
+                                                    <div style="margin-bottom:1px;cursor:pointer" class="notification-title" onclick="this.closest('form').submit();">
+                                                        <input type="hidden" name="NotifId" value="@notif.Id" />
+                                                        <input type="hidden" name="Lien" value="@Request.Url.PathAndQuery" />
+                                                        <p>@notif.TypeNotif.Text</p>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div style="margin-bottom:1px;cursor:pointer;color:antiquewhite;background-color:#747474;"
+                                                         class="notification-title" onclick="this.closest('form').submit();">
+                                                        <input type="hidden" name="NotifId" value="@notif.Id" />
+                                                        <input type="hidden" name="Lien" value="@Request.Url.PathAndQuery" />
+                                                        <p>@notif.TypeNotif.Text</p>
+                                                    </div>
+                                                }
+                                                <div class="notification-date"><label>@notif.heure_date</label></div>
+                                                <br />
+                                            </div>
+                                        }
                                     }
+                                </div>
+
+                            </div>
+                        </li>
+                        <li>
+                            <div class="list-footer">
+
+                                @using (Ajax.BeginForm("GetAllNotifications", "Home"
+                                    , new AjaxOptions { HttpMethod = "Post", OnFailure = "OnFailure()", OnSuccess = "OnSuccess(data)" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" value="@User.Identity.GetUserId()" name="_User" />
+                                    <input type="submit" value="Afficher tous les notifications" 
+                                           style="color:white;border:hidden;background-color:#ffffff00;width:100%;height:100%;cursor:pointer" />
                                 }
                             </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="list-footer"> <a href="@Url.Action("AllNotifications","Home")">Afiicher tous les notifications</a></div>
-                    </li>
-                </ul>
-            </li>
+                        </li>
+                    </ul>
+                </li>
+            }
+
             <li class="nav-item dropdown connection">
                 <a class="nav-link nav-icons" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-fw fa-th"></i>
@@ -88,24 +103,24 @@
                     <li class="connection-list">
                         <div class="row">
                             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                <a href="#" class="connection-item"><img src="~/Content/assets/images/github.png" alt=""> <span>Github</span></a>
+                                <a href="#" class="connection-item" target="_blank"><img src="~/Content/assets/images/github.png" alt=""> <span>Github</span></a>
                             </div>
                             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                <a href="#" class="connection-item"><img src="~/Content/assets/images/dribbble.png" alt=""> <span>Dribbble</span></a>
+                                <a href="#" class="connection-item" target="_blank"><img src="~/Content/assets/images/dribbble.png" alt=""> <span>Dribbble</span></a>
                             </div>
                             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                <a href="#" class="connection-item"><img src="~/Content/assets/images/dropbox.png" alt=""> <span>Dropbox</span></a>
+                                <a href="#" class="connection-item" target="_blank"><img src="~/Content/assets/images/dropbox.png" alt=""> <span>Dropbox</span></a>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                <a href="#" class="connection-item"><img src="~/Content/assets/images/bitbucket.png" alt=""> <span>Bitbucket</span></a>
+                                <a href="#" class="connection-item" target="_blank"><img src="~/Content/assets/images/bitbucket.png" alt=""> <span>Bitbucket</span></a>
                             </div>
                             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                <a href="#" class="connection-item"><img src="~/Content/assets/images/mail_chimp.png" alt=""><span>Mail chimp</span></a>
+                                <a href="#" class="connection-item" target="_blank"><img src="~/Content/assets/images/mail_chimp.png" alt=""><span>Mail chimp</span></a>
                             </div>
                             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                <a href="#" class="connection-item"><img src="~/Content/assets/images/slack.png" alt=""> <span>Slack</span></a>
+                                <a href="#" class="connection-item" target="_blank"><img src="~/Content/assets/images/slack.png" alt=""> <span>Slack</span></a>
                             </div>
                         </div>
                     </li>
@@ -117,5 +132,16 @@
             <!-- Partial view login -->
             @Html.Partial("_LoginPartial")
         </ul>
+        <script>
+            function OnFailure() {
+                alert("Failure");
+            }
+
+            function OnSuccess(data) {
+                date = data.date;
+                alert("Success\n" + data);
+            }
+
+        </script>
     </div>
 </nav>
