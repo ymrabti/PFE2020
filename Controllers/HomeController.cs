@@ -30,8 +30,9 @@ namespace GestionnaireUtilisateurs.Controllers
         aurs1Entities database = new aurs1Entities();
 
 
-        
+        #region Users
 
+        #region UserInfos
         [Authorize(Roles = Administrator)]
         public ActionResult Index()
         {
@@ -274,11 +275,8 @@ namespace GestionnaireUtilisateurs.Controllers
             return RedirectToAction("Index");
         }
 
-
-        /// ///////////////////////              USER TACHE                    //////////////////////
-        /// ///////////////////////              USER TACHE                    //////////////////////
-        /// ///////////////////////              USER TACHE                    //////////////////////
-
+        #endregion
+        #region User Taches
         [Authorize(Roles = Administrator)]
         public ActionResult UserTache(string id)
         {
@@ -350,12 +348,15 @@ namespace GestionnaireUtilisateurs.Controllers
             return RedirectToAction("UserTache", new { id = UserId[0] });
         }
 
-        /// ///////////////////////             STATUT                    //////////////////////
-        /// ///////////////////////             STATUT                    //////////////////////
-        /// ///////////////////////             STATUT                    //////////////////////
+        #endregion
+
+        #endregion
 
 
+        #region Statuts
 
+
+        #region Statut Info
         [Authorize(Roles = Administrator)]
         public ActionResult AddStatut()
         {
@@ -552,11 +553,10 @@ namespace GestionnaireUtilisateurs.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
+        #endregion
 
-        /// ///////////////////////              STATUT TACHE                    //////////////////////
-        /// ///////////////////////              STATUT TACHE                    //////////////////////
-        /// ///////////////////////              STATUT TACHE                    //////////////////////
 
+        #region Statut Tache
         [Authorize(Roles = Administrator)]
         public ActionResult IndexStatut()
         {
@@ -643,11 +643,12 @@ namespace GestionnaireUtilisateurs.Controllers
             return RedirectToAction("IndexStatut");
         }
 
-        /// ///////////////////////              MODULE                    //////////////////////
-        /// ///////////////////////              MODULE                    //////////////////////
-        /// ///////////////////////              MODULE                    //////////////////////
+        #endregion
+
+        #endregion
 
 
+        #region Module
         [Authorize(Roles = Administrator)]
         public ActionResult module()
         {
@@ -791,11 +792,10 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
 
+        #endregion
 
-        /// ///////////////////////             SUB MODULE                    //////////////////////
-        /// ///////////////////////             SUB MODULE                    //////////////////////
-        /// ///////////////////////             SUB MODULE                    //////////////////////
 
+        #region Sous Nodule
         [Authorize(Roles = Administrator)]
         public ActionResult sousmodule()
         {
@@ -931,10 +931,11 @@ namespace GestionnaireUtilisateurs.Controllers
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }
 
-        /// ///////////////////////             TACHES                    //////////////////////
-        /// ///////////////////////             TACHES                    //////////////////////
-        /// ///////////////////////             TACHES                    //////////////////////
+        #endregion
 
+
+
+        #region Roles
         [Authorize(Roles = Administrator)]
         public ActionResult taches()
         {
@@ -1089,10 +1090,10 @@ namespace GestionnaireUtilisateurs.Controllers
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }
 
+        #endregion
 
-        /// ///////////////////////             AUTRES                    //////////////////////
-        /// ///////////////////////             AUTRES                    //////////////////////
-        /// ///////////////////////             AUTRES                    //////////////////////
+
+        #region AURS
         [Authorize]
         public ActionResult AURS()
         {
@@ -1100,22 +1101,28 @@ namespace GestionnaireUtilisateurs.Controllers
             return View();
         }
         [HttpPost, ValidateAntiForgeryToken]
-        public JsonResult AURS(int f, string str, DateTime date)
+        public JsonResult AURS(int f, string str, DateTime date, object BaileyJay)
         {
             var data = new object();
             if (ModelState.IsValid)
             {
+                //Application application = new Application
+                //{
+                //    ApplicationDescription=str,ApplicationName=date.ToString(),
+                //    type=f+""
+                //};
+                //database.Application.Add(application);
+                //var res =await database.SaveChangesAsync();
                 ViewBag.f = f; ViewBag.str = str; ViewBag.date = date;
-                data = new { dd = "success", f, str, date };
+                data = new { dd = "success", f, str, date, BaileyJay };
                 return Json(data, JsonRequestBehavior.AllowGet);
             }
             return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         }
-        /// ///////////////////////             AUTRESAUTRES                    //////////////////////
-        /// ///////////////////////             AUTRESAUTRES                    //////////////////////
-        /// ///////////////////////             AUTRESAUTRES                    //////////////////////
-        /// 
+        #endregion
 
+
+        #region Renders
         public PartialViewResult NavBar()
         {
             if (User.Identity.IsAuthenticated)
@@ -1198,6 +1205,7 @@ namespace GestionnaireUtilisateurs.Controllers
         //    return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
         //}
 
+        #endregion
 
 
 

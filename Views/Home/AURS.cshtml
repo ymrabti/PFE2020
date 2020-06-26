@@ -4,19 +4,22 @@
     Layout = "~/Views/Shared/_LayoutDerogation.cshtml";
 }
 
-@*<center>
+<center>
         <img src="~/Content/documentation/img/aurs.png" alt="AURS" style="max-height:50%;rotation:90deg" /><br />
-        <img src="~/Content/documentation/img/aurs.png" alt="AURS" style="max-height:50%;rotation:90deg" /><br />
-    </center>*@
+        @*<img src="~/Content/documentation/img/aurs.png" alt="AURS" style="max-height:50%;rotation:90deg" /><br />*@
+    </center>
 
-@using (Ajax.BeginForm("AURS", new AjaxOptions { HttpMethod = "Post", OnFailure = "OnFailure()", OnSuccess = "OnSuccess(data)" }))
+@*@using (
+    //Ajax.BeginForm("AURS", new AjaxOptions { HttpMethod = "Post", OnFailure = "OnFailure()", OnSuccess = "OnSuccess(data)" })
+    Html.BeginForm()
+    )
 {
     @Html.AntiForgeryToken()
     <div class="row">
-        <div class="col-md-4"><input required class="form-control" type="text" name="f" value="@User.Identity.GetUserId()" /></div>
-        <div class="col-md-4"><input required class="form-control" type="text" name="str" value="@Request.Url.PathAndQuery" /></div>
+        <div class="col-md-4"><input required class="form-control" type="text" name="f" value="234" /></div>
+        <div class="col-md-4"><input required class="form-control" type="text" name="str" value="@User.Identity.GetUserId()" /></div>
         <div class="col-md-4">
-            <select itemscope required class="form-control form-control-sm" name="BaileyJay" id="select">
+            <select multiple required class="form-control form-control-sm" name="BaileyJay">
                 <option value="">select</option>
                 <optgroup label="countrie">
                     <option value="User">SomeThing</option>
@@ -42,7 +45,31 @@
         </div>
     </div>
     <div class="row" style="margin-top:20px">
-        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <select multiple required class="form-control form-control-sm" name="BaileyJay">
+                <option value="">select</option>
+                <optgroup label="countrie">
+                    <option value="User">SomeThing</option>
+                    <option value="User">SomeThing1</option>
+                    <option value="User">SomeThing2</option>
+                    <option value="User">SomeThing3</option>
+                </optgroup>
+                <optgroup label="Continent">
+                    <option value="User">Con</option>
+                    <option value="User">Con1</option>
+                    <option value="User">Con2</option>
+                    <option value="User">Con3</option>
+                    <option value="User">Con4</option>
+                </optgroup>
+                <optgroup label="Region">
+                    <option value="User">Region</option>
+                    <option value="User">Region</option>
+                    <option value="User">Region</option>
+                    <option value="User">Region</option>
+                    <option value="User">Region</option>
+                </optgroup>
+            </select>
+        </div>
         <div class="col-md-4"><input required class="form-control" type="datetime-local" name="date" value="@ViewBag.date" /></div>
         <div class="col-md-4"></div>
     </div>
@@ -63,7 +90,7 @@
             alert("Success" + data.f + "\n" + data.str + "\n" + date);
         }
 
-        $('#select').chosen({
+        $('.form-control-sm').chosen({
 
             disable_search: false,
             create_option: true,
@@ -75,4 +102,4 @@
     </script>
 
 
-}
+}*@
