@@ -8,6 +8,7 @@
     "esri/layers/FeatureLayer",
     "esri/layers/GraphicsLayer",
     "esri/tasks/GeometryService",
+    "esri/geometry/Extent",
     "esri/SpatialReference",
     "esri/dijit/LayerList",
     "esri/dijit/Legend",
@@ -18,10 +19,16 @@
     "esri/Color",
     "esri/toolbars/draw",
     "esri/symbols/SimpleFillSymbol",
+
+    "dojo/parser", "dijit/registry",
     "esri/geometry/Polygon",
     "esri/geometry/Point",
     "esri/dijit/HomeButton",
     "esri/geometry/geometryEngine",
+    "dijit/layout/BorderContainer",
+    "dijit/layout/ContentPane",
+    "dijit/form/Button",
+    "dijit/WidgetSet", 
     "dojo/domReady!"
 ],
     function (
@@ -34,6 +41,7 @@
         FeatureLayer,
         GraphicsLayer,
         GeometryService,
+        Extent,
         SpatialReference,
         LayerList,
         Legend,
@@ -43,7 +51,7 @@
         SimpleLineSymbol,
         Color,
         Draw,
-        SimpleFillSymbol,
+        SimpleFillSymbol, parser, registry,
         Polygon,
         Point,
         HomeButton,
@@ -63,43 +71,51 @@
         var graphicLayer = new GraphicsLayer();
         arcgisUtils.arcgisUrl = "https://si.aurs.org.ma/portal/sharing/content/items";
         arcgisUtils.createMap("fe0cf9e1c18f44388cae869a212d72de", "map").then(function (response) {
+            //arcgisUtils.createMap("245516f3a0364a899ead7f121b03c860", "map").then(function (response) {
             //update the app
             // dom.byId("title").innerHTML = response.itemInfo.item.title;
             // dom.byId("subtitle").innerHTML = response.itemInfo.item.snippet;
 
             map = response.map;
-            var legendLayers = arcgisUtils.getLegendLayers(response);
-            var legendDijit = new Legend({
-                map: map,
-                layerInfos: legendLayers
-            }, "legend");
-            legendDijit.startup();
+            //console(map.getExtent());
+           
 
-            var layerList = new LayerList({
-                map: response.map,
-                layers: arcgisUtils.getLayerList(response)
-            }, "layerList");
+            //var legendLayers = arcgisUtils.getLegendLayers(response);
+            //var legendDijit = new Legend({
+            //    map: map,
+            //    layerInfos: legendLayers
+            //}, "legend");
+            //legendDijit.startup();
 
-            layerList.startup();
+            //var layerList = new LayerList({
+            //    map: response.map,
+            //    layers: arcgisUtils.getLayerList(response)
+            //}, "layerList");
 
-            var basemapGallery = new BasemapGallery({
-                showArcGISBasemaps: true,
-                map: map
-            }, "basemapGallery");
-            basemapGallery.startup();
-            basemapGallery.on("load", function () {
-                var tot = basemapGallery.basemaps.length;
-                for (var i = 0; i < tot + 1; i++) {
-                    if (basemapGallery.basemaps[i].title === "Canevas gris foncé" || basemapGallery.basemaps[i].title === "Streets (Night)" || basemapGallery.basemaps[i].title == "Nuances de gris" || basemapGallery.basemaps[i].title === "Navigation" || basemapGallery.basemaps[i].title === "Océans et bathymétrie") {
-                        basemapGallery.remove(basemapGallery.basemaps[i].id);
-                    }
-                }
-            });
+            //layerList.startup();
 
+            //var basemapGallery = new BasemapGallery({
+            //    showArcGISBasemaps: true,
+            //    map: map
+            //}, "basemapGallery");
+            //basemapGallery.startup();
+            //basemapGallery.on("load", function () {
+            //    var tot = basemapGallery.basemaps.length;
+            //    for (var i = 0; i < tot + 1; i++) {
+            //        if (basemapGallery.basemaps[i].title === "Canevas gris foncé"
+            //            || basemapGallery.basemaps[i].title === "Streets (Night)"
+            //            || basemapGallery.basemaps[i].title == "Nuances de gris"
+            //            || basemapGallery.basemaps[i].title === "Navigation"
+            //            || basemapGallery.basemaps[i].title === "Océans et bathymétrie") {
+            //            basemapGallery.remove(basemapGallery.basemaps[i].id);
+            //        }
+            //    }
+            //});
+
+            gsvc = new GeometryService("https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
             graphicLayer.on('click', function (e) {
                 $("#tbodyCoord tr").remove();
                 array = [];
-                gsvc = new GeometryService("https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
 
                 var pointsGraphic = e.graphic.geometry.rings[0];
                 //console.log(features_parcellaire[0].geometry);
@@ -201,78 +217,107 @@
             legendDijit.startup();*/
         });
 
-        /****************************************************************
-         * Add feature layer - A FeatureLayer at minimum should point
-         * to a URL to a feature service or point to a feature collection
-         * object.
-         ***************************************************************/
+        
+
+        var xminextend = 86661.6116; var yminextend = 109335.0949; var xmaxextend = 916839.6617; var ymaxextend = 602597.8926;
+
+        var xrandom = Math.random() * (xmaxextend - xminextend) + xminextend;
+        var yrandom = Math.random() * (ymaxextend - yminextend) + yminextend;
+
+        var xmax = xrandom + 1000; var xmin = xrandom - 1000;
+        var ymax = yrandom + 500; var ymin = yrandom - 600;
+
+        var x = document.getElementById('xx');
+        var y = document.getElementById('yy');
+
+        document.getElementById('xx').onclick = function () {
+            x.value = Math.random() * (xmax - xmin) + xmin;
+            y.value = Math.random() * (ymax - ymin) + ymin;
+        }
 
         // Carbon storage of trees in Warren Wilson College.  
         var xCenteroidF;
         var yCenteroidF;
 
 
+        //x.value = Math.floor(Math.random() * 954135) + 947100;
+        //y.value = Math.floor(Math.random() * 3473355) + 3469086;
 
-        document.getElementById('selRef').onchange = function () {
-            var typeFonc = document.getElementById('selRef').value;
-            var numFonc = document.getElementById('numfonc').value;
-            var indice = document.getElementById('indice').value;
-            var fraction = document.getElementById('fraction').value;
-            document.getElementById('indice').disabled = false;
-            if (typeFonc == 'TF') {
-                document.getElementById('coordInputs').style.display = 'none';
-                document.getElementById('refInputs').style.display = 'block';
-                $('#indice').prop('disabled', false).trigger("liszt:updated");
-            } else if (typeFonc == 'Req') {
-                document.getElementById('coordInputs').style.display = 'none';
-                document.getElementById('refInputs').style.display = 'block';
-                document.getElementById('indice').value = "";
-                //$('#indice').prop('disabled', true).trigger("liszt:updated");
+        x.value = Math.random() * (xmax - xmin) + xmin;
+        y.value = Math.random() * (ymax - ymin) + ymin;
 
-            } else if (typeFonc == 'TNI') {
-                document.getElementById('coordInputs').style.display = 'block';
-                document.getElementById('refInputs').style.display = 'none';
-            }
-        }
+        var wkid = new SpatialReference(26191);
+        var wkid1 = new SpatialReference(3857);
 
-        //document.getElementById('localiser').onclick = Localiser();
-        $("#localiser").click(Localiser);
+
+        gsvc = new GeometryService("https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
+
 
 
         document.getElementById('addCoord').onclick = function () {
-
-            gsvc = new GeometryService("https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
-            var x = document.getElementById('xx');
-            var y = document.getElementById('yy');
-            var wkid = new SpatialReference(26191);
-
             pt = new Point(x.value.replace(",", "."), y.value.replace(",", "."), wkid);
-
-            var wkid1 = new SpatialReference(3857);
-            map.setZoom(15);
+            //map.setZoom(15); 
             gsvc.project([pt], wkid1, function (projectPoint) {
-
-                console.log(projectPoint);
                 var p = projectPoint[0];
                 /////Zoom to Added point
+                //var sym = new SimpleMarkerSymbol ( SimpleMarkerSymbol.STYLE_SQUARE, 10,
+                //    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255, 0, 0]), 1), new Color([0, 255, 0, 0.25]));
+
                 var sym = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 10,
-                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT,
                         new Color([255, 0, 0]), 1),
                     new Color([0, 255, 0, 0.25]));
-                var graphic2 = new Graphic(p, sym);
-                map.graphics.add(graphic2);
 
-                map.centerAt(p);
+
+                var graphic2 = new Graphic(p, sym);
+
+                map.graphics.add(graphic2);
+                //console.log(projectPoint[0]);
+
+                var thispoint = [p.x, p.y];
+                array.push(thispoint);
+
+
+                console.log(array);
+                //Liste.push(p);
+                //map.centerAt(p);
+                if (array.length == 1) {
+                    map.centerAt(p);
+                }
+                else {
+                    var arrayx = []; var arrayy = [];
+                    for (ik = 0; ik < array.length; ik++) { arrayx.push(array[ik][0]) };
+                    for (ik = 0; ik < array.length; ik++) { arrayy.push(array[ik][1]) };
+                    var _xmax = Math.max(...arrayx); var _xmin = Math.min(...arrayx);
+                    var _ymax = Math.max(...arrayy); var _ymin = Math.min(...arrayy);
+
+
+
+                    var startExtent = new Extent();
+                    startExtent.xmin = _xmin;
+                    startExtent.ymin = _ymin;
+                    startExtent.xmax = _xmax;
+                    startExtent.ymax = _ymax;
+                    startExtent.spatialReference = wkid1;
+
+                    map.setExtent(startExtent);
+
+                    console.log([_xmin, _ymin, _xmax, _ymax]);
+                    console.log('\n\n');
+                    //new Extent({ xmin: -20098296, ymin: -2804413, xmax: 5920428, ymax: 15813776, spatialReference: { wkid: 54032 } })
+                }
 
                 ///////////////////////
-                array.push([p.x, p.y]);
+
+                //console.log(projectPoint);
+                //console.log(array);
                 var table = document.getElementById('tbodyCoord');
                 var row = table.insertRow(table.length);
                 var cell1 = row.insertCell(0);
                 var cell2 = row.insertCell(1);
                 var cell3 = row.insertCell(2);
                 var cell4 = row.insertCell(3);
-                cell1.innerHTML = "B" + table.rows.length;
+                cell1.innerHTML = "P" + table.rows.length;
                 cell2.innerHTML = x.value.replace(",", ".");
                 cell3.innerHTML = y.value.replace(",", ".");
                 var btn = document.createElement("input");
@@ -318,7 +363,7 @@
                             for (var i = x1; i < table.rows.length + 1; i++) {
                                 var j = document.getElementsByName("update")[i].getAttribute('id');
                                 var k = i + 1;
-                                table.rows[i].cells[0].innerHTML = "B" + k;
+                                table.rows[i].cells[0].innerHTML = "P" + k;
                                 document.getElementsByName("update")[i].setAttribute('id', j - 1);
                             }
                         }
@@ -333,8 +378,10 @@
                     cell4.appendChild(btn1);
                 }
                 cell4.appendChild(btn);
-                x.value = "";
-                y.value = "";
+                //x.value = Math.floor(Math.random() * 954135) + 947100;
+                //y.value = Math.floor(Math.random() * 3473355) + 3469086;
+                x.value = Math.random() * (xmax - xmin) + xmin;
+                y.value = Math.random() * (ymax - ymin) + ymin;
                 x.style.boxShadow = "";
                 y.style.boxShadow = "";
             });
@@ -355,10 +402,10 @@
             if (typeFonc == 'TNI') {
                 var pol = new Polygon(array);
 
-                gsvc = new GeometryService("https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
                 var wkid = new SpatialReference(26191);
-                pt = new Point(pol.getCentroid().x, pol.getCentroid().y, wkid);
                 var wkid1 = new SpatialReference(3857);
+                pt = new Point(pol.getCentroid().x, pol.getCentroid().y, wkid);
+                console.log('Centroid : ' + [pol.getCentroid().x, pol.getCentroid().y]);
                 gsvc.project([pt], wkid1, function (projectPoint) {
                     var p = projectPoint[0];
                     var f = new FeatureLayer("https://si.aurs.org.ma/server/rest/services/PARCELLAIRE/FeatureServer/0");
@@ -401,7 +448,7 @@
 
 
                 //console.log(feature);
-                gsvc = new GeometryService("http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
+
                 var sr = new SpatialReference(102100);
                 gsvc.project([pol], sr, function (projectpol) {
                     var poly = projectpol[0];
@@ -422,26 +469,27 @@
             }
         }
 
-        //document.getElementById('btnPetitionnaire').onclick = function () {        
-        //    var btnValue = document.getElementById('btnPetitionnaire').value;
-        //    if (btnValue == 1) {
-        //        document.getElementById('divPetitionnaire').style.display = "none";
-        //        document.getElementById('btnPetitionnaire').value = 0;
-        //        document.getElementById('imgbtnPetitionnaire').setAttribute('src', '../Content/documentation/img/plusicon.png');
-        //        document.getElementById('inputPetFr').value = "";
-        //        document.getElementById('inputPetAr').value = "";
-        //        document.getElementById('inputCIN').value = "";
-        //        document.getElementById('inputMail').value = "";
-        //        document.getElementById('inputTel').value = "";
-        //    }else if (btnValue == 0) {
-        //        document.getElementById('divPetitionnaire').style.display = "block";
-        //        document.getElementById('btnPetitionnaire').value = 1;
-        //        document.getElementById('imgbtnPetitionnaire').setAttribute('src', '../Content/documentation/img/minusicon.png');
-        //        document.getElementById("petFrance").selectedIndex = "0";
-        //        document.getElementById("petArabe").selectedIndex = "0";
-        //    }
-        //}
+        document.getElementById('selRef').onchange = function () {
+            var typeFonc = document.getElementById('selRef').value;
+            var numFonc = document.getElementById('numfonc').value;
+            var indice = document.getElementById('indice').value;
+            var fraction = document.getElementById('fraction').value;
+            document.getElementById('indice').disabled = false;
+            if (typeFonc == 'TF') {
+                document.getElementById('coordInputs').style.display = 'none';
+                document.getElementById('refInputs').style.display = 'block';
+                $('#indice').prop('disabled', false).trigger("liszt:updated");
+            } else if (typeFonc == 'Req') {
+                document.getElementById('coordInputs').style.display = 'none';
+                document.getElementById('refInputs').style.display = 'block';
+                document.getElementById('indice').value = "";
+                //$('#indice').prop('disabled', true).trigger("liszt:updated");
 
+            } else if (typeFonc == 'TNI') {
+                document.getElementById('coordInputs').style.display = 'block';
+                document.getElementById('refInputs').style.display = 'none';
+            }
+        }
 
         document.getElementById('vider').onclick = function () {
             document.getElementById('error').style.display = 'none'
@@ -454,70 +502,6 @@
             map.graphics.clear();
             $("#tbodyCoord tr").remove();
         }
-
-        $('#testBtn').click(function () {
-            if ($('#testBtn').val() == "0") {
-                $('#testBtn').val("1");
-
-            } else {
-                $('#testBtn').val("0");
-            }
-
-            if ($('#testBtn1').val() == "1") {
-                $('.divHide1').slideToggle("fast");
-                $('#testBtn1').val("0");
-            }
-            if ($('#testBtn2').val() == "1") {
-                $('.divHide2').slideToggle("fast");
-                $('#testBtn2').val("0");
-            }
-
-            $('.divHide').slideToggle("fast");
-        });
-
-        $(document).ready(function () {
-            $('#testBtn1').click(function () {
-                if ($('#testBtn1').val() == "0") {
-                    $('#testBtn1').val("1");
-
-                } else {
-                    $('#testBtn1').val("0");
-                }
-
-                if ($('#testBtn').val() == "1") {
-                    $('.divHide').slideToggle("fast");
-                    $('#testBtn').val("0");
-                }
-                if ($('#testBtn2').val() == "1") {
-                    $('.divHide2').slideToggle("fast");
-                    $('#testBtn2').val("0");
-                }
-
-                $('.divHide1').slideToggle("fast");
-            });
-        });
-
-        $(document).ready(function () {
-            $('#testBtn2').click(function () {
-                if ($('#testBtn2').val() == "0") {
-                    $('#testBtn2').val("1");
-
-                } else {
-                    $('#testBtn2').val("0");
-                }
-
-                if ($('#testBtn').val() == "1") {
-                    $('.divHide').slideToggle("fast");
-                    $('#testBtn').val("0");
-                }
-                if ($('#testBtn1').val() == "1") {
-                    $('.divHide1').slideToggle("fast");
-                    $('#testBtn1').val("0");
-                }
-                $('.divHide2').slideToggle("fast");
-            });
-
-        });
 
         $(document).ready(function () {
             $('#btnBasemap').click(function () {
@@ -541,27 +525,9 @@
         });
 
 
-        document.getElementById('nvDemande').onclick = function () {
-            var typeFonc = document.getElementById('selRef').value;
-            var numFonc = document.getElementById('numfonc').value;
-            var indice = document.getElementById('indice').value;
-            document.getElementById('')
-            sessionStorage.setItem("typeFoncier", typeFonc);
-            if (typeFonc == 'TNI') {
-                sessionStorage.setItem("xCenteroid", xCenteroidF);
-                sessionStorage.setItem("yCenteroid", yCenteroidF);
-                location.replace("http://localhost/aurs/pages/cards.html");
-            } else {
-                sessionStorage.setItem("numFoncier", numFonc);
-                sessionStorage.setItem("indice", indice);
-                location.replace("http://localhost/aurs/pages/cards.html");
+        $("#localiser").click(Localiser);
 
-            }
-
-        }
-
-
-
+        
         function Localiser() {
 
             graphicLayer.clear();
@@ -601,6 +567,7 @@
                         var pt = new Point(array[0][0], array[0][1]);
 
                         console.log(pt);
+
                         featureLeyr_parc = new FeatureLayer("https://si.aurs.org.ma/server/rest/services/PARCELLAIRE/MapServer/0");
                         q_parc = new Query();
                         q_parc.outFields = ["*"];
@@ -739,4 +706,27 @@
                 }
             }
         }
+
+        //document.getElementById('localiser').onclick = Localiser();
+        //var extend = new Extent({ xmin: -793686.5760865562, ymin: 3673182.038422566, xmax: -689043.2877939753, ymax: 4052694.022156317, spatialReference: { wkid: 3857 } })
+        //document.getElementById('btnPetitionnaire').onclick = function () {        
+        //    var btnValue = document.getElementById('btnPetitionnaire').value;
+        //    if (btnValue == 1) {
+        //        document.getElementById('divPetitionnaire').style.display = "none";
+        //        document.getElementById('btnPetitionnaire').value = 0;
+        //        document.getElementById('imgbtnPetitionnaire').setAttribute('src', '../Content/documentation/img/plusicon.png');
+        //        document.getElementById('inputPetFr').value = "";
+        //        document.getElementById('inputPetAr').value = "";
+        //        document.getElementById('inputCIN').value = "";
+        //        document.getElementById('inputMail').value = "";
+        //        document.getElementById('inputTel').value = "";
+        //    }else if (btnValue == 0) {
+        //        document.getElementById('divPetitionnaire').style.display = "block";
+        //        document.getElementById('btnPetitionnaire').value = 1;
+        //        document.getElementById('imgbtnPetitionnaire').setAttribute('src', '../Content/documentation/img/minusicon.png');
+        //        document.getElementById("petFrance").selectedIndex = "0";
+        //        document.getElementById("petArabe").selectedIndex = "0";
+        //    }
+        //}
+
     });

@@ -23,6 +23,7 @@
     </nav>
 </section>
 
+<link rel="stylesheet" href="https://js.arcgis.com/3.32/dijit/themes/nihilo/nihilo.css">
 
 @using GestionnaireUtilisateurs.Controllers
 @{
@@ -35,91 +36,111 @@
     <link rel="stylesheet" href="http://localhost/arcgis_js_api/library/3.27/3.27/esri/css/esri.css">
 
     <div class="form-horizontal">
-        @using (Html.BeginForm("SituationGeo", "WorkflowDerogation", FormMethod.Post))
-        {
-            @Html.AntiForgeryToken()
-            <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
-                <h5 class="card-header">Saisie des coordonnées</h5>
-                <div class="card-body">
+        <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+            <h5 class="card-header">Saisie des coordonnées</h5>
+            <div class="card-body">
 
-                    <div class="form-group">
-                        <dic class="row">
-                            <div class="col-sm-6">
-                                <input type="number" id="xx" class="form-control" placeholder="Coord. X" value="200" style="margin-bottom:10px">
+                <div class="form-group">
+                    <dic class="row">
+                        <div class="col-sm-6">
+                            <input type="number" id="xx" autocomplete="off" class="form-control" placeholder="Coord. X" value="200" style="margin-bottom:10px">
 
-                                <input type="number" id="yy" class="form-control" placeholder="Coord. Y" value="250" data-target="Entrer Y">
-                                <br />
-                                <button class="btn btn-space btn-primary" type="button" style="position:absolute;right:10px" id="addCoord" name="enregistrer">Ajouter coordonnées</button>
-                                <br /><br /><br />
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-bordered first">
-                                        <thead>
-                                            <tr>
-                                                <th>Points</th>
-                                                <th>Coordonnées : X</th>
-                                                <th>Coordonnées : Y</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tbodyCoord"></tbody>
-                                    </table>
-                                </div>
-
-                            </div>
-                        </dic>
-
-
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <h5 class="card-header">Carte</h5>
-                <div class="card-body" style="height:600px;box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc;"
-                     id="map">
-                </div>
-            </div>
-            <br />
-            <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
-                <h5 class="card-header">Couverture en documents d'urbanisme</h5>
-                <div class="card-body">
-                    <div class="row">
-
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="inputText11" style="font-size:12px;">Couverture : </label>
-                                <select class="form-control form-control-sm chzn-selec" id="selRef" name="Type_Terrain">
-                                    <option value="">--- Sélectionner une réference fonciere ---</option>
-                                    @foreach (var item in Model.References_Foncieres)
-                                    {
-                                        <option value="@item.Id_RF">@item.NomRF</option>
-                                    }
-                                </select>
-                                <br /><br />
-                                <button class="btn btn-space btn-primary" type="button" style="position:absolute;right:10px" id="addCoords">Ajouter coordonnées</button>
-                                <br /><br /><br />
-                            </div>
-
+                            <input type="number" id="yy" autocomplete="off" class="form-control" placeholder="Coord. Y" value="250" data-target="Entrer Y">
+                            <br />
+                            <button class="btn btn-space btn-primary" type="button" style="position:absolute;right:10px" id="addCoord" name="enregistrer">Ajouter coordonnées</button>
+                            <br /><br /><br />
                         </div>
                         <div class="col-lg-6">
                             <div class="table-responsive">
-                                <label for="inputText11" style="font-size:12px;"></label>
                                 <table class="table table-striped table-bordered first">
                                     <thead>
                                         <tr>
-                                            <th>Couverture</th>
-                                            <th>Détail</th>
+                                            <th>Points</th>
+                                            <th>Coordonnées : X</th>
+                                            <th>Coordonnées : Y</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tbodyCouverture"></tbody>
+                                    <tbody id="tbodyCoord" style="max-height:250px"></tbody>
                                 </table>
                             </div>
+                            <input id="vider" class="btn btn-space btn-primary" type="button" value="Vider"/>
+                        </div>
+                    </dic>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="card card-body nihilo" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc;">
+            <h5 class="card-header">Carte</h5>
+            <div id="mainWindow" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'headline'">
+                <div id="header" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'">
+                    <button data-dojo-type="dijit/form/Button">Point</button>
+                    <button data-dojo-type="dijit/form/Button">Multi Point</button>
+                    <button data-dojo-type="dijit/form/Button">Line</button>
+                    <button data-dojo-type="dijit/form/Button">Polyline</button>
+                    <button data-dojo-type="dijit/form/Button">Polygon</button>
+                    <button data-dojo-type="dijit/form/Button">Freehand Polyline</button>
+                    <button data-dojo-type="dijit/form/Button">Freehand Polygon</button>
+
+                    <button data-dojo-type="dijit/form/Button">Arrow</button>
+                    <button data-dojo-type="dijit/form/Button">Triangle</button>
+                    <button data-dojo-type="dijit/form/Button">Circle</button>
+                    <button data-dojo-type="dijit/form/Button">Ellipse</button>
+                </div>
+                <div id="map" style="height:600px;" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'">
+                </div>
+            </div>
+            
+        </div>
+        <br />
+        <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
+            <h5 class="card-header">Couverture en documents d'urbanisme</h5>
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="inputText11" style="font-size:12px;">Couverture : </label>
+                            <select class="form-control form-control-sm chzn-selec" id="selRef" name="Type_Terrain">
+                                <option value="">--- Sélectionner une réference fonciere ---</option>
+                                @foreach (var item in Model.References_Foncieres)
+                                {
+                                    <option value="@item.Id_RF">@item.NomRF</option>
+                                }
+                            </select>
+                            <br /><input class="form-control" type="text" placeholder="Numero fincier" id="numfonc"/>
+                            <br /><input class="form-control" type="text" placeholder="Indice" id="indice"/>
+                            <br /><input class="form-control" type="text" placeholder="Fraction" id="fraction"/>
+                            <br /><input class="form-control" type="text" placeholder="Complement" id="complement"/>
+                            <br />
+                            <button class="btn btn-space btn-primary" type="button" style="position:absolute;right:10px" id="alimBD">Ajouter coordonnées</button>
+                            <br /><br /><br />
+                        </div>
+
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="table-responsive">
+                            <label for="inputText11" style="font-size:12px;"></label>
+                            <table class="table table-striped table-bordered first">
+                                <thead>
+                                    <tr>
+                                        <th>Couverture</th>
+                                        <th>Détail</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyCouverture"></tbody>
+                            </table>
                         </div>
                     </div>
+                </div>
 
-                    <br /><br />
+                <br /><br />
 
-                    <div class="row">
+                <div class="row">
+                    @using (Html.BeginForm("SituationGeo", "WorkflowDerogation", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
                         <center>
                             <p class="fixed-bottom">
                                 <input type="hidden" name="Id_DemDerg" value="@Model.DemDerg.Id_DemDerg" />
@@ -127,16 +148,18 @@
                                 <button type="submit" class="btn btn-lg buttonsReapeateds" value="1" name="enregistrer" id="btnsend">Passer à l'etape suivante  <i class="fa fa-paper-plane"></i></button>
                             </p>
                         </center>
-                    </div>
+                    }
                 </div>
+                <br />@Html.ActionLink("Retour a la liste des demandes", "Encours")<br />
             </div>
-        }
+        </div>
 
-        <br />@Html.ActionLink("Retour a la liste des demandes", "Encours")<br />
     </div>
 
     @section Scripts{
         <script src="http://localhost/arcgis_js_api/library/3.27/3.27/init.js"></script>
+        <script src="~/Content/mapApi.js"></script>
+
         @*<script src="https://js.arcgis.com/3.27/"></script>
             <script>
                     require(["esri/map", "dojo/domReady!"], function (Map) {
@@ -147,323 +170,8 @@
                         });
                     });
                 </script>*@
-        <script>
-
-            document.getElementById('addCoord').onclick = function () {
-                var integer=new random
-            }
-        </script>
-        <script src="~/Content/mapApi.js"></script>
-        @*<script>
-                require([
-                    "esri/map",
-                    "dojo/on",
-                    "esri/arcgis/utils",
-                    'esri/tasks/query',
-                    'esri/tasks/QueryTask',
-                    "esri/layers/FeatureLayer",
-                    "esri/layers/GraphicsLayer",
-                    "esri/tasks/GeometryService",
-                    "esri/SpatialReference",
-                    "esri/dijit/LayerList",
-                    "esri/dijit/Legend",
-                    "esri/dijit/BasemapGallery",
-                    "esri/graphic",
-                    "esri/symbols/SimpleMarkerSymbol",
-                    "esri/symbols/SimpleLineSymbol",
-                    "esri/Color",
-                    "esri/toolbars/draw",
-                    "esri/symbols/SimpleFillSymbol",
-                    "esri/geometry/Polygon",
-                    "esri/geometry/Point",
-                    "esri/dijit/HomeButton",
-                    "esri/geometry/geometryEngine",
-                    "dojo/domReady!"],
-                    function (
-                        Map,
-                        on,
-                        arcgisUtils,
-                        Query,
-                        QueryTask,
-                        FeatureLayer,
-                        GraphicsLayer,
-                        GeometryService,
-                        SpatialReference,
-                        LayerList,
-                        Legend,
-                        BasemapGallery,
-                        Graphic,
-                        SimpleMarkerSymbol,
-                        SimpleLineSymbol,
-                        Color,
-                        Draw,
-                        SimpleFillSymbol,
-                        Polygon,
-                        Point,
-                        HomeButton,
-                        geometryEngine
-                    ) {
-
-                        var map;
-                        var array = [];
-                        var graphicLayer = new GraphicsLayer();
-                        arcgisUtils.arcgisUrl = "https://si.aurs.org.ma/portal/sharing/content/items";
-                        arcgisUtils.createMap("fe0cf9e1c18f44388cae869a212d72de", "map").then(function (response) {
-                            //update the app
-                            // dom.byId("title").innerHTML = response.itemInfo.item.title;
-                            // dom.byId("subtitle").innerHTML = response.itemInfo.item.snippet;
-
-                            map = response.map;
-
-                            var legendLayers = arcgisUtils.getLegendLayers(response);
-
-                            var legendDijit = new Legend({
-                                map: map,
-                                layerInfos: legendLayers
-                            }, "legend");
-                            legendDijit.startup();
-
-                            var layerList = new LayerList({
-                                map: response.map,
-                                layers: arcgisUtils.getLayerList(response)
-                            }, "layerList");
-                            layerList.startup();
-
-                            var basemapGallery = new BasemapGallery({
-                                showArcGISBasemaps: true,
-                                map: map
-                            }, "basemapGallery");
-                            basemapGallery.startup();
-
-                            basemapGallery.on("load", function () {
-                                var tot = basemapGallery.basemaps.length;
-                                for (var i = 0; i < tot + 1; i++) {
-                                    if (basemapGallery.basemaps[i].title === "Canevas gris foncé"
-                                        || basemapGallery.basemaps[i].title === "Streets (Night)"
-                                        || basemapGallery.basemaps[i].title == "Nuances de gris"
-                                        || basemapGallery.basemaps[i].title === "Navigation"
-                                        || basemapGallery.basemaps[i].title === "Océans et bathymétrie") {
-                                        basemapGallery.remove(basemapGallery.basemaps[i].id);
-                                    }
-                                }
-                            });
-
-                            graphicLayer.on('click', function (e) {
-                                $("#tbodyCoord tr").remove();
-                                array = [];
-                                gsvc = new GeometryService("https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
-
-                                var pointsGraphic = e.graphic.geometry.rings[0];
-                                //console.log(features_parcellaire[0].geometry);
-                                for (var i = 0; i < pointsGraphic.length - 1; i++) {
-                                    var x = pointsGraphic[i][0];
-                                    var y = pointsGraphic[i][1];
-                                    array.push([x, y]);
-                                    var wkid = new SpatialReference(4326);
-                                    pt = new Point(x, y, wkid);
-                                    var wkid1 = new SpatialReference(26191);
-
-                                    gsvc.project([pt], wkid1, function (projectPoint) {
-                                        var p = projectPoint[0];
-                                        // array.push([p.x, p.y]);
-                                        var table = document.getElementById('tbodyCoord');
-                                        var row = table.insertRow(table.length);
-                                        var cell1 = row.insertCell(0);
-                                        var cell2 = row.insertCell(1);
-                                        var cell3 = row.insertCell(2);
-                                        var cell4 = row.insertCell(3);
-                                        cell1.innerHTML = "B" + table.rows.length;
-                                        cell2.innerHTML = p.x.toFixed(3);
-                                        cell3.innerHTML = p.y.toFixed(3);
-                                        var btn = document.createElement("input");
-                                        btn.setAttribute("id", table.rows.length);
-                                        btn.setAttribute("src", "../Content/documentation/img/modif.png");
-                                        btn.setAttribute("type", "image");
-                                        btn.setAttribute("name", "update");
-                                        btn.onclick = function () {
-                                            var id = this.id;
-                                            cell2.innerHTML = "<input type='text' class='form-control' id='new_lon' value='"
-                                                + table.rows[id - 1].cells[1].innerHTML + "'/>";
-                                            cell3.innerHTML = "<input type='text' class='form-control' id='new_lat' value='"
-                                                + table.rows[id - 1].cells[2].innerHTML + "'/>";
 
 
-                                            var valider = document.createElement('input');
-                                            valider.setAttribute('src', "../Content/documentation/img/valid.png");
-                                            valider.setAttribute('id', table.rows.length);
-                                            valider.setAttribute('type', "image");
-                                            valider.onclick = function () {
-                                                var a = document.getElementById('new_lon').value.replace(",", ".");
-                                                var b = document.getElementById('new_lat').value.replace(",", ".");
-                                                cell2.innerHTML = document.getElementById('new_lon').value.replace(",", ".");
-                                                cell3.innerHTML = document.getElementById('new_lat').value.replace(",", ".");
-                                                var pt2 = new Point(a, b, wkid);
-                                                gsvc.project([pt2], wkid1, function (projectPoint) {
-                                                    var p2 = projectPoint[0];
-                                                    array[id - 1] = [p2.x, p2.y];
-                                                });
-                                                cell4.removeChild(valider); cell4.removeChild(btn1);
-                                                cell4.appendChild(btn);
-                                            }
-
-
-                                            var btn1 = document.createElement('input');
-                                            btn1.setAttribute("src", "../Content/documentation/img/del.png");
-                                            btn1.setAttribute("type", "image");
-                                            btn1.setAttribute("id", id);
-                                            btn1.setAttribute("name", "delete");
-                                            btn1.onclick = function () {
-                                                if (table.rows.length > btn1.getAttribute('id')) {
-                                                    table.deleteRow(id - 1);
-                                                    array.splice(id - 1, 1);
-                                                    var x1 = parseInt(id) - 1;
-                                                    for (var i = x1; i < table.rows.length + 1; i++) {
-                                                        var j = document.getElementsByName("update")[i].getAttribute('id');
-                                                        var k = i + 1;
-                                                        table.rows[i].cells[0].innerHTML = "B" + k;
-                                                        document.getElementsByName("update")[i].setAttribute('id', j - 1);
-                                                    }
-                                                }
-                                                if (table.rows.length <= btn1.getAttribute('id') && table.rows.length > 1) { table.deleteRow(id - 1); array.splice(id - 1, 1); }
-                                                if (table.rows.length <= btn1.getAttribute('id') && table.rows.length == 1) {
-                                                    table.deleteRow(id - 1); array.splice(id - 1, 1);
-                                                    document.getElementById('vider').disabled = true;
-                                                }
-                                            }
-                                            cell4.removeChild(btn);
-                                            cell4.appendChild(valider);
-                                            cell4.appendChild(btn1);
-                                        }
-                                        cell4.appendChild(btn);
-                                    });
-                                }
-                            });
-
-                            //add the scalebar
-                            var scalebar = new Scalebar({
-                                map: map,
-                                scalebarUnit: "english"
-                            });
-
-                            //add the legend. Note that we use the utility method getLegendLayers to get
-                            //the layers to display in the legend from the createMap response.
-                            var legendLayers = arcgisUtils.getLegendLayers(response);
-                            var legendDijit = new Legend({
-                                map: map,
-                                layerInfos: legendLayers
-                            }, "legend");
-                            legendDijit.startup();
-                        });
-
-                        document.getElementById('addCoord').onclick = function () {
-
-                            //gsvc = new GeometryService("https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
-
-                            var x = document.getElementById('xx');
-                            var y = document.getElementById('yy');
-                            var wkid = new SpatialReference(26191);
-
-                            if (x.value != "" && y.value != "") {
-                                pt = new Point(x.value.replace(",", "."), y.value.replace(",", "."), wkid);
-
-                                var wkid1 = new SpatialReference(3857);
-                                //map.setZoom(15);
-                                //gsvc.project([pt], wkid1, function (projectPoint)
-                                //{
-                                //    console.log(projectPoint);
-                                //    var p = projectPoint[0];
-                                //    /////Zoom to Added point
-                                //    var sym = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 10,
-                                //        new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                                //            new Color([255, 0, 0]), 1),
-                                //        new Color([0, 255, 0, 0.25]));
-                                //    var graphic2 = new Graphic(p, sym);
-                                //    map.graphics.add(graphic2);
-
-                                //    map.centerAt(p);
-
-                                ///////////////////////
-                                //array.push([p.x, p.y]);
-                                var table = document.getElementById('tbodyCoord');
-                                var row = table.insertRow(table.length);
-                                var cell1 = row.insertCell(0);
-                                var cell2 = row.insertCell(1);
-                                var cell3 = row.insertCell(2);
-                                var cell4 = row.insertCell(3);
-                                cell1.innerHTML = "B" + table.rows.length;
-                                cell2.innerHTML = x.value.replace(",", ".");
-                                cell3.innerHTML = y.value.replace(",", ".");
-                                var btn = document.createElement("input");
-                                btn.setAttribute("id", table.rows.length);
-                                btn.setAttribute("src", "../Content/documentation/img/modif.png");
-                                btn.setAttribute("type", "image");
-                                btn.setAttribute("name", "update");
-                                btn.onclick = function () {
-                                    var id = this.id;
-                                    cell2.innerHTML = "<input type='text' class='form-control' id='new_lon' value='" + table.rows[id - 1].cells[1].innerHTML + "'/>";
-                                    cell3.innerHTML = "<input type='text' class='form-control' id='new_lat' value='" + table.rows[id - 1].cells[2].innerHTML + "'/>";
-
-
-                                    var valider = document.createElement('input');
-                                    valider.setAttribute('src', "../Content/documentation/img/valid.png");
-                                    valider.setAttribute('id', table.rows.length);
-                                    valider.setAttribute('type', "image");
-                                    valider.onclick = function () {
-                                        var a = document.getElementById('new_lon').value.replace(",", ".");
-                                        var b = document.getElementById('new_lat').value.replace(",", ".");
-                                        cell2.innerHTML = document.getElementById('new_lon').value.replace(",", ".");
-                                        cell3.innerHTML = document.getElementById('new_lat').value.replace(",", ".");
-                                        var pt2 = new Point(a, b, wkid);
-                                        gsvc.project([pt2], wkid1, function (projectPoint) {
-                                            var p2 = projectPoint[0];
-                                            array[id - 1] = [p2.x, p2.y];
-                                        });
-                                        cell4.removeChild(valider); cell4.removeChild(btn1);
-                                        cell4.appendChild(btn);
-                                    }
-
-
-                                    var btn1 = document.createElement('input');
-                                    btn1.setAttribute("src", "../Content/documentation/img/del.png");
-                                    btn1.setAttribute("type", "image");
-                                    btn1.setAttribute("id", id);
-                                    btn1.setAttribute("name", "delete");
-                                    btn1.onclick = function () {
-                                        if (table.rows.length > btn1.getAttribute('id')) {
-                                            table.deleteRow(id - 1);
-                                            array.splice(id - 1, 1);
-                                            var x1 = parseInt(id) - 1;
-                                            for (var i = x1; i < table.rows.length + 1; i++) {
-                                                var j = document.getElementsByName("update")[i].getAttribute('id');
-                                                var k = i + 1;
-                                                table.rows[i].cells[0].innerHTML = "B" + k;
-                                                document.getElementsByName("update")[i].setAttribute('id', j - 1);
-                                            }
-                                        }
-                                        if (table.rows.length <= btn1.getAttribute('id') && table.rows.length > 1) { table.deleteRow(id - 1); array.splice(id - 1, 1); }
-                                        if (table.rows.length <= btn1.getAttribute('id') && table.rows.length == 1) {
-                                            table.deleteRow(id - 1); array.splice(id - 1, 1);
-                                            document.getElementById('vider').disabled = true;
-                                        }
-                                    }
-                                    cell4.removeChild(btn);
-                                    cell4.appendChild(valider);
-                                    cell4.appendChild(btn1);
-                                }
-                                cell4.appendChild(btn);
-                                x.value = "";
-                                y.value = "";
-                                x.style.boxShadow = "";
-                                y.style.boxShadow = "";
-                                //});
-                            }
-                            else {
-                                alert("veuillez saisir les coordonnees!!");
-                            }
-                        }
-
-                    });
-            </script>*@
     }
 }
 else
