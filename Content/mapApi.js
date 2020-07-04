@@ -18,8 +18,8 @@
     "esri/symbols/SimpleLineSymbol",
     "esri/Color",
     "esri/toolbars/draw",
-    "esri/symbols/SimpleFillSymbol",
-
+    "esri/symbols/SimpleFillSymbol", "esri/symbols/PictureFillSymbol",
+    "esri/symbols/CartographicLineSymbol",
     "dojo/parser", "dijit/registry",
     "esri/geometry/Polygon",
     "esri/geometry/Point",
@@ -28,257 +28,135 @@
     "dijit/layout/BorderContainer",
     "dijit/layout/ContentPane",
     "dijit/form/Button",
-    "dijit/WidgetSet", 
+    "dijit/WidgetSet",
     "dojo/domReady!"
 ],
     function (
-        Map,
-        FeatureLayer,
-        on,
-        arcgisUtils,
-        Query,
-        QueryTask,
-        FeatureLayer,
-        GraphicsLayer,
-        GeometryService,
-        Extent,
-        SpatialReference,
-        LayerList,
-        Legend,
-        BasemapGallery,
-        Graphic,
-        SimpleMarkerSymbol,
-        SimpleLineSymbol,
-        Color,
-        Draw,
-        SimpleFillSymbol, parser, registry,
-        Polygon,
-        Point,
-        HomeButton,
-        geometryEngine
+        Map,FeatureLayer,on,arcgisUtils,Query,QueryTask,FeatureLayer,GraphicsLayer,GeometryService,Extent,SpatialReference,LayerList,
+        Legend,BasemapGallery,Graphic,SimpleMarkerSymbol,SimpleLineSymbol,Color,
+        Draw,SimpleFillSymbol, PictureFillSymbol, CartographicLineSymbol,parser, registry,Polygon,Point,dom,HomeButton,geometryEngine
     ) {
-
-        /*
-              var map = new Map("map", {
-              basemap: "streets",
-              autoResize: "autoResize",
-              center: [-7, 35.6122],
-              zoom: 5
-              });*/
-
-        var map;
-        var array = [];
-        var graphicLayer = new GraphicsLayer();
-        arcgisUtils.arcgisUrl = "https://si.aurs.org.ma/portal/sharing/content/items";
-        arcgisUtils.createMap("fe0cf9e1c18f44388cae869a212d72de", "map").then(function (response) {
-            //arcgisUtils.createMap("245516f3a0364a899ead7f121b03c860", "map").then(function (response) {
-            //update the app
-            // dom.byId("title").innerHTML = response.itemInfo.item.title;
-            // dom.byId("subtitle").innerHTML = response.itemInfo.item.snippet;
-
-            map = response.map;
-            //console(map.getExtent());
-           
-
-            //var legendLayers = arcgisUtils.getLegendLayers(response);
-            //var legendDijit = new Legend({
-            //    map: map,
-            //    layerInfos: legendLayers
-            //}, "legend");
-            //legendDijit.startup();
-
-            //var layerList = new LayerList({
-            //    map: response.map,
-            //    layers: arcgisUtils.getLayerList(response)
-            //}, "layerList");
-
-            //layerList.startup();
-
-            //var basemapGallery = new BasemapGallery({
-            //    showArcGISBasemaps: true,
-            //    map: map
-            //}, "basemapGallery");
-            //basemapGallery.startup();
-            //basemapGallery.on("load", function () {
-            //    var tot = basemapGallery.basemaps.length;
-            //    for (var i = 0; i < tot + 1; i++) {
-            //        if (basemapGallery.basemaps[i].title === "Canevas gris foncé"
-            //            || basemapGallery.basemaps[i].title === "Streets (Night)"
-            //            || basemapGallery.basemaps[i].title == "Nuances de gris"
-            //            || basemapGallery.basemaps[i].title === "Navigation"
-            //            || basemapGallery.basemaps[i].title === "Océans et bathymétrie") {
-            //            basemapGallery.remove(basemapGallery.basemaps[i].id);
-            //        }
-            //    }
-            //});
-
-            gsvc = new GeometryService("https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
-            graphicLayer.on('click', function (e) {
-                $("#tbodyCoord tr").remove();
-                array = [];
-
-                var pointsGraphic = e.graphic.geometry.rings[0];
-                //console.log(features_parcellaire[0].geometry);
-                for (var i = 0; i < pointsGraphic.length - 1; i++) {
-                    var x = pointsGraphic[i][0];
-                    var y = pointsGraphic[i][1];
-                    array.push([x, y]);
-                    var wkid = new SpatialReference(4326);
-                    pt = new Point(x, y, wkid);
-                    var wkid1 = new SpatialReference(26191);
-
-                    gsvc.project([pt], wkid1, function (projectPoint) {
-                        var p = projectPoint[0];
-                        // array.push([p.x, p.y]);
-                        var table = document.getElementById('tbodyCoord');
-                        var row = table.insertRow(table.length);
-                        var cell1 = row.insertCell(0);
-                        var cell2 = row.insertCell(1);
-                        var cell3 = row.insertCell(2);
-                        var cell4 = row.insertCell(3);
-                        cell1.innerHTML = "B" + table.rows.length;
-                        cell2.innerHTML = p.x.toFixed(3);
-                        cell3.innerHTML = p.y.toFixed(3);
-                        var btn = document.createElement("input");
-                        btn.setAttribute("id", table.rows.length);
-                        btn.setAttribute("src", "../Content/documentation/img/modif.png");
-                        btn.setAttribute("type", "image");
-                        btn.setAttribute("name", "update");
-                        btn.onclick = function () {
-                            var id = this.id;
-                            cell2.innerHTML = "<input type='text' class='form-control' id='new_lon' value='" + table.rows[id - 1].cells[1].innerHTML + "'/>";
-                            cell3.innerHTML = "<input type='text' class='form-control' id='new_lat' value='" + table.rows[id - 1].cells[2].innerHTML + "'/>";
-
-
-                            var valider = document.createElement('input');
-                            valider.setAttribute('src', "../Content/documentation/img/valid.png");
-                            valider.setAttribute('id', table.rows.length);
-                            valider.setAttribute('type', "image");
-                            valider.onclick = function () {
-                                var a = document.getElementById('new_lon').value.replace(",", ".");
-                                var b = document.getElementById('new_lat').value.replace(",", ".");
-                                cell2.innerHTML = document.getElementById('new_lon').value.replace(",", ".");
-                                cell3.innerHTML = document.getElementById('new_lat').value.replace(",", ".");
-                                var pt2 = new Point(a, b, wkid);
-                                gsvc.project([pt2], wkid1, function (projectPoint) {
-                                    var p2 = projectPoint[0];
-                                    array[id - 1] = [p2.x, p2.y];
-                                });
-                                cell4.removeChild(valider); cell4.removeChild(btn1);
-                                cell4.appendChild(btn);
-                            }
-
-
-                            var btn1 = document.createElement('input');
-                            btn1.setAttribute("src", "../Content/documentation/img/del.png");
-                            btn1.setAttribute("type", "image");
-                            btn1.setAttribute("id", id);
-                            btn1.setAttribute("name", "delete");
-                            btn1.onclick = function () {
-                                if (table.rows.length > btn1.getAttribute('id')) {
-                                    table.deleteRow(id - 1);
-                                    array.splice(id - 1, 1);
-                                    var x1 = parseInt(id) - 1;
-                                    for (var i = x1; i < table.rows.length + 1; i++) {
-                                        var j = document.getElementsByName("update")[i].getAttribute('id');
-                                        var k = i + 1;
-                                        table.rows[i].cells[0].innerHTML = "B" + k;
-                                        document.getElementsByName("update")[i].setAttribute('id', j - 1);
-                                    }
-                                }
-                                if (table.rows.length <= btn1.getAttribute('id') && table.rows.length > 1) { table.deleteRow(id - 1); array.splice(id - 1, 1); }
-                                if (table.rows.length <= btn1.getAttribute('id') && table.rows.length == 1) {
-                                    table.deleteRow(id - 1); array.splice(id - 1, 1);
-                                    document.getElementById('vider').disabled = true;
-                                }
-                            }
-                            cell4.removeChild(btn);
-                            cell4.appendChild(valider);
-                            cell4.appendChild(btn1);
-                        }
-                        cell4.appendChild(btn);
-                    });
-                }
-            });
-
-            //add the scalebar
-            /* var scalebar = new Scalebar({
-              map: map,
-              scalebarUnit: "english"
-            });
-    
-            //add the legend. Note that we use the utility method getLegendLayers to get
-            //the layers to display in the legend from the createMap response.
-            var legendLayers = arcgisUtils.getLegendLayers(response);
-            var legendDijit = new Legend({
-              map: map,
-              layerInfos: legendLayers
-            }, "legend");
-            legendDijit.startup();*/
+        var tb;
+        var map = new Map("map", {
+            basemap: "streets",
+            center: [-25.312, 34.307],
+            zoom: 3
         });
 
-        
+        map.on("load", initToolbar);
 
+        var markerSymbol = new SimpleMarkerSymbol();
+        markerSymbol.setPath("M16,4.938c-7.732,0-14,4.701-14,10.5c0,1.981,0.741,3.833,2.016,5.414L2,25.272l5.613-1.44c2.339,1.316,5.237,2.106,8.387,2.106c7.732,0,14-4.701,14-10.5S23.732,4.938,16,4.938zM16.868,21.375h-1.969v-1.889h1.969V21.375zM16.772,18.094h-1.777l-0.176-8.083h2.113L16.772,18.094z");
+        markerSymbol.setColor(new Color("#00FFFF"));
+ 
+        var lineSymbol = new CartographicLineSymbol(
+            CartographicLineSymbol.STYLE_SOLID,
+            new Color([255, 0, 0]), 1,
+            CartographicLineSymbol.CAP_ROUND,
+            CartographicLineSymbol.JOIN_MITER, 5
+        );
+
+        var fillSymbol = new PictureFillSymbol(
+            "../Content/documentation/img/valid.png",
+            new SimpleLineSymbol(
+                SimpleLineSymbol.STYLE_SOLID,
+                new Color('#000'),
+                1
+            ),10,20
+        );
+
+        function initToolbar() {
+            tb = new Draw(map);
+            tb.on("draw-end", addGraphic);
+            on(dojo.byId("info"), "click", function (evt) {
+                if (evt.target.id === "info") {
+                    return;
+                }
+                var tool = evt.target.id.toLowerCase();
+                map.disableMapNavigation();
+                tb.activate(tool);
+            });
+        }
+
+        function addGraphic(evt) {
+            tb.deactivate();
+            map.enableMapNavigation();
+            var symbol;
+            if (evt.geometry.type === "point" || evt.geometry.type === "multipoint") {
+                symbol = markerSymbol;
+            } else if (evt.geometry.type === "line" || evt.geometry.type === "polyline") {
+                symbol = lineSymbol;
+            }
+            else {
+                symbol = fillSymbol;
+            }
+            //map.graphics.clear();
+            var temp1 = evt.geometry.rings[0];
+            var arrayx = []; var arrayy = [];
+            for (ik = 0; ik < temp1.length; ik++) { arrayx.push(temp1[ik][0]) };
+            for (ik = 0; ik < temp1.length; ik++) { arrayy.push(temp1[ik][1]) };
+            var polygon = {
+                rings: evt.geometry.rings, _ring: 0, spatialReference: { wkid: 102100, latestWkid: 3857 },
+                cache: { xmin: Math.min(...arrayx), ymin: Math.min(...arrayy), xmax: Math.max(...arrayx), ymax: Math.max(...arrayy)}
+            };
+            //console.log(polygon);
+            console.log(evt.geometry);
+            map.graphics.add(new Graphic(evt.geometry, symbol));
+        }
+
+        var array = [];
+        var graphicLayer = new GraphicsLayer();
+
+        arcgisUtils.arcgisUrl = "https://si.aurs.org.ma/portal/sharing/content/items";
         var xminextend = 86661.6116; var yminextend = 109335.0949; var xmaxextend = 916839.6617; var ymaxextend = 602597.8926;
-
         var xrandom = Math.random() * (xmaxextend - xminextend) + xminextend;
         var yrandom = Math.random() * (ymaxextend - yminextend) + yminextend;
-
         var xmax = xrandom + 1000; var xmin = xrandom - 1000;
         var ymax = yrandom + 500; var ymin = yrandom - 600;
-
         var x = document.getElementById('xx');
         var y = document.getElementById('yy');
-
         document.getElementById('xx').onclick = function () {
             x.value = Math.random() * (xmax - xmin) + xmin;
             y.value = Math.random() * (ymax - ymin) + ymin;
         }
-
-        // Carbon storage of trees in Warren Wilson College.  
-        var xCenteroidF;
-        var yCenteroidF;
-
-
-        //x.value = Math.floor(Math.random() * 954135) + 947100;
-        //y.value = Math.floor(Math.random() * 3473355) + 3469086;
-
+        var xCenteroidF;var yCenteroidF;
         x.value = Math.random() * (xmax - xmin) + xmin;
         y.value = Math.random() * (ymax - ymin) + ymin;
-
-        var wkid = new SpatialReference(26191);
-        var wkid1 = new SpatialReference(3857);
-
-
+        var wkid = new SpatialReference(26191);var wkid1 = new SpatialReference(3857);
         gsvc = new GeometryService("https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
-
-
-
+        var typeFon = document.getElementById('selRef');
+        var numFon = document.getElementById('numfonc');
+        var indic = document.getElementById('indice');
+        var fractio = document.getElementById('fraction');
+        var complemen = document.getElementById("complement");
+        numFon.value = Math.random() * (xmax - xmin) + xmin;
+        indic.value = Math.random() * (xmax - xmin) + xmin;
+        fractio.value = Math.random() * (xmax - xmin) + xmin;
+        complemen.value = Math.random() * (xmax - xmin) + xmin;
         document.getElementById('addCoord').onclick = function () {
             pt = new Point(x.value.replace(",", "."), y.value.replace(",", "."), wkid);
             //map.setZoom(15); 
             gsvc.project([pt], wkid1, function (projectPoint) {
                 var p = projectPoint[0];
-                /////Zoom to Added point
-                //var sym = new SimpleMarkerSymbol ( SimpleMarkerSymbol.STYLE_SQUARE, 10,
-                //    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255, 0, 0]), 1), new Color([0, 255, 0, 0.25]));
+                //console.log(p);
+                var sym = new SimpleMarkerSymbol ( SimpleMarkerSymbol.STYLE_SQUARE, 10,
+                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255, 0, 0]), 1), new Color([0, 255, 0, 0.25]));
 
-                var sym = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 10,
-                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT,
-                        new Color([255, 0, 0]), 1),
-                    new Color([0, 255, 0, 0.25]));
+                //var sym = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 10,
+                //    new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT,
+                //        new Color([255, 0, 0]), 1),
+                //    new Color([0, 255, 0, 0.25]));
 
 
                 var graphic2 = new Graphic(p, sym);
-
                 map.graphics.add(graphic2);
+
                 //console.log(projectPoint[0]);
 
                 var thispoint = [p.x, p.y];
                 array.push(thispoint);
 
 
-                console.log(array);
                 //Liste.push(p);
                 //map.centerAt(p);
                 if (array.length == 1) {
@@ -302,8 +180,6 @@
 
                     map.setExtent(startExtent);
 
-                    console.log([_xmin, _ymin, _xmax, _ymax]);
-                    console.log('\n\n');
                     //new Extent({ xmin: -20098296, ymin: -2804413, xmax: 5920428, ymax: 15813776, spatialReference: { wkid: 54032 } })
                 }
 
@@ -387,57 +263,114 @@
             });
         }
 
+
         document.getElementById('alimBD').onclick = function () {
 
-            var typeFonc = document.getElementById('selRef').value;
-            var numFonc = document.getElementById('numfonc').value;
-            var indice = document.getElementById('indice').value;
-            var fraction = document.getElementById('fraction').value;
-            var complement = document.getElementById("complement").value;
+
+            var typeFonc = typeFon.value;
+            var numFonc = numFon.value;
+            var indice = indic.value;
+            var fraction = fractio.value;
+            var complement = complemen.value;
+
             var sym = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
                 new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT,
                     new Color([255, 0, 0]), 2), new Color([255, 255, 255, 0.15])
             );
 
-            if (typeFonc == 'TNI') {
+            if (typeFonc.trim().toUpperCase() == 'TNI') {
                 var pol = new Polygon(array);
 
                 var wkid = new SpatialReference(26191);
                 var wkid1 = new SpatialReference(3857);
                 pt = new Point(pol.getCentroid().x, pol.getCentroid().y, wkid);
+
                 console.log('Centroid : ' + [pol.getCentroid().x, pol.getCentroid().y]);
-                gsvc.project([pt], wkid1, function (projectPoint) {
-                    var p = projectPoint[0];
-                    var f = new FeatureLayer("https://si.aurs.org.ma/server/rest/services/PARCELLAIRE/FeatureServer/0");
-                    var xCenteroid = p.x.toFixed(3).replace(".", ",");
-                    var yCenteroid = p.y.toFixed(3).replace(".", ",");
-                    attr = { "typefoncier": typeFonc, "x": xCenteroid, "y": yCenteroid };
-                    var graphic = new Graphic(pol, sym, attr);
-                    f.applyEdits([graphic], null, null, function () {
-                        Localiser();
-                    });
 
+                //var p = projectPoint[0];
+                var f = new FeatureLayer("https://si.aurs.org.ma/server/rest/services/PARCELLAIRE/FeatureServer/0");
+                var xCenteroid = pt.x.toFixed(3).replace(".", ",");
+                var yCenteroid = pt.y.toFixed(3).replace(".", ",");
+                attr = { "typefoncier": typeFonc, "x": xCenteroid, "y": yCenteroid };
+                var graphic = new Graphic(pol, sym, attr);
+                f.applyEdits([graphic], null, null, function () {
+                    Localiser();
                 });
-            } else {
-                array = [];
-                array.push([-746530.0130604643, 4017850.880879946]);
-                array.push([-746503.3819100509, 4017862.1044801027]);
-                array.push([-746439.371403158, 4017961.4527203813]);
 
+                //gsvc.project([pt], wkid1, function (projectPoint) {
+                    
 
-                var pol = new Polygon(array);
-                var sr = new SpatialReference(3857);
-                pol.setSpatialReference(sr);
+                //});
+            }
+            else {
+                var temp1 = array;
+                var arrayx = []; var arrayy = [];
+                for (ik = 0; ik < temp1.length; ik++) { arrayx.push(temp1[ik][0]) };
+                for (ik = 0; ik < temp1.length; ik++) { arrayy.push(temp1[ik][1]) };
+                var polygon = {
+                    rings: [array], _ring: 0, spatialReference: { wkid: 3857/*, latestWkid: 26191*/  },
+                    cache: {
+                        _extent: { xmin: Math.min(...arrayx), ymin: Math.min(...arrayy), xmax: Math.max(...arrayx), ymax: Math.max(...arrayy) },
+                        _partwise:null
+                    }
+                };
+                console.log(polygon);
+                var arrayx = []; var arrayy = [];
+                for (ik = 0; ik < temp1.length; ik++) { arrayx.push(temp1[ik][0]) };
+                for (ik = 0; ik < temp1.length; ik++) { arrayy.push(temp1[ik][1]) };
+                var simpleFillSymbol = new PictureFillSymbol(
+                    "../Content/documentation/img/del.png",
+                    new SimpleLineSymbol(
+                        SimpleLineSymbol.STYLE_SOLID,
+                        new Color('#000'),
+                        3
+                    ), 12, 12
+                );
+                //var polygonGraphic = new Graphic({
+                //    geometry: polygon,
+                //    symbol: simpleFillSymbol
+                //});
+                map.graphics.add(new Graphic(polygon, simpleFillSymbol));
+                //map.graphics.add(polygonGraphic);
+                //map.graphics.clear();
                 //array = [];
-                console.log(pol);
+                //array.push([-746530.0130604643, 4017850.880879946]);
+                //array.push([-746503.3819100509, 4017862.1044801027]);
+                //array.push([-746439.371403158, 4017961.4527203813]);
 
-                var f = new FeatureLayer("https://si.aurs.org.ma/server/rest/services/PARCELLAIRE/FeatureServer/0", { outFields: ["*"] });
-                attr = { "typefoncier": typeFonc, "numfoncier": numFonc, "indice": indice, "fraction": fraction };
+                //var polygonJson = { "rings": [array], "spatialReference": { "wkid": 3857 } };
+                //var polygon = new Polygon(polygonJson);
+                //map.addLayer(polygon);
+
+                
+                //var pol = new Polygon(array);
+                //var sr = new SpatialReference(3857);
+                //pol.setSpatialReference(sr);
+                //array = [];
+                //console.log(pol);
+
+                    //type: "polygon",
+                
+                //var polygon = new Polygon(new SpatialReference(3857));
+                //polygon.addRing(array);
+
+                //console.log(map);
+                //var simpleFillSymbol = {
+                //    type: "simple-fill",
+                //    color: [227, 139, 79, 0.18],  // orange, opacity 80%
+                //    outline: {
+                //        color: [255, 255, 255],
+                //        width: 1
+                //    }
+                //};
+
+                //var f = new FeatureLayer("https://si.aurs.org.ma/server/rest/services/PARCELLAIRE/FeatureServer/0", { outFields: ["*"] });
+                //attr = { "typefoncier": typeFonc, "numfoncier": numFonc, "indice": indice, "fraction": fraction, "complement": complement };
+
+
+                //attr = { "typefoncier": typeFonc, "numfoncier": numFonc, "indice": indice, "fraction": fraction };
                 //  attr = { "OBJECTID": 10054, "typefoncier": typeFonc, "numfoncier": numFonc, "indice": indice, "fraction": fraction, "complement": complement };
-                attr = { "typefoncier": typeFonc, "numfoncier": numFonc, "indice": indice, "fraction": fraction, "complement": complement };
                 // var graphic = new Graphic([pol], null, null);
-
-
 
                 //var feature = [];      
                 //var attr = {};
@@ -446,26 +379,24 @@
                 //graphic.setAttributes(attr);
                 //feature.push(graphic);
 
-
                 //console.log(feature);
 
-                var sr = new SpatialReference(102100);
-                gsvc.project([pol], sr, function (projectpol) {
-                    var poly = projectpol[0];
-                    var graphic = new Graphic([poly], null, null);
+                //var sr = new SpatialReference(102100);
 
-                    f.applyEdits([graphic], null, null, function (res) {
-                        console.log(res);
-                        Localiser();
-                        alert('C est Bon');
-                    }, function (err) {
-                        console.log('Error occured: ', err);
-                        alert('Error');
-                    });
-                });
-                map.graphics.clear();
-                $("#tbodyCoord tr").remove();
-                $('alimBD').hide();
+                //var graphic = new Graphic([pol], null, null);
+                //map.graphics.add(graphic);
+
+                //f.applyEdits([graphic], null, null, function (res) {
+                //    console.log('resultat : ' + res);
+                //    Localiser();
+                //    alert('C est Bon');
+                //}, function (err) {
+                //    console.log('Error occured: ', err);
+                //    alert('Error');
+                //});
+
+                //$("#tbodyCoord tr").remove();
+                //$('#alimBD').hide();
             }
         }
 
@@ -492,7 +423,7 @@
         }
 
         document.getElementById('vider').onclick = function () {
-            document.getElementById('error').style.display = 'none'
+            //document.getElementById('error').style.display = 'none'
             document.getElementById('xx').value = "";
             document.getElementById('yy').value = "";
             document.getElementById('numfonc').value = "";
@@ -527,7 +458,6 @@
 
         $("#localiser").click(Localiser);
 
-        
         function Localiser() {
 
             graphicLayer.clear();
@@ -707,26 +637,6 @@
             }
         }
 
-        //document.getElementById('localiser').onclick = Localiser();
-        //var extend = new Extent({ xmin: -793686.5760865562, ymin: 3673182.038422566, xmax: -689043.2877939753, ymax: 4052694.022156317, spatialReference: { wkid: 3857 } })
-        //document.getElementById('btnPetitionnaire').onclick = function () {        
-        //    var btnValue = document.getElementById('btnPetitionnaire').value;
-        //    if (btnValue == 1) {
-        //        document.getElementById('divPetitionnaire').style.display = "none";
-        //        document.getElementById('btnPetitionnaire').value = 0;
-        //        document.getElementById('imgbtnPetitionnaire').setAttribute('src', '../Content/documentation/img/plusicon.png');
-        //        document.getElementById('inputPetFr').value = "";
-        //        document.getElementById('inputPetAr').value = "";
-        //        document.getElementById('inputCIN').value = "";
-        //        document.getElementById('inputMail').value = "";
-        //        document.getElementById('inputTel').value = "";
-        //    }else if (btnValue == 0) {
-        //        document.getElementById('divPetitionnaire').style.display = "block";
-        //        document.getElementById('btnPetitionnaire').value = 1;
-        //        document.getElementById('imgbtnPetitionnaire').setAttribute('src', '../Content/documentation/img/minusicon.png');
-        //        document.getElementById("petFrance").selectedIndex = "0";
-        //        document.getElementById("petArabe").selectedIndex = "0";
-        //    }
-        //}
+
 
     });

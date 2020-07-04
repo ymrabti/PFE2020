@@ -71,9 +71,6 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="@Url.Action("Statuts","Corbeille")">Statuts supprimés</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="@Url.Action("DemadesDerogations","Corbeille")">Demandes de dérogations supprimés</a>
-                                    </li>
                                 </ul>
                             </div>
                         </li>
@@ -88,16 +85,6 @@
                             Menu dérogations
                         </li>
                     }
-                    @if (User.IsInRole(WorkflowDerogationController.Administrator))
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link active" href="@Url.Action("TableBord","Statistics")" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1">
-                                <i class="fas fa fa-fw fa-tachometer-alt"></i>
-                                Tableau de bord <span class="badge badge-success">6</span>
-                            </a>
-                        </li>
-                    }
-
                     @if ((User.IsInRole(WorkflowDerogationController.Administrator) || User.IsInRole(WorkflowDerogationController._Rensegnement)
                         && !userDeleted))
                     {
@@ -137,29 +124,6 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="@Url.Action("Encours","WorkflowDerogation",new { finalisees=true})">Demandes de finalisés</a>
                                     </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-2"><i class="fa fa-fw fa-spinner"></i>Etat de sortie</a>
-                            <div id="submenu-4" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="@Url.Action("Index","EtatsSortie")">Etats de sortie</a>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-2"><i class="fas fa-fw fa-chart-pie"></i>Statistiques</a>
-                            <div id="submenu-5" class="collapse submenu" style="">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="@Url.Action("Index","Statistics")">Statistiques</a>
-                                    </li>
-
                                 </ul>
                             </div>
                         </li>

@@ -110,9 +110,10 @@
 
 
         arcgisUtils.arcgisUrl = "http://srvsiidev.aurs.local/portal/sharing/content/items";
-        arcgisUtils.createMap("464e3d0db8954e209dfe0dc6195330dc", "map").then(function (response) {
+        arcgisUtils.createMap("fe0cf9e1c18f44388cae869a212d72de", "map").then(function (response) {
+        //arcgisUtils.createMap("464e3d0db8954e209dfe0dc6195330dc", "map").then(function (response) {
             mapp1 = response.map;
-            console.log(mapp1);
+            //console.log(mapp1);
             var myWidget = new LayerList({
                 map: response.map,
                 layers: arcgisUtils.getLayerList(response)
@@ -237,95 +238,95 @@
 
                     $('#CodeProjetInput').val(e.graphic.attributes["objectid"]);
 
-                    //////////////////////////////////////////////////////////////////////////////////////////console.log(e.graphic.geometry);
-                    //////////////////////////////////////////////////////////////////////////////////////////for (var i = 0; i < pointsGraphic.length - 1; i++) {
-                    //////////////////////////////////////////////////////////////////////////////////////////    var x = pointsGraphic[i][0];
-                    //////////////////////////////////////////////////////////////////////////////////////////    var y = pointsGraphic[i][1];
+                    //console.log(e.graphic.geometry);
+                    //for (var i = 0; i < pointsGraphic.length - 1; i++) {
+                    //    var x = pointsGraphic[i][0];
+                    //    var y = pointsGraphic[i][1];
 
-                    //////////////////////////////////////////////////////////////////////////////////////////    array.push([x, y]);
+                    //    array.push([x, y]);
 
-                    //////////////////////////////////////////////////////////////////////////////////////////    var wkid = new SpatialReference(102100);
-                    //////////////////////////////////////////////////////////////////////////////////////////    pt = new Point(x, y, wkid);
-                    //////////////////////////////////////////////////////////////////////////////////////////    var wkid1 = new SpatialReference(26191);
-                    //////////////////////////////////////////////////////////////////////////////////////////    gsvc = new GeometryService("https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
-                    //////////////////////////////////////////////////////////////////////////////////////////    gsvc.project([pt], wkid1, function (projectPoint) {
+                    //    var wkid = new SpatialReference(102100);
+                    //    pt = new Point(x, y, wkid);
+                    //    var wkid1 = new SpatialReference(26191);
+                    //    gsvc = new GeometryService("https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
+                    //    gsvc.project([pt], wkid1, function (projectPoint) {
 
-                    //////////////////////////////////////////////////////////////////////////////////////////        var p = projectPoint[0];
-                    //////////////////////////////////////////////////////////////////////////////////////////        //console.log(p);
-                    //////////////////////////////////////////////////////////////////////////////////////////        // array.push([p.x, p.y]);
-                    //////////////////////////////////////////////////////////////////////////////////////////        var table = document.getElementById('tbodyCoordProjet');
-                    //////////////////////////////////////////////////////////////////////////////////////////        var row = table.insertRow(table.length);
-                    //////////////////////////////////////////////////////////////////////////////////////////        var cell1 = row.insertCell(0);
-                    //////////////////////////////////////////////////////////////////////////////////////////        var cell2 = row.insertCell(1);
-                    //////////////////////////////////////////////////////////////////////////////////////////        var cell3 = row.insertCell(2);
-                    //////////////////////////////////////////////////////////////////////////////////////////        var cell4 = row.insertCell(3);
-                    //////////////////////////////////////////////////////////////////////////////////////////        cell1.innerHTML = "B" + table.rows.length;
-                    //////////////////////////////////////////////////////////////////////////////////////////        cell2.innerHTML = p.x.toFixed(3);
-                    //////////////////////////////////////////////////////////////////////////////////////////        cell3.innerHTML = p.y.toFixed(3);
-                    //////////////////////////////////////////////////////////////////////////////////////////        var btn = document.createElement("input");
-                    //////////////////////////////////////////////////////////////////////////////////////////        btn.setAttribute("id", table.rows.length);
-                    //////////////////////////////////////////////////////////////////////////////////////////        btn.setAttribute("src", "../Content/documentation/img/modif.png");
-                    //////////////////////////////////////////////////////////////////////////////////////////        btn.setAttribute("type", "image");
-                    //////////////////////////////////////////////////////////////////////////////////////////        btn.setAttribute("name", "update");
-                    //////////////////////////////////////////////////////////////////////////////////////////        btn.onclick = function () {
-                    //////////////////////////////////////////////////////////////////////////////////////////            var id = this.id;
-                    //////////////////////////////////////////////////////////////////////////////////////////            cell2.innerHTML = "<input type='text' class='form-control' id='new_lon' value='" + table.rows[id - 1].cells[1].innerHTML + "'/>";
-                    //////////////////////////////////////////////////////////////////////////////////////////            cell3.innerHTML = "<input type='text' class='form-control' id='new_lat' value='" + table.rows[id - 1].cells[2].innerHTML + "'/>";
-
-
-                    //////////////////////////////////////////////////////////////////////////////////////////            var valider = document.createElement('input');
-                    //////////////////////////////////////////////////////////////////////////////////////////            valider.setAttribute('src', "../Content/documentation/img/valid.png");
-                    //////////////////////////////////////////////////////////////////////////////////////////            valider.setAttribute('id', table.rows.length);
-                    //////////////////////////////////////////////////////////////////////////////////////////            valider.setAttribute('type', "image");
-                    //////////////////////////////////////////////////////////////////////////////////////////            valider.onclick = function () {
-                    //////////////////////////////////////////////////////////////////////////////////////////                var a = document.getElementById('new_lon').value.replace(",", ".");
-                    //////////////////////////////////////////////////////////////////////////////////////////                var b = document.getElementById('new_lat').value.replace(",", ".");
-                    //////////////////////////////////////////////////////////////////////////////////////////                cell2.innerHTML = document.getElementById('new_lon').value.replace(",", ".");
-                    //////////////////////////////////////////////////////////////////////////////////////////                cell3.innerHTML = document.getElementById('new_lat').value.replace(",", ".");
-                    //////////////////////////////////////////////////////////////////////////////////////////                var pt2 = new Point(a, b, wkid);
-                    //////////////////////////////////////////////////////////////////////////////////////////                gsvc.project([pt2], wkid1, function (projectPoint) {
-                    //////////////////////////////////////////////////////////////////////////////////////////                    var p2 = projectPoint[0];
-                    //////////////////////////////////////////////////////////////////////////////////////////                    array[id - 1] = [p2.x, p2.y];
-                    //////////////////////////////////////////////////////////////////////////////////////////                });
-                    //////////////////////////////////////////////////////////////////////////////////////////                cell4.removeChild(valider); cell4.removeChild(btn1);
-                    //////////////////////////////////////////////////////////////////////////////////////////                cell4.appendChild(btn);
-                    //////////////////////////////////////////////////////////////////////////////////////////            }
+                    //        var p = projectPoint[0];
+                    //        //console.log(p);
+                    //        // array.push([p.x, p.y]);
+                    //        var table = document.getElementById('tbodyCoordProjet');
+                    //        var row = table.insertRow(table.length);
+                    //        var cell1 = row.insertCell(0);
+                    //        var cell2 = row.insertCell(1);
+                    //        var cell3 = row.insertCell(2);
+                    //        var cell4 = row.insertCell(3);
+                    //        cell1.innerHTML = "B" + table.rows.length;
+                    //        cell2.innerHTML = p.x.toFixed(3);
+                    //        cell3.innerHTML = p.y.toFixed(3);
+                    //        var btn = document.createElement("input");
+                    //        btn.setAttribute("id", table.rows.length);
+                    //        btn.setAttribute("src", "../Content/documentation/img/modif.png");
+                    //        btn.setAttribute("type", "image");
+                    //        btn.setAttribute("name", "update");
+                    //        btn.onclick = function () {
+                    //            var id = this.id;
+                    //            cell2.innerHTML = "<input type='text' class='form-control' id='new_lon' value='" + table.rows[id - 1].cells[1].innerHTML + "'/>";
+                    //            cell3.innerHTML = "<input type='text' class='form-control' id='new_lat' value='" + table.rows[id - 1].cells[2].innerHTML + "'/>";
 
 
-                    //////////////////////////////////////////////////////////////////////////////////////////            var btn1 = document.createElement('input');
-                    //////////////////////////////////////////////////////////////////////////////////////////            btn1.setAttribute("src", "../Content/documentation/img/del.png");
-                    //////////////////////////////////////////////////////////////////////////////////////////            btn1.setAttribute("type", "image");
-                    //////////////////////////////////////////////////////////////////////////////////////////            btn1.setAttribute("id", id);
-                    //////////////////////////////////////////////////////////////////////////////////////////            btn1.setAttribute("name", "delete");
-                    //////////////////////////////////////////////////////////////////////////////////////////            btn1.onclick = function () {
-                    //////////////////////////////////////////////////////////////////////////////////////////                if (table.rows.length > btn1.getAttribute('id')) {
-                    //////////////////////////////////////////////////////////////////////////////////////////                    table.deleteRow(id - 1);
-                    //////////////////////////////////////////////////////////////////////////////////////////                    array.splice(id - 1, 1);
-                    //////////////////////////////////////////////////////////////////////////////////////////                    var x1 = parseInt(id) - 1;
-                    //////////////////////////////////////////////////////////////////////////////////////////                    for (var i = x1; i < table.rows.length + 1; i++) {
-                    //////////////////////////////////////////////////////////////////////////////////////////                        var j = document.getElementsByName("update")[i].getAttribute('id');
-                    //////////////////////////////////////////////////////////////////////////////////////////                        var k = i + 1;
-                    //////////////////////////////////////////////////////////////////////////////////////////                        table.rows[i].cells[0].innerHTML = "B" + k;
-                    //////////////////////////////////////////////////////////////////////////////////////////                        document.getElementsByName("update")[i].setAttribute('id', j - 1);
-                    //////////////////////////////////////////////////////////////////////////////////////////                    }
-                    //////////////////////////////////////////////////////////////////////////////////////////                }
-                    //////////////////////////////////////////////////////////////////////////////////////////                if (table.rows.length <= btn1.getAttribute('id') && table.rows.length > 1) { table.deleteRow(id - 1); array.splice(id - 1, 1); }
-                    //////////////////////////////////////////////////////////////////////////////////////////                if (table.rows.length <= btn1.getAttribute('id') && table.rows.length == 1) {
-                    //////////////////////////////////////////////////////////////////////////////////////////                    table.deleteRow(id - 1); array.splice(id - 1, 1);
-                    //////////////////////////////////////////////////////////////////////////////////////////                    document.getElementById('vider').disabled = true;
-                    //////////////////////////////////////////////////////////////////////////////////////////                }
-                    //////////////////////////////////////////////////////////////////////////////////////////            }
-                    //////////////////////////////////////////////////////////////////////////////////////////            cell4.removeChild(btn);
-                    //////////////////////////////////////////////////////////////////////////////////////////            cell4.appendChild(valider);
-                    //////////////////////////////////////////////////////////////////////////////////////////            cell4.appendChild(btn1);
-                    //////////////////////////////////////////////////////////////////////////////////////////        }
-                    //////////////////////////////////////////////////////////////////////////////////////////        cell4.appendChild(btn);
+                    //            var valider = document.createElement('input');
+                    //            valider.setAttribute('src', "../Content/documentation/img/valid.png");
+                    //            valider.setAttribute('id', table.rows.length);
+                    //            valider.setAttribute('type', "image");
+                    //            valider.onclick = function () {
+                    //                var a = document.getElementById('new_lon').value.replace(",", ".");
+                    //                var b = document.getElementById('new_lat').value.replace(",", ".");
+                    //                cell2.innerHTML = document.getElementById('new_lon').value.replace(",", ".");
+                    //                cell3.innerHTML = document.getElementById('new_lat').value.replace(",", ".");
+                    //                var pt2 = new Point(a, b, wkid);
+                    //                gsvc.project([pt2], wkid1, function (projectPoint) {
+                    //                    var p2 = projectPoint[0];
+                    //                    array[id - 1] = [p2.x, p2.y];
+                    //                });
+                    //                cell4.removeChild(valider); cell4.removeChild(btn1);
+                    //                cell4.appendChild(btn);
+                    //            }
 
-                    //////////////////////////////////////////////////////////////////////////////////////////    });
 
-                    //////////////////////////////////////////////////////////////////////////////////////////    //console.log(pointsGraphic);
+                    //            var btn1 = document.createElement('input');
+                    //            btn1.setAttribute("src", "../Content/documentation/img/del.png");
+                    //            btn1.setAttribute("type", "image");
+                    //            btn1.setAttribute("id", id);
+                    //            btn1.setAttribute("name", "delete");
+                    //            btn1.onclick = function () {
+                    //                if (table.rows.length > btn1.getAttribute('id')) {
+                    //                    table.deleteRow(id - 1);
+                    //                    array.splice(id - 1, 1);
+                    //                    var x1 = parseInt(id) - 1;
+                    //                    for (var i = x1; i < table.rows.length + 1; i++) {
+                    //                        var j = document.getElementsByName("update")[i].getAttribute('id');
+                    //                        var k = i + 1;
+                    //                        table.rows[i].cells[0].innerHTML = "B" + k;
+                    //                        document.getElementsByName("update")[i].setAttribute('id', j - 1);
+                    //                    }
+                    //                }
+                    //                if (table.rows.length <= btn1.getAttribute('id') && table.rows.length > 1) { table.deleteRow(id - 1); array.splice(id - 1, 1); }
+                    //                if (table.rows.length <= btn1.getAttribute('id') && table.rows.length == 1) {
+                    //                    table.deleteRow(id - 1); array.splice(id - 1, 1);
+                    //                    document.getElementById('vider').disabled = true;
+                    //                }
+                    //            }
+                    //            cell4.removeChild(btn);
+                    //            cell4.appendChild(valider);
+                    //            cell4.appendChild(btn1);
+                    //        }
+                    //        cell4.appendChild(btn);
 
-                    //////////////////////////////////////////////////////////////////////////////////////////}
+                    //    });
+
+                    //    //console.log(pointsGraphic);
+
+                    //}
 
 
                 }

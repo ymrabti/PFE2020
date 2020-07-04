@@ -63,7 +63,7 @@
                                     <tbody id="tbodyCoord" style="max-height:250px"></tbody>
                                 </table>
                             </div>
-                            <input id="vider" class="btn btn-space btn-primary" type="button" value="Vider"/>
+                            <input id="vider" class="btn btn-space btn-primary" type="button" value="Vider" />
                         </div>
                     </dic>
 
@@ -73,25 +73,23 @@
         </div>
         <div class="card card-body nihilo" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc;">
             <h5 class="card-header">Carte</h5>
-            <div id="mainWindow" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'headline'">
-                <div id="header" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'top'">
-                    <button data-dojo-type="dijit/form/Button">Point</button>
-                    <button data-dojo-type="dijit/form/Button">Multi Point</button>
-                    <button data-dojo-type="dijit/form/Button">Line</button>
-                    <button data-dojo-type="dijit/form/Button">Polyline</button>
-                    <button data-dojo-type="dijit/form/Button">Polygon</button>
-                    <button data-dojo-type="dijit/form/Button">Freehand Polyline</button>
-                    <button data-dojo-type="dijit/form/Button">Freehand Polygon</button>
-
-                    <button data-dojo-type="dijit/form/Button">Arrow</button>
-                    <button data-dojo-type="dijit/form/Button">Triangle</button>
-                    <button data-dojo-type="dijit/form/Button">Circle</button>
-                    <button data-dojo-type="dijit/form/Button">Ellipse</button>
-                </div>
-                <div id="map" style="height:600px;" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'">
-                </div>
+            <div id="info">
+                @*<div>Select a shape then draw on map to add graphic</div>
+                <button id="Point">Point</button>
+                <button id="Multipoint">Multipoint</button>
+                <button id="Line">Line</button>
+                <button id="Polyline">Polyline</button>
+                <button id="FreehandPolyline">Freehand Polyline</button>
+                <button id="Triangle">Triangle</button>
+                <button id="Extent">Rectangle</button>
+                <button id="Circle">Circle</button>
+                <button id="Ellipse">Ellipse</button>
+                <button id="FreehandPolygon">Freehand Polygon</button>*@
+                <button id="Polygon">Polygon</button>
             </div>
-            
+            <div id="map" style="height:600px;" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'">
+            </div>
+
         </div>
         <br />
         <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
@@ -103,16 +101,16 @@
                         <div class="form-group">
                             <label for="inputText11" style="font-size:12px;">Couverture : </label>
                             <select class="form-control form-control-sm chzn-selec" id="selRef" name="Type_Terrain">
-                                <option value="">--- Sélectionner une réference fonciere ---</option>
-                                @foreach (var item in Model.References_Foncieres)
+                                @*<option value="">--- Sélectionner une réference fonciere ---</option>*@
+                                @foreach (var item in Model.References_Foncieres@*.OrderByDescending(i=>i.Id_RF)*@)
                                 {
                                     <option value="@item.Id_RF">@item.NomRF</option>
                                 }
                             </select>
-                            <br /><input class="form-control" type="text" placeholder="Numero fincier" id="numfonc"/>
-                            <br /><input class="form-control" type="text" placeholder="Indice" id="indice"/>
-                            <br /><input class="form-control" type="text" placeholder="Fraction" id="fraction"/>
-                            <br /><input class="form-control" type="text" placeholder="Complement" id="complement"/>
+                            <br /><input class="form-control" type="text" placeholder="Numero fincier" id="numfonc" />
+                            <br /><input class="form-control" type="text" placeholder="Indice" id="indice" />
+                            <br /><input class="form-control" type="text" placeholder="Fraction" id="fraction" />
+                            <br /><input class="form-control" type="text" placeholder="Complement" id="complement" />
                             <br />
                             <button class="btn btn-space btn-primary" type="button" style="position:absolute;right:10px" id="alimBD">Ajouter coordonnées</button>
                             <br /><br /><br />
@@ -144,8 +142,15 @@
                         <center>
                             <p class="fixed-bottom">
                                 <input type="hidden" name="Id_DemDerg" value="@Model.DemDerg.Id_DemDerg" />
-                                <button type="submit" class="btn btn-lg buttonsReapeateds" value="0" name="enregistrer" id="btnSave">Enregister   <i class="fa fa-level-down-alt"></i></button>
-                                <button type="submit" class="btn btn-lg buttonsReapeateds" value="1" name="enregistrer" id="btnsend">Passer à l'etape suivante  <i class="fa fa-paper-plane"></i></button>
+                                <button type="submit" class="btn btn-lg buttonsReapeateds" value="0" name="enregistrer" id="btnSave">
+                                    Enregister   <i class="fa fa-level-down-alt"></i>
+                                </button>
+                                @*<button type="submit" class="btn btn-lg buttonsReapeateds" value="1" name="enregistrer" id="btnsend">
+                                        Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
+                                    </button>*@
+                                <a onclick="passClicked(this)" class="btn btn-lg buttonsReapeateds" value="1" name="enregistrer" id="btnsend">
+                                    Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
+                                </a>
                             </p>
                         </center>
                     }
@@ -159,6 +164,19 @@
     @section Scripts{
         <script src="http://localhost/arcgis_js_api/library/3.27/3.27/init.js"></script>
         <script src="~/Content/mapApi.js"></script>
+        <script>
+            function passClicked(a) {
+                if (confirm('Voulez Vous Vraiment passer a L\'etape suivante ??')) {
+                    var input = document.createElement('input');
+                    input.setAttribute('type','hidden');
+                    input.setAttribute('name','enregistrer');
+                    input.setAttribute('value', '1');
+                    a.parentNode.appendChild(input);
+                    console.log(a.closest('form'));
+                    a.closest('form').submit();
+                }
+            }
+        </script>
 
         @*<script src="https://js.arcgis.com/3.27/"></script>
             <script>
