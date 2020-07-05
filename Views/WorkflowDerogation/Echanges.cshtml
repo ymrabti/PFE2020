@@ -137,9 +137,12 @@
                         <button type="submit" class="btn btn-lg buttonsReapeateds" value="0" name="valider" id="btnSave">
                             Enregister   <i class="fa fa-level-down-alt"></i>
                         </button>
-                        <button type="submit" class="btn btn-lg buttonsReapeateds" value="1" name="valider" id="btnsend">
+                        @*<button type="submit" class="btn btn-lg buttonsReapeateds" value="1" name="valider" id="btnsend">
+                                Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
+                            </button>*@
+                        <a onclick="passClicked(this,'valider')" class="btn btn-lg buttonsReapeateds" style="color:white">
                             Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
-                        </button>
+                        </a>
                     </center>
                 </div>
             }
@@ -193,7 +196,7 @@
 
             var td = document.createElement('td');
 
-            td.innerHTML = " <input required type='file' class='inputfile inputfile-2' name='file'" +
+            td.innerHTML = " <input required type='file' class='inputfile inputfile-1' name='file'" +
                         "id='file" + i + "' accept='.pdf,.jpeg,.jpg,.png,.gif' onchange='filechange(this)'> "
                         + "<label for='file" + i + "'>"
                         + "<span id='label" + i + "'>Document ...</span>"
@@ -235,6 +238,7 @@
                 label.querySelector('span').innerHTML = fileName.substring(0, endstart)
                     + "..." + fileName.substring(fileName.length - startend, fileName.length);
             }
+            input.className = 'inputfile inputfile-1';
             // Firefox bug fix
             input.addEventListener('focus', function () { input.classList.add('has-focus'); });
             input.addEventListener('blur', function () { input.classList.remove('has-focus'); });
@@ -266,3 +270,8 @@ else
     </div>
 }
 
+
+@section Scripts{
+
+    <script src="~/Content/PassNextStep.js"></script>
+}

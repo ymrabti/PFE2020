@@ -770,6 +770,7 @@
     <Content Include="Content\img\x.png" />
     <Content Include="Content\map.js" />
     <Content Include="Content\mapApi.js" />
+    <Content Include="Content\PassNextStep.js" />
     <Content Include="Content\script\AddEntite.js" />
     <Content Include="Content\script\AddEntite1.js" />
     <Content Include="Content\script\AspecTechnique.js" />

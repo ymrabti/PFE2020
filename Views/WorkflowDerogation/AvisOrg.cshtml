@@ -334,8 +334,7 @@
                                 }
                                 else
                                 {
-                                    <input disabled="@NModifier" @*onchange="filechange(this)"*@ size="30000" type="file" accept='.pdf,.jpeg,.jpg,.png,.gif'
-                                           class="inputfile inputfile-1" name="url_Doc_Derg" id="url_Doc_Derg" />
+                                    
                                 }
                                 <label for="url_Doc_Derg">
                                     <span id="labelNomDoc">
@@ -386,9 +385,12 @@
                                 <button type="submit" class="btn btn-lg buttonsReapeateds" value="0" name="valider" id="btnSave">
                                     Enregister   <i class="fa fa-level-down-alt"></i>
                                 </button>
-                                <button type="submit" class="btn btn-lg buttonsReapeateds" value="1" name="valider" id="btnsend">
+                                @*<button type="submit" class="btn btn-lg buttonsReapeateds" value="1" name="valider" id="btnsend">
                                     Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
-                                </button>
+                                </button>*@
+                                <a onclick="passClicked(this,'valider')" class="btn btn-lg buttonsReapeateds" style="color:white">
+                                    Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
+                                </a>
                             </center>
                         </div>
                     </div>
@@ -521,4 +523,8 @@ else
             <br />@Html.ActionLink("Retour a la liste des demandes", "Encours")<br />
         </div>
     </div>
+}
+@section Scripts{
+
+    <script src="~/Content/PassNextStep.js"></script>
 }

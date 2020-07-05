@@ -22,33 +22,52 @@
     "esri/symbols/CartographicLineSymbol",
     "dojo/parser", "dijit/registry",
     "esri/geometry/Polygon",
-    "esri/geometry/Point",
+    "esri/geometry/Point", "esri/geometry/webMercatorUtils",
     "esri/dijit/HomeButton",
     "esri/geometry/geometryEngine",
     "dijit/layout/BorderContainer",
     "dijit/layout/ContentPane",
     "dijit/form/Button",
-    "dijit/WidgetSet",
+    "dijit/WidgetSet", "dojo/dom",
     "dojo/domReady!"
 ],
     function (
-        Map,FeatureLayer,on,arcgisUtils,Query,QueryTask,FeatureLayer,GraphicsLayer,GeometryService,Extent,SpatialReference,LayerList,
-        Legend,BasemapGallery,Graphic,SimpleMarkerSymbol,SimpleLineSymbol,Color,
-        Draw,SimpleFillSymbol, PictureFillSymbol, CartographicLineSymbol,parser, registry,Polygon,Point,dom,HomeButton,geometryEngine
+        Map, FeatureLayer, on, arcgisUtils, Query, QueryTask, FeatureLayer, GraphicsLayer, GeometryService, Extent, SpatialReference, LayerList,
+        Legend, BasemapGallery, Graphic, SimpleMarkerSymbol, SimpleLineSymbol, Color,
+        Draw, SimpleFillSymbol, PictureFillSymbol, CartographicLineSymbol, parser, registry, Polygon, Point, webMercatorUtils, HomeButton, geometryEngine, dom
     ) {
         var tb;
         var map = new Map("map", {
-            basemap: "streets",
-            center: [-25.312, 34.307],
-            zoom: 3
+            basemap: "hybrid",
+            center: [-6.677, 33.968],
+            zoom: 11
         });
 
+        var wkid = new SpatialReference(26191); var wkid1 = new SpatialReference(3857);
+        gsvc = new GeometryService("https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
+
         map.on("load", initToolbar);
+        map.on("load", function () {
+            map.on("mouse-move", showCoordinates);
+            map.on("mouse-drag", showCoordinates);
+        });
+
+        function showCoordinates(evt) {
+            //the map is in web mercator but display coordinates in geographic (lat, long)
+            var mp = webMercatorUtils.webMercatorToGeographic(evt.mapPoint);
+
+            
+            //gsvc.project([mp], wkid, function (projectPoint) {
+            //    document.getElementById("infospan").innerHTML = projectPoint[0].x.toFixed(2) + ", " + projectPoint[0].y.toFixed(2);
+            //})
+
+        }
+        
 
         var markerSymbol = new SimpleMarkerSymbol();
         markerSymbol.setPath("M16,4.938c-7.732,0-14,4.701-14,10.5c0,1.981,0.741,3.833,2.016,5.414L2,25.272l5.613-1.44c2.339,1.316,5.237,2.106,8.387,2.106c7.732,0,14-4.701,14-10.5S23.732,4.938,16,4.938zM16.868,21.375h-1.969v-1.889h1.969V21.375zM16.772,18.094h-1.777l-0.176-8.083h2.113L16.772,18.094z");
         markerSymbol.setColor(new Color("#00FFFF"));
- 
+
         var lineSymbol = new CartographicLineSymbol(
             CartographicLineSymbol.STYLE_SOLID,
             new Color([255, 0, 0]), 1,
@@ -60,9 +79,9 @@
             "../Content/documentation/img/valid.png",
             new SimpleLineSymbol(
                 SimpleLineSymbol.STYLE_SOLID,
-                new Color('#000'),
+                new Color('#0f0'),
                 1
-            ),10,20
+            ), 10, 20
         );
 
         function initToolbar() {
@@ -97,170 +116,340 @@
             for (ik = 0; ik < temp1.length; ik++) { arrayy.push(temp1[ik][1]) };
             var polygon = {
                 rings: evt.geometry.rings, _ring: 0, spatialReference: { wkid: 102100, latestWkid: 3857 },
-                cache: { xmin: Math.min(...arrayx), ymin: Math.min(...arrayy), xmax: Math.max(...arrayx), ymax: Math.max(...arrayy)}
+                cache: { xmin: Math.min(...arrayx), ymin: Math.min(...arrayy), xmax: Math.max(...arrayx), ymax: Math.max(...arrayy) }
             };
-            //console.log(polygon);
+            
+            var pointsCoordinates = [];
             console.log(evt.geometry);
+            for (i = 0; i < evt.geometry.rings[0].length; i++) {
+                pt = new Point(evt.geometry.rings[0][i][0], evt.geometry.rings[0][i][1], wkid1);
+                pointsCoordinates.push(pt);
+            }
+
+            projecteur(pointsCoordinates);
             map.graphics.add(new Graphic(evt.geometry, symbol));
+        }
+        function projecteur(points) {
+            gsvc.project(points, wkid, function (projectPoints) {
+                console.log(projectPoints);
+            })
         }
 
         var array = [];
         var graphicLayer = new GraphicsLayer();
 
         arcgisUtils.arcgisUrl = "https://si.aurs.org.ma/portal/sharing/content/items";
-        var xminextend = 86661.6116; var yminextend = 109335.0949; var xmaxextend = 916839.6617; var ymaxextend = 602597.8926;
-        var xrandom = Math.random() * (xmaxextend - xminextend) + xminextend;
-        var yrandom = Math.random() * (ymaxextend - yminextend) + yminextend;
-        var xmax = xrandom + 1000; var xmin = xrandom - 1000;
-        var ymax = yrandom + 500; var ymin = yrandom - 600;
+        var json = [
+            [
+                {
+                    "x": 363564.2608327697,
+                    "y": 373878.50794192,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 363606.0970894097,
+                    "y": 373927.2629257601,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 363691.8605103388,
+                    "y": 373856.9667622168,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 363643.601771194,
+                    "y": 373809.7821770096,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 363564.2608327697,
+                    "y": 373878.50794192,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                }
+            ],
+            [
+                {
+                    "x": 364926.5352684335,
+                    "y": 373680.2215259044,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 365053.06995971204,
+                    "y": 373794.91037553607,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 365157.23950326914,
+                    "y": 373728.3170764742,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 365082.04761496035,
+                    "y": 373598.1041302808,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 365029.8932273509,
+                    "y": 373626.4677649411,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 364984.54042947164,
+                    "y": 373644.8670194514,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 364921.41295317374,
+                    "y": 373668.44987959636,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 364926.5352684335,
+                    "y": 373680.2215259044,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 364926.5352684335,
+                    "y": 373680.2215259044,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                }
+            ],
+            [
+                {
+                    "x": 365264.40912420175,
+                    "y": 379401.15782520804,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 365363.23542559345,
+                    "y": 379524.05897428264,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 365386.9302548074,
+                    "y": 379517.81023428706,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 365523.04654639185,
+                    "y": 379401.4947360698,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 365521.9320951655,
+                    "y": 379392.6330148095,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 365406.51139649976,
+                    "y": 379287.71481748094,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 365264.40912420175,
+                    "y": 379401.15782520804,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                }
+            ]
+        ]
+
+        
+
+        var elementtt = 0;
+        
+        
         var x = document.getElementById('xx');
         var y = document.getElementById('yy');
         document.getElementById('xx').onclick = function () {
-            x.value = Math.random() * (xmax - xmin) + xmin;
-            y.value = Math.random() * (ymax - ymin) + ymin;
+            x.value = json[0][elementtt].x.toFixed(2);
+            y.value = json[0][elementtt].y.toFixed(2);
         }
-        var xCenteroidF;var yCenteroidF;
-        x.value = Math.random() * (xmax - xmin) + xmin;
-        y.value = Math.random() * (ymax - ymin) + ymin;
-        var wkid = new SpatialReference(26191);var wkid1 = new SpatialReference(3857);
-        gsvc = new GeometryService("https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
+        var xCenteroidF; var yCenteroidF;
+
+        x.value = json[0][elementtt].x.toFixed(2);
+        y.value = json[0][elementtt].y.toFixed(2);
+
         var typeFon = document.getElementById('selRef');
         var numFon = document.getElementById('numfonc');
         var indic = document.getElementById('indice');
         var fractio = document.getElementById('fraction');
         var complemen = document.getElementById("complement");
-        numFon.value = Math.random() * (xmax - xmin) + xmin;
-        indic.value = Math.random() * (xmax - xmin) + xmin;
-        fractio.value = Math.random() * (xmax - xmin) + xmin;
-        complemen.value = Math.random() * (xmax - xmin) + xmin;
+        numFon.value = 'Bi';
+        indic.value = 'Bi';
+        fractio.value = 'Bi';
+        complemen.value = 'Bi';
         document.getElementById('addCoord').onclick = function () {
-            pt = new Point(x.value.replace(",", "."), y.value.replace(",", "."), wkid);
-            //map.setZoom(15); 
-            gsvc.project([pt], wkid1, function (projectPoint) {
-                var p = projectPoint[0];
-                //console.log(p);
-                var sym = new SimpleMarkerSymbol ( SimpleMarkerSymbol.STYLE_SQUARE, 10,
-                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255, 0, 0]), 1), new Color([0, 255, 0, 0.25]));
 
-                //var sym = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 10,
-                //    new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT,
-                //        new Color([255, 0, 0]), 1),
-                //    new Color([0, 255, 0, 0.25]));
+            p = new Point(x.value.replace(",", "."), y.value.replace(",", "."), wkid);
+            
+            //gsvc.project([pt], wkid1, function (projectPoint) {
+            //});
+            //var p = projectPoint[0];
+                
+            var sym = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 10,
+                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255, 0, 0]), 1), new Color([0, 255, 0, 0.25]));
 
-
-                var graphic2 = new Graphic(p, sym);
-                map.graphics.add(graphic2);
-
-                //console.log(projectPoint[0]);
-
-                var thispoint = [p.x, p.y];
-                array.push(thispoint);
+            //var sym = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 10,
+            //    new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT,
+            //        new Color([255, 0, 0]), 1),
+            //    new Color([0, 255, 0, 0.25]));
 
 
-                //Liste.push(p);
-                //map.centerAt(p);
-                if (array.length == 1) {
-                    map.centerAt(p);
+            var graphic2 = new Graphic(p, sym);
+            map.graphics.add(graphic2);
+
+            //console.log(projectPoint[0]);
+
+            var thispoint = [p.x, p.y];
+            array.push(thispoint);
+
+
+            //Liste.push(p);
+            //map.centerAt(p);
+            if (array.length == 1) {
+                map.centerAt(p);
+            }
+            else {
+                var arrayx = []; var arrayy = [];
+                for (ik = 0; ik < array.length; ik++) { arrayx.push(array[ik][0]) };
+                for (ik = 0; ik < array.length; ik++) { arrayy.push(array[ik][1]) };
+                var _xmax = Math.max(...arrayx); var _xmin = Math.min(...arrayx);
+                var _ymax = Math.max(...arrayy); var _ymin = Math.min(...arrayy);
+
+
+
+                var startExtent = new Extent();
+                startExtent.xmin = _xmin;
+                startExtent.ymin = _ymin;
+                startExtent.xmax = _xmax;
+                startExtent.ymax = _ymax;
+                startExtent.spatialReference = wkid;
+
+                map.setExtent(startExtent);
+
+                //new Extent({ xmin: -20098296, ymin: -2804413, xmax: 5920428, ymax: 15813776, spatialReference: { wkid: 54032 } })
+            }
+
+            ///////////////////////
+
+            //console.log(projectPoint);
+            //console.log(array);
+            var table = document.getElementById('tbodyCoord');
+            var row = table.insertRow(table.length);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            cell1.innerHTML = "P" + table.rows.length;
+            cell2.innerHTML = x.value.replace(",", ".");
+            cell3.innerHTML = y.value.replace(",", ".");
+            var btn = document.createElement("input");
+            btn.setAttribute("id", table.rows.length);
+            btn.setAttribute("src", "../Content/documentation/img/modif.png");
+            btn.setAttribute("type", "image");
+            btn.setAttribute("name", "update");
+            btn.onclick = function () {
+                var id = this.id;
+                cell2.innerHTML = "<input type='text' class='form-control' id='new_lon' value='" + table.rows[id - 1].cells[1].innerHTML + "'/>";
+                cell3.innerHTML = "<input type='text' class='form-control' id='new_lat' value='" + table.rows[id - 1].cells[2].innerHTML + "'/>";
+
+
+                var valider = document.createElement('input');
+                valider.setAttribute('src', "../Content/documentation/img/valid.png");
+                valider.setAttribute('id', table.rows.length);
+                valider.setAttribute('type', "image");
+                valider.onclick = function () {
+                    var a = document.getElementById('new_lon').value.replace(",", ".");
+                    var b = document.getElementById('new_lat').value.replace(",", ".");
+                    cell2.innerHTML = document.getElementById('new_lon').value.replace(",", ".");
+                    cell3.innerHTML = document.getElementById('new_lat').value.replace(",", ".");
+                    var pt2 = new Point(a, b, wkid);
+                    gsvc.project([pt2], wkid1, function (projectPoint) {
+                        var p2 = projectPoint[0];
+                        array[id - 1] = [p2.x, p2.y];
+                    });
+                    cell4.removeChild(valider); cell4.removeChild(btn1);
+                    cell4.appendChild(btn);
                 }
-                else {
-                    var arrayx = []; var arrayy = [];
-                    for (ik = 0; ik < array.length; ik++) { arrayx.push(array[ik][0]) };
-                    for (ik = 0; ik < array.length; ik++) { arrayy.push(array[ik][1]) };
-                    var _xmax = Math.max(...arrayx); var _xmin = Math.min(...arrayx);
-                    var _ymax = Math.max(...arrayy); var _ymin = Math.min(...arrayy);
 
 
-
-                    var startExtent = new Extent();
-                    startExtent.xmin = _xmin;
-                    startExtent.ymin = _ymin;
-                    startExtent.xmax = _xmax;
-                    startExtent.ymax = _ymax;
-                    startExtent.spatialReference = wkid1;
-
-                    map.setExtent(startExtent);
-
-                    //new Extent({ xmin: -20098296, ymin: -2804413, xmax: 5920428, ymax: 15813776, spatialReference: { wkid: 54032 } })
-                }
-
-                ///////////////////////
-
-                //console.log(projectPoint);
-                //console.log(array);
-                var table = document.getElementById('tbodyCoord');
-                var row = table.insertRow(table.length);
-                var cell1 = row.insertCell(0);
-                var cell2 = row.insertCell(1);
-                var cell3 = row.insertCell(2);
-                var cell4 = row.insertCell(3);
-                cell1.innerHTML = "P" + table.rows.length;
-                cell2.innerHTML = x.value.replace(",", ".");
-                cell3.innerHTML = y.value.replace(",", ".");
-                var btn = document.createElement("input");
-                btn.setAttribute("id", table.rows.length);
-                btn.setAttribute("src", "../Content/documentation/img/modif.png");
-                btn.setAttribute("type", "image");
-                btn.setAttribute("name", "update");
-                btn.onclick = function () {
-                    var id = this.id;
-                    cell2.innerHTML = "<input type='text' class='form-control' id='new_lon' value='" + table.rows[id - 1].cells[1].innerHTML + "'/>";
-                    cell3.innerHTML = "<input type='text' class='form-control' id='new_lat' value='" + table.rows[id - 1].cells[2].innerHTML + "'/>";
-
-
-                    var valider = document.createElement('input');
-                    valider.setAttribute('src', "../Content/documentation/img/valid.png");
-                    valider.setAttribute('id', table.rows.length);
-                    valider.setAttribute('type', "image");
-                    valider.onclick = function () {
-                        var a = document.getElementById('new_lon').value.replace(",", ".");
-                        var b = document.getElementById('new_lat').value.replace(",", ".");
-                        cell2.innerHTML = document.getElementById('new_lon').value.replace(",", ".");
-                        cell3.innerHTML = document.getElementById('new_lat').value.replace(",", ".");
-                        var pt2 = new Point(a, b, wkid);
-                        gsvc.project([pt2], wkid1, function (projectPoint) {
-                            var p2 = projectPoint[0];
-                            array[id - 1] = [p2.x, p2.y];
-                        });
-                        cell4.removeChild(valider); cell4.removeChild(btn1);
-                        cell4.appendChild(btn);
-                    }
-
-
-                    var btn1 = document.createElement('input');
-                    btn1.setAttribute("src", "../Content/documentation/img/del.png");
-                    btn1.setAttribute("type", "image");
-                    btn1.setAttribute("id", id);
-                    btn1.setAttribute("name", "delete");
-                    btn1.onclick = function () {
-                        if (table.rows.length > btn1.getAttribute('id')) {
-                            table.deleteRow(id - 1);
-                            array.splice(id - 1, 1);
-                            var x1 = parseInt(id) - 1;
-                            for (var i = x1; i < table.rows.length + 1; i++) {
-                                var j = document.getElementsByName("update")[i].getAttribute('id');
-                                var k = i + 1;
-                                table.rows[i].cells[0].innerHTML = "P" + k;
-                                document.getElementsByName("update")[i].setAttribute('id', j - 1);
-                            }
-                        }
-                        if (table.rows.length <= btn1.getAttribute('id') && table.rows.length > 1) { table.deleteRow(id - 1); array.splice(id - 1, 1); }
-                        if (table.rows.length <= btn1.getAttribute('id') && table.rows.length == 1) {
-                            table.deleteRow(id - 1); array.splice(id - 1, 1);
-                            document.getElementById('vider').disabled = true;
+                var btn1 = document.createElement('input');
+                btn1.setAttribute("src", "../Content/documentation/img/del.png");
+                btn1.setAttribute("type", "image");
+                btn1.setAttribute("id", id);
+                btn1.setAttribute("name", "delete");
+                btn1.onclick = function () {
+                    if (table.rows.length > btn1.getAttribute('id')) {
+                        table.deleteRow(id - 1);
+                        array.splice(id - 1, 1);
+                        var x1 = parseInt(id) - 1;
+                        for (var i = x1; i < table.rows.length + 1; i++) {
+                            var j = document.getElementsByName("update")[i].getAttribute('id');
+                            var k = i + 1;
+                            table.rows[i].cells[0].innerHTML = "P" + k;
+                            document.getElementsByName("update")[i].setAttribute('id', j - 1);
                         }
                     }
-                    cell4.removeChild(btn);
-                    cell4.appendChild(valider);
-                    cell4.appendChild(btn1);
+                    if (table.rows.length <= btn1.getAttribute('id') && table.rows.length > 1) { table.deleteRow(id - 1); array.splice(id - 1, 1); }
+                    if (table.rows.length <= btn1.getAttribute('id') && table.rows.length == 1) {
+                        table.deleteRow(id - 1); array.splice(id - 1, 1);
+                        document.getElementById('vider').disabled = true;
+                    }
                 }
-                cell4.appendChild(btn);
-                //x.value = Math.floor(Math.random() * 954135) + 947100;
-                //y.value = Math.floor(Math.random() * 3473355) + 3469086;
-                x.value = Math.random() * (xmax - xmin) + xmin;
-                y.value = Math.random() * (ymax - ymin) + ymin;
-                x.style.boxShadow = "";
-                y.style.boxShadow = "";
-            });
+                cell4.removeChild(btn);
+                cell4.appendChild(valider);
+                cell4.appendChild(btn1);
+            }
+            cell4.appendChild(btn);
+            
+            x.value = json[0][elementtt].x.toFixed(2);
+            y.value = json[0][elementtt].y.toFixed(2);
+            elementtt += 1;
+            x.style.boxShadow = "";
+            y.style.boxShadow = "";
+
         }
 
 
@@ -298,7 +487,7 @@
                 });
 
                 //gsvc.project([pt], wkid1, function (projectPoint) {
-                    
+
 
                 //});
             }
@@ -308,10 +497,10 @@
                 for (ik = 0; ik < temp1.length; ik++) { arrayx.push(temp1[ik][0]) };
                 for (ik = 0; ik < temp1.length; ik++) { arrayy.push(temp1[ik][1]) };
                 var polygon = {
-                    rings: [array], _ring: 0, spatialReference: { wkid: 3857/*, latestWkid: 26191*/  },
+                    rings: [array], _ring: 0, spatialReference: { wkid: 3857/*, latestWkid: 26191*/ },
                     cache: {
                         _extent: { xmin: Math.min(...arrayx), ymin: Math.min(...arrayy), xmax: Math.max(...arrayx), ymax: Math.max(...arrayy) },
-                        _partwise:null
+                        _partwise: null
                     }
                 };
                 console.log(polygon);
@@ -342,15 +531,15 @@
                 //var polygon = new Polygon(polygonJson);
                 //map.addLayer(polygon);
 
-                
+
                 //var pol = new Polygon(array);
                 //var sr = new SpatialReference(3857);
                 //pol.setSpatialReference(sr);
                 //array = [];
                 //console.log(pol);
 
-                    //type: "polygon",
-                
+                //type: "polygon",
+
                 //var polygon = new Polygon(new SpatialReference(3857));
                 //polygon.addRing(array);
 

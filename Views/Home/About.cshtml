@@ -13,7 +13,7 @@
     <div class="dashboard-finance">
         <div class="container-fluid dashboard-content">
             <br />
-            @using (Ajax.BeginForm("About",new AjaxOptions { HttpMethod = "Post", OnSuccess = "ajaxSuccess",OnFailure="ajaxError" }))
+            @using (Ajax.BeginForm("AURS",new AjaxOptions { HttpMethod = "Post", OnSuccess = "ajaxSuccess",OnFailure="ajaxError" }))
             {
                 @Html.AntiForgeryToken()
                 <div class="form-group">

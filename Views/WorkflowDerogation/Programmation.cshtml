@@ -135,13 +135,16 @@
                             @using (Html.BeginForm())
                             {
                                 @Html.AntiForgeryToken()
-                                <input type="hidden" name="FK_DemDerg_Com" value="@Model.DemDerg.Id_DemDerg"/>
+                                <input type="hidden" name="FK_DemDerg_Com" value="@Model.DemDerg.Id_DemDerg" />
                                 <button class="btn btn-lg" type="submit" value="0" name="enregistrer" style="background-color:#09aacc; color:white">
                                     Enregistrer  <i class="fa fa-level-down-alt"></i>
                                 </button>
-                                <button class="btn btn-lg" type="submit" value="1" name="enregistrer" style="background-color:#09aacc; color:white">
+                                @*<button class="btn btn-lg" type="submit" value="1" name="enregistrer" style="background-color:#09aacc; color:white">
                                     Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
-                                </button>
+                                </button>*@
+                                <a onclick="passClicked(this,'enregistrer')" class="btn btn-lg buttonsReapeateds" style="color:white">
+                                    Passer à l'etape suivante <i class="fa fa-paper-plane"></i>
+                                </a>
                             }
                         </p>
                     </center>
@@ -171,6 +174,11 @@ else
 }
 
 
+
+@section Scripts{
+
+    <script src="~/Content/PassNextStep.js"></script>
+}
 
 <script>
     @*$("#createcommission").click(function () {

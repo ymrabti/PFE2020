@@ -86,8 +86,8 @@
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
-                                    <label for="inputText11" style="font-size:12px;">Etat d'avancement du projet : </label>
-                                    <input readonly="@NModifier" required class="form-control" id="etatAvc"
+                                    <label for="inputText11" style="font-size:12px;">Etat d'avancement du projet (%): </label>
+                                    <input readonly="@NModifier" required class="form-control" id="etatAvc" type="number" min="0" max="100"
                                            name="EtatAvancemt_Autorisation" value="@Model.DemDerg.Autorisation_Derogation.EtatAvancemt_Autorisation" />
 
                                 </div>
@@ -138,8 +138,8 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
 
-                                        <label for="inputText11" style="font-size:12px;">Etat d'avancement du projet : </label>
-                                        <input required class="form-control" type="text" id="etatAvc" name="EtatAvancemt_Autorisation" value="" />
+                                        <label for="inputText11" style="font-size:12px;">Etat d'avancement du projet (%): </label>
+                                        <input required class="form-control" type="number" min="0" max="100" id="etatAvc" name="EtatAvancemt_Autorisation" value="" />
                                     </div>
                                 </div>
                             </div>
@@ -185,8 +185,8 @@
                                 <div class="col-lg-4">
                                     <div class="form-group">
 
-                                        <label for="inputText11" style="font-size:12px;">Etat d'avancement du projet : </label>
-                                        <input readonly class="form-control" type="text" id="etatAvc" name="EtatAvancemt_Autorisation" value="" />
+                                        <label for="inputText11" style="font-size:12px;">Etat d'avancement du projet (%): </label>
+                                        <input readonly class="form-control" type="number" min="0" max="100" id="etatAvc" name="EtatAvancemt_Autorisation" value="" />
                                     </div>
                                 </div>
                             </div>
@@ -197,9 +197,13 @@
                         <button type="submit" class="btn btn-lg" value="0" name="valider" id="btnSave" style="background-color:#09aacc; color:white">
                             Enregister   <i class="fa fa-level-down-alt"></i>
                         </button>
-                        <button type="submit" class="btn btn-lg" value="1" name="valider" id="btnsend" style="background-color:#09aacc; color:white">
+                        @*<button type="submit" class="btn btn-lg" value="1" name="valider" id="btnsend" style="background-color:#09aacc; color:white">
+                                Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
+                            </button>*@
+
+                        <a onclick="passClicked(this,'valider')" class="btn btn-lg buttonsReapeateds" style="color:white">
                             Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
-                        </button>
+                        </a>
                     </center>
                 }
                 <br />@Html.ActionLink("Retour a la liste des demandes", "Encours")<br />
@@ -229,9 +233,9 @@ else
 }
 
 
-@*@section Scripts{
-
-        <script language="javascript">
+@section Scripts{
+    <script src="~/Content/PassNextStep.js"></script>
+        @*<script language="javascript">
             $("#natAut").change(function () {
                 if ($("#natAut").val() == "") {
                     $("#natAut").css("border-color", "red");
@@ -306,5 +310,5 @@ else
 
                 traditional: true
             }
-        </script>
-    }*@
+        </script>*@
+    }

@@ -67,7 +67,7 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <label for="inputText11" style="font-size:12px;">Préfecture :</label>
-                                <select disabled="@NModifier" class="form-control form-control-sm chzn-selec" id="Prefectures" name="Prefecture">
+                                <select disabled="@NModifier" required class="form-control form-control-sm chzn-selec" id="Prefectures" name="Prefecture">
                                     <option value="">-------- Sélectionner la préfecture : --------</option>
                                     @foreach (var item in Model.Provs)
                                     {
@@ -173,7 +173,7 @@
                         <div class="col-sm-4">
 
                             <label for="inputText11" style="font-size:12px;">Superficie (m2) :</label>
-                            <input disabled="@NModifier" required type="number" class="form-control" id="superficie" value="@Model.DemDerg.Superficie_Terrain_DemDerg" name="Superficie_Terrain_DemDerg"
+                            <input disabled="@NModifier" required type="number" min="10" class="form-control" id="superficie" value="@Model.DemDerg.Superficie_Terrain_DemDerg" name="Superficie_Terrain_DemDerg"
                                    oninvalid="this.setCustomValidity('Superficie obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
 
@@ -239,7 +239,7 @@
                         </div>
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Montant d'investissement (en DH):</label>
-                            <input disabled="@NModifier" required type="number" class="form-control" id="montantInvest" value="@Model.DemDerg.Montant_Investissement_DemDerg" name="Montant_Investissement_DemDerg"
+                            <input disabled="@NModifier" required type="number"  min="100" class="form-control" id="montantInvest" value="@Model.DemDerg.Montant_Investissement_DemDerg" name="Montant_Investissement_DemDerg"
                                    oninvalid="this.setCustomValidity('Montant d\'investissement obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
                         <div class="col-sm-4">
@@ -267,7 +267,7 @@
                     <div class="row" style="margin-bottom:25px">
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Localisation du projet :</label>
-                            <input disabled="@NModifier" required type="text" class="form-control" id="localisationPrj" value="@Model.DemDerg.Adresse_DemDerg" name="Adresse_DemDerg"
+                            <input disabled="@NModifier" required type="text" min="1" class="form-control" id="localisationPrj" value="@Model.DemDerg.Adresse_DemDerg" name="Adresse_DemDerg"
                                    oninvalid="this.setCustomValidity('Localisation du projet obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
                         <div class="col-sm-4">
@@ -277,7 +277,7 @@
                         </div>
                         <div class="col-sm-4">
                             <label for="inputText11" style="font-size:12px;">Durée de réalisation (Jours) :</label>
-                            <input disabled="@NModifier" required type="number" class="form-control" id="dureeReal" value="@Model.DemDerg.Duree_realisation_DemDerg" name="Duree_realisation_DemDerg"
+                            <input disabled="@NModifier" required type="number" min="1" class="form-control" id="dureeReal" value="@Model.DemDerg.Duree_realisation_DemDerg" name="Duree_realisation_DemDerg"
                                    oninvalid="this.setCustomValidity('Durée de réalisation obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
                     </div>
@@ -294,39 +294,41 @@
 
                         <div class="col-sm-3">
                             <label for="inputText11" style="font-size:12px;">Ratio Résidentiel :</label>
-                            <input disabled="@NModifier" required type="text" class="form-control" id="ratioResid" value="@Model.DemDerg.Ratio_resid_DemDerg" name="Ratio_resid_DemDerg"
+                            <input disabled="@NModifier" max="100" min="0" required type="text" class="form-control" id="ratioResid" value="@Model.DemDerg.Ratio_resid_DemDerg" name="Ratio_resid_DemDerg"
                                    oninvalid="this.setCustomValidity('Ratio Résidentiel obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
 
                         <div class="col-sm-3">
                             <label for="inputText11" style="font-size:12px;">Ratio Social :</label>
-                            <input disabled="@NModifier" required type="text" class="form-control" id="ratioSoc" value="@Model.DemDerg.Ratio_Social_DemDerg" name="Ratio_Social_DemDerg"
+                            <input disabled="@NModifier" max="100" min="0" required type="text" class="form-control" id="ratioSoc" value="@Model.DemDerg.Ratio_Social_DemDerg" name="Ratio_Social_DemDerg"
                                    oninvalid="this.setCustomValidity('Ratio Social obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
 
                         <div class="col-sm-3">
                             <label for="inputText11" style="font-size:12px;">Ratio Touristique :</label>
-                            <input disabled="@NModifier" required type="text" class="form-control" id="ratioTour" value="@Model.DemDerg.Ratio_touris_DemDerg" name="Ratio_touris_DemDerg"
+                            <input disabled="@NModifier" max="100" min="0" required type="text" class="form-control" id="ratioTour" value="@Model.DemDerg.Ratio_touris_DemDerg" name="Ratio_touris_DemDerg"
                                    oninvalid="this.setCustomValidity('Ratio Touristique obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
 
                         <div class="col-sm-3">
                             <label for="inputText11" style="font-size:12px;">Ratio Industriel :</label>
-                            <input disabled="@NModifier" required type="text" class="form-control" id="rationInd" value="@Model.DemDerg.Ratio_indus_DemDerg" name="Ratio_indus_DemDerg"
+                            <input disabled="@NModifier" max="100" min="0" required type="text" class="form-control" id="rationInd" value="@Model.DemDerg.Ratio_indus_DemDerg" name="Ratio_indus_DemDerg"
                                    oninvalid="this.setCustomValidity('Ratio Industriel obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
 
                     </div>
                     <br /><br />
                     <center class="fixed-bottom">
-                        @*@Html.HiddenFor(p => p.DemDerg.Id_DemDerg)*@
                         <input type="hidden" name="Id_DemDerg" value="@Model.DemDerg.Id_DemDerg" />
                         <button type="submit" class="btn btn-lg" value="0" name="enregistrer" id="btnSave" style="background-color:#09aacc; color:white">
                             Enregister   <i class="fa fa-level-down-alt"></i>
                         </button>
-                        <button type="submit" class="btn btn-lg" value="1" name="enregistrer" id="btnsend" style="background-color:#09aacc; color:white">
-                            Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
-                        </button>
+                        @*<button type="submit" class="btn btn-lg" value="1" name="enregistrer" id="btnsend" style="background-color:#09aacc; color:white">
+                                Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
+                            </button>*@
+                        <a onclick="passClicked(this,'enregistrer')" class="btn btn-lg buttonsReapeateds" style="color:white">
+                            Passer à l'etape suivante <i class="fa fa-paper-plane"></i>
+                        </a>
                     </center>
 
                 }
@@ -396,6 +398,9 @@
             $('#Arrondissements').trigger("liszt:updated");
 
         });
+    </script>
+    <script src="~/Content/PassNextStep.js">
+
     </script>
 }
 else

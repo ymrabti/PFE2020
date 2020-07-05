@@ -59,14 +59,23 @@
     .inputfile-1 + label:hover {
         background-color: #08a;
     }
+/* style error */
 
-
-/* style 2 */
-
-.inputfile-2 + label {
-    color: #09aacc;
-    border: 2px solid currentColor;
+.inputfile-err + label {
+    color: #f1e5e6;
+    background-color: #ff4e00;
 }
+
+    .inputfile-err:focus + label,
+    .inputfile-err.has-focus + label,
+    .inputfile-err + label:hover {
+        background-color: #FF0000;
+    }
+    /* style 2 */
+    .inputfile-2 + label {
+        color: #09aacc;
+        border: 2px solid currentColor;
+    }
 
     .inputfile-2:focus + label,
     .inputfile-2.has-focus + label,

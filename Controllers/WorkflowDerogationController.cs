@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
 namespace GestionnaireUtilisateurs.Controllers
 {
     public class WorkflowTache
@@ -19,13 +18,9 @@ namespace GestionnaireUtilisateurs.Controllers
         //    this.Nom = str;this.numeroTache = n;
         //}
     }
-
-
     public class WorkflowDerogationController : Controller
     {
         public aurs1Entities database = new aurs1Entities();
-
-
         public ActionResult correctAction(int idTache, int IdDemDerog, MultiModeles multiTab)
         {
             if (IdDemDerog == 0)
@@ -83,8 +78,6 @@ namespace GestionnaireUtilisateurs.Controllers
                 }
             }
         }
-
-
         #region Rensegnements
         [Authorize(Roles = Administrator + "," + _Rensegnement)]
         public ActionResult Rensegnements()
@@ -393,9 +386,6 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
         #endregion
-
-
-
         #region SituationGeo
 
         [Authorize(Roles = Administrator + "," + _SitGeo)]
@@ -437,7 +427,6 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
         #endregion
-
         #region Ged
         [Authorize(Roles = Administrator + "," + _GED)]
         public ActionResult Ged(int FK_DemDerg_DocDerg)
@@ -556,7 +545,6 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
         #endregion
-
         #region Programmation
 
         [Authorize(Roles = Administrator + "," + _Programmation)]
@@ -635,7 +623,7 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 if (commission.Date_Commission < DateTime.Now)
                 {
-                    commission.Date_Commission = DateTime.Now;
+                    commission.Date_Commission = DateTime.Now.AddHours(2);
                 }
                 database.Commission.Add(commission);
                 database.SaveChanges();
@@ -676,8 +664,6 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
         #endregion
-
-
         #region Avis
         [Authorize(Roles = Administrator + "," + _Avis)]
         public ActionResult AvisOrg(int FK_DemDerg)
@@ -768,10 +754,17 @@ namespace GestionnaireUtilisateurs.Controllers
 
                 if (valider == 1)
                 {
-                    demdeg.FK_DemDerg_EtatAvc = 20;
-                    database.SaveChanges();
-                    //return Json(Url.Action("Echanges", "WorkflowDerogation"));
-                    return RedirectToAction("Echanges", "WorkflowDerogation", new { FK_DemDerg });
+                    if (demdeg.Avis_Org.Where(i=>i.FK_Organisme==1).First().FK_TypAvis==1 && demdeg.Avis_Org.Where(i => i.FK_Organisme == 3).First().FK_TypAvis == 1)
+                    {
+                        demdeg.FK_DemDerg_EtatAvc = 20;
+                        database.SaveChanges();
+                        //return Json(Url.Action("Echanges", "WorkflowDerogation"));
+                        return RedirectToAction("Echanges", "WorkflowDerogation", new { FK_DemDerg });
+                    }
+                    else
+                    {
+                        return RedirectToAction("AvisOrg", "WorkflowDerogation", new { FK_DemDerg });
+                    }
                 }
                 else
                 {
@@ -785,16 +778,23 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 if (demdeg.Avis_Org.Where(i => i.FK_Organisme < 6).Count() == 0)
                 {
-                    return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
+                    return RedirectToAction("AvisOrg", "WorkflowDerogation", new { FK_DemDerg });
                 }
                 else
                 {
                     if (valider == 1)
                     {
-                        demdeg.FK_DemDerg_EtatAvc = 20;
-                        database.SaveChanges();
-                        //return Json(Url.Action("Echanges", "WorkflowDerogation"));
-                        return RedirectToAction("Echanges", "WorkflowDerogation", new { FK_DemDerg });
+                        if (demdeg.Avis_Org.Where(i => i.FK_Organisme == 1).First().FK_TypAvis == 1 && demdeg.Avis_Org.Where(i => i.FK_Organisme == 3).First().FK_TypAvis == 1)
+                        {
+                            demdeg.FK_DemDerg_EtatAvc = 20;
+                            database.SaveChanges();
+                            //return Json(Url.Action("Echanges", "WorkflowDerogation"));
+                            return RedirectToAction("Echanges", "WorkflowDerogation", new { FK_DemDerg });
+                        }
+                        else
+                        {
+                            return RedirectToAction("AvisOrg", "WorkflowDerogation", new { FK_DemDerg });
+                        }
                     }
                     else
                     {
@@ -828,8 +828,6 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
         #endregion
-
-
         #region Echanges
 
         [Authorize(Roles = Administrator + "," + _Echanges)]
@@ -879,7 +877,7 @@ namespace GestionnaireUtilisateurs.Controllers
                         Courrier courrier = new Courrier();
                         DateTime dateChecked = new DateTime();
                         if (Date_Courier[n] < DateTime.Now)
-                        { dateChecked = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day + 1, 08, 00, 00); }
+                        { dateChecked = DateTime.Now.AddDays(1); }
                         else { dateChecked = Date_Courier[n]; }
                         courrier.FK_Nature_Courrier = FK_Nature_Courrier[n];
                         courrier.Date_Courier = dateChecked;
@@ -935,9 +933,6 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
         #endregion
-
-
-
         #region Autorisation
 
         [Authorize(Roles = Administrator + "," + _Autorisation)]
@@ -1016,8 +1011,6 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
         #endregion
-
-
         #region Cloture
         [Authorize(Roles = Administrator + "," + _Cloture)]
         public ActionResult Cloture(int FK_DemDerg)
@@ -1057,7 +1050,6 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
         #endregion
-
         #region Errors
 
         [Authorize]
@@ -1073,8 +1065,6 @@ namespace GestionnaireUtilisateurs.Controllers
 
 
         #endregion
-
-
         #region Encours
         [Authorize(Roles = _WorkflowDerogation)]
         public ActionResult Encours(short? page, bool? finalisees)
@@ -1189,8 +1179,6 @@ namespace GestionnaireUtilisateurs.Controllers
         }
 
         #endregion
-
-
         #region Renders
         [Authorize(Roles = _WorkflowDerogation)]
         public ActionResult WorkflowG(int idDemDerog)
@@ -1214,20 +1202,18 @@ namespace GestionnaireUtilisateurs.Controllers
             return PartialView("~/Views/Shared/_Indicators.cshtml");
         }
         #endregion
-
-
         #region Programmes d'assistance
 
-        static int nombre_res_ppage = 5;
+        static int nombre_res_ppage = 10;
         public const string Administrator = "Administrator";
-        public const string _Rensegnement = "Rensegnement";
+        public const string _Rensegnement = "Renseignement";
         public const string _Programmation = "Programmation";
         public const string _Autorisation = "Autorisation";
         public const string _GED = "GED";
         public const string _Avis = "Avis";
         public const string _SitGeo = "Situation Géographique";
-        public const string _Cloture = "Cloture";
-        public const string _Echanges = "Echanges";
+        public const string _Cloture = "Clôture";
+        public const string _Echanges = "Échanges";
 
         public const string _WorkflowDerogationExeptAdmin = _Rensegnement
             + "," + _SitGeo + "," + _GED + "," + _Echanges + ","

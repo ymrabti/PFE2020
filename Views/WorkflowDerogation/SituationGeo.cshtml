@@ -12,7 +12,7 @@
     <nav>
         <ol class="cd-multi-steps text-bottom count">
             <li style="right: 2px;" class="visited"><a href="#0">Renseignements</a></li>
-            <li style="right: 2px; top: 12px;" class="current"><a href="#0">Siuation Géographique</a></li>
+            <li style="right: 2px; top: 12px;" class="current"><a href="#" target="_blank">Siuation Géographique</a></li>
             <li style="right: 2px;"><em>GED</em></li>
             <li style="right: 2px;"><em>Programmation</em></li>
             <li style="right: 2px;"><em>Avis</em></li>
@@ -75,19 +75,28 @@
             <h5 class="card-header">Carte</h5>
             <div id="info">
                 @*<div>Select a shape then draw on map to add graphic</div>
-                <button id="Point">Point</button>
-                <button id="Multipoint">Multipoint</button>
-                <button id="Line">Line</button>
-                <button id="Polyline">Polyline</button>
-                <button id="FreehandPolyline">Freehand Polyline</button>
-                <button id="Triangle">Triangle</button>
-                <button id="Extent">Rectangle</button>
-                <button id="Circle">Circle</button>
-                <button id="Ellipse">Ellipse</button>
-                <button id="FreehandPolygon">Freehand Polygon</button>*@
+            <button id="Point">Point</button>
+            <button id="Multipoint">Multipoint</button>
+            <button id="Line">Line</button>
+            <button id="Polyline">Polyline</button>
+            <button id="FreehandPolyline">Freehand Polyline</button>
+            <button id="Triangle">Triangle</button>
+            <button id="Extent">Rectangle</button>
+            <button id="Circle">Circle</button>
+            <button id="Ellipse">Ellipse</button>
+            <button id="FreehandPolygon">Freehand Polygon</button>*@
                 <button id="Polygon">Polygon</button>
             </div>
             <div id="map" style="height:600px;" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'">
+                @*<div style="position:absolute; right:20px; top:10px; z-Index:999;">
+            <div data-dojo-type="dijit/TitlePane"
+                 data-dojo-props="title:'Switch Basemap', open:true">
+                <div data-dojo-type="dijit/layout/ContentPane" style="width:380px; height:280px; overflow:auto;">
+                    <div id="basemapGallery"></div>
+                </div>
+            </div>
+        </div>*@
+                <span id="infospan" style="position:absolute; left:15px; bottom:5px; color:#000; z-index:50;"></span>
             </div>
 
         </div>
@@ -103,9 +112,9 @@
                             <select class="form-control form-control-sm chzn-selec" id="selRef" name="Type_Terrain">
                                 @*<option value="">--- Sélectionner une réference fonciere ---</option>*@
                                 @foreach (var item in Model.References_Foncieres@*.OrderByDescending(i=>i.Id_RF)*@)
-                                {
-                                    <option value="@item.Id_RF">@item.NomRF</option>
-                                }
+{
+<option value="@item.Id_RF">@item.NomRF</option>
+}
                             </select>
                             <br /><input class="form-control" type="text" placeholder="Numero fincier" id="numfonc" />
                             <br /><input class="form-control" type="text" placeholder="Indice" id="indice" />
@@ -148,7 +157,7 @@
                                 @*<button type="submit" class="btn btn-lg buttonsReapeateds" value="1" name="enregistrer" id="btnsend">
                                         Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
                                     </button>*@
-                                <a onclick="passClicked(this)" class="btn btn-lg buttonsReapeateds" value="1" name="enregistrer" id="btnsend">
+                                <a onclick="passClicked(this,'enregistrer')" class="btn btn-lg buttonsReapeateds" style="color:white">
                                     Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
                                 </a>
                             </p>
@@ -164,19 +173,8 @@
     @section Scripts{
         <script src="http://localhost/arcgis_js_api/library/3.27/3.27/init.js"></script>
         <script src="~/Content/mapApi.js"></script>
-        <script>
-            function passClicked(a) {
-                if (confirm('Voulez Vous Vraiment passer a L\'etape suivante ??')) {
-                    var input = document.createElement('input');
-                    input.setAttribute('type','hidden');
-                    input.setAttribute('name','enregistrer');
-                    input.setAttribute('value', '1');
-                    a.parentNode.appendChild(input);
-                    console.log(a.closest('form'));
-                    a.closest('form').submit();
-                }
-            }
-        </script>
+
+        <script src="~/Content/PassNextStep.js"></script>
 
         @*<script src="https://js.arcgis.com/3.27/"></script>
             <script>

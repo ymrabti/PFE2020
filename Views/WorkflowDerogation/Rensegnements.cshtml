@@ -25,7 +25,21 @@
     </nav>
 </section>
 
+<style>
+    /*input:invalid {
+  border: 2px dashed red;
+}
 
+input:valid {
+  border: 2px solid #0f0;
+}
+select:valid{
+    border: 2px dashed green;
+}
+select:invalid{
+    border:2px groove red;
+}*/
+</style>
 @using GestionnaireUtilisateurs.Controllers
 @{
     Html.RenderAction("Indicators", "WorkflowDerogation", new { Tache = WorkflowDerogationController._Rensegnement });
@@ -55,8 +69,8 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="form-group">
-                                <label for="name" style="font-size:12px;">Préfecture :</label>
-                                <select disabled="@NCree" class="form-control form-control-sm" id="Prefectures" name="Prefecture">
+                                <label for="name" style="font-size: 12px;">Préfecture :</label>
+                                <select disabled="@NCree" required class="form-control form-control-sm" id="Prefectures" name="Prefecture">
                                     <option value="">-------- Sélectionner la préfecture : --------</option>
                                     @foreach (var item in Model.Provs)
                                     {
@@ -82,7 +96,7 @@
                     <div class="row" style="margin-bottom:25px">
                         <div class="col-sm-4">
                             <label for="name" style="font-size:12px;">N° de Dossier :</label>
-                            <input disabled="@NCree" required type="number" class="form-control" id="NumDossier" name="Code_DemDerg"
+                            <input disabled="@NCree" required type="number" min="1" class="form-control" id="NumDossier" name="Code_DemDerg"
                                    oninvalid="this.setCustomValidity('N° de Dossier obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
                         <div class="col-sm-4">
@@ -140,7 +154,7 @@
                         <div class="col-sm-4">
 
                             <label for="name" style="font-size:12px;">Superficie (m²) :</label>
-                            <input disabled="@NCree" required type="number" class="form-control" id="superficie" value="" name="Superficie_Terrain_DemDerg"
+                            <input disabled="@NCree" required type="number" min="10" class="form-control" id="superficie" value="" name="Superficie_Terrain_DemDerg"
                                    oninvalid="this.setCustomValidity('Superficie obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
 
@@ -189,7 +203,7 @@
                         </div>
                         <div class="col-sm-4">
                             <label for="name" style="font-size:12px;">Montant d'investissement (en DH):</label>
-                            <input disabled="@NCree" required type="number" class="form-control" id="montantInvest" value="" name="Montant_Investissement_DemDerg"
+                            <input disabled="@NCree" required type="number" min="100" class="form-control" id="montantInvest" value="" name="Montant_Investissement_DemDerg"
                                    oninvalid="this.setCustomValidity('Montant d\'investissement obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
                         <div class="col-sm-4">
@@ -213,12 +227,12 @@
                         </div>
                         <div class="col-sm-4">
                             <label for="name" style="font-size:12px;">Emplois induits :</label>
-                            <input disabled="@NCree" required type="number" class="form-control" id="emploisInd" value="" name="Emploi_generer_DemDerg"
+                            <input disabled="@NCree" required type="number" min="1" class="form-control" id="emploisInd" value="" name="Emploi_generer_DemDerg"
                                    oninvalid="this.setCustomValidity('Emplois induits obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
                         <div class="col-sm-4">
                             <label for="name" style="font-size:12px;">Durée de réalisation (Jours) :</label>
-                            <input disabled="@NCree" required type="number" class="form-control" id="dureeReal" value="" name="Duree_realisation_DemDerg"
+                            <input disabled="@NCree" required type="number" min="1" class="form-control" id="dureeReal" value="" name="Duree_realisation_DemDerg"
                                    oninvalid="this.setCustomValidity('Durée de réalisation obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
                     </div>
@@ -235,25 +249,25 @@
 
                         <div class="col-sm-3">
                             <label for="name" style="font-size:12px;">Ratio Résidentiel :</label>
-                            <input disabled="@NCree" required type="number" class="form-control" id="ratioResid" value="" name="Ratio_resid_DemDerg"
+                            <input disabled="@NCree" max="100" min="0" required type="number" class="form-control" id="ratioResid" value="" name="Ratio_resid_DemDerg"
                                    oninvalid="this.setCustomValidity('Ratio Résidentiel obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
 
                         <div class="col-sm-3">
                             <label for="name" style="font-size:12px;">Ratio Social :</label>
-                            <input disabled="@NCree" required type="number" class="form-control" id="ratioSoc" value="" name="Ratio_Social_DemDerg"
+                            <input disabled="@NCree" max="100" min="0" required type="number" class="form-control" id="ratioSoc" value="" name="Ratio_Social_DemDerg"
                                    oninvalid="this.setCustomValidity('Ratio Social obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
 
                         <div class="col-sm-3">
                             <label for="name" style="font-size:12px;">Ratio Touristique :</label>
-                            <input disabled="@NCree" required type="number" class="form-control" id="ratioTour" value="" name="Ratio_touris_DemDerg"
+                            <input disabled="@NCree" max="100" min="0" required type="number" class="form-control" id="ratioTour" value="" name="Ratio_touris_DemDerg"
                                    oninvalid="this.setCustomValidity('Ratio Touristique obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
 
                         <div class="col-sm-3">
                             <label for="name" style="font-size:12px;">Ratio Industriel :</label>
-                            <input disabled="@NCree" required type="number" class="form-control" id="rationInd" value="" name="Ratio_indus_DemDerg"
+                            <input disabled="@NCree" max="100" min="0" required type="number" class="form-control" id="rationInd" value="" name="Ratio_indus_DemDerg"
                                    oninvalid="this.setCustomValidity('Ratio Industriel obligatoire !')" oninput="this.setCustomValidity('')">
                         </div>
 
@@ -261,11 +275,14 @@
                     <br /><br />
                     <center class="fixed-bottom">
                         <button type="submit" class="btn btn-lg" value="0" name="enregistrer" id="btnSave" style="background-color:#09aacc; color:white">
-                            Enregister   <i class="fa fa-level-down-alt"></i>
+                            Enregister <i class="fa fa-level-down-alt"></i>
                         </button>
-                        <button type="submit" class="btn btn-lg" value="1" name="enregistrer" id="btnsend" style="background-color:#09aacc; color:white">
-                            Passer à l'etape suivante  <i class="fa fa-paper-plane"></i>
-                        </button>
+                        @*<button type="submit" class="btn btn-lg" value="1" name="enregistrer" id="btnsend" style="background-color:#09aacc; color:white">
+                                      Passer à l'etape suivante <i class="fa fa-paper-plane"></i>
+                            </button>*@
+                        <a onclick="passClicked(this,'enregistrer')" class="btn btn-lg buttonsReapeateds" style="color:white">
+                            Passer à l'etape suivante <i class="fa fa-paper-plane"></i>
+                        </a>
                     </center>
 
                 }
@@ -418,6 +435,9 @@
                 $("#formsubmit").submit();
             }
         </script>*@
+    </script>
+    <script src="~/Content/PassNextStep.js">
+
     </script>
 }
 else
