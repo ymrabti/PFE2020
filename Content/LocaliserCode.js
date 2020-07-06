@@ -1,4 +1,6 @@
 ﻿
+$("#localiser").click(Localiser);
+
 function Localiser() {
 
     graphicLayer.clear();

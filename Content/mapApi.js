@@ -5,7 +5,6 @@
     "esri/arcgis/utils",
     'esri/tasks/query',
     'esri/tasks/QueryTask',
-    "esri/layers/FeatureLayer",
     "esri/layers/GraphicsLayer",
     "esri/tasks/GeometryService",
     "esri/geometry/Extent",
@@ -32,7 +31,7 @@
     "dojo/domReady!"
 ],
     function (
-        Map, FeatureLayer, on, arcgisUtils, Query, QueryTask, FeatureLayer, GraphicsLayer, GeometryService, Extent, SpatialReference, LayerList,
+        Map, FeatureLayer, on, arcgisUtils, Query, QueryTask, GraphicsLayer, GeometryService, Extent, SpatialReference, LayerList,
         Legend, BasemapGallery, Graphic, SimpleMarkerSymbol, SimpleLineSymbol, Color,
         Draw, SimpleFillSymbol, PictureFillSymbol, CartographicLineSymbol, parser, registry, Polygon, Point, webMercatorUtils, HomeButton, geometryEngine, dom
     ) {
@@ -43,7 +42,14 @@
             zoom: 11
         });
 
-        var wkid = new SpatialReference(26191); var wkid1 = new SpatialReference(3857);
+        var wkid = new SpatialReference(26191);//Merchich - Nord Maroc
+        //WGS84 Bounds: -9.7500, 31.5000, -1.0100, 35.9500
+        //Projected Bounds: 86661.6116, 109335.0949, 916839.6617, 602597.8926
+        //Scope: Large and medium scale topographic mapping and engineering survey.
+        //Last Revised: Sept. 19, 2002
+        //Area: Morocco - north of 31.5°N
+        var wkid1 = new SpatialReference(3857);//WGS84 Web Mercator (Auxiliary Sphere): SR ... x y
+        var wkid2 = new SpatialReference(102100);//SR-ORG Projection -- Spatial Reference lat lon
         gsvc = new GeometryService("https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
 
         map.on("load", initToolbar);
@@ -51,18 +57,30 @@
             map.on("mouse-move", showCoordinates);
             map.on("mouse-drag", showCoordinates);
         });
+        var coordsWidget = document.getElementById("coordsWidget");
+        var spanCoords = document.getElementById("infospan");
 
         function showCoordinates(evt) {
-            //the map is in web mercator but display coordinates in geographic (lat, long)
-            var mp = webMercatorUtils.webMercatorToGeographic(evt.mapPoint);
-
-            
-            //gsvc.project([mp], wkid, function (projectPoint) {
-            //    document.getElementById("infospan").innerHTML = projectPoint[0].x.toFixed(2) + ", " + projectPoint[0].y.toFixed(2);
+            //evt : 102100,     mp : 4326
+            //var mp = webMercatorUtils.webMercatorToGeographic(evt.mapPoint);
+            //gsvc.project([evt.mapPoint], wkid, function (projectPoint) {
+            //    spanCoords.innerHTML = projectPoint[0].x.toFixed(2) + ", " + projectPoint[0].y.toFixed(2);
             //})
-
+            //console.log(evt);
+            //var coordsText = mp.x/*.toFixed(2)*/ + ", " + mp.y/*.toFixed(2)*/;
+            var coords = evt.mapPoint.x.toFixed(3) + " , " + evt.mapPoint.y.toFixed(3);
+            coordsWidget.innerHTML = coords;
+            //spanCoords.innerHTML = coordsText;
+            //console.log(coordsText + " . " + mp.SpatialReference + " " + coords + " . "+evt.SpatialReference);
         }
-        
+
+
+
+        //var layerAURS = new FeatureLayer({
+        //    url: "https://si.aurs.org.ma/server/rest/services/PARCELLAIRE/FeatureServer", layerId: 0
+        //});
+
+
 
         var markerSymbol = new SimpleMarkerSymbol();
         markerSymbol.setPath("M16,4.938c-7.732,0-14,4.701-14,10.5c0,1.981,0.741,3.833,2.016,5.414L2,25.272l5.613-1.44c2.339,1.316,5.237,2.106,8.387,2.106c7.732,0,14-4.701,14-10.5S23.732,4.938,16,4.938zM16.868,21.375h-1.969v-1.889h1.969V21.375zM16.772,18.094h-1.777l-0.176-8.083h2.113L16.772,18.094z");
@@ -110,33 +128,28 @@
                 symbol = fillSymbol;
             }
             //map.graphics.clear();
-            var temp1 = evt.geometry.rings[0];
-            var arrayx = []; var arrayy = [];
-            for (ik = 0; ik < temp1.length; ik++) { arrayx.push(temp1[ik][0]) };
-            for (ik = 0; ik < temp1.length; ik++) { arrayy.push(temp1[ik][1]) };
-            var polygon = {
-                rings: evt.geometry.rings, _ring: 0, spatialReference: { wkid: 102100, latestWkid: 3857 },
-                cache: { xmin: Math.min(...arrayx), ymin: Math.min(...arrayy), xmax: Math.max(...arrayx), ymax: Math.max(...arrayy) }
-            };
+            //var temp1 = evt.geometry.rings[0];
+            //var arrayx = []; var arrayy = [];
+            //for (ik = 0; ik < temp1.length; ik++) { arrayx.push(temp1[ik][0]) };
+            //for (ik = 0; ik < temp1.length; ik++) { arrayy.push(temp1[ik][1]) };var pointsCoordinates = [];
+            //console.log(evt.geometry);
+            //for (i = 0; i < evt.geometry.rings[0].length; i++) {
+            //    pt = new Point(evt.geometry.rings[0][i][0], evt.geometry.rings[0][i][1], wkid1);
+            //    pointsCoordinates.push(pt);
+            //}
+            //projecteur(pointsCoordinates);
             
-            var pointsCoordinates = [];
-            console.log(evt.geometry);
-            for (i = 0; i < evt.geometry.rings[0].length; i++) {
-                pt = new Point(evt.geometry.rings[0][i][0], evt.geometry.rings[0][i][1], wkid1);
-                pointsCoordinates.push(pt);
-            }
 
-            projecteur(pointsCoordinates);
             map.graphics.add(new Graphic(evt.geometry, symbol));
         }
+
         function projecteur(points) {
             gsvc.project(points, wkid, function (projectPoints) {
                 console.log(projectPoints);
             })
         }
 
-        var array = [];
-        var graphicLayer = new GraphicsLayer();
+        var array = []; var PointsWKID = [];var PointsWKID1 = [];
 
         arcgisUtils.arcgisUrl = "https://si.aurs.org.ma/portal/sharing/content/items";
         var json = [
@@ -295,18 +308,17 @@
             ]
         ]
 
-        
+
 
         var elementtt = 0;
-        
-        
+
+
         var x = document.getElementById('xx');
         var y = document.getElementById('yy');
         document.getElementById('xx').onclick = function () {
             x.value = json[0][elementtt].x.toFixed(2);
             y.value = json[0][elementtt].y.toFixed(2);
         }
-        var xCenteroidF; var yCenteroidF;
 
         x.value = json[0][elementtt].x.toFixed(2);
         y.value = json[0][elementtt].y.toFixed(2);
@@ -322,55 +334,66 @@
         complemen.value = 'Bi';
         document.getElementById('addCoord').onclick = function () {
 
-            p = new Point(x.value.replace(",", "."), y.value.replace(",", "."), wkid);
-            
-            //gsvc.project([pt], wkid1, function (projectPoint) {
-            //});
-            //var p = projectPoint[0];
-                
-            var sym = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 10,
-                new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255, 0, 0]), 1), new Color([0, 255, 0, 0.25]));
+            pp = new Point(x.value.replace(",", "."), y.value.replace(",", "."), wkid);
+            PointsWKID.push(pp);
 
-            //var sym = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 10,
-            //    new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT,
-            //        new Color([255, 0, 0]), 1),
-            //    new Color([0, 255, 0, 0.25]));
+            gsvc.project([pp], wkid1, function (projectPoint) {
+                var p = projectPoint[0];
+                var sym = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 10,
+                    new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([255, 0, 0]), 1), new Color([0, 255, 0, 0.25]));
 
-
-            var graphic2 = new Graphic(p, sym);
-            map.graphics.add(graphic2);
-
-            //console.log(projectPoint[0]);
-
-            var thispoint = [p.x, p.y];
-            array.push(thispoint);
+                //var sym = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_SQUARE, 10,
+                //    new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT,
+                //        new Color([255, 0, 0]), 1),
+                //    new Color([0, 255, 0, 0.25]));
 
 
-            //Liste.push(p);
-            //map.centerAt(p);
-            if (array.length == 1) {
-                map.centerAt(p);
-            }
-            else {
-                var arrayx = []; var arrayy = [];
-                for (ik = 0; ik < array.length; ik++) { arrayx.push(array[ik][0]) };
-                for (ik = 0; ik < array.length; ik++) { arrayy.push(array[ik][1]) };
-                var _xmax = Math.max(...arrayx); var _xmin = Math.min(...arrayx);
-                var _ymax = Math.max(...arrayy); var _ymin = Math.min(...arrayy);
+                var graphic2 = new Graphic(p, sym);
+                map.graphics.add(graphic2);
+
+
+                var thispoint = [p.x, p.y];
+                array.push(thispoint);
+                PointsWKID1.push(p);
+
+
+                if (array.length == 1) {
+                    map.centerAt(p);
+                }
+                else {
+                    var arrayx = []; var arrayy = [];
+                    for (ik = 0; ik < array.length; ik++) { arrayx.push(array[ik][0]) };
+                    for (ik = 0; ik < array.length; ik++) { arrayy.push(array[ik][1]) };
+                    var _xmax = Math.max(...arrayx); var _xmin = Math.min(...arrayx);
+                    var _ymax = Math.max(...arrayy); var _ymin = Math.min(...arrayy);
 
 
 
-                var startExtent = new Extent();
-                startExtent.xmin = _xmin;
-                startExtent.ymin = _ymin;
-                startExtent.xmax = _xmax;
-                startExtent.ymax = _ymax;
-                startExtent.spatialReference = wkid;
+                    var startExtent = new Extent();
+                    startExtent.xmin = _xmin;
+                    startExtent.ymin = _ymin;
+                    startExtent.xmax = _xmax;
+                    startExtent.ymax = _ymax;
+                    startExtent.spatialReference = wkid1;
 
-                map.setExtent(startExtent);
+                    map.setExtent(startExtent);
 
-                //new Extent({ xmin: -20098296, ymin: -2804413, xmax: 5920428, ymax: 15813776, spatialReference: { wkid: 54032 } })
-            }
+                    //new Extent({ xmin: -20098296, ymin: -2804413, xmax: 5920428, ymax: 15813776, spatialReference: { wkid: 54032 } })
+                }
+
+                if (array.length==4) {
+                    //var polygon = {
+                    //    rings: PointsWKID1, spatialReference: { wkid: 102100, latestWkid: 3857 }
+                    //};
+                    var polygonJson = {
+                        "rings": [array], "spatialReference": { "wkid": 102100, "latestWkid": 3857}
+                    };
+                    var polygon = new Polygon(polygonJson);
+                    console.log(polygon.rings)
+                    map.graphics.add(new Graphic(polygon, fillSymbol));
+                }
+            });
+
 
             ///////////////////////
 
@@ -443,10 +466,10 @@
                 cell4.appendChild(btn1);
             }
             cell4.appendChild(btn);
-            
+
+            elementtt += 1;
             x.value = json[0][elementtt].x.toFixed(2);
             y.value = json[0][elementtt].y.toFixed(2);
-            elementtt += 1;
             x.style.boxShadow = "";
             y.style.boxShadow = "";
 
@@ -643,8 +666,5 @@
                 $('#testBtn2').val("0");
             });
         });
-
-
-        $("#localiser").click(Localiser);
 
     });

@@ -768,6 +768,7 @@
     <Content Include="Content\img\sms1.png" />
     <Content Include="Content\img\up.png" />
     <Content Include="Content\img\x.png" />
+    <Content Include="Content\LocaliserCode.js" />
     <Content Include="Content\map.js" />
     <Content Include="Content\mapApi.js" />
     <Content Include="Content\PassNextStep.js" />
