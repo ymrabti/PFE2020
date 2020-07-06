@@ -1074,12 +1074,16 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 finalisees = false;
             }
-            var demandes = database.Demande_Derogation.Where(k => !k.Supp).Where(f => f.Cloture_DemDerg == finalisees);
-
+            var demandes = database.Demande_Derogation
+                    .OrderByDescending(p => p.Id_DemDerg)
+                    .Where(k => !k.Supp)
+                    .Where(f => f.Cloture_DemDerg == finalisees);
+            ViewBag.Nombre = demandes.Count();
             int totale_resultats = demandes.Count();
+            int reste;
 
-            int nombre_de_pages = totale_resultats / nombre_res_ppage + 1;
-
+            int nombre_de_pages = Math.DivRem(totale_resultats , nombre_res_ppage ,out reste);
+            if (reste!=0) {nombre_de_pages = nombre_de_pages + 1; } 
             ViewBag.page = page; ViewBag.nombre_de_pages = nombre_de_pages;
             ViewBag.finalisees = finalisees;
 
@@ -1093,13 +1097,13 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             else
             {
-                var model = new MultiModeles
-                {
-                    DemDergs = demandes
-                    .OrderByDescending(p => p.Id_DemDerg)
+                var demsdergs = demandes
                     .Skip((page.Value - 1) * nombre_res_ppage)
                     .Take(nombre_res_ppage)
-                    .ToList()
+                    .ToList();
+                var model = new MultiModeles
+                {
+                    DemDergs = demsdergs
                 };
                 return View(model);
             }
@@ -1204,7 +1208,7 @@ namespace GestionnaireUtilisateurs.Controllers
         #endregion
         #region Programmes d'assistance
 
-        static int nombre_res_ppage = 10;
+        static int nombre_res_ppage = 7;
         public const string Administrator = "Administrator";
         public const string _Rensegnement = "Renseignement";
         public const string _Programmation = "Programmation";
