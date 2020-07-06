@@ -169,7 +169,7 @@
 
             var td = document.createElement('td');
 
-            td.innerHTML = "<select required class='form-control form-control-sm chzn-selec' name='FK_Nature_Courrier'>"+
+            td.innerHTML = "<select required class='form-control form-control-sm chzn-selec' name='FK_Nature_Courrier'  onchange='surChange(this)'>"+
                                             "<option value=''>--- Nature de courrier ---</option>"+
                                             "@foreach (var item_ in Model.NatCours){<option value='@item_.Id_Nature_Courrier'>@item_.Nature_Courrier1</option>}"+
                                         "</select>" ;
@@ -178,19 +178,19 @@
 
             var td = document.createElement('td');
 
-            td.innerHTML = "<input required class='form-control' type='datetime-local' name='Date_Courier' value='' />";
+            td.innerHTML = "<input required class='form-control' min='@DateTime.Now.ToString("yyyy-MM-ddTHH:mm");' onchange='surChange(this)' type='datetime-local' name='Date_Courier' value='' />";
             tr.appendChild(td);
             ////////////////////////////////////////////// TD ////////////////////////////////////////////////////////
 
             var td = document.createElement('td');
 
-            td.innerHTML = "<input required class='form-control' type='email' name='Source_Courrier' value='' />";
+            td.innerHTML = "<input required class='form-control' onchange='surChange(this)' type='email' name='Source_Courrier' value='' />";
             tr.appendChild(td);
             ////////////////////////////////////////////// TD ////////////////////////////////////////////////////////
 
             var td = document.createElement('td');
 
-            td.innerHTML = "<input required class='form-control' type='email' name='Destination_Courrier' value='' />";
+            td.innerHTML = "<input required class='form-control' onchange='surChange(this)' type='email' name='Destination_Courrier' value='' />";
             tr.appendChild(td);
             ////////////////////////////////////////////// TD ////////////////////////////////////////////////////////
 

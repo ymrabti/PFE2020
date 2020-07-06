@@ -31,7 +31,7 @@
 
 @if (Lire)
 {
-    Html.Partial("WorkflowG", Model);
+    <div>@Html.Partial("WorkflowG", Model)</div>
     <div class="card" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc">
         <div class="card-body" id="">
             <div class="form-horizontal">
@@ -235,7 +235,7 @@ else
 
 @section Scripts{
     <script src="~/Content/PassNextStep.js"></script>
-        @*<script language="javascript">
+    @*<script language="javascript">
             $("#natAut").change(function () {
                 if ($("#natAut").val() == "") {
                     $("#natAut").css("border-color", "red");
@@ -311,4 +311,4 @@ else
                 traditional: true
             }
         </script>*@
-    }
+}

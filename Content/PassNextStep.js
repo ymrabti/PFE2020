@@ -16,6 +16,14 @@ $('select').change(function () {
         this.style.border = "2px dashed green";
     }
 });
+function surChange(element) {
+    if (element.type != null && element.type != 'submit' && !element.checkValidity()) {
+        element.style.border = "2px solid red";
+    }
+    else {
+        element.style.border = "2px dashed green";
+    }
+}
 
 var inputs = document.getElementsByTagName('input');
 var selects = document.getElementsByTagName('select');
@@ -26,13 +34,14 @@ function passClicked(a, nameAttr) {
         Array.from(inputs).forEach(function (item) {
             if (item.type == 'file') {
                 if (!item.checkValidity()) {
+                    errors += 1;
                     item.className = 'inputfile inputfile-err';
                 }
                 else {
                     item.className = 'inputfile inputfile-1';
                 }
             }
-            else if (item.type != null && item.id != 'Date_Commission' && item.type != 'submit' && !item.checkValidity()) {
+            if (item.type != null && item.type != 'file' && item.id != 'Date_Commission' && item.type != 'submit' && !item.checkValidity()) {
                 errors += 1;
                 item.style.border = "2px solid red";
             }

@@ -596,7 +596,7 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             else
             {
-                if (Read && demandeDerg.Commission != null)
+                if (Read && demandeDerg.Commission != null && demandeDerg.Commission.Date_Commission>DateTime.Now.AddDays(-1))
                 {
                     demandeDerg.FK_DemDerg_EtatAvc = 19;
                     database.SaveChanges();
@@ -996,7 +996,7 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             else
             {
-                if (demdeg.Autorisation_Derogation != null)
+                if (demdeg.Autorisation_Derogation != null && Int32.Parse(demdeg.Autorisation_Derogation.EtatAvancemt_Autorisation)==100 )
                 {
                     demdeg.FK_DemDerg_EtatAvc = 22;
                     database.SaveChanges();

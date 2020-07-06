@@ -55,8 +55,8 @@
                                         *
                                     </label>
                                 </label>
-                                <input required type="datetime-local" class="form-control" value="@DateTime.Now.AddDays(-13).ToString()"
-                                       min="2020-6-30T10:00" max="2020-7-30T10:00"
+                                <input required type="datetime-local" class="form-control" 
+                                       min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" max="2020-7-30T10:00"
                                        id="Date_Commission" name="Date_Commission">
                             </div>
                         </div>

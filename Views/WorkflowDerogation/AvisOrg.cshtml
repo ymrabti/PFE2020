@@ -256,7 +256,7 @@
                                         {
                                             <tr id="@item.FK_Organisme">
                                                 <td>
-                                                    <select disabled='@NModifier' class='form-control form-control-sm chzn-selec' name='FK_Organisme'>
+                                                    <select disabled='@NModifier' class='form-control form-control-sm chzn-selec' name='FK_Organisme' onchange="surChange(this)">
                                                         <option value=''>--- Parties Prenantes  ---</option>
                                                         @foreach (var element in Model.Orgs)
                                                         {
@@ -273,7 +273,7 @@
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <select disabled='@NModifier' class='form-control form-control-sm chzn-selec' name='FK_TypAvis'>
+                                                    <select disabled='@NModifier' class='form-control form-control-sm chzn-selec' name='FK_TypAvis' onchange="surChange(this)">
                                                         <option value=''>--- Avis  ---</option>
                                                         @foreach (var element in Model.TypAviss)
                                                         {
@@ -290,7 +290,7 @@
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="Detail_Avis" value="@item.Detail_Avis" />
+                                                    <input type="text" name="Detail_Avis" value="@item.Detail_Avis" onchange="surChange(this)" />
                                                 </td>
                                                 <td>
                                                     @if (Supprimer)
@@ -405,6 +405,7 @@
         <script language="javascript">
             $('#url_Doc_Derg').change(function (evt) {
                 var input = document.getElementById('url_Doc_Derg'); filechange(input);
+                surChange(input);
             });
             function filechange(input) {
                 var label = input.nextElementSibling;
@@ -474,13 +475,13 @@
                 tr.appendChild(td);
 
                 var td = document.createElement('td');
-                td.innerHTML = "<select required class='form-control form-control-sm chzn-selec' name='FK_TypAvis'><option value=''>--- Avis  ---</option>"+
+                td.innerHTML = "<select required class='form-control form-control-sm chzn-selec' name='FK_TypAvis' onchange='surChange(this)'><option value=''>--- Avis  ---</option>"+
                                     "@foreach (var element in Model.TypAviss){<option value='@element.Id_TypAvis'>@element.Type_Avis1 </option>}"+
                                 "</select>";
                 tr.appendChild(td);
 
                 var td = document.createElement('td');
-                td.innerHTML = "<input required type='text' name='Detail_Avis' />";
+                td.innerHTML = "<input required type='text' name='Detail_Avis' onchange='surChange(this)' />";
                 tr.appendChild(td);
 
                 var element = document.createElement("i");
