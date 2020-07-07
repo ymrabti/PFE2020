@@ -22,6 +22,7 @@ namespace GestionnaireUtilisateurs.Models
         public System.Data.Entity.Spatial.DbGeometry shape { get; set; }
         public byte[] GDB_GEOMATTR_DATA { get; set; }
         public Nullable<int> Fk_DemDerog { get; set; }
+        public string GeometryText { get; set; }
     
         public virtual Demande_Derogation Demande_Derogation { get; set; }
     }

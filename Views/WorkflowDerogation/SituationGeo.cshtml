@@ -113,16 +113,16 @@
                             <select class="form-control form-control-sm chzn-selec" id="selRef" name="Type_Terrain">
                                 @*<option value="">--- Sélectionner une réference fonciere ---</option>*@
                                 @foreach (var item in Model.References_Foncieres@*.OrderByDescending(i=>i.Id_RF)*@)
-{
-<option value="@item.Id_RF">@item.NomRF</option>
-}
+                                {
+                                    <option value="@item.Id_RF">@item.NomRF</option>
+                                }
                             </select>
                             <br /><input class="form-control" type="text" placeholder="Numero fincier" id="numfonc" />
                             <br /><input class="form-control" type="text" placeholder="Indice" id="indice" />
                             <br /><input class="form-control" type="text" placeholder="Fraction" id="fraction" />
                             <br /><input class="form-control" type="text" placeholder="Complement" id="complement" />
                             <br />
-                            <button class="btn btn-space btn-primary" type="button" style="position:absolute;right:10px" id="alimBD">Ajouter coordonnées</button>
+                            <button class="btn btn-space btn-primary" type="button" style="position:absolute;right:10px" id="alimBD">Ajouter parcelle</button>
                             <br /><br /><br />
                         </div>
 

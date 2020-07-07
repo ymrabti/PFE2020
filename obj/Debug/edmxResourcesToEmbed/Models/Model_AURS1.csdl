@@ -443,6 +443,7 @@
     <Property Name="GDB_GEOMATTR_DATA" Type="Binary" MaxLength="Max" FixedLength="false" />
     <Property Name="Fk_DemDerog" Type="Int32" />
     <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_parcell_Demande_Derogation" FromRole="parcell" ToRole="Demande_Derogation" />
+    <Property Name="GeometryText" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="PROVINCES_RSK">
     <Key>
