@@ -140,9 +140,9 @@
 
                 <div class="row">
                     @*@using (Html.BeginForm("SituationGeo", "WorkflowDerogation", FormMethod.Post))
-                    {
-                        @Html.AntiForgeryToken()
-                    }*@
+                        {
+                            @Html.AntiForgeryToken()
+                        }*@
                     <center>
                         <p class="fixed-bottom">
                             <input type="hidden" name="Id_DemDerg" value="@Model.DemDerg.Id_DemDerg" />
@@ -309,11 +309,6 @@
             else {
                 symbol = fillSymbol;
             }
-            //map.graphics.clear();
-            //var temp1 = evt.geometry.rings[0];
-            //var arrayx = []; var arrayy = [];
-            //for (ik = 0; ik < temp1.length; ik++) { arrayx.push(temp1[ik][0]) };
-            //for (ik = 0; ik < temp1.length; ik++) { arrayy.push(temp1[ik][1]) };
             var pointsCoordinates = [];
             for (i = 0; i < evt.geometry.rings[0].length; i++) {
                 pt = new Point(evt.geometry.rings[0][i][0], evt.geometry.rings[0][i][1], wkid1);
@@ -332,9 +327,9 @@
             })
         }
 
-        var array = []; var PointsWKID = []; var PointsWKID1 = [];
+        var array = []; var PointsWKID1 = []; var ringsParcels = [];
 
-        var ringsParcels = []; var centroids = []; var ringsPointsWKID1 = [];
+        var indices = [];var numFonciers = [];var ringsParcels12 = [];
 
         arcgisUtils.arcgisUrl = "https://si.aurs.org.ma/portal/sharing/content/items";
 
@@ -532,7 +527,53 @@
             ]
         ]
 
+        CountDownIntervalle(3,1);
+        function CountDownIntervalle(secondes,ticksSecondes) {
+            var countDownDate = secondes*1000;
+            var interval = ticksSecondes*1000;
+            var aug = 0;
 
+            var x = setInterval(function() {
+
+    
+              var distance = countDownDate - aug;
+               aug+=interval;
+    
+                console.log(distance);
+    
+              if (distance < 0) {
+                  clearInterval(x);
+                  DbToMap();
+                //DO SOMETHING
+              }
+            }, interval);
+        }
+
+        function DbToMap() {
+            
+             @foreach (var item in Model.DemDerg.parcell) {
+                @:ringsParcels.push([JSON.parse("@item.GeometryText")]);
+
+            }
+             @foreach (var item in Model.DemDerg.parcell) {
+                @:ringsParcels12.push(JSON.parse("@item.GeometryText"));
+
+            }
+             @foreach (var item in Model.DemDerg.parcell) {
+                @:indices.push("@item.indice");
+
+            }
+             @foreach (var item in Model.DemDerg.parcell) {
+                @:numFonciers.push("@item.numfoncier");
+
+            }
+            
+            //console.log(liste);
+            if (ringsParcels.length > 0) {
+                RecuperePolygons(ringsParcels);
+                GetExtentsFromPolygons(ringsParcels);
+            }
+        }
 
         var elementtt = 0;
         var parcelelement = document.getElementById('parcelId').value;
@@ -558,7 +599,6 @@
             }
             else {
                 pp = new Point(x.value.replace(",", "."), y.value.replace(",", "."), wkid);
-                PointsWKID.push(pp);
 
                 gsvc.project([pp], wkid1, function (projectPoint) {
 
@@ -609,15 +649,14 @@
                         cell2.innerHTML = document.getElementById('new_lon').value.replace(",", ".");
                         cell3.innerHTML = document.getElementById('new_lat').value.replace(",", ".");
                         var pt2 = new Point(a, b, wkid);
-                        PointsWKID[id - 1] = pt2;
                         gsvc.project([pt2], wkid1, function (projectPoint) {
                             var p2 = projectPoint[0];
                             array[id - 1] = [p2.x, p2.y];
                             PointsWKID1[id - 1] = p2;
+                            UpdateGraphicPoints();CarteSetExtent(); 
                         });
                         cell4.removeChild(valider); cell5.removeChild(btn1);
                         cell4.appendChild(btn);
-                        CarteSetExtent(); UpdateGraphicPoints();
                     }
                     var btn1 = document.createElement('input');
                     btn1.setAttribute("src", "../Content/documentation/img/del.png");
@@ -627,9 +666,8 @@
                     btn1.onclick = function () {
                         table.deleteRow(id - 1);
                         array.splice(id - 1, 1);
-                        PointsWKID.splice(id - 1, 1);
                         PointsWKID1.splice(id - 1, 1);
-                        CarteSetExtent(); UpdateGraphicPoints();
+                        UpdateGraphicPoints();CarteSetExtent(); 
                         //if (table.rows.length > btn1.getAttribute('id')) {}
                         var x1 = parseInt(id) - 1;
                         for (var i = x1; i < table.rows.length + 1; i++) {
@@ -665,22 +703,22 @@
             if (array.length < 4) {
                 alert('4 points au mois pour dessiner un parcelle');
             }
+            else if (indic.value=="") {
+                alert('indice obligatoires');
+            }
+            else if (numFon.value=="") {
+                alert('numero fonciere est obligatoirs');
+            }
             else {
-                ringsParcels.push([array]);
-                ringsPointsWKID1.push(PointsWKID1);
+                ringsParcels.push([array]);ringsParcels12.push(array);
+                
+                numFonciers.push(numFon.value);
+                    indices.push(indic.value);
                 array = []; PointsWKID1 = [];
                 $("#tbodyCoord tr").remove();
-                RecuperePolygons();
-                var polygonJson = {
-                    "rings": [array], "spatialReference": { "wkid": 102100, "latestWkid": 3857 }
-                };
-                var polygon = new Polygon(polygonJson);
-                //var centre = polygon.getCentroid();
-                //console.log(polygon);
-                //centroids.push([centre.x,centre.y]);
-                //console.log(polygon.rings)
-                map.graphics.add(new Graphic(polygon, fillSymbol));
-                GetExtentsFromPolygons();
+                RecuperePolygons(ringsParcels);
+                DrawPolygon([array]);
+                GetExtentsFromPolygons(ringsParcels);
             }
             //pt = new Point(pol.getCentroid().x, pol.getCentroid().y, wkid);
         }
@@ -691,8 +729,8 @@
             document.getElementById('yy').value = "";
             document.getElementById('numfonc').value = "";
             document.getElementById('indice').value = "";
-            array = []; PointsWKID = [];  PointsWKID1 = [];
-            map.graphics.clear();
+            array = [];   PointsWKID1 = [];
+            map.graphics.clear();RecuperePolygons(ringsParcels);
             $("#tbodyCoord tr").remove();
         }
 
@@ -740,34 +778,41 @@
 
         function UpdateGraphicPoints() {
             map.graphics.clear();
-            array.forEach(myFunction);
-
-            function myFunction(item, index) {
+            RecuperePolygons(ringsParcels);
+            array.forEach(UpdatePoints);
+            function UpdatePoints(item, index) {
                 p = new Point(item[0], item[1], wkid1);
                 var graphic2 = new Graphic(p, markerSymbol);
                 map.graphics.add(graphic2);
             }
         }
 
-        function RecuperePolygons() {
-            map.graphics.clear();
-            ringsParcels.forEach(myFunction);
-
-            function myFunction(item, index) {
-                var polygonJson = {
-                    "rings": item, "spatialReference": { "wkid": 102100, "latestWkid": 3857 }
+        function DrawPolygon(Ring){
+            var polygonJson = {
+                    "rings": Ring, "spatialReference": { "wkid": 102100, "latestWkid": 3857 }
                 };
                 var polygon = new Polygon(polygonJson);
-
+                //var centre = polygon.getCentroid();
+                //console.log(polygon);
+                //centroids.push([centre.x,centre.y]);
+                //console.log(polygon.rings)
                 map.graphics.add(new Graphic(polygon, fillSymbol));
+        }
+
+        function RecuperePolygons(Rings) {
+            map.graphics.clear();
+            Rings.forEach(myFunction);
+
+            function myFunction(item, index) {
+                DrawPolygon(item);
             }
         }
 
-        function GetExtentsFromPolygons() {
+        function GetExtentsFromPolygons(Rings) {
 
             var arrayx = []; var arrayy = [];
 
-            ringsParcels.forEach(myFunction);
+            Rings.forEach(myFunction);
 
             function myFunction(item, index) {
                 var arr = item[0];
@@ -775,11 +820,8 @@
                 for (ik = 0; ik < arr.length; ik++) { arrayy.push(parseInt(arr[ik][1])) };
 
             }
-
             var _xmax = Math.max(...arrayx) ; var _xmin = Math.min(...arrayx) ;
-            var _ymax = Math.max(...arrayy) ; var _ymin = Math.min(...arrayy) ;
-
-
+            var _ymax = Math.max(...arrayy); var _ymin = Math.min(...arrayy);
 
             var startExtent = new Extent();
             startExtent.xmin = _xmin;
@@ -802,12 +844,32 @@
         function passClicked(valeurAttr) {
 
             var formData = new FormData();
-            var anneaux = JSON.stringify(ringsPointsWKID1[0]);
-            formData.append("Anneaux", anneaux);
+            var ParcelleJson = {};
+            Parcelles = [];
+            ringsParcels12.forEach(myFunction);
+            function myFunction(item, index) {
+                var result = "[";
+                item.forEach(myFunctionFille);
+                function myFunctionFille(itemfils, index) {
+                    result += "[";result += itemfils[0] + ","; result += itemfils[1];result += "]";
+                    if (index == item.length - 1) { result += ""; }
+                    else { result += ","; }
+                } result += "]";
+                Parcelles.push({
+                    "GeometryText" : result,
+                    "indice"  : indices[index],
+                    "Fk_DemDerog"  : @Model.DemDerg.Id_DemDerg,
+                    "numFoncier"       : numFonciers[index]
+                });
+                
+            }
+            var json__ = JSON.stringify(Parcelles);
+            formData.append("Parcel", json__);
+
             formData.append("Id_DemDerg", @Model.DemDerg.Id_DemDerg);
+
             formData.append("enregistrer", valeurAttr);
 
-            console.log(ringsPointsWKID1);
             $.ajax({
                 type: "Post",
                 url: '@Url.Action("SituationGeo", "WorkflowDerogation")',
@@ -817,11 +879,11 @@
                 data: formData,
                 processData: false,
                 success: function (data) {
-                    //window.location.href = data;
-                    alert(erreur);
+                    window.location.href = data;
+                    //alert(data);
                 },
-                error: function (resultat, statut, erreur) {
-                    alert(erreur);
+                error: function () {
+                    alert("ERREUR");
                 }
             });
             //if (confirm('Voulez Vous Vraiment passer a L\'etape suivante ??')) {

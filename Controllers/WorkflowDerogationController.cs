@@ -407,12 +407,31 @@ namespace GestionnaireUtilisateurs.Controllers
         [HttpPost, Authorize(Roles = Administrator + "," + _SitGeo)]
         public ActionResult SituationGeo(FormCollection formCollection)
         {
-            int enregistrer = int.Parse(formCollection["enregistrer"]);
-            int Id_DemDerg = int.Parse(formCollection["Id_DemDerg"]);
-            var anneaux = formCollection["Anneaux"];
-            var avv = JsonConvert.DeserializeObject<List<Avis_Org>>(anneaux);
-            var demandeDerg = database.Demande_Derogation.Find(Id_DemDerg);
-
+            if (ModelState.IsValid)
+            {
+                int enregistrer = int.Parse(formCollection["enregistrer"]);
+                int Id_DemDerg = int.Parse(formCollection["Id_DemDerg"]);
+                string Parcels = formCollection["Parcel"];
+                Demande_Derogation demande = database.Demande_Derogation.Find(Id_DemDerg);
+                database.parcell.RemoveRange(demande.parcell);
+                List<parcell> parcellaires = JsonConvert.DeserializeObject<List<parcell>>(Parcels);
+                database.parcell.AddRange(parcellaires);database.SaveChanges();
+                if (enregistrer==0)
+                {
+                    return Json(Url.Action("Encours", "WorkflowDerogation"));
+                }
+                else
+                {
+                    if (demande.parcell.Count()==0)
+                    {
+                        return RedirectToAction("SituationGeo", "WorkflowDerogation", new { Id_DemDerg });
+                    }
+                    else
+                    {
+                        return RedirectToAction("FK_DemDerg_DocDerg", "WorkflowDerogation", new { FK_DemDerg_DocDerg = Id_DemDerg });
+                    }
+                }
+            }
             return Json(Url.Action("Encours", "WorkflowDerogation"));
 
         }
@@ -587,7 +606,7 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             else
             {
-                if (Read && demandeDerg.Commission != null && demandeDerg.Commission.Date_Commission>DateTime.Now.AddDays(-1))
+                if (Read && demandeDerg.Commission != null && demandeDerg.Commission.Date_Commission > DateTime.Now.AddDays(-1))
                 {
                     demandeDerg.FK_DemDerg_EtatAvc = 19;
                     database.SaveChanges();
@@ -745,7 +764,7 @@ namespace GestionnaireUtilisateurs.Controllers
 
                 if (valider == 1)
                 {
-                    if (demdeg.Avis_Org.Where(i=>i.FK_Organisme==1).First().FK_TypAvis==1 && demdeg.Avis_Org.Where(i => i.FK_Organisme == 3).First().FK_TypAvis == 1)
+                    if (demdeg.Avis_Org.Where(i => i.FK_Organisme == 1).First().FK_TypAvis == 1 && demdeg.Avis_Org.Where(i => i.FK_Organisme == 3).First().FK_TypAvis == 1)
                     {
                         demdeg.FK_DemDerg_EtatAvc = 20;
                         database.SaveChanges();
@@ -987,7 +1006,7 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             else
             {
-                if (demdeg.Autorisation_Derogation != null && Int32.Parse(demdeg.Autorisation_Derogation.EtatAvancemt_Autorisation)==100 )
+                if (demdeg.Autorisation_Derogation != null && Int32.Parse(demdeg.Autorisation_Derogation.EtatAvancemt_Autorisation) == 100)
                 {
                     demdeg.FK_DemDerg_EtatAvc = 22;
                     database.SaveChanges();
@@ -1073,8 +1092,8 @@ namespace GestionnaireUtilisateurs.Controllers
             int totale_resultats = demandes.Count();
             int reste;
 
-            int nombre_de_pages = Math.DivRem(totale_resultats , nombre_res_ppage ,out reste);
-            if (reste!=0) {nombre_de_pages = nombre_de_pages + 1; } 
+            int nombre_de_pages = Math.DivRem(totale_resultats, nombre_res_ppage, out reste);
+            if (reste != 0) { nombre_de_pages = nombre_de_pages + 1; }
             ViewBag.page = page; ViewBag.nombre_de_pages = nombre_de_pages;
             ViewBag.finalisees = finalisees;
 
