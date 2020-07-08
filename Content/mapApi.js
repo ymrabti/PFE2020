@@ -31,10 +31,20 @@
     "dojo/domReady!"
 ],
     function (
-        Map, FeatureLayer, on, arcgisUtils, Query, QueryTask, GraphicsLayer, GeometryService, Extent, SpatialReference, LayerList,
+        Map, FeatureLayer, on, arcgisUtils, Query, QueryTask, GraphicsLayer, GeometryService,
+        Extent, SpatialReference, LayerList,
         Legend, BasemapGallery, Graphic, SimpleMarkerSymbol, SimpleLineSymbol, Color,
-        Draw, SimpleFillSymbol, PictureFillSymbol, CartographicLineSymbol, parser, registry, Polygon, Point, webMercatorUtils, HomeButton, geometryEngine, dom
+        Draw, SimpleFillSymbol, PictureFillSymbol, CartographicLineSymbol, parser, registry,
+        Polygon, Point, webMercatorUtils, HomeButton, geometryEngine, dom
     ) {
+        var x = document.getElementById('xx');
+        var y = document.getElementById('yy');
+        var numFon = document.getElementById('numfonc');
+        var indic = document.getElementById('indice');
+        var table = document.getElementById('tbodyCoord');
+        numFon.value = '';
+        indic.value = '';
+
         var tb;
         var map = new Map("map", {
             basemap: "hybrid",
@@ -99,7 +109,7 @@
         );
 
         var fillSymbol = new PictureFillSymbol(
-            "../Content/documentation/img/valid.png",
+            "../Content/documentation/img/fill.png",
             new SimpleLineSymbol(
                 SimpleLineSymbol.STYLE_SOLID,
                 new Color('#0f0'),
@@ -120,6 +130,7 @@
             });
         }
 
+        
         function addGraphic(evt) {
             tb.deactivate();
             map.enableMapNavigation();
@@ -136,15 +147,16 @@
             //var temp1 = evt.geometry.rings[0];
             //var arrayx = []; var arrayy = [];
             //for (ik = 0; ik < temp1.length; ik++) { arrayx.push(temp1[ik][0]) };
-            //for (ik = 0; ik < temp1.length; ik++) { arrayy.push(temp1[ik][1]) };var pointsCoordinates = [];
-            //console.log(evt.geometry);
-            //for (i = 0; i < evt.geometry.rings[0].length; i++) {
-            //    pt = new Point(evt.geometry.rings[0][i][0], evt.geometry.rings[0][i][1], wkid1);
-            //    pointsCoordinates.push(pt);
-            //}
-            //projecteur(pointsCoordinates);
-
-
+            //for (ik = 0; ik < temp1.length; ik++) { arrayy.push(temp1[ik][1]) };
+            var pointsCoordinates = [];
+            for (i = 0; i < evt.geometry.rings[0].length; i++) {
+                pt = new Point(evt.geometry.rings[0][i][0], evt.geometry.rings[0][i][1], wkid1);
+                pointsCoordinates.push(pt);
+            }
+            projecteur(pointsCoordinates);
+            var centre = evt.geometry.getCentroid();
+            var graphic2 = new Graphic(centre, markerSymbol);
+            map.graphics.add(graphic2);
             map.graphics.add(new Graphic(evt.geometry, symbol));
         }
 
@@ -156,7 +168,7 @@
 
         var array = []; var PointsWKID = []; var PointsWKID1 = [];
 
-        var ringsParcels = []; var ringsPointsWKID = []; var ringsPointsWKID1 = [];
+        var ringsParcels = []; var centroids = []; var ringsPointsWKID1 = [];
 
         arcgisUtils.arcgisUrl = "https://si.aurs.org.ma/portal/sharing/content/items";
 
@@ -198,6 +210,44 @@
                     }
                 }
             ],
+            [
+                {
+                    "x": 363614.2324961542,
+                    "y": 373937.04936931946,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 363644.69318267645,
+                    "y": 373970.17428334564,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 363679.7069951504,
+                    "y": 373939.5787386657,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 363645.7349643981,
+                    "y": 373903.54243838147,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                },
+                {
+                    "x": 363614.2324961542,
+                    "y": 373937.04936931946,
+                    "spatialReference": {
+                        "wkid": 26191
+                    }
+                }
+            ]
+            ,
             [
                 {
                     "x": 364926.5352684335,
@@ -319,36 +369,189 @@
 
 
         var elementtt = 0;
+        var parcelelement = document.getElementById('parcelId').value;
+        $('#parcelId').change(function () {
+            parcelelement = document.getElementById('parcelId').value;
+            elementtt = 0;
+            x.value = json[parcelelement][elementtt].x.toFixed(2);
+            y.value = json[parcelelement][elementtt].y.toFixed(2);
+        });
 
 
-        var x = document.getElementById('xx');
-        var y = document.getElementById('yy');
 
-        x.value = json[0][elementtt].x.toFixed(2);
-        y.value = json[0][elementtt].y.toFixed(2);
+        x.value = json[parcelelement][elementtt].x.toFixed(2);
 
-        var typeFon = document.getElementById('selRef');
-        var numFon = document.getElementById('numfonc');
-        var indic = document.getElementById('indice');
-        var fractio = document.getElementById('fraction');
-        var complemen = document.getElementById("complement");
-        var table = document.getElementById('tbodyCoord');
-        numFon.value = 'Bi';
-        indic.value = 'Bi';
-        fractio.value = 'Bi';
-        complemen.value = 'Bi';
+        y.value = json[parcelelement][elementtt].y.toFixed(2);
+
+
+
+        document.getElementById('addCoord').onclick = function () {
+
+            if (x.value == "" || y.value == "") {
+                alert("coordonnes obligatoires !!");
+            }
+            else {
+                pp = new Point(x.value.replace(",", "."), y.value.replace(",", "."), wkid);
+                PointsWKID.push(pp);
+
+                gsvc.project([pp], wkid1, function (projectPoint) {
+
+                    var p = projectPoint[0];
+
+                    var graphic2 = new Graphic(p, markerSymbol);
+                    map.graphics.add(graphic2);
+
+                    var thispoint = [p.x.toFixed(2), p.y.toFixed(2)];
+                    array.push(thispoint);
+                    PointsWKID1.push(p);
+
+                    CarteSetExtent();
+
+
+                });
+
+
+                var row = table.insertRow(table.length);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                var cell4 = row.insertCell(3);
+                var cell5 = row.insertCell(4);
+                cell1.innerHTML = "P" + table.rows.length;
+                cell2.innerHTML = x.value.replace(",", ".");
+                cell3.innerHTML = y.value.replace(",", ".");
+                var btn = document.createElement("input");
+                btn.setAttribute("id", table.rows.length);
+                btn.setAttribute("src", "../Content/documentation/img/modif.png");
+                btn.setAttribute("type", "image");
+                btn.setAttribute("name", "update");
+                btn.onclick = function () {
+                    var id = this.id;
+                    cell2.innerHTML = "<input type='text' class='form-control' id='new_lon' value='"
+                        + table.rows[id - 1].cells[1].innerHTML + "'/>";
+                    cell3.innerHTML = "<input type='text' class='form-control' id='new_lat' value='"
+                        + table.rows[id - 1].cells[2].innerHTML + "'/>";
+
+
+                    var valider = document.createElement('input');
+                    valider.setAttribute('src', "../Content/documentation/img/valid.png");
+                    valider.setAttribute('id', table.rows.length);
+                    valider.setAttribute('type', "image");
+                    valider.onclick = function () {
+                        var a = document.getElementById('new_lon').value.replace(",", ".");
+                        var b = document.getElementById('new_lat').value.replace(",", ".");
+                        cell2.innerHTML = document.getElementById('new_lon').value.replace(",", ".");
+                        cell3.innerHTML = document.getElementById('new_lat').value.replace(",", ".");
+                        var pt2 = new Point(a, b, wkid);
+                        PointsWKID[id - 1] = pt2;
+                        gsvc.project([pt2], wkid1, function (projectPoint) {
+                            var p2 = projectPoint[0];
+                            array[id - 1] = [p2.x, p2.y];
+                            PointsWKID1[id - 1] = p2;
+                        });
+                        cell4.removeChild(valider); cell5.removeChild(btn1);
+                        cell4.appendChild(btn);
+                        CarteSetExtent(); UpdateGraphicPoints();
+                    }
+                    var btn1 = document.createElement('input');
+                    btn1.setAttribute("src", "../Content/documentation/img/del.png");
+                    btn1.setAttribute("type", "image");
+                    btn1.setAttribute("id", id);
+                    btn1.setAttribute("name", "delete");
+                    btn1.onclick = function () {
+                        table.deleteRow(id - 1);
+                        array.splice(id - 1, 1);
+                        PointsWKID.splice(id - 1, 1);
+                        PointsWKID1.splice(id - 1, 1);
+                        CarteSetExtent(); UpdateGraphicPoints();
+                        //if (table.rows.length > btn1.getAttribute('id')) {}
+                        var x1 = parseInt(id) - 1;
+                        for (var i = x1; i < table.rows.length + 1; i++) {
+                            var j = document.getElementsByName("update")[i].getAttribute('id');
+                            var k = i + 1;
+                            table.rows[i].cells[0].innerHTML = "P" + k;
+                            document.getElementsByName("update")[i].setAttribute('id', j - 1);
+                        }
+                    }
+                    cell4.removeChild(btn);
+                    cell4.appendChild(valider);
+                    cell5.appendChild(btn1);
+                }
+                cell4.appendChild(btn);
+                elementtt += 1;
+                if (elementtt < json[parcelelement].length) {
+                    x.value = json[parcelelement][elementtt].x.toFixed(2);
+                    y.value = json[parcelelement][elementtt].y.toFixed(2);
+                }
+                else {
+                    x.value = "";
+                    y.value = "";
+                }
+
+                x.style.boxShadow = "";
+                y.style.boxShadow = "";
+            }
+
+        }
+
+
+        document.getElementById('alimBD').onclick = function () {
+            if (array.length < 4) {
+                alert('4 points au mois pour dessiner un parcelle');
+            }
+            else {
+                ringsParcels.push([array]);
+                ringsPointsWKID1.push(PointsWKID1);
+                array = []; PointsWKID1 = [];
+                $("#tbodyCoord tr").remove();
+                RecuperePolygons();
+                var polygonJson = {
+                    "rings": [array], "spatialReference": { "wkid": 102100, "latestWkid": 3857 }
+                };
+                var polygon = new Polygon(polygonJson);
+                //var centre = polygon.getCentroid();
+                //console.log(polygon);
+                //centroids.push([centre.x,centre.y]);
+                //console.log(polygon.rings)
+                map.graphics.add(new Graphic(polygon, fillSymbol));
+                GetExtentsFromPolygons();
+            }
+            //pt = new Point(pol.getCentroid().x, pol.getCentroid().y, wkid);
+        }
+
+        document.getElementById('vider').onclick = function () {
+            //document.getElementById('error').style.display = 'none'
+            document.getElementById('xx').value = "";
+            document.getElementById('yy').value = "";
+            document.getElementById('numfonc').value = "";
+            document.getElementById('indice').value = "";
+            array = [];
+            map.graphics.clear();
+            $("#tbodyCoord tr").remove();
+        }
+
+
+        $('input').change(function () {
+            if (this.type != null && this.type != 'submit' && !this.checkValidity()) {
+                this.style.border = "2px solid red";
+            }
+            else {
+                this.style.border = "2px dashed green";
+            }
+        });
 
         function CarteSetExtent() {
             try {
                 if (array.length == 1 && array.length != 0) {
+                    map.setZoom(19);
                     map.centerAt(PointsWKID1[0]);
                 }
                 else {
                     var arrayx = []; var arrayy = [];
-                    for (ik = 0; ik < array.length; ik++) { arrayx.push(array[ik][0]) };
-                    for (ik = 0; ik < array.length; ik++) { arrayy.push(array[ik][1]) };
-                    var _xmax = Math.max(...arrayx); var _xmin = Math.min(...arrayx);
-                    var _ymax = Math.max(...arrayy); var _ymin = Math.min(...arrayy);
+                    for (ik = 0; ik < array.length; ik++) { arrayx.push(parseInt(array[ik][0])) };
+                    for (ik = 0; ik < array.length; ik++) { arrayy.push(parseInt(array[ik][1])) };
+                    var _xmax = Math.max(...arrayx) + 25; var _xmin = Math.min(...arrayx) - 25;
+                    var _ymax = Math.max(...arrayy) + 25; var _ymin = Math.min(...arrayy) - 25;
 
 
 
@@ -389,320 +592,85 @@
                     "rings": item, "spatialReference": { "wkid": 102100, "latestWkid": 3857 }
                 };
                 var polygon = new Polygon(polygonJson);
-                console.log(polygon.rings)
+
                 map.graphics.add(new Graphic(polygon, fillSymbol));
             }
         }
 
-        
+        function GetExtentsFromPolygons() {
 
-        document.getElementById('addCoord').onclick = function () {
+            var arrayx = []; var arrayy = [];
 
-            pp = new Point(x.value.replace(",", "."), y.value.replace(",", "."), wkid);
-            PointsWKID.push(pp);
+            ringsParcels.forEach(myFunction);
 
-            gsvc.project([pp], wkid1, function (projectPoint) {
+            function myFunction(item, index) {
+                var arr = item[0];
+                for (ik = 0; ik < arr.length; ik++) { arrayx.push(parseInt(arr[ik][0])) };
+                for (ik = 0; ik < arr.length; ik++) { arrayy.push(parseInt(arr[ik][1])) };
 
-                var p = projectPoint[0];
-
-                var graphic2 = new Graphic(p, markerSymbol);
-                map.graphics.add(graphic2);
-
-                var thispoint = [p.x, p.y];
-                array.push(thispoint);
-                PointsWKID1.push(p);
-
-                CarteSetExtent();
-
-
-            });
-
-
-            var row = table.insertRow(table.length);
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            var cell3 = row.insertCell(2);
-            var cell4 = row.insertCell(3);
-            var cell5 = row.insertCell(4);
-            cell1.innerHTML = "P" + table.rows.length;
-            cell2.innerHTML = x.value.replace(",", ".");
-            cell3.innerHTML = y.value.replace(",", ".");
-            var btn = document.createElement("input");
-            btn.setAttribute("id", table.rows.length);
-            btn.setAttribute("src", "../Content/documentation/img/modif.png");
-            btn.setAttribute("type", "image");
-            btn.setAttribute("name", "update");
-            btn.onclick = function () {
-                var id = this.id;
-                cell2.innerHTML = "<input type='text' class='form-control' id='new_lon' value='"
-                    + table.rows[id - 1].cells[1].innerHTML + "'/>";
-                cell3.innerHTML = "<input type='text' class='form-control' id='new_lat' value='"
-                    + table.rows[id - 1].cells[2].innerHTML + "'/>";
-
-
-                var valider = document.createElement('input');
-                valider.setAttribute('src', "../Content/documentation/img/valid.png");
-                valider.setAttribute('id', table.rows.length);
-                valider.setAttribute('type', "image");
-                valider.onclick = function () {
-                    var a = document.getElementById('new_lon').value.replace(",", ".");
-                    var b = document.getElementById('new_lat').value.replace(",", ".");
-                    cell2.innerHTML = document.getElementById('new_lon').value.replace(",", ".");
-                    cell3.innerHTML = document.getElementById('new_lat').value.replace(",", ".");
-                    var pt2 = new Point(a, b, wkid);
-                    PointsWKID[id - 1] = pt2;
-                    gsvc.project([pt2], wkid1, function (projectPoint) {
-                        var p2 = projectPoint[0];
-                        array[id - 1] = [p2.x, p2.y];
-                        PointsWKID1[id - 1] = p2;
-                    });
-                    cell4.removeChild(valider); cell5.removeChild(btn1);
-                    cell4.appendChild(btn);
-                    CarteSetExtent(); UpdateGraphicPoints();
-                }
-                var btn1 = document.createElement('input');
-                btn1.setAttribute("src", "../Content/documentation/img/del.png");
-                btn1.setAttribute("type", "image");
-                btn1.setAttribute("id", id);
-                btn1.setAttribute("name", "delete");
-                btn1.onclick = function () {
-                    table.deleteRow(id - 1);
-                    array.splice(id - 1, 1);
-                    PointsWKID.splice(id - 1, 1);
-                    PointsWKID1.splice(id - 1, 1);
-                    CarteSetExtent(); UpdateGraphicPoints();
-                    //if (table.rows.length > btn1.getAttribute('id')) {}
-                    var x1 = parseInt(id) - 1;
-                    for (var i = x1; i < table.rows.length + 1; i++) {
-                        var j = document.getElementsByName("update")[i].getAttribute('id');
-                        var k = i + 1;
-                        table.rows[i].cells[0].innerHTML = "P" + k;
-                        document.getElementsByName("update")[i].setAttribute('id', j - 1);
-                    }
-                }
-                cell4.removeChild(btn);
-                cell4.appendChild(valider);
-                cell5.appendChild(btn1);
             }
-            cell4.appendChild(btn);
-            elementtt += 1;
-            x.value = json[0][elementtt].x.toFixed(2);
-            y.value = json[0][elementtt].y.toFixed(2);
-            x.style.boxShadow = "";
-            y.style.boxShadow = "";
 
-        }
+            var _xmax = Math.max(...arrayx) ; var _xmin = Math.min(...arrayx) ;
+            var _ymax = Math.max(...arrayy) ; var _ymin = Math.min(...arrayy) ;
 
-        document.getElementById('alimBD').onclick = function () {
-            //le tableau des coordonnes n\'est pas vide, les enregistrements seront perdus, voulez vous confirmer ??
+
+
+            var startExtent = new Extent();
+            startExtent.xmin = _xmin;
+            startExtent.ymin = _ymin;
+            startExtent.xmax = _xmax;
+            startExtent.ymax = _ymax;
+            startExtent.spatialReference = wkid1;
             
+            map.setExtent(startExtent);
+        }
 
-            if (array.length < 4) {
-                alert('4 points au mois pour dessiner un parcelle');
-            }
-            else {
-                ringsParcels.push([array]); ringsPointsWKID1.push(PointsWKID1);
-                array = []; PointsWKID1 = [];
-                $("#tbodyCoord tr").remove();
-                RecuperePolygons();
-                var polygonJson = {
-                    "rings": [array], "spatialReference": { "wkid": 102100, "latestWkid": 3857 }
-                };
-                var polygon = new Polygon(polygonJson);
-                console.log(polygon.rings)
-                map.graphics.add(new Graphic(polygon, fillSymbol));
-            }
+        $('#BtnSave').click(function() {
+            passClicked(0);
+        });
+
+        $('#BtnSend').click(function() {
+            passClicked(1);
+        });
+
+        function passClicked(valeurAttr) {
+
+            var formData = new FormData();
+
+            formData.append("anneaux", ringsPointsWKID1);
             
+            console.log(ringsPointsWKID1);
+            console.log(formData);
+            $.ajax({
+                type: "Post",
+                url: '@Url.Action("AvisOrg", "WorkflowDerogation")',
+                contentType: false,
+                cache: false,
+                dataType: "json",
+                data: formData,
+                processData: false,
+                success: function (data) {
+                    window.location.href = data;
+                },
+                error: function (resultat, statut, erreur) {
+                    alert(erreur);
+                }
+            });
+            //if (confirm('Voulez Vous Vraiment passer a L\'etape suivante ??')) {
+            //    //console.log('errors = ' + errors);
+            //    if (errors == 0) {
+            //        var input = document.createElement('input');
+            //        input.setAttribute('type', 'hidden');
+            //        input.setAttribute('name', 'enregistrer');
+            //        input.setAttribute('value', valeurAttr);
+            //        a.parentNode.appendChild(input);
+            //        console.log(a.closest('form'));
+            //        a.closest('form').submit();
+            //    }
+            //    else {
+            //        alert(errors + " champs non valides !!");
+            //    }
 
-            if (false) {
-                //var typeFonc = typeFon.value;
-            //var numFonc = numFon.value;
-            //var indice = indic.value;
-            //var fraction = fractio.value;
-            //var complement = complemen.value;
-
-            //var sym = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
-            //    new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT,
-            //        new Color([255, 0, 0]), 2), new Color([255, 255, 255, 0.15])
-            //);
-
-            //if (typeFonc.trim().toUpperCase() == 'TNI') {
-            //    var pol = new Polygon(array);
-
-            //    var wkid = new SpatialReference(26191);
-            //    var wkid1 = new SpatialReference(3857);
-            //    pt = new Point(pol.getCentroid().x, pol.getCentroid().y, wkid);
-
-            //    console.log('Centroid : ' + [pol.getCentroid().x, pol.getCentroid().y]);
-
-            //    //var p = projectPoint[0];
-            //    var f = new FeatureLayer("https://si.aurs.org.ma/server/rest/services/PARCELLAIRE/FeatureServer/0");
-            //    var xCenteroid = pt.x.toFixed(3).replace(".", ",");
-            //    var yCenteroid = pt.y.toFixed(3).replace(".", ",");
-            //    attr = { "typefoncier": typeFonc, "x": xCenteroid, "y": yCenteroid };
-            //    var graphic = new Graphic(pol, sym, attr);
-            //    f.applyEdits([graphic], null, null, function () {
-            //        Localiser();
-            //    });
-
-            //    //gsvc.project([pt], wkid1, function (projectPoint) {
-
-
-            //    //});
             //}
-            //else {
-            //    var temp1 = array;
-            //    var arrayx = []; var arrayy = [];
-            //    for (ik = 0; ik < temp1.length; ik++) { arrayx.push(temp1[ik][0]) };
-            //    for (ik = 0; ik < temp1.length; ik++) { arrayy.push(temp1[ik][1]) };
-            //    var polygon = {
-            //        rings: [array], _ring: 0, spatialReference: { wkid: 3857/*, latestWkid: 26191*/ },
-            //        cache: {
-            //            _extent: { xmin: Math.min(...arrayx), ymin: Math.min(...arrayy), xmax: Math.max(...arrayx), ymax: Math.max(...arrayy) },
-            //            _partwise: null
-            //        }
-            //    };
-            //    console.log(polygon);
-            //    var arrayx = []; var arrayy = [];
-            //    for (ik = 0; ik < temp1.length; ik++) { arrayx.push(temp1[ik][0]) };
-            //    for (ik = 0; ik < temp1.length; ik++) { arrayy.push(temp1[ik][1]) };
-            //    var simpleFillSymbol = new PictureFillSymbol(
-            //        "../Content/documentation/img/del.png",
-            //        new SimpleLineSymbol(
-            //            SimpleLineSymbol.STYLE_SOLID,
-            //            new Color('#000'),
-            //            3
-            //        ), 12, 12
-            //    );
-            //    //var polygonGraphic = new Graphic({
-            //    //    geometry: polygon,
-            //    //    symbol: simpleFillSymbol
-            //    //});
-            //    map.graphics.add(new Graphic(polygon, simpleFillSymbol));
-            //    //map.graphics.add(polygonGraphic);
-            //    //map.graphics.clear();
-            //    //array = [];
-            //    //array.push([-746530.0130604643, 4017850.880879946]);
-            //    //array.push([-746503.3819100509, 4017862.1044801027]);
-            //    //array.push([-746439.371403158, 4017961.4527203813]);
-
-            //    //var polygonJson = { "rings": [array], "spatialReference": { "wkid": 3857 } };
-            //    //var polygon = new Polygon(polygonJson);
-            //    //map.addLayer(polygon);
-
-
-            //    //var pol = new Polygon(array);
-            //    //var sr = new SpatialReference(3857);
-            //    //pol.setSpatialReference(sr);
-            //    //array = [];
-            //    //console.log(pol);
-
-            //    //type: "polygon",
-
-            //    //var polygon = new Polygon(new SpatialReference(3857));
-            //    //polygon.addRing(array);
-
-            //    //console.log(map);
-            //    //var simpleFillSymbol = {
-            //    //    type: "simple-fill",
-            //    //    color: [227, 139, 79, 0.18],  // orange, opacity 80%
-            //    //    outline: {
-            //    //        color: [255, 255, 255],
-            //    //        width: 1
-            //    //    }
-            //    //};
-
-            //    //var f = new FeatureLayer("https://si.aurs.org.ma/server/rest/services/PARCELLAIRE/FeatureServer/0", { outFields: ["*"] });
-            //    //attr = { "typefoncier": typeFonc, "numfoncier": numFonc, "indice": indice, "fraction": fraction, "complement": complement };
-
-
-            //    //attr = { "typefoncier": typeFonc, "numfoncier": numFonc, "indice": indice, "fraction": fraction };
-            //    //  attr = { "OBJECTID": 10054, "typefoncier": typeFonc, "numfoncier": numFonc, "indice": indice, "fraction": fraction, "complement": complement };
-            //    // var graphic = new Graphic([pol], null, null);
-
-            //    //var feature = [];      
-            //    //var attr = {};
-            //    //attr["typefoncier"] = typeFonc;  
-            //    //var graphic = new Graphic([pol]);
-            //    //graphic.setAttributes(attr);
-            //    //feature.push(graphic);
-
-            //    //console.log(feature);
-
-            //    //var sr = new SpatialReference(102100);
-
-            //    //var graphic = new Graphic([pol], null, null);
-            //    //map.graphics.add(graphic);
-
-            //    //f.applyEdits([graphic], null, null, function (res) {
-            //    //    console.log('resultat : ' + res);
-            //    //    Localiser();
-            //    //    alert('C est Bon');
-            //    //}, function (err) {
-            //    //    console.log('Error occured: ', err);
-            //    //    alert('Error');
-            //    //});
-
-            //    //$("#tbodyCoord tr").remove();
-            //    //$('#alimBD').hide();
-            //}
-            }
         }
-
-        document.getElementById('selRef').onchange = function () {
-            var typeFonc = document.getElementById('selRef').value;
-            var numFonc = document.getElementById('numfonc').value;
-            var indice = document.getElementById('indice').value;
-            var fraction = document.getElementById('fraction').value;
-            document.getElementById('indice').disabled = false;
-            if (typeFonc == 'TF') {
-                document.getElementById('coordInputs').style.display = 'none';
-                document.getElementById('refInputs').style.display = 'block';
-                $('#indice').prop('disabled', false).trigger("liszt:updated");
-            } else if (typeFonc == 'Req') {
-                document.getElementById('coordInputs').style.display = 'none';
-                document.getElementById('refInputs').style.display = 'block';
-                document.getElementById('indice').value = "";
-                //$('#indice').prop('disabled', true).trigger("liszt:updated");
-
-            } else if (typeFonc == 'TNI') {
-                document.getElementById('coordInputs').style.display = 'block';
-                document.getElementById('refInputs').style.display = 'none';
-            }
-        }
-
-        document.getElementById('vider').onclick = function () {
-            //document.getElementById('error').style.display = 'none'
-            document.getElementById('xx').value = "";
-            document.getElementById('yy').value = "";
-            document.getElementById('numfonc').value = "";
-            document.getElementById('indice').value = "";
-            document.getElementById('selRef').selectedIndex = "0";
-            array = [];
-            map.graphics.clear();
-            $("#tbodyCoord tr").remove();
-        }
-
-        $(document).ready(function () {
-            $('#btnBasemap').click(function () {
-                $('.divHide').slideToggle("fast");
-                $('#testBtn').val("0");
-            });
-        });
-
-        $(document).ready(function () {
-            $('#btnLayerList').click(function () {
-                $('.divHide1').slideToggle("fast");
-                $('#testBtn1').val("0");
-            });
-        });
-
-        $(document).ready(function () {
-            $('#btnLegend').click(function () {
-                $('.divHide2').slideToggle("fast");
-                $('#testBtn2').val("0");
-            });
-        });
-
-
     });

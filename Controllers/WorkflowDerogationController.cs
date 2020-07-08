@@ -1,5 +1,6 @@
 ﻿using GestionnaireUtilisateurs.Models;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -403,26 +404,16 @@ namespace GestionnaireUtilisateurs.Controllers
             };
             return correctAction(16, Id_DemDerg, multiTab);
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult SituationGeo(int? Id_DemDerg, int enregistrer)
+        [HttpPost, Authorize(Roles = Administrator + "," + _SitGeo)]
+        public ActionResult SituationGeo(FormCollection formCollection)
         {
+            int enregistrer = int.Parse(formCollection["enregistrer"]);
+            int Id_DemDerg = int.Parse(formCollection["Id_DemDerg"]);
+            var anneaux = formCollection["Anneaux"];
+            var avv = JsonConvert.DeserializeObject<List<Avis_Org>>(anneaux);
             var demandeDerg = database.Demande_Derogation.Find(Id_DemDerg);
-            if (enregistrer == 0)
-            {
 
-                demandeDerg.FK_DemDerg_EtatAvc = 16;
-                database.SaveChanges();
-                //return RedirectToAction("Encours", "WorkflowDerogation");
-                return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
-            }
-            else
-            {
-                demandeDerg.FK_DemDerg_EtatAvc = 17;
-                database.SaveChanges();
-                //return RedirectToAction("GED", "WorkflowDerogation", new { Id_DemDerg = Id_DemDerg });
-                return RedirectToAction("Ged", "WorkflowDerogation", new { FK_DemDerg_DocDerg = Id_DemDerg });
-            }
+            return Json(Url.Action("Encours", "WorkflowDerogation"));
 
         }
 
