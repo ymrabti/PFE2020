@@ -7,6 +7,14 @@
     bool Modifier = ViewBag.Update; bool NModifier = !Modifier;
     bool Supprimer = ViewBag.Delete; bool NSupprimer = !Supprimer;
     var _parcelles = Model.DemDerg.parcell.ToList();
+    var intersection = false;
+    foreach (var parcel in _parcelles)
+    {
+        if (parcel.shape.Intersects(Model.DemDerg.COMMUNES_RSK.Shape))
+        {
+            intersection = true;
+        }
+    }
 }
 
 <section>
@@ -110,7 +118,7 @@
             <div class="card-body">
                 <div class="row">
 
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                         <div class="form-group">
 
                             <br /><input class="form-control" type="text" placeholder="Indice" id="indice" />
@@ -121,7 +129,7 @@
                         </div>
 
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-8">
                         <div class="table-responsive">
                             <label for="inputText11" style="font-size:12px;"></label>
                             <table class="table table-bordered first" id="tableFilter">
@@ -130,6 +138,7 @@
                                         <th style="background-color:#d9edf7;">Parcelle </th>
                                         <th style="background-color:#d9edf7;">Indice </th>
                                         <th style="background-color:#d9edf7;">N° Fonciere </th>
+                                        <th style="background-color:#d9edf7;">Intesecte avec la commune </th>
                                     </tr>
                                 </thead>
                                 <tbody id="tableau">
@@ -139,6 +148,7 @@
                                             <td> @(i+1)</td>
                                             <td>@_parcelles[i].indice</td>
                                             <td>@_parcelles[i].numfoncier</td>
+                                            <td>@_parcelles[i].shape.Intersects(Model.DemDerg.COMMUNES_RSK.Shape)</td>
                                             <td>
                                                 <a class="btn btn-sm buttonsReapeateds" 
                                                    href="@Url.Action("DeleteParcelle","WorkflowDerogation",new { Id_parcelle=_parcelles[i].objectid,FK_DemDerg=Model.DemDerg.Id_DemDerg})">
@@ -229,6 +239,12 @@
         var table = document.getElementById('tbodyCoord');
         numFon.value = '';
         indic.value = '';
+        
+        var intersectionGlobale = "@intersection".toLowerCase()=="true";
+        var Lire = "@Lire".toLowerCase()=="true";
+        var Cree = "@Cree".toLowerCase()=="true";
+        var Supp = "@Supprimer".toLowerCase()=="true";
+        var Modifier = "@Modifier".toLowerCase()=="true";
 
         var tb;
         var map = new Map("map", {
@@ -619,6 +635,7 @@
             }, interval);
         }
 
+
         function DbToMap() {
 
              @foreach (var item in Model.DemDerg.parcell) {
@@ -662,20 +679,9 @@
                 function myFunction(item, index) {
                     DrawPolygon(item);
                 }
-                //ringsParcels12.forEach(func);
-                //function func(element, index) {
-                //    //var projectPoint = webMercatorUtils.webMercatorToGeographic(evt.mapPoint);;
-                //    element.forEach(fun);
-                //    function fun(elemen, inde) {
-                //        var p = new Point(elemen[0], elemen[0], wkid1);
-                //        //gsvc.project([p], { "wkid": 4326}, function (projectPoints) {
-
-                //        //});
-                //        console.log(webMercatorUtils.webMercatorToGeographic(p));
-                //    }
-                //}
                 GetExtentsFromPolygons(ringsParcels);
             }
+            
             //else {
             //    GetExtentsFromPolygons([[pol]]);
             //}
@@ -689,7 +695,6 @@
             x.value = json[parcelelement][elementtt].x.toFixed(2);
             y.value = json[parcelelement][elementtt].y.toFixed(2);
         });
-
 
 
         x.value = json[parcelelement][elementtt].x.toFixed(2);
