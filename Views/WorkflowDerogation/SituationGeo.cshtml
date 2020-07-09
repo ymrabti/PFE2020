@@ -6,6 +6,7 @@
     bool Cree = ViewBag.Create; bool NCree = !Cree;
     bool Modifier = ViewBag.Update; bool NModifier = !Modifier;
     bool Supprimer = ViewBag.Delete; bool NSupprimer = !Supprimer;
+    var _parcelles = Model.DemDerg.parcell.ToList();
 }
 
 <section>
@@ -112,8 +113,8 @@
                     <div class="col-lg-6">
                         <div class="form-group">
 
-                            <br /><input class="form-control" type="text" placeholder="Numero fincier" id="numfonc" />
                             <br /><input class="form-control" type="text" placeholder="Indice" id="indice" />
+                            <br /><input class="form-control" type="text" placeholder="Numero fincier" id="numfonc" />
                             <br />
                             <button class="btn btn-space btn-primary" type="button" style="position:absolute;right:10px" id="alimBD">Ajouter parcelle</button>
                             <br /><br /><br />
@@ -123,14 +124,30 @@
                     <div class="col-lg-6">
                         <div class="table-responsive">
                             <label for="inputText11" style="font-size:12px;"></label>
-                            <table class="table table-striped table-bordered first">
+                            <table class="table table-bordered first" id="tableFilter">
                                 <thead>
                                     <tr>
-                                        <th>Couverture</th>
-                                        <th>Détail</th>
+                                        <th style="background-color:#d9edf7;">Polygon </th>
+                                        <th style="background-color:#d9edf7;">Indice </th>
+                                        <th style="background-color:#d9edf7;">N° Fonciere </th>
                                     </tr>
                                 </thead>
-                                <tbody id="tbodyCouverture"></tbody>
+                                <tbody id="tableau">
+                                    @for (var i=0;i< _parcelles.Count();i++)
+                                    {
+                                        <tr id="@i">
+                                            <td><input type="hidden" value="@i"/> @(i+1)</td>
+                                            <td>@_parcelles[i].indice</td>
+                                            <td>@_parcelles[i].numfoncier</td>
+                                            <td>
+                                                <a class="btn btn-sm buttonsReapeateds" 
+                                                   href="@Url.Action("DeleteParcelle","WorkflowDerogation",new { Id_Doc_Derog=_parcelles[i].objectid,FK_DemDerg=Model.DemDerg.Id_DemDerg})">
+                                                    <i class="fa fa-minus"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -217,6 +234,7 @@
             center: [-6.677, 33.968],
             zoom: 11
         });
+
 
         var wkid = new SpatialReference(26191);//Merchich - Nord Maroc
         //WGS84 Bounds: -9.7500, 31.5000, -1.0100, 35.9500
@@ -535,12 +553,12 @@
 
             var x = setInterval(function() {
 
-    
+
               var distance = countDownDate - aug;
                aug+=interval;
-    
+
                 console.log(distance);
-    
+
               if (distance < 0) {
                   clearInterval(x);
                   DbToMap();
@@ -550,7 +568,7 @@
         }
 
         function DbToMap() {
-            
+
              @foreach (var item in Model.DemDerg.parcell) {
                 @:ringsParcels.push([JSON.parse("@item.GeometryText")]);
 
@@ -567,7 +585,7 @@
                 @:numFonciers.push("@item.numfoncier");
 
             }
-            
+
             //console.log(liste);
             if (ringsParcels.length > 0) {
                 RecuperePolygons(ringsParcels);
@@ -653,7 +671,7 @@
                             var p2 = projectPoint[0];
                             array[id - 1] = [p2.x, p2.y];
                             PointsWKID1[id - 1] = p2;
-                            UpdateGraphicPoints();CarteSetExtent(); 
+                            UpdateGraphicPoints();CarteSetExtent();
                         });
                         cell4.removeChild(valider); cell5.removeChild(btn1);
                         cell4.appendChild(btn);
@@ -667,7 +685,7 @@
                         table.deleteRow(id - 1);
                         array.splice(id - 1, 1);
                         PointsWKID1.splice(id - 1, 1);
-                        UpdateGraphicPoints();CarteSetExtent(); 
+                        UpdateGraphicPoints();CarteSetExtent();
                         //if (table.rows.length > btn1.getAttribute('id')) {}
                         var x1 = parseInt(id) - 1;
                         for (var i = x1; i < table.rows.length + 1; i++) {
@@ -711,7 +729,7 @@
             }
             else {
                 ringsParcels.push([array]);ringsParcels12.push(array);
-                
+
                 numFonciers.push(numFon.value);
                     indices.push(indic.value);
                 array = []; PointsWKID1 = [];
@@ -837,8 +855,10 @@
             passClicked(0);
         });
 
-        $('#BtnSend').click(function() {
-            passClicked(1);
+        $('#BtnSend').click(function () {
+            if (confirm('Voulez Vous Vraiment passer a L\'etape suivante ??')) {
+                passClicked(1);
+            }
         });
 
         function passClicked(valeurAttr) {
@@ -861,7 +881,7 @@
                     "Fk_DemDerog"  : @Model.DemDerg.Id_DemDerg,
                     "numFoncier"       : numFonciers[index]
                 });
-                
+
             }
             var json__ = JSON.stringify(Parcelles);
             formData.append("Parcel", json__);
@@ -886,23 +906,95 @@
                     alert("ERREUR");
                 }
             });
-            //if (confirm('Voulez Vous Vraiment passer a L\'etape suivante ??')) {
-            //    //console.log('errors = ' + errors);
-            //    if (errors == 0) {
-            //        var input = document.createElement('input');
-            //        input.setAttribute('type', 'hidden');
-            //        input.setAttribute('name', 'enregistrer');
-            //        input.setAttribute('value', valeurAttr);
-            //        a.parentNode.appendChild(input);
-            //        console.log(a.closest('form'));
-            //        a.closest('form').submit();
-            //    }
-            //    else {
-            //        alert(errors + " champs non valides !!");
-            //    }
-
-            //}
         }
+        
+        var table = document.getElementById('tableau');
+        var rows = table.rows;
+        //alert(rows.length);
+        for (var i = 0; i < rows.length; i++) {
+
+
+            var date = new Date(rows[i].getAttribute('value'));
+            var dateNow = new Date();
+            var date_now = new Date(dateNow.toISOString().slice(0, 10) + ',' + dateNow.getHours() + ':' + dateNow.getMinutes());
+            var tempsRester = (date.getTime() + 172800000) - date_now.getTime();
+            var tempsResterSec = 172800000 - tempsRester;
+            var backclr = '';
+            var clr = '';
+
+            if (tempsRester < 0) { backclr = '#fff'; clr = 'black' } else if (0 <= tempsRester && tempsRester < 43200000)
+            { backclr = '#e38710'; clr = 'white' }
+            rows[i].setAttribute('temps', tempsResterSec);
+            rows[i].setAttribute('backclr', backclr);
+            rows[i].setAttribute('clr', clr);
+            rows[i].style.backgroundColor = backclr;
+            rows[i].style.color = clr;
+
+            rows[i].onclick = function () {
+                for (var j = 0; j < rows.length; j++) {
+                    table.rows[j].style.backgroundColor = table.rows[j].getAttribute('backclr');
+                    table.rows[j].style.color = table.rows[j].getAttribute('clr');
+                    table.rows[j].clicked = false;
+
+                }
+                var tab = document.getElementById("tableFilter");
+                for (var i = 0; i < tab.rows.length; i++) {
+
+
+                    if (tab.rows[i]/*.cells[4]*/.innerHTML.includes(" Dépassement de délai")) {
+
+                        tab.rows[i].style.color = '#FF3364';
+                    }
+                }
+                var id = this.id;
+                document.getElementById(id).style.backgroundColor = "#DAEFF9";
+                document.getElementById(id).style.borderColor = "#2e6da4";
+                document.getElementById(id).style.color = "balck";
+                document.getElementById(id).clicked = true;
+
+                //ROW CLICKED
+                GetExtentsFromPolygons([ringsParcels[id]]);
+
+            }
+
+
+            rows[i].onmouseover = function () {
+                var id = this.id;
+                if (document.getElementById(id).clicked != true) {
+                    document.getElementById(id).style.backgroundColor = "#f5f5f5";
+                    document.getElementById(id).style.borderColor = "#f5f5f5";
+                    document.getElementById(id).style.color = '';
+                    var tab = document.getElementById("tableFilter");
+                    for (var i = 0; i < tab.rows.length; i++) {
+
+
+                        if (tab.rows[i].innerHTML.includes(" Dépassement de délai")) {
+
+                            tab.rows[i].style.color = '#FF3364';
+                        }
+                    }
+                }
+            }
+
+            rows[i].onmouseout = function () {
+                var id = this.id;
+                if (document.getElementById(id).clicked != true) {
+                    document.getElementById(id).style.backgroundColor = document.getElementById(id).getAttribute('backclr');
+                    document.getElementById(id).style.borderColor = '';
+                    document.getElementById(id).style.color = document.getElementById(id).getAttribute('clr');
+                    var tab = document.getElementById("tableFilter");
+                    for (var i = 0; i < tab.rows.length; i++) {
+
+
+                        if (tab.rows[i].innerHTML.includes(" Dépassement de délai")) {
+
+                            tab.rows[i].style.color = '#FF3364';
+                        }
+                    }
+                }
+            };
+        }
+
     });
         </script>
     }
