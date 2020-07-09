@@ -298,6 +298,7 @@
     <Property Name="GDB_GEOMATTR_DATA" Type="varbinary(max)" />
     <Property Name="Fk_DemDerog" Type="int" />
     <Property Name="GeometryText" Type="varchar(max)" Nullable="false" />
+    <Property Name="ShapeText" Type="varchar(max)" />
   </EntityType>
   <EntityType Name="PROVINCES_RSK">
     <Key>

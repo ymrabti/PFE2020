@@ -127,7 +127,7 @@
                             <table class="table table-bordered first" id="tableFilter">
                                 <thead>
                                     <tr>
-                                        <th style="background-color:#d9edf7;">Polygon </th>
+                                        <th style="background-color:#d9edf7;">Parcelle </th>
                                         <th style="background-color:#d9edf7;">Indice </th>
                                         <th style="background-color:#d9edf7;">N° Fonciere </th>
                                     </tr>
@@ -136,12 +136,12 @@
                                     @for (var i=0;i< _parcelles.Count();i++)
                                     {
                                         <tr id="@i">
-                                            <td><input type="hidden" value="@i"/> @(i+1)</td>
+                                            <td> @(i+1)</td>
                                             <td>@_parcelles[i].indice</td>
                                             <td>@_parcelles[i].numfoncier</td>
                                             <td>
                                                 <a class="btn btn-sm buttonsReapeateds" 
-                                                   href="@Url.Action("DeleteParcelle","WorkflowDerogation",new { Id_Doc_Derog=_parcelles[i].objectid,FK_DemDerg=Model.DemDerg.Id_DemDerg})">
+                                                   href="@Url.Action("DeleteParcelle","WorkflowDerogation",new { Id_parcelle=_parcelles[i].objectid,FK_DemDerg=Model.DemDerg.Id_DemDerg})">
                                                     <i class="fa fa-minus"></i>
                                                 </a>
                                             </td>
@@ -181,6 +181,8 @@
     @section Scripts{
         <script src="http://localhost/arcgis_js_api/library/3.27/3.27/init.js"></script>
         <script>
+
+
             require([
     "esri/map",
     "esri/layers/FeatureLayer",
@@ -244,6 +246,7 @@
         //Area: Morocco - north of 31.5°N
         var wkid1 = new SpatialReference(3857);//WGS84 Web Mercator (Auxiliary Sphere): SR ... x y
         var wkid2 = new SpatialReference(102100);//SR-ORG Projection -- Spatial Reference lat lon
+        var wkid3 = new SpatialReference(4326);
         gsvc = new GeometryService("https://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer");
 
         map.on("load", initToolbar);
@@ -300,6 +303,8 @@
                 1
             ), 10, 20
         );
+        var symbolNewOne = new SimpleFillSymbol();
+        symbolNewOne.setColor(new Color([150, 150, 150, 0.5]));
 
         function initToolbar() {
             tb = new Draw(map);
@@ -332,6 +337,7 @@
                 pt = new Point(evt.geometry.rings[0][i][0], evt.geometry.rings[0][i][1], wkid1);
                 pointsCoordinates.push(pt);
             }
+            console.log(evt.geometry);
             projecteur(pointsCoordinates);
             var centre = evt.geometry.getCentroid();
             var graphic2 = new Graphic(centre, markerSymbol);
@@ -345,6 +351,8 @@
             })
         }
 
+        var pol = [];
+
         var array = []; var PointsWKID1 = []; var ringsParcels = [];
 
         var indices = [];var numFonciers = [];var ringsParcels12 = [];
@@ -352,6 +360,50 @@
         arcgisUtils.arcgisUrl = "https://si.aurs.org.ma/portal/sharing/content/items";
 
         var json = [
+            [
+              {
+                "x": 368573.9344051722,
+                "y": 376447.0585452734,
+                "spatialReference": {
+                  "wkid": 26191
+                }
+              },
+              {
+                "x": 368652.42925060005,
+                "y": 376497.29569671635,
+                "spatialReference": {
+                  "wkid": 26191
+                }
+              },
+              {
+                "x": 368736.3626773296,
+                "y": 376364.43551448715,
+                "spatialReference": {
+                  "wkid": 26191
+                }
+              },
+              {
+                "x": 368653.8425736436,
+                "y": 376309.8117624237,
+                "spatialReference": {
+                  "wkid": 26191
+                }
+              },
+              {
+                "x": 368626.24878330005,
+                "y": 376358.0405144231,
+                "spatialReference": {
+                  "wkid": 26191
+                }
+              },
+              {
+                "x": 368573.9344051722,
+                "y": 376447.0585452734,
+                "spatialReference": {
+                  "wkid": 26191
+                }
+              }
+            ],
             [
                 {
                     "x": 363564.2608327697,
@@ -545,7 +597,7 @@
             ]
         ]
 
-        CountDownIntervalle(3,1);
+        CountDownIntervalle(1,1);
         function CountDownIntervalle(secondes,ticksSecondes) {
             var countDownDate = secondes*1000;
             var interval = ticksSecondes*1000;
@@ -585,12 +637,48 @@
                 @:numFonciers.push("@item.numfoncier");
 
             }
-
-            //console.log(liste);
+            
+            var polygonText = "@Model.DemDerg.COMMUNES_RSK.Shape.ToString()";
+            polygonText=polygonText.replace("POLYGON","").replace("((","").replace("))","").split(", ");
+            polygonText.forEach(myFunctionFille);
+            function myFunctionFille(itemfils, index) {
+                if (index!=0) {
+                    var itemint=itemfils.split(" ");
+                    pol[index-1]=[];
+                    pol[index-1][0]=parseFloat(itemint[0]);
+                    pol[index-1][1]=parseFloat(itemint[1]);
+                }
+                
+            }
+            var polygonJson = {
+                "rings": [pol], "spatialReference": wkid3
+            };
+            var polygonCommune = new Polygon(polygonJson);
+            map.graphics.add(new Graphic(polygonCommune, symbolNewOne));
+            
             if (ringsParcels.length > 0) {
-                RecuperePolygons(ringsParcels);
+
+                ringsParcels.forEach(myFunction);
+                function myFunction(item, index) {
+                    DrawPolygon(item);
+                }
+                //ringsParcels12.forEach(func);
+                //function func(element, index) {
+                //    //var projectPoint = webMercatorUtils.webMercatorToGeographic(evt.mapPoint);;
+                //    element.forEach(fun);
+                //    function fun(elemen, inde) {
+                //        var p = new Point(elemen[0], elemen[0], wkid1);
+                //        //gsvc.project([p], { "wkid": 4326}, function (projectPoints) {
+
+                //        //});
+                //        console.log(webMercatorUtils.webMercatorToGeographic(p));
+                //    }
+                //}
                 GetExtentsFromPolygons(ringsParcels);
             }
+            //else {
+            //    GetExtentsFromPolygons([[pol]]);
+            //}
         }
 
         var elementtt = 0;
@@ -729,7 +817,7 @@
             }
             else {
                 ringsParcels.push([array]);ringsParcels12.push(array);
-
+                
                 numFonciers.push(numFon.value);
                     indices.push(indic.value);
                 array = []; PointsWKID1 = [];
@@ -737,6 +825,16 @@
                 RecuperePolygons(ringsParcels);
                 DrawPolygon([array]);
                 GetExtentsFromPolygons(ringsParcels);
+                var tablePolygons = document.getElementById('tableau');
+                var row = tablePolygons.insertRow(table.length);
+                row.setAttribute("id",table.rows.length+1)
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                cell1.innerHTML = table.rows.length+2;
+                cell2.innerHTML = indic.value;
+                cell3.innerHTML = numFon.value;
+                actualisationTable(tablePolygons);
             }
             //pt = new Point(pol.getCentroid().x, pol.getCentroid().y, wkid);
         }
@@ -824,6 +922,11 @@
             function myFunction(item, index) {
                 DrawPolygon(item);
             }
+            var polygonJson = {
+                "rings": [pol], "spatialReference": wkid3
+            };
+            var polygonCommune = new Polygon(polygonJson);
+            map.graphics.add(new Graphic(polygonCommune, symbolNewOne));
         }
 
         function GetExtentsFromPolygons(Rings) {
@@ -861,22 +964,59 @@
             }
         });
 
+        function getPointTransformed(point) {
+                pttt = "";
+            gsvc.project([point], wkid3, function (projectPoints) {
+                pwkid3 = projectPoints[0];
+
+                pttt += pwkid3.x + " " + pwkid3.y;
+                console.log(pttt);
+            });
+                return pttt;
+        }
+
         function passClicked(valeurAttr) {
 
             var formData = new FormData();
             var ParcelleJson = {};
             Parcelles = [];
+            
             ringsParcels12.forEach(myFunction);
             function myFunction(item, index) {
-                var result = "[";
+
+                var result = "["; var shapeText = "POLYGON ((";
+                var x0 = 0; y0 = 0;
                 item.forEach(myFunctionFille);
-                function myFunctionFille(itemfils, index) {
-                    result += "[";result += itemfils[0] + ","; result += itemfils[1];result += "]";
-                    if (index == item.length - 1) { result += ""; }
-                    else { result += ","; }
-                } result += "]";
+                function myFunctionFille(itemfils, indexfils) {
+                    var p = new Point(itemfils[0], itemfils[1], wkid1);
+
+                    var ppqwe = webMercatorUtils.webMercatorToGeographic(p);
+
+                    if (index==0) {x0 = ppqwe.x; y0 = ppqwe.y;}
+
+                    shapeText += ppqwe.x + " " + ppqwe.y;
+
+                    result += "["; result += itemfils[0] + ","; result += itemfils[1]; result += "]";
+
+                    if (indexfils == item.length - 1) { result += ""; }
+
+                    else { result += ",";shapeText += ","; }
+                }
+                var pqw = new Point(item[0][0], item[0][1], wkid1);
+
+                var ppqwee = webMercatorUtils.webMercatorToGeographic(pqw);
+
+                result += "]";
+
+                if (!shapeText.includes(ppqwee.x+"") && !shapeText.includes(ppqwee.y+"")) {
+                    shapeText +=",", ppqwee.x + " " + ppqwee.y;
+                }
+
+                 shapeText += "))";
+
                 Parcelles.push({
                     "GeometryText" : result,
+                    "ShapeText" : shapeText,
                     "indice"  : indices[index],
                     "Fk_DemDerog"  : @Model.DemDerg.Id_DemDerg,
                     "numFoncier"       : numFonciers[index]
@@ -908,9 +1048,10 @@
             });
         }
         
-        var table = document.getElementById('tableau');
-        var rows = table.rows;
-        //alert(rows.length);
+        var tablePolygons = document.getElementById('tableau');
+        actualisationTable(tablePolygons);
+        function actualisationTable(tablePolygons) {
+            var rows = tablePolygons.rows;
         for (var i = 0; i < rows.length; i++) {
 
 
@@ -932,9 +1073,9 @@
 
             rows[i].onclick = function () {
                 for (var j = 0; j < rows.length; j++) {
-                    table.rows[j].style.backgroundColor = table.rows[j].getAttribute('backclr');
-                    table.rows[j].style.color = table.rows[j].getAttribute('clr');
-                    table.rows[j].clicked = false;
+                    tablePolygons.rows[j].style.backgroundColor = tablePolygons.rows[j].getAttribute('backclr');
+                    tablePolygons.rows[j].style.color = tablePolygons.rows[j].getAttribute('clr');
+                    tablePolygons.rows[j].clicked = false;
 
                 }
                 var tab = document.getElementById("tableFilter");
@@ -993,6 +1134,7 @@
                     }
                 }
             };
+        }
         }
 
     });

@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity.Spatial;
 namespace GestionnaireUtilisateurs.Controllers
 {
     public class WorkflowTache
@@ -404,9 +405,32 @@ namespace GestionnaireUtilisateurs.Controllers
             };
             return correctAction(16, Id_DemDerg, multiTab);
         }
+        [Authorize(Roles = Administrator + "," + _SitGeo)]
+        public ActionResult DeleteParcelle(int Id_parcelle,int FK_DemDerg)
+        {
+            var _Actions = Actions(_SitGeo);
+            bool Read = _Actions[0];
+            bool Create = _Actions[1];
+            bool Update = _Actions[2];
+            bool Delete = _Actions[3];
+            if (Read && Delete)
+            {
+                parcell parcelle = database.parcell.Find(Id_parcelle);
+                database.parcell.Remove(parcelle);
+                database.SaveChanges();
+            }
+            return RedirectToAction("SituationGeo", "WorkflowDerogation", new { Id_DemDerg =FK_DemDerg});
+        }
+
+
         [HttpPost, Authorize(Roles = Administrator + "," + _SitGeo)]
         public ActionResult SituationGeo(FormCollection formCollection)
         {
+            var _Actions = Actions(_SitGeo);
+            bool Read = _Actions[0];
+            bool Create = _Actions[1];
+            bool Update = _Actions[2];
+            bool Delete = _Actions[3];
             if (ModelState.IsValid)
             {
                 int enregistrer = int.Parse(formCollection["enregistrer"]);
@@ -415,7 +439,12 @@ namespace GestionnaireUtilisateurs.Controllers
                 Demande_Derogation demande = database.Demande_Derogation.Find(Id_DemDerg);
                 database.parcell.RemoveRange(demande.parcell);
                 List<parcell> parcellaires = JsonConvert.DeserializeObject<List<parcell>>(Parcels);
-                database.parcell.AddRange(parcellaires);database.SaveChanges();
+                foreach (parcell pa in parcellaires)
+                {
+                    pa.shape = DbGeometry.PolygonFromText(pa.ShapeText,4326);
+                }
+                database.parcell.AddRange(parcellaires);
+                database.SaveChanges();
                 if (enregistrer==0)
                 {
                     return Json(Url.Action("Encours", "WorkflowDerogation"));

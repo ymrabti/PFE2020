@@ -444,6 +444,7 @@
     <Property Name="Fk_DemDerog" Type="Int32" />
     <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_parcell_Demande_Derogation" FromRole="parcell" ToRole="Demande_Derogation" />
     <Property Name="GeometryText" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="ShapeText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="PROVINCES_RSK">
     <Key>

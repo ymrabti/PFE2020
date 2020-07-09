@@ -238,6 +238,7 @@
     <EntitySetMapping Name="parcell">
       <EntityTypeMapping TypeName="aurs1Model.parcell">
         <MappingFragment StoreEntitySet="parcell">
+          <ScalarProperty Name="ShapeText" ColumnName="ShapeText" />
           <ScalarProperty Name="GeometryText" ColumnName="GeometryText" />
           <ScalarProperty Name="Fk_DemDerog" ColumnName="Fk_DemDerog" />
           <ScalarProperty Name="GDB_GEOMATTR_DATA" ColumnName="GDB_GEOMATTR_DATA" />

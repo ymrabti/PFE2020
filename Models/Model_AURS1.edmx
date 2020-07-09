@@ -303,6 +303,7 @@
           <Property Name="GDB_GEOMATTR_DATA" Type="varbinary(max)" />
           <Property Name="Fk_DemDerog" Type="int" />
           <Property Name="GeometryText" Type="varchar(max)" Nullable="false" />
+          <Property Name="ShapeText" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="PROVINCES_RSK">
           <Key>
@@ -1470,6 +1471,7 @@
           <Property Name="Fk_DemDerog" Type="Int32" />
           <NavigationProperty Name="Demande_Derogation" Relationship="aurs1Model.FK_parcell_Demande_Derogation" FromRole="parcell" ToRole="Demande_Derogation" />
           <Property Name="GeometryText" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="ShapeText" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PROVINCES_RSK">
           <Key>
@@ -2358,6 +2360,7 @@
           <EntitySetMapping Name="parcell">
             <EntityTypeMapping TypeName="aurs1Model.parcell">
               <MappingFragment StoreEntitySet="parcell">
+                <ScalarProperty Name="ShapeText" ColumnName="ShapeText" />
                 <ScalarProperty Name="GeometryText" ColumnName="GeometryText" />
                 <ScalarProperty Name="Fk_DemDerog" ColumnName="Fk_DemDerog" />
                 <ScalarProperty Name="GDB_GEOMATTR_DATA" ColumnName="GDB_GEOMATTR_DATA" />

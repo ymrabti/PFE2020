@@ -23,6 +23,7 @@ namespace GestionnaireUtilisateurs.Models
         public byte[] GDB_GEOMATTR_DATA { get; set; }
         public Nullable<int> Fk_DemDerog { get; set; }
         public string GeometryText { get; set; }
+        public string ShapeText { get; set; }
     
         public virtual Demande_Derogation Demande_Derogation { get; set; }
     }
