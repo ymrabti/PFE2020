@@ -124,3 +124,14 @@ C:\Users\HPr\source\repos\GestionnaireUtilisateurs\obj\Debug\GestionnaireUtilisa
 C:\Users\HPr\source\repos\GestionnaireUtilisateurs\obj\Debug\GestionnaireUtilisateurs.csproj.CopyComplete
 C:\Users\HPr\source\repos\GestionnaireUtilisateurs\obj\Debug\GestionnaireUtilisateurs.dll
 C:\Users\HPr\source\repos\GestionnaireUtilisateurs\obj\Debug\GestionnaireUtilisateurs.pdb
+C:\Users\HPr\source\repos\GestionnaireUtilisateurs\bin\System.Spatial.dll
+C:\Users\HPr\source\repos\GestionnaireUtilisateurs\bin\System.Spatial.xml
+C:\Users\HPr\source\repos\GestionnaireUtilisateurs\bin\de\System.Spatial.resources.dll
+C:\Users\HPr\source\repos\GestionnaireUtilisateurs\bin\es\System.Spatial.resources.dll
+C:\Users\HPr\source\repos\GestionnaireUtilisateurs\bin\fr\System.Spatial.resources.dll
+C:\Users\HPr\source\repos\GestionnaireUtilisateurs\bin\it\System.Spatial.resources.dll
+C:\Users\HPr\source\repos\GestionnaireUtilisateurs\bin\ja\System.Spatial.resources.dll
+C:\Users\HPr\source\repos\GestionnaireUtilisateurs\bin\ko\System.Spatial.resources.dll
+C:\Users\HPr\source\repos\GestionnaireUtilisateurs\bin\ru\System.Spatial.resources.dll
+C:\Users\HPr\source\repos\GestionnaireUtilisateurs\bin\zh-Hans\System.Spatial.resources.dll
+C:\Users\HPr\source\repos\GestionnaireUtilisateurs\bin\zh-Hant\System.Spatial.resources.dll

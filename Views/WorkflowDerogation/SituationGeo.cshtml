@@ -52,13 +52,20 @@
                 <div class="form-group">
                     <dic class="row">
                         <div class="col-sm-6">
-                            <input type="number" id="parcelId" autocomplete="off" class="form-control" placeholder="parcell" value="0" style="margin-bottom:10px">
+                            <input type="hidden" readonly="@NCree" id="parcelId" autocomplete="off" class="form-control" placeholder="parcell" value="0" style="margin-bottom:10px">
 
-                            <input type="number" id="xx" autocomplete="off" class="form-control" placeholder="Coord. X" value="" style="margin-bottom:10px">
+                            <input type="number" readonly="@NCree" id="xx" autocomplete="off" class="form-control" placeholder="Coord. X" value="" style="margin-bottom:10px">
 
-                            <input type="number" id="yy" autocomplete="off" class="form-control" placeholder="Coord. Y" value="" data-target="Entrer Y">
+                            <input type="number" readonly="@NCree" id="yy" autocomplete="off" class="form-control" placeholder="Coord. Y" value="" data-target="Entrer Y">
                             <br />
-                            <button class="btn btn-space btn-primary" type="button" style="position:absolute;right:10px" id="addCoord" name="enregistrer">Ajouter coordonnées</button>
+                            @if (Cree)
+                            {
+                                <button class="btn btn-space btn-primary" type="button"
+                                        style="position:absolute;right:10px" id="addCoord" name="enregistrer">
+                                    Ajouter coordonnées
+                                </button>
+                            }
+
                             <br /><br /><br />
                         </div>
                         <div class="col-lg-6">
@@ -84,8 +91,8 @@
         </div>
         <div class="card card-body nihilo" style="box-shadow: 0 17px 41px -21px black;border-top:5px solid #09aacc;">
             <h5 class="card-header">Carte</h5>
-            <span id="infospan" style="position:absolute; left:15px; bottom:5px; color:#000; z-index:50;"></span>
-            <span id="coordsWidget" class="esri-widget esri-component">00000.00000 , 0000000.00000</span>
+            <span id="infospan" style="position:absolute; left:15px; bottom:5px; color:#000; z-index:50;display:none;"></span>
+            <span id="coordsWidget" class="esri-widget esri-component" style="display:none;">00000.00000 , 0000000.00000</span>
             <div id="info">
                 @*<div>Select a shape then draw on map to add graphic</div>
                     <button id="Point">Point</button>
@@ -98,7 +105,7 @@
                     <button id="Circle">Circle</button>
                     <button id="Ellipse">Ellipse</button>
                     <button id="FreehandPolygon">Freehand Polygon</button>*@
-                <button id="Polygon">Polygon</button>
+                <button id="Polygon" style="display:none;">Polygon</button>
             </div>
             <div id="map" style="height:600px;" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'">
                 @*<div style="position:absolute; right:20px; top:10px; z-Index:999;">
@@ -121,8 +128,8 @@
                     <div class="col-lg-4">
                         <div class="form-group">
 
-                            <br /><input class="form-control" type="text" placeholder="Indice" id="indice" />
-                            <br /><input class="form-control" type="text" placeholder="Numero fincier" id="numfonc" />
+                            <br /><input class="form-control" readonly="@NCree" type="text" placeholder="Indice" id="indice" />
+                            <br /><input class="form-control" readonly="@NCree" type="text" placeholder="Numero fincier" id="numfonc" />
                             <br />
                             <button class="btn btn-space btn-primary" type="button" style="position:absolute;right:10px" id="alimBD">Ajouter parcelle</button>
                             <br /><br /><br />
@@ -142,18 +149,27 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tableau">
-                                    @for (var i=0;i< _parcelles.Count();i++)
+                                    @for (var i = 0; i < _parcelles.Count(); i++)
                                     {
                                         <tr id="@i">
-                                            <td> @(i+1)</td>
+                                            <td> @(i + 1)</td>
                                             <td>@_parcelles[i].indice</td>
                                             <td>@_parcelles[i].numfoncier</td>
-                                            <td>@_parcelles[i].shape.Intersects(Model.DemDerg.COMMUNES_RSK.Shape)</td>
                                             <td>
-                                                <a class="btn btn-sm buttonsReapeateds" 
-                                                   href="@Url.Action("DeleteParcelle","WorkflowDerogation",new { Id_parcelle=_parcelles[i].objectid,FK_DemDerg=Model.DemDerg.Id_DemDerg})">
-                                                    <i class="fa fa-minus"></i>
-                                                </a>
+                                                @if (_parcelles[i].shape.Intersects(Model.DemDerg.COMMUNES_RSK.Shape))
+                                                {<img src="~/Content/documentation/img/valid.png" />}
+                                                else
+                                                {<img src="~/Content/documentation/img/del.png" />}
+                                            </td>
+                                            <td>
+                                                @if (Supprimer)
+                                                {
+                                                    <a class="btn btn-sm buttonsReapeateds"
+                                                       href="@Url.Action("DeleteParcelle","WorkflowDerogation",new { Id_parcelle=_parcelles[i].objectid,FK_DemDerg=Model.DemDerg.Id_DemDerg})">
+                                                        <i class="fa fa-minus"></i>
+                                                    </a>
+                                                }
+
                                             </td>
                                         </tr>
                                     }
@@ -239,7 +255,7 @@
         var table = document.getElementById('tbodyCoord');
         numFon.value = '';
         indic.value = '';
-        
+
         var intersectionGlobale = "@intersection".toLowerCase()=="true";
         var Lire = "@Lire".toLowerCase()=="true";
         var Cree = "@Cree".toLowerCase()=="true";
@@ -654,7 +670,7 @@
                 @:numFonciers.push("@item.numfoncier");
 
             }
-            
+
             var polygonText = "@Model.DemDerg.COMMUNES_RSK.Shape.ToString()";
             polygonText=polygonText.replace("POLYGON","").replace("((","").replace("))","").split(", ");
             polygonText.forEach(myFunctionFille);
@@ -665,14 +681,14 @@
                     pol[index-1][0]=parseFloat(itemint[0]);
                     pol[index-1][1]=parseFloat(itemint[1]);
                 }
-                
+
             }
             var polygonJson = {
                 "rings": [pol], "spatialReference": wkid3
             };
             var polygonCommune = new Polygon(polygonJson);
             map.graphics.add(new Graphic(polygonCommune, symbolNewOne));
-            
+
             if (ringsParcels.length > 0) {
 
                 ringsParcels.forEach(myFunction);
@@ -681,7 +697,7 @@
                 }
                 GetExtentsFromPolygons(ringsParcels);
             }
-            
+
             //else {
             //    GetExtentsFromPolygons([[pol]]);
             //}
@@ -822,7 +838,7 @@
             }
             else {
                 ringsParcels.push([array]);ringsParcels12.push(array);
-                
+
                 numFonciers.push(numFon.value);
                     indices.push(indic.value);
                 array = []; PointsWKID1 = [];
@@ -987,7 +1003,7 @@
             var formData = new FormData();
             var ParcelleJson = {};
             Parcelles = [];
-            
+
             ringsParcels12.forEach(myFunction);
             function myFunction(item, index) {
 
@@ -1016,7 +1032,7 @@
                 result += "]";
                 shapeText +=","+ ppqwee.x + " " + ppqwee.y;
                 //if (!shapeText.includes(ppqwee.x+"") && !shapeText.includes(ppqwee.y+"")) {
-                    
+
                 //}
 
                  shapeText += "))";
@@ -1054,7 +1070,7 @@
                 }
             });
         }
-        
+
         var tablePolygons = document.getElementById('tableau');
         actualisationTable(tablePolygons);
         function actualisationTable(tablePolygons) {

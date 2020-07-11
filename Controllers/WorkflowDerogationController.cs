@@ -435,29 +435,50 @@ namespace GestionnaireUtilisateurs.Controllers
             {
                 int enregistrer = int.Parse(formCollection["enregistrer"]);
                 int Id_DemDerg = int.Parse(formCollection["Id_DemDerg"]);
-                string Parcels = formCollection["Parcel"];
                 Demande_Derogation demande = database.Demande_Derogation.Find(Id_DemDerg);
-                database.parcell.RemoveRange(demande.parcell);
+
+                string Parcels = formCollection["Parcel"];
                 List<parcell> parcellaires = JsonConvert.DeserializeObject<List<parcell>>(Parcels);
-                foreach (parcell pa in parcellaires)
+                if (parcellaires.Count()!=0)
                 {
-                    pa.shape = DbGeometry.PolygonFromText(pa.ShapeText,4326);
+                    if (Read && Create)
+                    {
+                        database.parcell.RemoveRange(demande.parcell);
+
+                        foreach (parcell pa in parcellaires)
+                        {
+                            pa.shape = DbGeometry.PolygonFromText(pa.ShapeText, 4326);
+                            pa.xcenteroid = Decimal.Parse("" + pa.shape.Centroid.XCoordinate.Value);
+                            pa.ycenteroid = Decimal.Parse("" + pa.shape.Centroid.YCoordinate.Value);
+                            pa.GDB_GEOMATTR_DATA = pa.shape.AsBinary();
+                        }
+                        database.parcell.AddRange(parcellaires);
+                        database.SaveChanges();
+                    }
                 }
-                database.parcell.AddRange(parcellaires);
-                database.SaveChanges();
+                
+                
+
                 if (enregistrer==0)
                 {
                     return Json(Url.Action("Encours", "WorkflowDerogation"));
                 }
                 else
                 {
-                    if (demande.parcell.Count()==0)
+                    DbGeometry geomParcels=demande.parcell.First().shape;
+                    foreach (var parcel in demande.parcell)
                     {
-                        return RedirectToAction("SituationGeo", "WorkflowDerogation", new { Id_DemDerg });
+                        geomParcels = geomParcels.Union(parcel.shape);
+                    }
+                    var intersection = geomParcels.Intersects(demande.COMMUNES_RSK.Shape);
+                    if (demande.parcell.Count()==0 || !intersection)
+                    {
+                        return Json(Url.Action("SituationGeo", "WorkflowDerogation", new { Id_DemDerg }));
                     }
                     else
                     {
-                        return RedirectToAction("FK_DemDerg_DocDerg", "WorkflowDerogation", new { FK_DemDerg_DocDerg = Id_DemDerg });
+                        demande.FK_DemDerg_EtatAvc = 17;database.SaveChanges();
+                        return Json(Url.Action("Ged", "WorkflowDerogation", new { FK_DemDerg_DocDerg = Id_DemDerg }));
                     }
                 }
             }
@@ -788,16 +809,21 @@ namespace GestionnaireUtilisateurs.Controllers
                     database.Document_Derogation.Add(d);
                     database.SaveChanges();
                 }
-
-
-
+            }
+            if (demdeg.Avis_Org.Where(i => i.FK_Organisme < 6).Count() == 0)
+            {
+                return RedirectToAction("AvisOrg", "WorkflowDerogation", new { FK_DemDerg });
+            }
+            else
+            {
                 if (valider == 1)
                 {
-                    if (demdeg.Avis_Org.Where(i => i.FK_Organisme == 1).First().FK_TypAvis == 1 && demdeg.Avis_Org.Where(i => i.FK_Organisme == 3).First().FK_TypAvis == 1)
+                    var date_time_difference = DateTime.UtcNow > demdeg.Commission.Date_Commission;
+                    if (demdeg.Avis_Org.Where(i => i.FK_Organisme == 1).First().FK_TypAvis == 1
+                        && demdeg.Avis_Org.Where(i => i.FK_Organisme == 3).First().FK_TypAvis == 1 && date_time_difference)
                     {
                         demdeg.FK_DemDerg_EtatAvc = 20;
                         database.SaveChanges();
-                        //return Json(Url.Action("Echanges", "WorkflowDerogation"));
                         return RedirectToAction("Echanges", "WorkflowDerogation", new { FK_DemDerg });
                     }
                     else
@@ -810,38 +836,6 @@ namespace GestionnaireUtilisateurs.Controllers
                     demdeg.FK_DemDerg_EtatAvc = 19;
                     database.SaveChanges();
                     return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
-                    //return Json(Url.Action("AvisOrg", "WorkflowDerogation", new { FK_DemDerg = id }));
-                }
-            }
-            else
-            {
-                if (demdeg.Avis_Org.Where(i => i.FK_Organisme < 6).Count() == 0)
-                {
-                    return RedirectToAction("AvisOrg", "WorkflowDerogation", new { FK_DemDerg });
-                }
-                else
-                {
-                    if (valider == 1)
-                    {
-                        if (demdeg.Avis_Org.Where(i => i.FK_Organisme == 1).First().FK_TypAvis == 1 && demdeg.Avis_Org.Where(i => i.FK_Organisme == 3).First().FK_TypAvis == 1)
-                        {
-                            demdeg.FK_DemDerg_EtatAvc = 20;
-                            database.SaveChanges();
-                            //return Json(Url.Action("Echanges", "WorkflowDerogation"));
-                            return RedirectToAction("Echanges", "WorkflowDerogation", new { FK_DemDerg });
-                        }
-                        else
-                        {
-                            return RedirectToAction("AvisOrg", "WorkflowDerogation", new { FK_DemDerg });
-                        }
-                    }
-                    else
-                    {
-                        demdeg.FK_DemDerg_EtatAvc = 19;
-                        database.SaveChanges();
-                        return RedirectToAction("Encours", "WorkflowDerogation", new { page = 1 });
-                        //return Json(Url.Action("AvisOrg", "WorkflowDerogation", new { FK_DemDerg = id }));
-                    }
                 }
             }
         }

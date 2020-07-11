@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity.Spatial;
 using System.Globalization;
 using System.Linq;
+using System.Spatial;
 using System.Web;
 using System.Web.Mvc;
 using GestionnaireUtilisateurs.Models;
@@ -190,5 +191,46 @@ namespace GestionnaireUtilisateurs.Controllers
                 Console.WriteLine(location.Address + " " + location.GeoString + " " + location.Distance);
             }
         }
+        //public static Geometry Project_EPSG25832_To_EPSG3857(byte[] wkb)
+        //{
+        //    NetTopologySuite.IO.WKBReader reader = new NetTopologySuite.IO.WKBReader();
+        //    Geometry geom = (Geometry)reader.Read(wkb);
+
+        //    double[] pointArray = new double[geom.Coordinates.Count() * 2];
+        //    double[] zArray = new double[1];
+        //    zArray[0] = 1;
+            
+        //    int counterX = 0;
+        //    int counterY = 1;
+        //    foreach (var coordinate in geom.Coordinates)
+        //    {
+        //        pointArray[counterX] = coordinate.X;
+        //        pointArray[counterY] = coordinate.Y;
+
+        //        counterX = counterX + 2;
+        //        counterY = counterY + 2;
+        //    }
+
+        //    var epsg25832 = new DotSpatial.Projections.ProjectionInfo();
+        //    var epsg3857 = new DotSpatial.Projections.ProjectionInfo();
+        //    epsg25832.ParseEsriString(ESRI_EPSG_25832);
+        //    epsg3857.ParseEsriString(ESRI_EPSG_3857);
+
+        //    DotSpatial.Projections.Reproject.ReprojectPoints(pointArray, zArray, epsg25832, epsg3857, 0, (pointArray.Length / 2));
+
+        //    counterX = 0;
+        //    counterY = 1;
+        //    foreach (var coordinate in geom.Coordinates)
+        //    {
+        //        coordinate.X = pointArray[counterX];
+        //        coordinate.Y = pointArray[counterY];
+
+        //        counterX = counterX + 2;
+        //        counterY = counterY + 2;
+        //    }
+        //    //**geom.GeometryChanged(); **
+        //    return geom;
+        //}
     }
+    
 }
