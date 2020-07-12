@@ -9,6 +9,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity.Spatial;
+using System.Threading.Tasks;
+
 namespace GestionnaireUtilisateurs.Controllers
 {
     public class WorkflowTache
@@ -23,6 +25,7 @@ namespace GestionnaireUtilisateurs.Controllers
     public class WorkflowDerogationController : Controller
     {
         public aurs1Entities database = new aurs1Entities();
+        #region correctAction
         public ActionResult correctAction(int idTache, int IdDemDerog, MultiModeles multiTab)
         {
             if (IdDemDerog == 0)
@@ -80,6 +83,7 @@ namespace GestionnaireUtilisateurs.Controllers
                 }
             }
         }
+        #endregion
         #region Rensegnements
         [Authorize(Roles = Administrator + "," + _Rensegnement)]
         public ActionResult Rensegnements()
@@ -421,7 +425,61 @@ namespace GestionnaireUtilisateurs.Controllers
             }
             return RedirectToAction("SituationGeo", "WorkflowDerogation", new { Id_DemDerg =FK_DemDerg});
         }
+        [HttpPost, Authorize(Roles = Administrator + "," + _SitGeo)]
+        public JsonResult AddParcel(FormCollection formCollection)
+        {
+            var _Actions = Actions(_SitGeo);
+            bool Read = _Actions[0];
+            bool Create = _Actions[1];
+            bool Update = _Actions[2];
+            bool Delete = _Actions[3];
+            var data = new object();
+            if (ModelState.IsValid)
+            {
+                int Id_DemDerg = int.Parse(formCollection["Id_DemDerg"]);
+                Demande_Derogation demande = database.Demande_Derogation.Find(Id_DemDerg);
 
+                string Parcels = formCollection["Parcel"];
+                parcell parcellaire = JsonConvert.DeserializeObject<parcell>(Parcels);
+                if (Read && Create)
+                {
+                    parcellaire.shape = DbGeometry.PolygonFromText(parcellaire.ShapeText, 4326);
+                    var global = false;
+                    foreach (parcell parc in demande.parcell)
+                    {
+                        bool IsValid = parcellaire.shape.Intersection(parc.shape).IsValid;
+                        if (IsValid)
+                        {
+                            DbGeometry shapeCommune = parcellaire.shape.Intersection(parc.shape);
+                            if (shapeCommune.Area.Value / Math.Max(parc.shape.Area.Value, parcellaire.shape.Area.Value) > 0.9)
+                            {
+                                global = true;
+                            }
+                        }
+                    }
+                    parcellaire.xcenteroid = Decimal.Parse("" + parcellaire.shape.Centroid.XCoordinate.Value);
+                    parcellaire.ycenteroid = Decimal.Parse("" + parcellaire.shape.Centroid.YCoordinate.Value);
+                    parcellaire.GDB_GEOMATTR_DATA = parcellaire.shape.AsBinary();
+                    if (!global)
+                    {
+                        database.parcell.Add(parcellaire);
+                        database.SaveChanges();
+                    }
+                    
+                    
+                    return Json(new { global ,
+                        parcelle = new {
+                            geomText=parcellaire.GeometryText,
+                            intersects=parcellaire.shape.Intersects(demande.COMMUNES_RSK.Shape),
+                            id=parcellaire.objectid,parcellaire.indice,parcellaire.numfoncier
+                        } }, JsonRequestBehavior.AllowGet);
+
+                    //var parserialise = JsonConvert.SerializeObject(parcellaire);
+                    //var data = ;
+                }
+            }
+            return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
+        }
 
         [HttpPost, Authorize(Roles = Administrator + "," + _SitGeo)]
         public ActionResult SituationGeo(FormCollection formCollection)
@@ -437,25 +495,25 @@ namespace GestionnaireUtilisateurs.Controllers
                 int Id_DemDerg = int.Parse(formCollection["Id_DemDerg"]);
                 Demande_Derogation demande = database.Demande_Derogation.Find(Id_DemDerg);
 
-                string Parcels = formCollection["Parcel"];
-                List<parcell> parcellaires = JsonConvert.DeserializeObject<List<parcell>>(Parcels);
-                if (parcellaires.Count()!=0)
-                {
-                    if (Read && Create)
-                    {
-                        database.parcell.RemoveRange(demande.parcell);
+                //string Parcels = formCollection["Parcel"];
+                //List<parcell> parcellaires = JsonConvert.DeserializeObject<List<parcell>>(Parcels);
+                //if (parcellaires.Count()!=0)
+                //{
+                //    if (Read && Create)
+                //    {
+                //        database.parcell.RemoveRange(demande.parcell);
 
-                        foreach (parcell pa in parcellaires)
-                        {
-                            pa.shape = DbGeometry.PolygonFromText(pa.ShapeText, 4326);
-                            pa.xcenteroid = Decimal.Parse("" + pa.shape.Centroid.XCoordinate.Value);
-                            pa.ycenteroid = Decimal.Parse("" + pa.shape.Centroid.YCoordinate.Value);
-                            pa.GDB_GEOMATTR_DATA = pa.shape.AsBinary();
-                        }
-                        database.parcell.AddRange(parcellaires);
-                        database.SaveChanges();
-                    }
-                }
+                //        foreach (parcell pa in parcellaires)
+                //        {
+                //            pa.shape = DbGeometry.PolygonFromText(pa.ShapeText, 4326);
+                //            pa.xcenteroid = Decimal.Parse("" + pa.shape.Centroid.XCoordinate.Value);
+                //            pa.ycenteroid = Decimal.Parse("" + pa.shape.Centroid.YCoordinate.Value);
+                //            pa.GDB_GEOMATTR_DATA = pa.shape.AsBinary();
+                //        }
+                //        database.parcell.AddRange(parcellaires);
+                //        database.SaveChanges();
+                //    }
+                //}
                 
                 
 
