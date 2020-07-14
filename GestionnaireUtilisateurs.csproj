@@ -1518,6 +1518,7 @@
     <Content Include="Views\Corbeille\DeleteStatut.cshtml" />
     <Content Include="Views\Home\NotificationClick.cshtml" />
     <Content Include="Views\Shared\_Indicators.cshtml" />
+    <Content Include="Views\pw\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -85,7 +85,6 @@
                                     , new AjaxOptions { HttpMethod = "Post", OnFailure = "OnFailure()", OnSuccess = "OnSuccess(data)" }))
                                 {
                                     @Html.AntiForgeryToken()
-                                    <input type="hidden" value="@User.Identity.GetUserId()" name="_User" />
                                     <input type="submit" value="Afficher tous les notifications" 
                                            style="color:white;border:hidden;background-color:#ffffff00;width:100%;height:100%;cursor:pointer" />
                                 }
@@ -95,40 +94,7 @@
                 </li>
             }
 
-            <li class="nav-item dropdown connection" style="display:none">
-                <a class="nav-link nav-icons" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-fw fa-th"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-right connection-dropdown">
-                    <li class="connection-list">
-                        <div class="row">
-                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                <a href="#" class="connection-item" target="_blank"><img src="~/Content/assets/images/github.png" alt=""> <span>Github</span></a>
-                            </div>
-                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                <a href="#" class="connection-item" target="_blank"><img src="~/Content/assets/images/dribbble.png" alt=""> <span>Dribbble</span></a>
-                            </div>
-                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                <a href="#" class="connection-item" target="_blank"><img src="~/Content/assets/images/dropbox.png" alt=""> <span>Dropbox</span></a>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                <a href="#" class="connection-item" target="_blank"><img src="~/Content/assets/images/bitbucket.png" alt=""> <span>Bitbucket</span></a>
-                            </div>
-                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                <a href="#" class="connection-item" target="_blank"><img src="~/Content/assets/images/mail_chimp.png" alt=""><span>Mail chimp</span></a>
-                            </div>
-                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 ">
-                                <a href="#" class="connection-item" target="_blank"><img src="~/Content/assets/images/slack.png" alt=""> <span>Slack</span></a>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="conntection-footer"><a href="#">More</a></div>
-                    </li>
-                </ul>
-            </li>
+            
             <!-- Partial view login -->
             @Html.Partial("_LoginPartial")
         </ul>
@@ -138,8 +104,7 @@
             }
 
             function OnSuccess(data) {
-                date = data.date;
-                alert("Success\n" + data);
+                alert("Success\n" + JSON.stringify( data.notifications));
             }
 
         </script>

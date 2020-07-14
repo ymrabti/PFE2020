@@ -1181,30 +1181,30 @@ namespace GestionnaireUtilisateurs.Controllers
             }
         }
 
-        //[HttpPost, ValidateAntiForgeryToken]
-        //public JsonResult GetAllNotifications(string _User)
-        //{
-        //    var data = new object();
-        //    if (ModelState.IsValid)
-        //    {
-        //        string uid = User.Identity.GetUserId();
-        //        if (uid != _User)
-        //        {
-        //            return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
-        //        }
-        //        AspNetUsers user = database.AspNetUsers.Find(uid);
-        //        var notifications = from p in user.Notification.ToList()
-        //                            select new Notification
-        //                            {
-        //                                Id = p.Id,
-        //                                heure_date = p.heure_date,
-        //                                TypeNotif = p.TypeNotif
-        //                            };
-        //        data = new { dd = "success", notifications };
-        //        return Json(data, JsonRequestBehavior.AllowGet);
-        //    }
-        //    return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
-        //}
+        [Authorize, HttpPost]
+        public JsonResult GetAllNotifications()
+        {
+            var data = new object();
+            if (ModelState.IsValid)
+            {
+                string uid = User.Identity.GetUserId();
+                AspNetUsers user = database.AspNetUsers.Find(uid);
+                var notifications = new List<object>();
+                foreach (var item in user.Notification)
+                {
+                    var element = new {
+                        IdNotif=item.Id,
+                        dateTime=item.heure_date.ToString(),
+                        textNotif=item.TypeNotif.Text,
+                        clicked=item.Clicked
+                    };
+                    notifications.Add(element);
+                }
+                data = new { dd = "success", notifications };
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { dd = "error", data }, JsonRequestBehavior.AllowGet);
+        }
 
         #endregion
 

@@ -22,6 +22,8 @@ namespace GestionnaireUtilisateurs.Controllers
             //if (passwordResult.) { }
         }
 
+
+
         public pwController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;

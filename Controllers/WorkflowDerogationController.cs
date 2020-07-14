@@ -846,12 +846,14 @@ namespace GestionnaireUtilisateurs.Controllers
                         avis.FK_TypAvis = FK_TypAvis[i]; avis.Detail_Avis = Detail_Avis[i];
                         var res = database.Entry(avis).State = EntityState.Modified;
                     }
+                    database.SaveChanges();
 
                 }
                 demdeg.Avis_Remarque_DemDerg = Avis_Remarque_DemDerg;
                 var docCommission = demdeg.Document_Derogation.Where(o => o.Intitule_Doc_Derg == 201);
                 var pvExist = docCommission.Count() != 0; var pvDoesNotExist = !pvExist;
                 string pathDemande = CheckFolder(FK_DemDerg, 1);
+                database.SaveChanges();
                 //bool notexistFile = !FileExist(url_Doc_Derg.FileName, FK_DemDerg);
                 if (url_Doc_Derg != null)
                 {
@@ -952,31 +954,26 @@ namespace GestionnaireUtilisateurs.Controllers
             bool Update = _Actions[2];
             bool Delete = _Actions[3];
             var demdeg = database.Demande_Derogation.Find(FK_DemDerg);
-            if (Read && Update)
+            if (Read && Create)
             {
                 if (file != null)
                 {
-                    List<Courrier> courriers = new List<Courrier>();
                     string pathDemande = CheckFolder(FK_DemDerg, 2);
-                    var longeur = FK_Nature_Courrier.Length;
                     var count = FK_Nature_Courrier.Count();
-                    for (int n = 0; n < longeur; n++)
+                    for (int n = 0; n < count; n++)
                     {
                         HttpPostedFileBase filen = file[n];
-                        String path1 = Path.Combine(pathDemande, filen.FileName /*+ Path.GetExtension(file.FileName)*/);
+                        string path1 = Path.Combine(pathDemande, filen.FileName );
                         filen.SaveAs(path1);
                         Courrier courrier = new Courrier();
-                        DateTime dateChecked = new DateTime();
                         if (Date_Courier[n] < DateTime.Now)
-                        { dateChecked = DateTime.Now.AddDays(1); }
-                        else { dateChecked = Date_Courier[n]; }
+                        { courrier.Date_Courier = DateTime.Now.AddDays(1); }
+                        else { courrier.Date_Courier = Date_Courier[n]; }
                         courrier.FK_Nature_Courrier = FK_Nature_Courrier[n];
-                        courrier.Date_Courier = dateChecked;
                         courrier.FK_DemDerg_Cour = FK_DemDerg;
                         courrier.Source_Courrier = Source_Courrier[n];
                         courrier.Destination_Courrier = Destination_Courrier[n];
                         courrier.url_Courrier = path1.ToString();
-                        //courriers.Add(courrier);
                         database.Courrier.Add(courrier);
                         database.SaveChanges();
                     }
